@@ -1,0 +1,92 @@
+{
+  "tagline": "Run SearXNG's declared streams and reverse-ETL actions.",
+  "usage": "pm searxng \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get config",
+        "api get healthz",
+        "reddit list",
+        "search list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get config",
+      "summary": "Documented GET /config (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "examples": [
+        "pm searxng api get config --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/config"
+        }
+      ],
+      "operation": "searxng.get.config",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get healthz",
+      "summary": "Documented GET /healthz (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "examples": [
+        "pm searxng api get healthz --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/healthz"
+        }
+      ],
+      "operation": "searxng.get.healthz",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "reddit list",
+      "summary": "Run the reddit ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reddit",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "examples": [
+        "pm searxng reddit list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ]
+    },
+    {
+      "path": "search list",
+      "summary": "Run the search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "examples": [
+        "pm searxng search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search"
+        }
+      ]
+    }
+  ]
+}

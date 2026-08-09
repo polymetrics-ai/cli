@@ -1,0 +1,909 @@
+{
+  "operations": [
+    {
+      "id": "dropbox-sign.post.account-create",
+      "kind": "rest_write",
+      "summary": "POST /account/create",
+      "description": "provisions a brand-new Dropbox Sign account under the caller's API app/OAuth client; account-provisioning admin action, not a record mutation on the connected account's own data",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/account/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.account-verify",
+      "kind": "rest_write",
+      "summary": "POST /account/verify",
+      "description": "looks up whether a Dropbox Sign account exists for a given email address; a read-like existence check with no state change, not a genuine mutation despite being a POST",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/account/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.api-app",
+      "kind": "rest_write",
+      "summary": "POST /api_app",
+      "description": "creates a new OAuth API application (its own client_id/client_secret credential pair); credential-provisioning admin action, out of scope for a data connector",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api_app",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.api-app-list",
+      "kind": "rest_read",
+      "summary": "GET /api_app/list",
+      "description": "API-app management is a developer-portal admin concern, not sync-worthy account data. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api_app/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.api-app-client-id",
+      "kind": "rest_read",
+      "summary": "GET /api_app/{client_id}",
+      "description": "single API-app detail; API-app management is a developer-portal admin concern, not sync-worthy account data. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api_app/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.api-app-client-id",
+      "kind": "rest_write",
+      "summary": "PUT /api_app/{client_id}",
+      "description": "reconfigures an OAuth API application's callback URL/domains/OAuth settings; credential/security-surface admin action",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api_app/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.delete.api-app-client-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api_app/{client_id}",
+      "description": "permanently deletes an OAuth API application and invalidates every token issued under it",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api_app/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.bulk-send-job-list",
+      "kind": "rest_read",
+      "summary": "GET /bulk_send_job/list",
+      "description": "same reasoning as the single bulk_send_job GET; the bulk-send creation step itself is multipart-only and out of scope",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_send_job/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.bulk-send-job-bulk-send-job-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk_send_job/{bulk_send_job_id}",
+      "description": "status/progress polling for a bulk-send job; the only way to CREATE a bulk send job is multipart (bulk_send_with_template/bulk_create_embedded_with_template), which this dialect cannot express, so there is no way to ever populate a job id to poll",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_send_job/{bulk_send_job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.embedded-edit-url-template-id",
+      "kind": "rest_write",
+      "summary": "POST /embedded/edit_url/{template_id}",
+      "description": "mints a short-lived, single-use iframe session token/URL for embedded template editing; a session credential, not a syncable record or a persistent mutation",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/embedded/edit_url/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.embedded-sign-url-signature-id",
+      "kind": "rest_read",
+      "summary": "GET /embedded/sign_url/{signature_id}",
+      "description": "mints a short-lived, single-use iframe session token/URL for embedded signing; a session credential, not a syncable record",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/embedded/sign_url/{signature_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-files-fax-id",
+      "kind": "rest_read",
+      "summary": "GET /fax/files/{fax_id}",
+      "description": "fax document PDF/TIFF binary download, not a syncable record; also Fax product entitlement, out of scope",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax/files/{fax_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-list",
+      "kind": "rest_read",
+      "summary": "GET /fax/list",
+      "description": "Fax product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.fax-send",
+      "kind": "rest_write",
+      "summary": "POST /fax/send",
+      "description": "sending a fax requires a multipart file upload of the document; Fax product entitlement, also out of scope regardless",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/fax/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-fax-id",
+      "kind": "rest_read",
+      "summary": "GET /fax/{fax_id}",
+      "description": "Fax is a separate, distinct Dropbox Sign product entitlement (fax numbers/fax sending) unrelated to e-signature; legacy internal/connectors/dropbox-sign never touched it. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax/{fax_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.delete.fax-fax-id",
+      "kind": "rest_write",
+      "summary": "DELETE /fax/{fax_id}",
+      "description": "Fax product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/fax/{fax_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-line",
+      "kind": "rest_read",
+      "summary": "GET /fax_line",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax_line",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.delete.fax-line",
+      "kind": "rest_write",
+      "summary": "DELETE /fax_line",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/fax_line",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.fax-line-add-user",
+      "kind": "rest_write",
+      "summary": "PUT /fax_line/add_user",
+      "description": "Fax Line product entitlement (dedicated fax phone number management), out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/fax_line/add_user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-line-area-codes",
+      "kind": "rest_read",
+      "summary": "GET /fax_line/area_codes",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax_line/area_codes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.fax-line-create",
+      "kind": "rest_write",
+      "summary": "POST /fax_line/create",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/fax_line/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.fax-line-list",
+      "kind": "rest_read",
+      "summary": "GET /fax_line/list",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fax_line/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.fax-line-remove-user",
+      "kind": "rest_write",
+      "summary": "PUT /fax_line/remove_user",
+      "description": "Fax Line product entitlement, out of scope; see /fax/{fax_id} GET",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/fax_line/remove_user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.notification-retry",
+      "kind": "rest_write",
+      "summary": "POST /notification/retry",
+      "description": "manually re-fires a previously-failed webhook callback delivery; operational/debugging action against Dropbox Sign's own callback-retry queue, not a record mutation. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/notification/retry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.oauth-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth/token",
+      "description": "OAuth2 authorization-code token exchange; connection-lifecycle plumbing (this bundle authenticates via a plain API-key Basic auth spec, not OAuth), not a data operation",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.oauth-token-refresh",
+      "kind": "rest_write",
+      "summary": "POST /oauth/token?refresh",
+      "description": "OAuth2 token refresh; same reasoning as the token-exchange endpoint",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/token?refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.report-create",
+      "kind": "rest_write",
+      "summary": "POST /report/create",
+      "description": "kicks off an asynchronous bulk CSV export job of account activity, not a synchronous read/write record operation; Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/report/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-bulk-create-embedded-with-template",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/bulk_create_embedded_with_template",
+      "description": "the templated multi-recipient bulk-send request body is only expressible as multipart/form-data (a CSV/file of recipient data alongside the template reference)",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/bulk_create_embedded_with_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-bulk-send-with-template",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/bulk_send_with_template",
+      "description": "same multipart-only bulk-recipient-data requirement as bulk_create_embedded_with_template",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/bulk_send_with_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-create-embedded",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/create_embedded",
+      "description": "creating a signature request requires uploading the actual document file(s) as multipart/form-data (or a files_url, still only accepted alongside multipart-shaped signer/field metadata in the SDK-generated request); the engine's write dialect has no multipart body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/create_embedded",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-create-embedded-with-template",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/create_embedded_with_template",
+      "description": "same reasoning as create_embedded: the request accepts multipart/form-data for custom field/signer data alongside file references; not expressible in json/form body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/create_embedded_with_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.signature-request-edit-signature-request-id",
+      "kind": "rest_write",
+      "summary": "PUT /signature_request/edit/{signature_request_id}",
+      "description": "re-uploads/replaces the request's document files as multipart/form-data",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/signature_request/edit/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.signature-request-edit-embedded-signature-request-id",
+      "kind": "rest_write",
+      "summary": "PUT /signature_request/edit_embedded/{signature_request_id}",
+      "description": "same file re-upload requirement as edit/{signature_request_id}",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/signature_request/edit_embedded/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.signature-request-edit-embedded-with-template-signature-request-id",
+      "kind": "rest_write",
+      "summary": "PUT /signature_request/edit_embedded_with_template/{signature_request_id}",
+      "description": "same file/custom-field multipart requirement as create_embedded_with_template",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/signature_request/edit_embedded_with_template/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.put.signature-request-edit-with-template-signature-request-id",
+      "kind": "rest_write",
+      "summary": "PUT /signature_request/edit_with_template/{signature_request_id}",
+      "description": "same file/custom-field multipart requirement as create_embedded_with_template",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/signature_request/edit_with_template/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.signature-request-files-signature-request-id",
+      "kind": "rest_read",
+      "summary": "GET /signature_request/files/{signature_request_id}",
+      "description": "signed-document PDF/ZIP binary download, not a syncable record stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/signature_request/files/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.signature-request-files-as-data-uri-signature-request-id",
+      "kind": "rest_read",
+      "summary": "GET /signature_request/files_as_data_uri/{signature_request_id}",
+      "description": "signed-document binary encoded as a data URI string; still a binary payload, not a syncable record stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/signature_request/files_as_data_uri/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.signature-request-files-as-file-url-signature-request-id",
+      "kind": "rest_read",
+      "summary": "GET /signature_request/files_as_file_url/{signature_request_id}",
+      "description": "mints a short-lived download URL for the signed-document binary; not a syncable record stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/signature_request/files_as_file_url/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-send",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/send",
+      "description": "creating a signature request requires uploading the actual document file(s) as multipart/form-data (or a files_url alongside multipart-shaped signer metadata); the engine's write dialect has no multipart body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.signature-request-send-with-template",
+      "kind": "rest_write",
+      "summary": "POST /signature_request/send_with_template",
+      "description": "the request body for custom field values / CC recipients is only fully expressible as multipart/form-data in Dropbox Sign's own SDK-generated shape (array-of-object custom_fields alongside optional multipart file additions)",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signature_request/send_with_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.signature-request-signature-request-id",
+      "kind": "rest_read",
+      "summary": "GET /signature_request/{signature_request_id}",
+      "description": "single-signature-request detail; identical record shape to the signature_requests list stream's per-item object, already covered by that stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/signature_request/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.team",
+      "kind": "rest_read",
+      "summary": "GET /team",
+      "description": "team_members stream already reads GET /team/members/{team_id}, which returns the same roster this endpoint's response embeds; not modeled as a separate stream to avoid a duplicate record shape",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/team",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.delete.team-destroy",
+      "kind": "rest_write",
+      "summary": "DELETE /team/destroy",
+      "description": "permanently deletes the caller's entire Team (only invocable when the Team has exactly one member); irreversible account-structure change with no per-record scope, unlike the other team actions which target a specific member/name",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/team/destroy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.team-info",
+      "kind": "rest_read",
+      "summary": "GET /team/info",
+      "description": "team subscription/plan metadata bundled with the same team roster team_members already reads; not a distinct record shape worth a separate stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/team/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.team-invites",
+      "kind": "rest_read",
+      "summary": "GET /team/invites",
+      "description": "pending-invite list for the caller's Team; a narrow admin-facing sub-list, not modeled as a separate stream this pass. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/team/invites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.team-sub-teams-team-id",
+      "kind": "rest_read",
+      "summary": "GET /team/sub_teams/{team_id}",
+      "description": "Enterprise-plan sub-team hierarchy listing, a distinct organizational feature legacy never modeled. Pass B breadth-vs-cost triage",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/team/sub_teams/{team_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.template-create",
+      "kind": "rest_write",
+      "summary": "POST /template/create",
+      "description": "creating a template requires uploading the actual document file(s) as multipart/form-data; the engine's write dialect has no multipart body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/template/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.template-create-embedded-draft",
+      "kind": "rest_write",
+      "summary": "POST /template/create_embedded_draft",
+      "description": "same file-upload requirement as template/create, embedded-editor variant",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/template/create_embedded_draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.template-files-template-id",
+      "kind": "rest_read",
+      "summary": "GET /template/files/{template_id}",
+      "description": "template document PDF binary download, not a syncable record stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/template/files/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.template-files-as-data-uri-template-id",
+      "kind": "rest_read",
+      "summary": "GET /template/files_as_data_uri/{template_id}",
+      "description": "template document binary encoded as a data URI string; still a binary payload",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/template/files_as_data_uri/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.template-files-as-file-url-template-id",
+      "kind": "rest_read",
+      "summary": "GET /template/files_as_file_url/{template_id}",
+      "description": "mints a short-lived download URL for the template document binary; not a syncable record stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/template/files_as_file_url/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.template-update-template-id",
+      "kind": "rest_write",
+      "summary": "POST /template/update/{template_id}",
+      "description": "content update variant that accepts multipart/form-data for updated signer/field metadata alongside the existing files; not expressible in json/form body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/template/update/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.template-update-files-template-id",
+      "kind": "rest_write",
+      "summary": "POST /template/update_files/{template_id}",
+      "description": "replaces the template's document file(s) via multipart/form-data upload",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/template/update_files/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.get.template-template-id",
+      "kind": "rest_read",
+      "summary": "GET /template/{template_id}",
+      "description": "single-template detail; identical record shape to the templates list stream's per-item object, already covered by that stream",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/template/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.unclaimed-draft-create",
+      "kind": "rest_write",
+      "summary": "POST /unclaimed_draft/create",
+      "description": "creating an unclaimed draft requires uploading the actual document file(s) as multipart/form-data; the engine's write dialect has no multipart body_type",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unclaimed_draft/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.unclaimed-draft-create-embedded",
+      "kind": "rest_write",
+      "summary": "POST /unclaimed_draft/create_embedded",
+      "description": "same file-upload requirement as unclaimed_draft/create, embedded variant",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unclaimed_draft/create_embedded",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.unclaimed-draft-create-embedded-with-template",
+      "kind": "rest_write",
+      "summary": "POST /unclaimed_draft/create_embedded_with_template",
+      "description": "multipart-shaped custom field/signer data requirement, same reasoning as signature_request/create_embedded_with_template",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unclaimed_draft/create_embedded_with_template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dropbox-sign.post.unclaimed-draft-edit-and-resend-signature-request-id",
+      "kind": "rest_write",
+      "summary": "POST /unclaimed_draft/edit_and_resend/{signature_request_id}",
+      "description": "re-edits and re-sends a request originally created from an unclaimed draft; couples to the unclaimed-draft creation flow this connector does not implement (multipart-only), so there is no way for a synced record to ever supply a valid target here",
+      "source_url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unclaimed_draft/edit_and_resend/{signature_request_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

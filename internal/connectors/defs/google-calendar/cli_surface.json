@@ -1,161 +1,1966 @@
 {
-  "tagline": "Read Google Calendar data, run a bounded free/busy query, and safely plan typed Calendar reverse-ETL writes.",
-  "usage": "pm google-calendar <command> [flags]",
-  "source_cli": {
-    "name": "Google Calendar API v3",
-    "docs": "https://developers.google.com/workspace/calendar/api/v3/reference",
-    "reference": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    "source": "google-calendar-discovery"
-  },
+  "tagline": "Run Google Calendar's declared streams and reverse-ETL actions.",
+  "usage": "pm google-calendar \u003ccommand\u003e [flags]",
   "groups": [
-    {"id": "acl", "title": "ACL reads and reverse-ETL actions", "commands": ["acl"]},
-    {"id": "calendar-list", "title": "Calendar-list reads and reverse-ETL actions", "commands": ["calendar-list"]},
-    {"id": "calendars", "title": "Calendar reads and reverse-ETL actions", "commands": ["calendars"]},
-    {"id": "channels", "title": "Notification-channel reverse-ETL actions", "commands": ["channels"]},
-    {"id": "colors", "title": "Color reads", "commands": ["colors"]},
-    {"id": "events", "title": "Event reads and reverse-ETL actions", "commands": ["events"]},
-    {"id": "freebusy", "title": "Typed direct reads", "commands": ["freebusy"]},
-    {"id": "settings", "title": "Settings reads and reverse-ETL actions", "commands": ["settings"]}
-  ],
-  "global_flags": [
-    {"name": "json", "type": "boolean", "summary": "Write machine-readable JSON output."},
-    {"name": "connection", "type": "string", "summary": "Use a saved Google Calendar connector credential.", "maps_to": "connection"},
-    {"name": "credential", "type": "string", "summary": "Alias for selecting a saved connector credential.", "maps_to": "credential"},
-    {"name": "config", "type": "string", "summary": "Inline key=value connector configuration override; do not use for secrets.", "maps_to": "config"},
-    {"name": "limit", "type": "integer", "summary": "Maximum ETL records to read for stream-backed commands.", "maps_to": "limit"},
-    {"name": "max-bytes", "type": "integer", "summary": "Maximum direct-read response bytes.", "maps_to": "max_bytes"},
-    {"name": "plan", "type": "string", "summary": "Execute an approved reverse-ETL plan by id."},
-    {"name": "preview", "type": "boolean", "summary": "Preview a reverse-ETL write command without making a network mutation."},
-    {"name": "approve", "type": "string", "summary": "Approval token required to execute a reverse-ETL plan."},
-    {"name": "confirm", "type": "string", "summary": "Typed confirmation challenge for destructive reverse-ETL writes."}
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "acl list",
+        "acl rule list",
+        "api get calendars calendarid",
+        "api get calendars calendarid acl",
+        "api get calendars calendarid acl ruleid",
+        "api get calendars calendarid events",
+        "api get calendars calendarid events eventid",
+        "api get calendars calendarid events eventid instances",
+        "api get colors",
+        "api get users me calendarlist",
+        "api get users me calendarlist calendarid",
+        "api get users me settings",
+        "api get users me settings setting",
+        "calendar list",
+        "calendar list entry list",
+        "calendar list list",
+        "colors list",
+        "event instances list",
+        "event list",
+        "events list",
+        "freebusy query",
+        "setting list",
+        "settings list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete calendars calendarid",
+        "api delete calendars calendarid acl ruleid",
+        "api delete calendars calendarid events eventid",
+        "api delete users me calendarlist calendarid",
+        "api patch calendars calendarid",
+        "api patch calendars calendarid acl ruleid",
+        "api patch calendars calendarid events eventid",
+        "api patch users me calendarlist calendarid",
+        "api post calendars",
+        "api post calendars calendarid acl",
+        "api post calendars calendarid acl watch",
+        "api post calendars calendarid clear",
+        "api post calendars calendarid events",
+        "api post calendars calendarid events eventid move",
+        "api post calendars calendarid events import",
+        "api post calendars calendarid events quickadd",
+        "api post calendars calendarid events watch",
+        "api post calendars calendarid transferownership",
+        "api post channels stop",
+        "api post freebusy",
+        "api post users me calendarlist",
+        "api post users me calendarlist watch",
+        "api post users me settings watch",
+        "api put calendars calendarid",
+        "api put calendars calendarid acl ruleid",
+        "api put calendars calendarid events eventid",
+        "api put users me calendarlist calendarid",
+        "clear calendar apply",
+        "delete acl rule apply",
+        "delete calendar apply",
+        "delete calendar list entry apply",
+        "delete event apply",
+        "import event apply",
+        "insert acl rule apply",
+        "insert calendar apply",
+        "insert calendar list entry apply",
+        "insert event apply",
+        "move event apply",
+        "patch acl rule apply",
+        "patch calendar apply",
+        "patch calendar list entry apply",
+        "patch event apply",
+        "quick add event apply",
+        "stop channel apply",
+        "transfer calendar ownership apply",
+        "update acl rule apply",
+        "update calendar apply",
+        "update calendar list entry apply",
+        "update event apply",
+        "watch acl apply",
+        "watch calendar list apply",
+        "watch events apply",
+        "watch settings apply"
+      ]
+    }
   ],
   "commands": [
-    {"path": "calendar-list list", "summary": "List calendars visible in the authenticated user calendar list.", "intent": "etl", "availability": "implemented", "stream": "calendar_list", "api_surface": [{"method": "GET", "path": "/calendar/v3/users/me/calendarList"}], "examples": ["pm google-calendar calendar-list list --json"]},
-    {"path": "calendar-list get", "summary": "Read one calendar-list entry using config.calendarid.", "intent": "etl", "availability": "implemented", "stream": "calendar_list_entry", "api_surface": [{"method": "GET", "path": "/calendar/v3/users/me/calendarList/{calendarId}"}], "examples": ["pm google-calendar calendar-list get --json"]},
-    {"path": "calendars get", "summary": "Read configured calendar metadata.", "intent": "etl", "availability": "implemented", "stream": "calendar", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}"}], "examples": ["pm google-calendar calendars get --json"]},
-    {"path": "colors get", "summary": "Read color palettes for calendars and events.", "intent": "etl", "availability": "implemented", "stream": "colors", "api_surface": [{"method": "GET", "path": "/calendar/v3/colors"}], "examples": ["pm google-calendar colors get --json"]},
-    {"path": "events list", "summary": "List events with updatedMin incremental support.", "intent": "etl", "availability": "implemented", "stream": "events", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events"}], "examples": ["pm google-calendar events list --json"]},
-    {"path": "events get", "summary": "Read one event using config.calendarid and config.event_id.", "intent": "etl", "availability": "implemented", "stream": "event", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"}], "examples": ["pm google-calendar events get --config event_id=event123 --json"]},
-    {"path": "events instances", "summary": "List recurring-event instances for config.event_id.", "intent": "etl", "availability": "implemented", "stream": "event_instances", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances"}], "examples": ["pm google-calendar events instances --config event_id=event123 --json"]},
-    {"path": "settings list", "summary": "List user Calendar settings.", "intent": "etl", "availability": "implemented", "stream": "settings", "api_surface": [{"method": "GET", "path": "/calendar/v3/users/me/settings"}], "examples": ["pm google-calendar settings list --json"]},
-    {"path": "settings get", "summary": "Read one user Calendar setting.", "intent": "etl", "availability": "implemented", "stream": "setting", "api_surface": [{"method": "GET", "path": "/calendar/v3/users/me/settings/{setting}"}], "examples": ["pm google-calendar settings get --config setting=timezone --json"]},
-    {"path": "acl list", "summary": "List ACL rules for config.calendarid.", "intent": "etl", "availability": "implemented", "stream": "acl", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/acl"}], "examples": ["pm google-calendar acl list --json"]},
-    {"path": "acl get", "summary": "Read one ACL rule for config.rule_id.", "intent": "etl", "availability": "implemented", "stream": "acl_rule", "api_surface": [{"method": "GET", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"}], "examples": ["pm google-calendar acl get --config rule_id=default --json"]},
     {
-      "path": "freebusy query", "summary": "Run a bounded typed free/busy query for one calendar and time range.", "intent": "direct_read", "availability": "implemented", "operation": "google-calendar.freebusy.query",
-      "flags": [
-        {"name": "calendar", "type": "string", "summary": "Calendar ID to query.", "maps_to": "body.items.0.id", "required": true, "allow_empty": false},
-        {"name": "time-min", "type": "string", "summary": "RFC3339 lower time bound.", "maps_to": "body.timeMin", "format": "date-time", "required": true, "allow_empty": false},
-        {"name": "time-max", "type": "string", "summary": "RFC3339 upper time bound.", "maps_to": "body.timeMax", "format": "date-time", "required": true, "allow_empty": false},
-        {"name": "time-zone", "type": "string", "summary": "Optional response timezone.", "maps_to": "body.timeZone", "allow_empty": false}
+      "path": "acl list",
+      "summary": "Run the acl ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "acl",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar acl list --json"
       ],
-      "constraints": [{"kind": "order", "left": "body.timeMin", "right": "body.timeMax", "op": "lt", "value_type": "date-time", "message": "time-min must be earlier than time-max"}],
-      "api_surface": [{"method": "POST", "path": "/calendar/v3/freeBusy"}], "output_policy": "json_redacted", "risk": "medium", "approval": "No write approval required; bounded direct read validates typed inputs.",
-      "examples": ["pm google-calendar freebusy query --calendar primary --time-min 2020-01-01T00:00:00Z --time-max 2020-01-02T00:00:00Z --json"]
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}/acl"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
     },
     {
-      "path": "acl delete", "summary": "Plan deletion of an ACL rule with typed destructive confirmation.", "intent": "reverse_etl", "availability": "implemented", "write": "delete_acl_rule", "source_cli_path": "DELETE /calendar/v3/calendars/{calendarId}/acl/{ruleId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/delete",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "rule-id", "type": "string", "summary": "ACL rule identifier.", "maps_to": "record.rule_id", "required": true, "allow_empty": false}], "redact_fields": ["calendar_id", "rule_id"], "api_surface": [{"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"}], "risk": "Deletes calendar sharing permission; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar acl delete --calendar-id calendar_fixture_1 --rule-id rule_fixture_1 --preview --json"]
+      "path": "acl rule list",
+      "summary": "Run the acl rule ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "acl_rule",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar acl rule list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
     },
     {
-      "path": "acl insert", "summary": "Plan creation of an ACL sharing rule.", "intent": "reverse_etl", "availability": "implemented", "write": "insert_acl_rule", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/acl", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/insert",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "role", "type": "enum", "summary": "ACL role.", "values": ["none", "freeBusyReader", "reader", "writer", "owner"], "maps_to": "record.role", "required": true}, {"name": "scope-type", "type": "enum", "summary": "ACL scope type.", "values": ["default", "user", "group", "domain"], "maps_to": "record.scope.type", "required": true}, {"name": "scope-value", "type": "string", "summary": "ACL scope value for user, group, or domain scopes.", "maps_to": "record.scope.value", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/acl"}], "risk": "Grants or changes calendar sharing; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar acl insert --calendar-id calendar_fixture_1 --role reader --scope-type user --scope-value fixture@example.invalid --preview --json"]
+      "path": "api delete calendars calendarid",
+      "summary": "Documented DELETE /calendars/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api delete calendars calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendars/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.delete.calendars-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "acl patch", "summary": "Plan a partial ACL sharing-rule update.", "intent": "reverse_etl", "availability": "implemented", "write": "patch_acl_rule", "source_cli_path": "PATCH /calendar/v3/calendars/{calendarId}/acl/{ruleId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/patch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "rule-id", "type": "string", "summary": "ACL rule identifier.", "maps_to": "record.rule_id", "required": true, "allow_empty": false}, {"name": "role", "type": "enum", "summary": "Replacement ACL role.", "values": ["none", "freeBusyReader", "reader", "writer", "owner"], "maps_to": "record.role", "required": true}, {"name": "scope-type", "type": "enum", "summary": "Optional ACL scope type.", "values": ["default", "user", "group", "domain"], "maps_to": "record.scope.type"}, {"name": "scope-value", "type": "string", "summary": "Optional ACL scope value.", "maps_to": "record.scope.value", "allow_empty": false}], "api_surface": [{"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"}], "risk": "Changes calendar sharing; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar acl patch --calendar-id calendar_fixture_1 --rule-id rule_fixture_1 --role writer --preview --json"]
+      "path": "api delete calendars calendarid acl ruleid",
+      "summary": "Documented DELETE /calendars/{calendarId}/acl/{ruleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api delete calendars calendarid acl ruleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "operation": "google-calendar.delete.calendars-calendarid-acl-ruleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "acl update", "summary": "Plan replacement of an ACL sharing rule.", "intent": "reverse_etl", "availability": "implemented", "write": "update_acl_rule", "source_cli_path": "PUT /calendar/v3/calendars/{calendarId}/acl/{ruleId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/update",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "rule-id", "type": "string", "summary": "ACL rule identifier.", "maps_to": "record.rule_id", "required": true, "allow_empty": false}, {"name": "role", "type": "enum", "summary": "Replacement ACL role.", "values": ["none", "freeBusyReader", "reader", "writer", "owner"], "maps_to": "record.role", "required": true}, {"name": "scope-type", "type": "enum", "summary": "ACL scope type.", "values": ["default", "user", "group", "domain"], "maps_to": "record.scope.type", "required": true}, {"name": "scope-value", "type": "string", "summary": "ACL scope value for user, group, or domain scopes.", "maps_to": "record.scope.value", "allow_empty": false}], "api_surface": [{"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"}], "risk": "Replaces calendar sharing settings; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar acl update --calendar-id calendar_fixture_1 --rule-id rule_fixture_1 --role reader --scope-type user --scope-value fixture@example.invalid --preview --json"]
+      "path": "api delete calendars calendarid events eventid",
+      "summary": "Documented DELETE /calendars/{calendarId}/events/{eventId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api delete calendars calendarid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "operation": "google-calendar.delete.calendars-calendarid-events-eventid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "acl watch", "summary": "Plan creation of an ACL notification channel.", "intent": "reverse_etl", "availability": "implemented", "write": "watch_acl", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/acl/watch", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/watch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "channel-id", "type": "string", "summary": "Unique channel identifier.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "channel-type", "type": "enum", "summary": "Google channel transport type.", "values": ["web_hook"], "maps_to": "record.type", "required": true}, {"name": "channel-address", "type": "string", "summary": "HTTPS webhook callback URL.", "maps_to": "record.address", "required": true, "allow_empty": false}, {"name": "channel-token", "type": "string", "summary": "Optional opaque channel token.", "maps_to": "record.token", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/acl/watch"}], "risk": "Creates an ACL notification channel; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar acl watch --calendar-id calendar_fixture_1 --channel-id channel_fixture_1 --channel-type web_hook --channel-address https://example.invalid/calendar-hook --preview --json"]
+      "path": "api delete users me calendarlist calendarid",
+      "summary": "Documented DELETE /users/me/calendarList/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api delete users me calendarlist calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.delete.users-me-calendarlist-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "calendar-list delete", "summary": "Plan removal of a calendar-list entry with typed destructive confirmation.", "intent": "reverse_etl", "availability": "implemented", "write": "delete_calendar_list_entry", "source_cli_path": "DELETE /calendar/v3/users/me/calendarList/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/delete",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}], "redact_fields": ["calendar_id"], "api_surface": [{"method": "DELETE", "path": "/calendar/v3/users/me/calendarList/{calendarId}"}], "risk": "Removes a calendar from the user's list; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar calendar-list delete --calendar-id calendar_fixture_1 --preview --json"]
+      "path": "api get calendars calendarid",
+      "summary": "Documented GET /calendars/{calendarId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendar-list insert", "summary": "Plan insertion of a calendar-list entry.", "intent": "reverse_etl", "availability": "implemented", "write": "insert_calendar_list_entry", "source_cli_path": "POST /calendar/v3/users/me/calendarList", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/insert",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Existing calendar ID to add.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "summary-override", "type": "string", "summary": "Optional display-name override.", "maps_to": "record.summaryOverride", "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional calendar-list color ID.", "maps_to": "record.colorId", "allow_empty": false}, {"name": "hidden", "type": "boolean", "summary": "Optional hidden state.", "maps_to": "record.hidden"}, {"name": "selected", "type": "boolean", "summary": "Optional selected state.", "maps_to": "record.selected"}], "api_surface": [{"method": "POST", "path": "/calendar/v3/users/me/calendarList"}], "risk": "Adds a calendar to the user's list; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendar-list insert --calendar-id calendar_fixture_1 --preview --json"]
+      "path": "api get calendars calendarid acl",
+      "summary": "Documented GET /calendars/{calendarId}/acl (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid acl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}/acl"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid-acl",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendar-list patch", "summary": "Plan a partial calendar-list entry update.", "intent": "reverse_etl", "availability": "implemented", "write": "patch_calendar_list_entry", "source_cli_path": "PATCH /calendar/v3/users/me/calendarList/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/patch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "summary-override", "type": "string", "summary": "Replacement display-name override.", "maps_to": "record.summaryOverride", "required": true, "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional calendar-list color ID.", "maps_to": "record.colorId", "allow_empty": false}, {"name": "hidden", "type": "boolean", "summary": "Optional hidden state.", "maps_to": "record.hidden"}, {"name": "selected", "type": "boolean", "summary": "Optional selected state.", "maps_to": "record.selected"}], "api_surface": [{"method": "PATCH", "path": "/calendar/v3/users/me/calendarList/{calendarId}"}], "risk": "Changes a calendar-list entry; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendar-list patch --calendar-id calendar_fixture_1 --summary-override Fixture --preview --json"]
+      "path": "api get calendars calendarid acl ruleid",
+      "summary": "Documented GET /calendars/{calendarId}/acl/{ruleId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid acl ruleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid-acl-ruleid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendar-list update", "summary": "Plan replacement of calendar-list writable fields.", "intent": "reverse_etl", "availability": "implemented", "write": "update_calendar_list_entry", "source_cli_path": "PUT /calendar/v3/users/me/calendarList/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/update",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "summary-override", "type": "string", "summary": "Replacement display-name override.", "maps_to": "record.summaryOverride", "required": true, "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional calendar-list color ID.", "maps_to": "record.colorId", "allow_empty": false}, {"name": "hidden", "type": "boolean", "summary": "Optional hidden state.", "maps_to": "record.hidden"}, {"name": "selected", "type": "boolean", "summary": "Optional selected state.", "maps_to": "record.selected"}], "api_surface": [{"method": "PUT", "path": "/calendar/v3/users/me/calendarList/{calendarId}"}], "risk": "Replaces calendar-list writable fields; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendar-list update --calendar-id calendar_fixture_1 --summary-override Fixture --preview --json"]
+      "path": "api get calendars calendarid events",
+      "summary": "Documented GET /calendars/{calendarId}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}/events"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendar-list watch", "summary": "Plan creation of a calendar-list notification channel.", "intent": "reverse_etl", "availability": "implemented", "write": "watch_calendar_list", "source_cli_path": "POST /calendar/v3/users/me/calendarList/watch", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/watch",
-      "flags": [{"name": "channel-id", "type": "string", "summary": "Unique channel identifier.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "channel-type", "type": "enum", "summary": "Google channel transport type.", "values": ["web_hook"], "maps_to": "record.type", "required": true}, {"name": "channel-address", "type": "string", "summary": "HTTPS webhook callback URL.", "maps_to": "record.address", "required": true, "allow_empty": false}, {"name": "channel-token", "type": "string", "summary": "Optional opaque channel token.", "maps_to": "record.token", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/users/me/calendarList/watch"}], "risk": "Creates a calendar-list notification channel; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendar-list watch --channel-id channel_fixture_1 --channel-type web_hook --channel-address https://example.invalid/calendar-hook --preview --json"]
+      "path": "api get calendars calendarid events eventid",
+      "summary": "Documented GET /calendars/{calendarId}/events/{eventId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid-events-eventid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars clear", "summary": "Plan clearing every event from a primary calendar with typed destructive confirmation.", "intent": "reverse_etl", "availability": "implemented", "write": "clear_calendar", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/clear", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/clear",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Primary calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}], "redact_fields": ["calendar_id"], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/clear"}], "risk": "Clears all events in a primary calendar; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar calendars clear --calendar-id primary --preview --json"]
+      "path": "api get calendars calendarid events eventid instances",
+      "summary": "Documented GET /calendars/{calendarId}/events/{eventId}/instances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get calendars calendarid events eventid instances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendars/{calendarId}/events/{eventId}/instances"
+        }
+      ],
+      "operation": "google-calendar.get.calendars-calendarid-events-eventid-instances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars delete", "summary": "Plan deletion of a secondary calendar with typed destructive confirmation.", "intent": "reverse_etl", "availability": "implemented", "write": "delete_calendar", "source_cli_path": "DELETE /calendar/v3/calendars/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/delete",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Secondary calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}], "redact_fields": ["calendar_id"], "api_surface": [{"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}"}], "risk": "Deletes a secondary calendar; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar calendars delete --calendar-id calendar_fixture_1 --preview --json"]
+      "path": "api get colors",
+      "summary": "Documented GET /colors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get colors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/colors"
+        }
+      ],
+      "operation": "google-calendar.get.colors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars insert", "summary": "Plan creation of a secondary calendar.", "intent": "reverse_etl", "availability": "implemented", "write": "insert_calendar", "source_cli_path": "POST /calendar/v3/calendars", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/insert",
-      "flags": [{"name": "summary", "type": "string", "summary": "Calendar display name.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional calendar description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional calendar location.", "maps_to": "record.location", "allow_empty": false}, {"name": "time-zone", "type": "string", "summary": "Optional IANA calendar timezone.", "maps_to": "record.timeZone", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars"}], "risk": "Creates a secondary calendar; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendars insert --summary 'Fixture Calendar' --preview --json"]
+      "path": "api get users me calendarlist",
+      "summary": "Documented GET /users/me/calendarList (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get users me calendarlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/calendarList"
+        }
+      ],
+      "operation": "google-calendar.get.users-me-calendarlist",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars patch", "summary": "Plan a partial calendar metadata update.", "intent": "reverse_etl", "availability": "implemented", "write": "patch_calendar", "source_cli_path": "PATCH /calendar/v3/calendars/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/patch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Replacement calendar display name.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional calendar description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional calendar location.", "maps_to": "record.location", "allow_empty": false}, {"name": "time-zone", "type": "string", "summary": "Optional IANA calendar timezone.", "maps_to": "record.timeZone", "allow_empty": false}], "api_surface": [{"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}"}], "risk": "Changes calendar metadata; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendars patch --calendar-id calendar_fixture_1 --summary 'Updated Fixture' --preview --json"]
+      "path": "api get users me calendarlist calendarid",
+      "summary": "Documented GET /users/me/calendarList/{calendarId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get users me calendarlist calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.get.users-me-calendarlist-calendarid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars transfer-ownership", "summary": "Plan transfer of a secondary calendar to a Workspace user.", "intent": "reverse_etl", "availability": "implemented", "write": "transfer_calendar_ownership", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/transferOwnership", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/transferOwnership",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Secondary calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "new-data-owner", "type": "string", "summary": "Workspace user email that becomes the data owner.", "maps_to": "record.new_data_owner", "required": true, "allow_empty": false}, {"name": "use-admin-access", "type": "boolean", "summary": "Required administrator-privilege acknowledgement.", "maps_to": "record.use_admin_access", "required": true}], "redact_fields": ["calendar_id", "new_data_owner"], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/transferOwnership"}], "risk": "Transfers calendar data ownership; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar calendars transfer-ownership --calendar-id calendar_fixture_1 --new-data-owner owner@example.invalid --use-admin-access --preview --json"]
+      "path": "api get users me settings",
+      "summary": "Documented GET /users/me/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get users me settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/settings"
+        }
+      ],
+      "operation": "google-calendar.get.users-me-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "calendars update", "summary": "Plan replacement of calendar metadata.", "intent": "reverse_etl", "availability": "implemented", "write": "update_calendar", "source_cli_path": "PUT /calendar/v3/calendars/{calendarId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/update",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Replacement calendar display name.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional calendar description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional calendar location.", "maps_to": "record.location", "allow_empty": false}, {"name": "time-zone", "type": "string", "summary": "Optional IANA calendar timezone.", "maps_to": "record.timeZone", "allow_empty": false}], "api_surface": [{"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}"}], "risk": "Replaces calendar metadata; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar calendars update --calendar-id calendar_fixture_1 --summary 'Updated Fixture' --preview --json"]
+      "path": "api get users me settings setting",
+      "summary": "Documented GET /users/me/settings/{setting} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api get users me settings setting --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/settings/{setting}"
+        }
+      ],
+      "operation": "google-calendar.get.users-me-settings-setting",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "channels stop", "summary": "Plan stopping a Google Calendar notification channel.", "intent": "reverse_etl", "availability": "implemented", "write": "stop_channel", "source_cli_path": "POST /calendar/v3/channels/stop", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/channels/stop",
-      "flags": [{"name": "channel-id", "type": "string", "summary": "Channel identifier.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "resource-id", "type": "string", "summary": "Provider resource identifier returned with the channel.", "maps_to": "record.resourceId", "required": true, "allow_empty": false}], "redact_fields": ["id", "resourceId"], "api_surface": [{"method": "POST", "path": "/calendar/v3/channels/stop"}], "risk": "Stops a notification channel; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar channels stop --channel-id channel_fixture_1 --resource-id resource_fixture_1 --preview --json"]
+      "path": "api patch calendars calendarid",
+      "summary": "Documented PATCH /calendars/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api patch calendars calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendars/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.patch.calendars-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events delete", "summary": "Plan deletion of an event with typed destructive confirmation.", "intent": "reverse_etl", "availability": "implemented", "write": "delete_event", "source_cli_path": "DELETE /calendar/v3/calendars/{calendarId}/events/{eventId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/delete",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "event-id", "type": "string", "summary": "Event identifier.", "maps_to": "record.event_id", "required": true, "allow_empty": false}], "redact_fields": ["calendar_id", "event_id"], "api_surface": [{"method": "DELETE", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"}], "risk": "Deletes an event; requires plan, preview, approval, and --confirm destructive.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token and --confirm destructive.", "examples": ["pm google-calendar events delete --calendar-id calendar_fixture_1 --event-id event_fixture_1 --preview --json"]
+      "path": "api patch calendars calendarid acl ruleid",
+      "summary": "Documented PATCH /calendars/{calendarId}/acl/{ruleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api patch calendars calendarid acl ruleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "operation": "google-calendar.patch.calendars-calendarid-acl-ruleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events import", "summary": "Plan import of a private event copy.", "intent": "reverse_etl", "availability": "implemented", "write": "import_event", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/events/import", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/import",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "ical-uid", "type": "string", "summary": "RFC 5545 iCalendar event UID.", "maps_to": "record.iCalUID", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Event summary.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "start-date-time", "type": "string", "summary": "RFC3339 event start.", "maps_to": "record.start.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "end-date-time", "type": "string", "summary": "RFC3339 event end.", "maps_to": "record.end.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional event description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional event location.", "maps_to": "record.location", "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional event color ID.", "maps_to": "record.colorId", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/import"}], "risk": "Imports a private event copy; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events import --calendar-id calendar_fixture_1 --ical-uid event-fixture-1@example.invalid --summary 'Fixture Event' --start-date-time 2030-01-01T10:00:00Z --end-date-time 2030-01-01T11:00:00Z --preview --json"]
+      "path": "api patch calendars calendarid events eventid",
+      "summary": "Documented PATCH /calendars/{calendarId}/events/{eventId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api patch calendars calendarid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "operation": "google-calendar.patch.calendars-calendarid-events-eventid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events insert", "summary": "Plan creation of a Google Calendar event.", "intent": "reverse_etl", "availability": "implemented", "write": "insert_event", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/events", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/insert",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Event summary.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "start-date-time", "type": "string", "summary": "RFC3339 event start.", "maps_to": "record.start.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "end-date-time", "type": "string", "summary": "RFC3339 event end.", "maps_to": "record.end.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional event description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional event location.", "maps_to": "record.location", "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional event color ID.", "maps_to": "record.colorId", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events"}], "risk": "Creates a calendar event; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events insert --calendar-id calendar_fixture_1 --summary 'Fixture Event' --start-date-time 2030-01-01T10:00:00Z --end-date-time 2030-01-01T11:00:00Z --preview --json"]
+      "path": "api patch users me calendarlist calendarid",
+      "summary": "Documented PATCH /users/me/calendarList/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api patch users me calendarlist calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.patch.users-me-calendarlist-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events move", "summary": "Plan moving an event to a destination calendar.", "intent": "reverse_etl", "availability": "implemented", "write": "move_event", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/events/{eventId}/move", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/move",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Source calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "event-id", "type": "string", "summary": "Event identifier.", "maps_to": "record.event_id", "required": true, "allow_empty": false}, {"name": "destination", "type": "string", "summary": "Destination calendar identifier.", "maps_to": "record.destination", "required": true, "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move"}], "risk": "Moves an event between calendars; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events move --calendar-id calendar_fixture_1 --event-id event_fixture_1 --destination destination_fixture_1 --preview --json"]
+      "path": "api post calendars",
+      "summary": "Documented POST /calendars (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars"
+        }
+      ],
+      "operation": "google-calendar.post.calendars",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events patch", "summary": "Plan a partial Google Calendar event update.", "intent": "reverse_etl", "availability": "implemented", "write": "patch_event", "source_cli_path": "PATCH /calendar/v3/calendars/{calendarId}/events/{eventId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/patch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "event-id", "type": "string", "summary": "Event identifier.", "maps_to": "record.event_id", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Replacement event summary.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "start-date-time", "type": "string", "summary": "RFC3339 event start.", "maps_to": "record.start.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "end-date-time", "type": "string", "summary": "RFC3339 event end.", "maps_to": "record.end.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional event description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional event location.", "maps_to": "record.location", "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional event color ID.", "maps_to": "record.colorId", "allow_empty": false}], "api_surface": [{"method": "PATCH", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"}], "risk": "Patches a calendar event; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events patch --calendar-id calendar_fixture_1 --event-id event_fixture_1 --summary 'Updated Fixture Event' --start-date-time 2030-01-01T10:00:00Z --end-date-time 2030-01-01T11:00:00Z --preview --json"]
+      "path": "api post calendars calendarid acl",
+      "summary": "Documented POST /calendars/{calendarId}/acl (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid acl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/acl"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-acl",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events quick-add", "summary": "Plan creation of an event from natural-language text.", "intent": "reverse_etl", "availability": "implemented", "write": "quick_add_event", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/events/quickAdd", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "text", "type": "string", "summary": "Natural-language event description.", "maps_to": "record.text", "required": true, "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd"}], "risk": "Creates an event from natural-language text; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events quick-add --calendar-id calendar_fixture_1 --text 'Fixture meeting tomorrow at 10am' --preview --json"]
+      "path": "api post calendars calendarid acl watch",
+      "summary": "Documented POST /calendars/{calendarId}/acl/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid acl watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/acl/watch"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-acl-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events update", "summary": "Plan replacement of a Google Calendar event.", "intent": "reverse_etl", "availability": "implemented", "write": "update_event", "source_cli_path": "PUT /calendar/v3/calendars/{calendarId}/events/{eventId}", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/update",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "event-id", "type": "string", "summary": "Event identifier.", "maps_to": "record.event_id", "required": true, "allow_empty": false}, {"name": "summary", "type": "string", "summary": "Replacement event summary.", "maps_to": "record.summary", "required": true, "allow_empty": false}, {"name": "start-date-time", "type": "string", "summary": "RFC3339 event start.", "maps_to": "record.start.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "end-date-time", "type": "string", "summary": "RFC3339 event end.", "maps_to": "record.end.dateTime", "format": "date-time", "required": true, "allow_empty": false}, {"name": "description", "type": "string", "summary": "Optional event description.", "maps_to": "record.description", "allow_empty": false}, {"name": "location", "type": "string", "summary": "Optional event location.", "maps_to": "record.location", "allow_empty": false}, {"name": "color-id", "type": "string", "summary": "Optional event color ID.", "maps_to": "record.colorId", "allow_empty": false}], "api_surface": [{"method": "PUT", "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"}], "risk": "Replaces a calendar event; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events update --calendar-id calendar_fixture_1 --event-id event_fixture_1 --summary 'Updated Fixture Event' --start-date-time 2030-01-01T10:00:00Z --end-date-time 2030-01-01T11:00:00Z --preview --json"]
+      "path": "api post calendars calendarid clear",
+      "summary": "Documented POST /calendars/{calendarId}/clear (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid clear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/clear"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-clear",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "events watch", "summary": "Plan creation of an event notification channel.", "intent": "reverse_etl", "availability": "implemented", "write": "watch_events", "source_cli_path": "POST /calendar/v3/calendars/{calendarId}/events/watch", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/watch",
-      "flags": [{"name": "calendar-id", "type": "string", "summary": "Calendar identifier.", "maps_to": "record.calendar_id", "required": true, "allow_empty": false}, {"name": "channel-id", "type": "string", "summary": "Unique channel identifier.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "channel-type", "type": "enum", "summary": "Google channel transport type.", "values": ["web_hook"], "maps_to": "record.type", "required": true}, {"name": "channel-address", "type": "string", "summary": "HTTPS webhook callback URL.", "maps_to": "record.address", "required": true, "allow_empty": false}, {"name": "channel-token", "type": "string", "summary": "Optional opaque channel token.", "maps_to": "record.token", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/calendars/{calendarId}/events/watch"}], "risk": "Creates an event notification channel; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar events watch --calendar-id calendar_fixture_1 --channel-id channel_fixture_1 --channel-type web_hook --channel-address https://example.invalid/calendar-hook --preview --json"]
+      "path": "api post calendars calendarid events",
+      "summary": "Documented POST /calendars/{calendarId}/events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/events"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "settings watch", "summary": "Plan creation of a settings notification channel.", "intent": "reverse_etl", "availability": "implemented", "write": "watch_settings", "source_cli_path": "POST /calendar/v3/users/me/settings/watch", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/settings/watch",
-      "flags": [{"name": "channel-id", "type": "string", "summary": "Unique channel identifier.", "maps_to": "record.id", "required": true, "allow_empty": false}, {"name": "channel-type", "type": "enum", "summary": "Google channel transport type.", "values": ["web_hook"], "maps_to": "record.type", "required": true}, {"name": "channel-address", "type": "string", "summary": "HTTPS webhook callback URL.", "maps_to": "record.address", "required": true, "allow_empty": false}, {"name": "channel-token", "type": "string", "summary": "Optional opaque channel token.", "maps_to": "record.token", "allow_empty": false}], "api_surface": [{"method": "POST", "path": "/calendar/v3/users/me/settings/watch"}], "risk": "Creates a settings notification channel; requires plan, preview, approval, and execute.", "approval": "Plan first, inspect preview output, then execute only with the generated approval token.", "examples": ["pm google-calendar settings watch --channel-id channel_fixture_1 --channel-type web_hook --channel-address https://example.invalid/calendar-hook --preview --json"]
+      "path": "api post calendars calendarid events eventid move",
+      "summary": "Documented POST /calendars/{calendarId}/events/{eventId}/move (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid events eventid move --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/events/{eventId}/move"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-events-eventid-move",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post calendars calendarid events import",
+      "summary": "Documented POST /calendars/{calendarId}/events/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid events import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/events/import"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-events-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post calendars calendarid events quickadd",
+      "summary": "Documented POST /calendars/{calendarId}/events/quickAdd (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid events quickadd --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/events/quickAdd"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-events-quickadd",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post calendars calendarid events watch",
+      "summary": "Documented POST /calendars/{calendarId}/events/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid events watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/events/watch"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-events-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post calendars calendarid transferownership",
+      "summary": "Documented POST /calendars/{calendarId}/transferOwnership (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post calendars calendarid transferownership --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendars/{calendarId}/transferOwnership"
+        }
+      ],
+      "operation": "google-calendar.post.calendars-calendarid-transferownership",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post channels stop",
+      "summary": "Documented POST /channels/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post channels stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/stop"
+        }
+      ],
+      "operation": "google-calendar.post.channels-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post freebusy",
+      "summary": "Documented POST /freeBusy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post freebusy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/freeBusy"
+        }
+      ],
+      "operation": "google-calendar.post.freebusy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users me calendarlist",
+      "summary": "Documented POST /users/me/calendarList (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post users me calendarlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/me/calendarList"
+        }
+      ],
+      "operation": "google-calendar.post.users-me-calendarlist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users me calendarlist watch",
+      "summary": "Documented POST /users/me/calendarList/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post users me calendarlist watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/me/calendarList/watch"
+        }
+      ],
+      "operation": "google-calendar.post.users-me-calendarlist-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users me settings watch",
+      "summary": "Documented POST /users/me/settings/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api post users me settings watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/me/settings/watch"
+        }
+      ],
+      "operation": "google-calendar.post.users-me-settings-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put calendars calendarid",
+      "summary": "Documented PUT /calendars/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api put calendars calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendars/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.put.calendars-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put calendars calendarid acl ruleid",
+      "summary": "Documented PUT /calendars/{calendarId}/acl/{ruleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api put calendars calendarid acl ruleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "operation": "google-calendar.put.calendars-calendarid-acl-ruleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put calendars calendarid events eventid",
+      "summary": "Documented PUT /calendars/{calendarId}/events/{eventId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api put calendars calendarid events eventid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "operation": "google-calendar.put.calendars-calendarid-events-eventid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users me calendarlist calendarid",
+      "summary": "Documented PUT /users/me/calendarList/{calendarId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar api put users me calendarlist calendarid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "operation": "google-calendar.put.users-me-calendarlist-calendarid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "calendar list",
+      "summary": "Run the calendar ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar calendar list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "calendar list entry list",
+      "summary": "Run the calendar list entry ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_list_entry",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar calendar list entry list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "calendar list list",
+      "summary": "Run the calendar list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_list",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar calendar list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/users/me/calendarList"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "clear calendar apply",
+      "summary": "Plan and execute the clear calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "clear_calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar clear calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/clear"
+        }
+      ],
+      "risk": "critical destructive external mutation; clears every event from a primary calendar; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "colors list",
+      "summary": "Run the colors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "colors",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar colors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/colors"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "delete acl rule apply",
+      "summary": "Plan and execute the delete acl rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_acl_rule",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "rule_id",
+          "type": "string",
+          "summary": "Required rule id record field.",
+          "maps_to": "record.rule_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar delete acl rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "risk": "destructive external mutation; removes a Google Calendar ACL rule; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete calendar apply",
+      "summary": "Plan and execute the delete calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar delete calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendar/v3/calendars/{calendarId}"
+        }
+      ],
+      "risk": "critical destructive external mutation; deletes a secondary calendar; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete calendar list entry apply",
+      "summary": "Plan and execute the delete calendar list entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_calendar_list_entry",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar delete calendar list entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendar/v3/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "risk": "destructive external mutation; removes a calendar from the authenticated user's calendar list; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete event apply",
+      "summary": "Plan and execute the delete event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar delete event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "risk": "destructive external mutation; deletes a Google Calendar event; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "event instances list",
+      "summary": "Run the event instances ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_instances",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar event instances list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "event list",
+      "summary": "Run the event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/calendars/{calendarId}/events"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "freebusy query",
+      "summary": "Run a bounded typed free/busy query for one calendar and time range.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "calendar",
+          "type": "string",
+          "summary": "Calendar ID to query.",
+          "maps_to": "body.items.0.id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "time-min",
+          "type": "string",
+          "summary": "RFC3339 lower time bound.",
+          "maps_to": "body.timeMin",
+          "format": "date-time",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "time-max",
+          "type": "string",
+          "summary": "RFC3339 upper time bound.",
+          "maps_to": "body.timeMax",
+          "format": "date-time",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "time-zone",
+          "type": "string",
+          "summary": "Optional response timezone.",
+          "maps_to": "body.timeZone",
+          "allow_empty": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "order",
+          "left": "body.timeMin",
+          "right": "body.timeMax",
+          "op": "lt",
+          "value_type": "date-time",
+          "message": "time-min must be earlier than time-max"
+        }
+      ],
+      "examples": [
+        "pm google-calendar freebusy query --calendar primary --time-min 2020-01-01T00:00:00Z --time-max 2020-01-02T00:00:00Z --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/freeBusy"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "operation": "google-calendar.freebusy.query",
+      "risk": "medium",
+      "approval": "No write approval required; bounded direct read validates typed inputs."
+    },
+    {
+      "path": "import event apply",
+      "summary": "Plan and execute the import event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "import_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar import event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/events/import"
+        }
+      ],
+      "risk": "high-impact external mutation; imports a private event copy; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "insert acl rule apply",
+      "summary": "Plan and execute the insert acl rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "insert_acl_rule",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar insert acl rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/acl"
+        }
+      ],
+      "risk": "high-impact external mutation; grants or changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "insert calendar apply",
+      "summary": "Plan and execute the insert calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "insert_calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Required summary record field.",
+          "maps_to": "record.summary",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar insert calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars"
+        }
+      ],
+      "risk": "high-impact external mutation; creates a secondary calendar owned by the authenticated user; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "insert calendar list entry apply",
+      "summary": "Plan and execute the insert calendar list entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "insert_calendar_list_entry",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar insert calendar list entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/users/me/calendarList"
+        }
+      ],
+      "risk": "external mutation; adds a calendar to the authenticated user's calendar list; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "insert event apply",
+      "summary": "Plan and execute the insert event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "insert_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar insert event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/events"
+        }
+      ],
+      "risk": "high-impact external mutation; creates a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "move event apply",
+      "summary": "Plan and execute the move event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "move_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "destination",
+          "type": "string",
+          "summary": "Required destination record field.",
+          "maps_to": "record.destination",
+          "required": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar move event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move"
+        }
+      ],
+      "risk": "high-impact external mutation; moves an event between calendars; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch acl rule apply",
+      "summary": "Plan and execute the patch acl rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_acl_rule",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        },
+        {
+          "name": "rule_id",
+          "type": "string",
+          "summary": "Required rule id record field.",
+          "maps_to": "record.rule_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar patch acl rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "risk": "high-impact external mutation; changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch calendar apply",
+      "summary": "Plan and execute the patch calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Required summary record field.",
+          "maps_to": "record.summary",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar patch calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendar/v3/calendars/{calendarId}"
+        }
+      ],
+      "risk": "high-impact external mutation; changes calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch calendar list entry apply",
+      "summary": "Plan and execute the patch calendar list entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_calendar_list_entry",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "summaryOverride",
+          "type": "string",
+          "summary": "Required summaryOverride record field.",
+          "maps_to": "record.summaryOverride",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar patch calendar list entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendar/v3/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "risk": "external mutation; changes a calendar-list entry; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "patch event apply",
+      "summary": "Plan and execute the patch event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "patch_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar patch event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "risk": "high-impact external mutation; patches a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "quick add event apply",
+      "summary": "Plan and execute the quick add event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "quick_add_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar quick add event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd"
+        }
+      ],
+      "risk": "external mutation; creates an event from natural-language text; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "setting list",
+      "summary": "Run the setting ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "setting",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar setting list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/users/me/settings/{setting}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "settings list",
+      "summary": "Run the settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "settings",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calendar/v3/users/me/settings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "stop channel apply",
+      "summary": "Plan and execute the stop channel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "stop_channel",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "resourceId",
+          "type": "string",
+          "summary": "Required resourceId record field.",
+          "maps_to": "record.resourceId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar stop channel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/channels/stop"
+        }
+      ],
+      "risk": "external mutation; stops a Google Calendar notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "transfer calendar ownership apply",
+      "summary": "Plan and execute the transfer calendar ownership reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "transfer_calendar_ownership",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "new_data_owner",
+          "type": "string",
+          "summary": "Required new data owner record field.",
+          "maps_to": "record.new_data_owner",
+          "required": true
+        },
+        {
+          "name": "use_admin_access",
+          "type": "boolean",
+          "summary": "Required use admin access record field.",
+          "maps_to": "record.use_admin_access",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar transfer calendar ownership apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/transferOwnership"
+        }
+      ],
+      "risk": "critical administrative external mutation; transfers secondary-calendar data ownership; reverse-ETL approval and typed destructive confirmation required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update acl rule apply",
+      "summary": "Plan and execute the update acl rule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_acl_rule",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar update acl rule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}"
+        }
+      ],
+      "risk": "high-impact external mutation; replaces calendar sharing settings; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update calendar apply",
+      "summary": "Plan and execute the update calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_calendar",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Required summary record field.",
+          "maps_to": "record.summary",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar update calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendar/v3/calendars/{calendarId}"
+        }
+      ],
+      "risk": "high-impact external mutation; replaces calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update calendar list entry apply",
+      "summary": "Plan and execute the update calendar list entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_calendar_list_entry",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "summaryOverride",
+          "type": "string",
+          "summary": "Required summaryOverride record field.",
+          "maps_to": "record.summaryOverride",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar update calendar list entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendar/v3/users/me/calendarList/{calendarId}"
+        }
+      ],
+      "risk": "external mutation; replaces a calendar-list entry's writable fields; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update event apply",
+      "summary": "Plan and execute the update event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_event",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "examples": [
+        "pm google-calendar update event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}"
+        }
+      ],
+      "risk": "high-impact external mutation; replaces a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "watch acl apply",
+      "summary": "Plan and execute the watch acl reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "watch_acl",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Required address record field.",
+          "maps_to": "record.address",
+          "required": true
+        },
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar watch acl apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/acl/watch"
+        }
+      ],
+      "risk": "external mutation; creates an ACL notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "watch calendar list apply",
+      "summary": "Plan and execute the watch calendar list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "watch_calendar_list",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Required address record field.",
+          "maps_to": "record.address",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar watch calendar list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/users/me/calendarList/watch"
+        }
+      ],
+      "risk": "external mutation; creates a calendar-list notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "watch events apply",
+      "summary": "Plan and execute the watch events reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "watch_events",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Required address record field.",
+          "maps_to": "record.address",
+          "required": true
+        },
+        {
+          "name": "calendar_id",
+          "type": "string",
+          "summary": "Required calendar id record field.",
+          "maps_to": "record.calendar_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar watch events apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/calendars/{calendarId}/events/watch"
+        }
+      ],
+      "risk": "external mutation; creates an event notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "watch settings apply",
+      "summary": "Plan and execute the watch settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "watch_settings",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+      "flags": [
+        {
+          "name": "address",
+          "type": "string",
+          "summary": "Required address record field.",
+          "maps_to": "record.address",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm google-calendar watch settings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calendar/v3/users/me/settings/watch"
+        }
+      ],
+      "risk": "external mutation; creates a settings notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "approval": "requires plan, preview, approval, and execute"
     }
   ]
 }

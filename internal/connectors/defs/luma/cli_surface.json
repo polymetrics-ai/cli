@@ -1,0 +1,1581 @@
+{
+  "tagline": "Run Luma's declared streams and reverse-ETL actions.",
+  "usage": "pm luma \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api webhook calendar-event-added-post",
+        "api webhook calendar-event-submitted-post",
+        "api webhook calendar-person-subscribed-post",
+        "api webhook event-canceled-post",
+        "api webhook event-created-post",
+        "api webhook event-updated-post",
+        "api webhook guest-registered-post",
+        "api webhook guest-updated-post",
+        "api webhook ticket-registered-post",
+        "calendar admins list",
+        "calendar contacts list",
+        "calendar coupons list",
+        "calendar events list",
+        "calendar list",
+        "contact tags list",
+        "entity lookup list",
+        "event coupons list",
+        "event guests list",
+        "event hosts list",
+        "event list",
+        "event lookup list",
+        "event tags list",
+        "event ticket type list",
+        "event ticket types list",
+        "events list",
+        "guest list",
+        "guests list",
+        "membership tiers list",
+        "organization admins list",
+        "organization calendars list",
+        "organization events list",
+        "self user list",
+        "webhook list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add calendar event apply",
+        "add event guests apply",
+        "add event host apply",
+        "add membership member apply",
+        "api post v1 calendars contacts block",
+        "api post v1 calendars contacts remove",
+        "api post v1 calendars contacts restore",
+        "api post v1 events guests update-tickets",
+        "apply contact tag apply",
+        "apply event tag apply",
+        "approve calendar event apply",
+        "cancel event apply",
+        "create calendar coupon apply",
+        "create contact tag apply",
+        "create event apply",
+        "create event coupon apply",
+        "create event tag apply",
+        "create image upload url apply",
+        "create organization calendar apply",
+        "create ticket type apply",
+        "create webhook apply",
+        "delete contact tag apply",
+        "delete event tag apply",
+        "delete ticket type apply",
+        "delete webhook apply",
+        "import calendar contacts apply",
+        "reject calendar event apply",
+        "remove event host apply",
+        "request event cancellation apply",
+        "send event invites apply",
+        "transfer event calendar apply",
+        "unapply contact tag apply",
+        "unapply event tag apply",
+        "update calendar apply",
+        "update calendar coupon apply",
+        "update contact tag apply",
+        "update event apply",
+        "update event coupon apply",
+        "update event host apply",
+        "update event tag apply",
+        "update guest status apply",
+        "update membership member status apply",
+        "update ticket type apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add calendar event apply",
+      "summary": "Plan and execute the add calendar event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_calendar_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma add calendar event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/events/add"
+        }
+      ],
+      "risk": "add calendar event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add event guests apply",
+      "summary": "Plan and execute the add event guests reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_event_guests",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma add event guests apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/guests/add"
+        }
+      ],
+      "risk": "add event guests through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add event host apply",
+      "summary": "Plan and execute the add event host reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_event_host",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma add event host apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/hosts/add"
+        }
+      ],
+      "risk": "add event host through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add membership member apply",
+      "summary": "Plan and execute the add membership member reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_membership_member",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma add membership member apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/memberships/members/add"
+        }
+      ],
+      "risk": "add membership member through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "api post v1 calendars contacts block",
+      "summary": "Documented POST /v1/calendars/contacts/block (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api post v1 calendars contacts block --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contacts/block"
+        }
+      ],
+      "operation": "luma.post.v1-calendars-contacts-block",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calendars contacts remove",
+      "summary": "Documented POST /v1/calendars/contacts/remove (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api post v1 calendars contacts remove --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contacts/remove"
+        }
+      ],
+      "operation": "luma.post.v1-calendars-contacts-remove",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 calendars contacts restore",
+      "summary": "Documented POST /v1/calendars/contacts/restore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api post v1 calendars contacts restore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contacts/restore"
+        }
+      ],
+      "operation": "luma.post.v1-calendars-contacts-restore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 events guests update-tickets",
+      "summary": "Documented POST /v1/events/guests/update-tickets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api post v1 events guests update-tickets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/guests/update-tickets"
+        }
+      ],
+      "operation": "luma.post.v1-events-guests-update-tickets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook calendar-event-added-post",
+      "summary": "Documented WEBHOOK calendar.event.added#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook calendar-event-added-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "calendar.event.added#POST"
+        }
+      ],
+      "operation": "luma.webhook.calendar-event-added-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook calendar-event-submitted-post",
+      "summary": "Documented WEBHOOK calendar.event.submitted#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook calendar-event-submitted-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "calendar.event.submitted#POST"
+        }
+      ],
+      "operation": "luma.webhook.calendar-event-submitted-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook calendar-person-subscribed-post",
+      "summary": "Documented WEBHOOK calendar.person.subscribed#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook calendar-person-subscribed-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "calendar.person.subscribed#POST"
+        }
+      ],
+      "operation": "luma.webhook.calendar-person-subscribed-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook event-canceled-post",
+      "summary": "Documented WEBHOOK event.canceled#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook event-canceled-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "event.canceled#POST"
+        }
+      ],
+      "operation": "luma.webhook.event-canceled-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook event-created-post",
+      "summary": "Documented WEBHOOK event.created#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook event-created-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "event.created#POST"
+        }
+      ],
+      "operation": "luma.webhook.event-created-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook event-updated-post",
+      "summary": "Documented WEBHOOK event.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook event-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "event.updated#POST"
+        }
+      ],
+      "operation": "luma.webhook.event-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook guest-registered-post",
+      "summary": "Documented WEBHOOK guest.registered#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook guest-registered-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "guest.registered#POST"
+        }
+      ],
+      "operation": "luma.webhook.guest-registered-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook guest-updated-post",
+      "summary": "Documented WEBHOOK guest.updated#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook guest-updated-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "guest.updated#POST"
+        }
+      ],
+      "operation": "luma.webhook.guest-updated-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "api webhook ticket-registered-post",
+      "summary": "Documented WEBHOOK ticket.registered#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma api webhook ticket-registered-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "ticket.registered#POST"
+        }
+      ],
+      "operation": "luma.webhook.ticket-registered-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "apply contact tag apply",
+      "summary": "Plan and execute the apply contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "apply_contact_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma apply contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contact-tags/apply"
+        }
+      ],
+      "risk": "apply contact tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "apply event tag apply",
+      "summary": "Plan and execute the apply event tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "apply_event_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma apply event tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/event-tags/apply"
+        }
+      ],
+      "risk": "apply event tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "approve calendar event apply",
+      "summary": "Plan and execute the approve calendar event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "approve_calendar_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma approve calendar event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/events/approve"
+        }
+      ],
+      "risk": "approve calendar event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "calendar admins list",
+      "summary": "Run the calendar admins ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_admins",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma calendar admins list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/admins/list"
+        }
+      ]
+    },
+    {
+      "path": "calendar contacts list",
+      "summary": "Run the calendar contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_contacts",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma calendar contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/contacts/list"
+        }
+      ]
+    },
+    {
+      "path": "calendar coupons list",
+      "summary": "Run the calendar coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_coupons",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma calendar coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/coupons/list"
+        }
+      ]
+    },
+    {
+      "path": "calendar events list",
+      "summary": "Run the calendar events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_events",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma calendar events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/events/list"
+        }
+      ]
+    },
+    {
+      "path": "calendar list",
+      "summary": "Run the calendar ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma calendar list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/get"
+        }
+      ]
+    },
+    {
+      "path": "cancel event apply",
+      "summary": "Plan and execute the cancel event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma cancel event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/cancel"
+        }
+      ],
+      "risk": "cancel event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "contact tags list",
+      "summary": "Run the contact tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_tags",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma contact tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/contact-tags/list"
+        }
+      ]
+    },
+    {
+      "path": "create calendar coupon apply",
+      "summary": "Plan and execute the create calendar coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_calendar_coupon",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create calendar coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/coupons/create"
+        }
+      ],
+      "risk": "create calendar coupon through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact tag apply",
+      "summary": "Plan and execute the create contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contact-tags/create"
+        }
+      ],
+      "risk": "create contact tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create event apply",
+      "summary": "Plan and execute the create event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/create"
+        }
+      ],
+      "risk": "create event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create event coupon apply",
+      "summary": "Plan and execute the create event coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_event_coupon",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create event coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/coupons/create"
+        }
+      ],
+      "risk": "create event coupon through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create event tag apply",
+      "summary": "Plan and execute the create event tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_event_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create event tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/event-tags/create"
+        }
+      ],
+      "risk": "create event tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create image upload url apply",
+      "summary": "Plan and execute the create image upload url reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_image_upload_url",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create image upload url apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/images/create-upload-url"
+        }
+      ],
+      "risk": "create image upload url through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create organization calendar apply",
+      "summary": "Plan and execute the create organization calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_organization_calendar",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create organization calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/organizations/calendars/create"
+        }
+      ],
+      "risk": "create organization calendar through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create ticket type apply",
+      "summary": "Plan and execute the create ticket type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_ticket_type",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create ticket type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/ticket-types/create"
+        }
+      ],
+      "risk": "create ticket type through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_webhook",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhooks/create"
+        }
+      ],
+      "risk": "create webhook through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact tag apply",
+      "summary": "Plan and execute the delete contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma delete contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contact-tags/delete"
+        }
+      ],
+      "risk": "delete contact tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete event tag apply",
+      "summary": "Plan and execute the delete event tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_event_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma delete event tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/event-tags/delete"
+        }
+      ],
+      "risk": "delete event tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete ticket type apply",
+      "summary": "Plan and execute the delete ticket type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_ticket_type",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma delete ticket type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/ticket-types/delete"
+        }
+      ],
+      "risk": "delete ticket type through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_webhook",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/webhooks/delete"
+        }
+      ],
+      "risk": "delete webhook through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "entity lookup list",
+      "summary": "Run the entity lookup ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "entity_lookup",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma entity lookup list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/entities/lookup"
+        }
+      ]
+    },
+    {
+      "path": "event coupons list",
+      "summary": "Run the event coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_coupons",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/coupons/list"
+        }
+      ]
+    },
+    {
+      "path": "event guests list",
+      "summary": "Run the event guests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_guests",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event guests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/guests/list"
+        }
+      ]
+    },
+    {
+      "path": "event hosts list",
+      "summary": "Run the event hosts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_hosts",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event hosts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/get"
+        }
+      ]
+    },
+    {
+      "path": "event list",
+      "summary": "Run the event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/get"
+        }
+      ]
+    },
+    {
+      "path": "event lookup list",
+      "summary": "Run the event lookup ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_lookup",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event lookup list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/events/lookup"
+        }
+      ]
+    },
+    {
+      "path": "event tags list",
+      "summary": "Run the event tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_tags",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/event-tags/list"
+        }
+      ]
+    },
+    {
+      "path": "event ticket type list",
+      "summary": "Run the event ticket type ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_ticket_type",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event ticket type list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/ticket-types/get"
+        }
+      ]
+    },
+    {
+      "path": "event ticket types list",
+      "summary": "Run the event ticket types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_ticket_types",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma event ticket types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/ticket-types/list"
+        }
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendars/events/list"
+        }
+      ]
+    },
+    {
+      "path": "guest list",
+      "summary": "Run the guest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guest",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma guest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/guests/get"
+        }
+      ]
+    },
+    {
+      "path": "guests list",
+      "summary": "Run the guests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guests",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma guests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/events/guests/list"
+        }
+      ]
+    },
+    {
+      "path": "import calendar contacts apply",
+      "summary": "Plan and execute the import calendar contacts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "import_calendar_contacts",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma import calendar contacts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contacts/import"
+        }
+      ],
+      "risk": "import calendar contacts through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "membership tiers list",
+      "summary": "Run the membership tiers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "membership_tiers",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma membership tiers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/memberships/tiers/list"
+        }
+      ]
+    },
+    {
+      "path": "organization admins list",
+      "summary": "Run the organization admins ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization_admins",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma organization admins list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/admins/list"
+        }
+      ]
+    },
+    {
+      "path": "organization calendars list",
+      "summary": "Run the organization calendars ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization_calendars",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma organization calendars list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/calendars/list"
+        }
+      ]
+    },
+    {
+      "path": "organization events list",
+      "summary": "Run the organization events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization_events",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma organization events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/organizations/events/list"
+        }
+      ]
+    },
+    {
+      "path": "reject calendar event apply",
+      "summary": "Plan and execute the reject calendar event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reject_calendar_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma reject calendar event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/events/reject"
+        }
+      ],
+      "risk": "reject calendar event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "remove event host apply",
+      "summary": "Plan and execute the remove event host reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_event_host",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma remove event host apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/hosts/remove"
+        }
+      ],
+      "risk": "remove event host through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "request event cancellation apply",
+      "summary": "Plan and execute the request event cancellation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "request_event_cancellation",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma request event cancellation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/cancel/request"
+        }
+      ],
+      "risk": "request event cancellation through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "self user list",
+      "summary": "Run the self user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "self_user",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma self user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/get-self"
+        }
+      ]
+    },
+    {
+      "path": "send event invites apply",
+      "summary": "Plan and execute the send event invites reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_event_invites",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma send event invites apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/guests/send-invites"
+        }
+      ],
+      "risk": "send event invites through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "transfer event calendar apply",
+      "summary": "Plan and execute the transfer event calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "transfer_event_calendar",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma transfer event calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/organizations/events/transfer-calendar"
+        }
+      ],
+      "risk": "transfer event calendar through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unapply contact tag apply",
+      "summary": "Plan and execute the unapply contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unapply_contact_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma unapply contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contact-tags/unapply"
+        }
+      ],
+      "risk": "unapply contact tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unapply event tag apply",
+      "summary": "Plan and execute the unapply event tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unapply_event_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma unapply event tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/event-tags/unapply"
+        }
+      ],
+      "risk": "unapply event tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update calendar apply",
+      "summary": "Plan and execute the update calendar reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_calendar",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update calendar apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/update"
+        }
+      ],
+      "risk": "update calendar through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update calendar coupon apply",
+      "summary": "Plan and execute the update calendar coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_calendar_coupon",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update calendar coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/coupons/update"
+        }
+      ],
+      "risk": "update calendar coupon through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact tag apply",
+      "summary": "Plan and execute the update contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/contact-tags/update"
+        }
+      ],
+      "risk": "update contact tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update event apply",
+      "summary": "Plan and execute the update event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_event",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/update"
+        }
+      ],
+      "risk": "update event through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update event coupon apply",
+      "summary": "Plan and execute the update event coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_event_coupon",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update event coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/coupons/update"
+        }
+      ],
+      "risk": "update event coupon through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update event host apply",
+      "summary": "Plan and execute the update event host reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_event_host",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update event host apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/hosts/update"
+        }
+      ],
+      "risk": "update event host through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update event tag apply",
+      "summary": "Plan and execute the update event tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_event_tag",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update event tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/calendars/event-tags/update"
+        }
+      ],
+      "risk": "update event tag through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update guest status apply",
+      "summary": "Plan and execute the update guest status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_guest_status",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update guest status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/guests/update-status"
+        }
+      ],
+      "risk": "update guest status through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update membership member status apply",
+      "summary": "Plan and execute the update membership member status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_membership_member_status",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update membership member status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/memberships/members/update-status"
+        }
+      ],
+      "risk": "update membership member status through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update ticket type apply",
+      "summary": "Plan and execute the update ticket type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_ticket_type",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update ticket type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/events/ticket-types/update"
+        }
+      ],
+      "risk": "update ticket type through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_webhook",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhooks/update"
+        }
+      ],
+      "risk": "update webhook through the Luma API.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks/get"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "examples": [
+        "pm luma webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhooks/list"
+        }
+      ]
+    }
+  ]
+}

@@ -1,27 +1,69 @@
 {
-  "api": "TMDb API v3 OpenAPI (https://developer.themoviedb.org/openapi/tmdb-api.json)",
+  "api": "TMDb API v3 OpenAPI (https://developer.themoviedb.org/openapi/tmdb-api.json); provider artifact version: v3 (OpenAPI 3.1.0)",
   "docs": "https://developer.themoviedb.org/reference/intro/getting-started",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B reviewed the official ReadMe OpenAPI 3.1 document for TMDb API v3. All documented GET endpoints are covered by streams except authentication probes/token creation and one scalar reference list. POST/DELETE endpoints are excluded because this connector remains read-only and they require user session/account/list/rating side effects.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (152 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "tmdb-artifact-2026-08-09",
+      "url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/3/authentication",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "API-key validation probe, already represented by connector check rather than a syncable stream"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/account/{account_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}\"].get"
+      },
       "covered_by": {
         "stream": "account_details"
       }
     },
     {
+      "method": "POST",
+      "path": "/3/account/{account_id}/favorite",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/favorite\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/account/{account_id}/favorite/movies",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/favorite/movies\"].get"
+      },
       "covered_by": {
         "stream": "account_get_favorites"
       }
@@ -29,6 +71,15 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/favorite/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/favorite/tv\"].get"
+      },
       "covered_by": {
         "stream": "account_favorite_tv"
       }
@@ -36,6 +87,15 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/lists",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/lists\"].get"
+      },
       "covered_by": {
         "stream": "account_lists"
       }
@@ -43,6 +103,15 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/rated/movies",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/rated/movies\"].get"
+      },
       "covered_by": {
         "stream": "account_rated_movies"
       }
@@ -50,6 +119,15 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/rated/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/rated/tv\"].get"
+      },
       "covered_by": {
         "stream": "account_rated_tv"
       }
@@ -57,13 +135,52 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/rated/tv/episodes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/rated/tv/episodes\"].get"
+      },
       "covered_by": {
         "stream": "account_rated_tv_episodes"
       }
     },
     {
+      "method": "POST",
+      "path": "/3/account/{account_id}/watchlist",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/watchlist\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/account/{account_id}/watchlist/movies",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/watchlist/movies\"].get"
+      },
       "covered_by": {
         "stream": "account_watchlist_movies"
       }
@@ -71,29 +188,178 @@
     {
       "method": "GET",
       "path": "/3/account/{account_id}/watchlist/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/account/{account_id}/watchlist/tv\"].get"
+      },
       "covered_by": {
         "stream": "account_watchlist_tv"
       }
     },
     {
       "method": "GET",
+      "path": "/3/authentication",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "API-key validation probe, already represented by connector check rather than a syncable stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/authentication/guest_session/new",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "creates an authentication guest session token, not a data stream"
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/guest_session/new\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates an authentication guest session token, not a data stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/authentication/session",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/session\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/session/convert/4",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/session/convert/4\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/session/new",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/session/new\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "authentication session lifecycle endpoint, not a data write action for ETL",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/3/authentication/token/new",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "creates an authentication request token, not a data stream"
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/token/new\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "creates an authentication request token, not a data stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/authentication/token/validate_with_login",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/authentication/token/validate_with_login\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/3/certification/movie/list",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/certification/movie/list\"].get"
+      },
       "covered_by": {
         "stream": "certification_movie_list"
       }
@@ -101,34 +367,31 @@
     {
       "method": "GET",
       "path": "/3/certification/tv/list",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/certification/tv/list\"].get"
+      },
       "covered_by": {
         "stream": "certifications_tv_list"
       }
     },
     {
       "method": "GET",
-      "path": "/3/movie/changes",
-      "covered_by": {
-        "stream": "changes_movie_list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/person/changes",
-      "covered_by": {
-        "stream": "changes_people_list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/changes",
-      "covered_by": {
-        "stream": "changes_tv_list"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/collection/{collection_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/collection/{collection_id}\"].get"
+      },
       "covered_by": {
         "stream": "collection_details"
       }
@@ -136,6 +399,15 @@
     {
       "method": "GET",
       "path": "/3/collection/{collection_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/collection/{collection_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "collection_images"
       }
@@ -143,6 +415,15 @@
     {
       "method": "GET",
       "path": "/3/collection/{collection_id}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/collection/{collection_id}/translations\"].get"
+      },
       "covered_by": {
         "stream": "collection_translations"
       }
@@ -150,6 +431,15 @@
     {
       "method": "GET",
       "path": "/3/company/{company_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/company/{company_id}\"].get"
+      },
       "covered_by": {
         "stream": "company_details"
       }
@@ -157,6 +447,15 @@
     {
       "method": "GET",
       "path": "/3/company/{company_id}/alternative_names",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/company/{company_id}/alternative_names\"].get"
+      },
       "covered_by": {
         "stream": "company_alternative_names"
       }
@@ -164,6 +463,15 @@
     {
       "method": "GET",
       "path": "/3/company/{company_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/company/{company_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "company_images"
       }
@@ -171,6 +479,15 @@
     {
       "method": "GET",
       "path": "/3/configuration",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration\"].get"
+      },
       "covered_by": {
         "stream": "configuration_details"
       }
@@ -178,6 +495,15 @@
     {
       "method": "GET",
       "path": "/3/configuration/countries",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration/countries\"].get"
+      },
       "covered_by": {
         "stream": "configuration_countries"
       }
@@ -185,6 +511,15 @@
     {
       "method": "GET",
       "path": "/3/configuration/jobs",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration/jobs\"].get"
+      },
       "covered_by": {
         "stream": "configuration_jobs"
       }
@@ -192,6 +527,15 @@
     {
       "method": "GET",
       "path": "/3/configuration/languages",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration/languages\"].get"
+      },
       "covered_by": {
         "stream": "configuration_languages"
       }
@@ -199,14 +543,36 @@
     {
       "method": "GET",
       "path": "/3/configuration/primary_translations",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static scalar reference list of translation codes rather than object records"
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration/primary_translations\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "static scalar reference list of translation codes rather than object records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/3/configuration/timezones",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/configuration/timezones\"].get"
+      },
       "covered_by": {
         "stream": "configuration_timezones"
       }
@@ -214,6 +580,15 @@
     {
       "method": "GET",
       "path": "/3/credit/{credit_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/credit/{credit_id}\"].get"
+      },
       "covered_by": {
         "stream": "credit_details"
       }
@@ -221,6 +596,15 @@
     {
       "method": "GET",
       "path": "/3/discover/movie",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/discover/movie\"].get"
+      },
       "covered_by": {
         "stream": "discover_movie"
       }
@@ -228,6 +612,15 @@
     {
       "method": "GET",
       "path": "/3/discover/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/discover/tv\"].get"
+      },
       "covered_by": {
         "stream": "discover_tv"
       }
@@ -235,6 +628,15 @@
     {
       "method": "GET",
       "path": "/3/find/{external_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/find/{external_id}\"].get"
+      },
       "covered_by": {
         "stream": "find_by_id"
       }
@@ -242,6 +644,15 @@
     {
       "method": "GET",
       "path": "/3/genre/movie/list",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/genre/movie/list\"].get"
+      },
       "covered_by": {
         "stream": "genre_movie_list"
       }
@@ -249,6 +660,15 @@
     {
       "method": "GET",
       "path": "/3/genre/tv/list",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/genre/tv/list\"].get"
+      },
       "covered_by": {
         "stream": "genre_tv_list"
       }
@@ -256,6 +676,15 @@
     {
       "method": "GET",
       "path": "/3/guest_session/{guest_session_id}/rated/movies",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/guest_session/{guest_session_id}/rated/movies\"].get"
+      },
       "covered_by": {
         "stream": "guest_session_rated_movies"
       }
@@ -263,6 +692,15 @@
     {
       "method": "GET",
       "path": "/3/guest_session/{guest_session_id}/rated/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/guest_session/{guest_session_id}/rated/tv\"].get"
+      },
       "covered_by": {
         "stream": "guest_session_rated_tv"
       }
@@ -270,6 +708,15 @@
     {
       "method": "GET",
       "path": "/3/guest_session/{guest_session_id}/rated/tv/episodes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/guest_session/{guest_session_id}/rated/tv/episodes\"].get"
+      },
       "covered_by": {
         "stream": "guest_session_rated_tv_episodes"
       }
@@ -277,6 +724,15 @@
     {
       "method": "GET",
       "path": "/3/keyword/{keyword_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/keyword/{keyword_id}\"].get"
+      },
       "covered_by": {
         "stream": "keyword_details"
       }
@@ -284,27 +740,200 @@
     {
       "method": "GET",
       "path": "/3/keyword/{keyword_id}/movies",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/keyword/{keyword_id}/movies\"].get"
+      },
       "covered_by": {
         "stream": "keyword_movies"
       }
     },
     {
-      "method": "GET",
-      "path": "/3/list/{list_id}/item_status",
-      "covered_by": {
-        "stream": "list_check_item_status"
+      "method": "POST",
+      "path": "/3/list",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/3/list/{list_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}\"].get"
+      },
       "covered_by": {
         "stream": "list_details"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/3/list/{list_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/add_item",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}/add_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/clear",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}/clear\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/list/{list_id}/item_status",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}/item_status\"].get"
+      },
+      "covered_by": {
+        "stream": "list_check_item_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/3/list/{list_id}/remove_item",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/list/{list_id}/remove_item\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/changes\"].get"
+      },
+      "covered_by": {
+        "stream": "changes_movie_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/movie/latest",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "movie_latest_id"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/movie/now_playing",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/now_playing\"].get"
+      },
       "covered_by": {
         "stream": "now_playing_movies"
       }
@@ -312,6 +941,15 @@
     {
       "method": "GET",
       "path": "/3/movie/popular",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/popular\"].get"
+      },
       "covered_by": {
         "stream": "popular_movies"
       }
@@ -319,6 +957,15 @@
     {
       "method": "GET",
       "path": "/3/movie/top_rated",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/top_rated\"].get"
+      },
       "covered_by": {
         "stream": "movie_top_rated_list"
       }
@@ -326,6 +973,15 @@
     {
       "method": "GET",
       "path": "/3/movie/upcoming",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/upcoming\"].get"
+      },
       "covered_by": {
         "stream": "movie_upcoming_list"
       }
@@ -333,6 +989,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}\"].get"
+      },
       "covered_by": {
         "stream": "movie_details"
       }
@@ -340,6 +1005,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/account_states",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/account_states\"].get"
+      },
       "covered_by": {
         "stream": "movie_account_states"
       }
@@ -347,6 +1021,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/alternative_titles",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/alternative_titles\"].get"
+      },
       "covered_by": {
         "stream": "movie_alternative_titles"
       }
@@ -354,6 +1037,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/changes\"].get"
+      },
       "covered_by": {
         "stream": "movie_changes"
       }
@@ -361,6 +1053,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/credits\"].get"
+      },
       "covered_by": {
         "stream": "movie_credits"
       }
@@ -368,6 +1069,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/external_ids",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/external_ids\"].get"
+      },
       "covered_by": {
         "stream": "movie_external_ids"
       }
@@ -375,6 +1085,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "movie_images"
       }
@@ -382,27 +1101,89 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/keywords",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/keywords\"].get"
+      },
       "covered_by": {
         "stream": "movie_keywords"
       }
     },
     {
       "method": "GET",
-      "path": "/3/movie/latest",
-      "covered_by": {
-        "stream": "movie_latest_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/movie/{movie_id}/lists",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/lists\"].get"
+      },
       "covered_by": {
         "stream": "movie_lists"
       }
     },
     {
+      "method": "POST",
+      "path": "/3/movie/{movie_id}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/rating\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/movie/{movie_id}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/rating\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/movie/{movie_id}/recommendations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/recommendations\"].get"
+      },
       "covered_by": {
         "stream": "movie_recommendations"
       }
@@ -410,6 +1191,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/release_dates",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/release_dates\"].get"
+      },
       "covered_by": {
         "stream": "movie_release_dates"
       }
@@ -417,6 +1207,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/reviews",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/reviews\"].get"
+      },
       "covered_by": {
         "stream": "movie_reviews"
       }
@@ -424,6 +1223,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/similar",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/similar\"].get"
+      },
       "covered_by": {
         "stream": "movie_similar"
       }
@@ -431,6 +1239,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/translations\"].get"
+      },
       "covered_by": {
         "stream": "movie_translations"
       }
@@ -438,6 +1255,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/videos",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/videos\"].get"
+      },
       "covered_by": {
         "stream": "movie_videos"
       }
@@ -445,6 +1271,15 @@
     {
       "method": "GET",
       "path": "/3/movie/{movie_id}/watch/providers",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/movie/{movie_id}/watch/providers\"].get"
+      },
       "covered_by": {
         "stream": "movie_watch_providers"
       }
@@ -452,6 +1287,15 @@
     {
       "method": "GET",
       "path": "/3/network/{network_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/network/{network_id}\"].get"
+      },
       "covered_by": {
         "stream": "network_details"
       }
@@ -459,6 +1303,15 @@
     {
       "method": "GET",
       "path": "/3/network/{network_id}/alternative_names",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/network/{network_id}/alternative_names\"].get"
+      },
       "covered_by": {
         "stream": "details_copy"
       }
@@ -466,13 +1319,63 @@
     {
       "method": "GET",
       "path": "/3/network/{network_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/network/{network_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "alternative_names_copy"
       }
     },
     {
       "method": "GET",
+      "path": "/3/person/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/changes\"].get"
+      },
+      "covered_by": {
+        "stream": "changes_people_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/person/latest",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "person_latest_id"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/person/popular",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/popular\"].get"
+      },
       "covered_by": {
         "stream": "person_popular_list"
       }
@@ -480,6 +1383,15 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}\"].get"
+      },
       "covered_by": {
         "stream": "person_details"
       }
@@ -487,6 +1399,15 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/changes\"].get"
+      },
       "covered_by": {
         "stream": "person_changes"
       }
@@ -494,6 +1415,15 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}/combined_credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/combined_credits\"].get"
+      },
       "covered_by": {
         "stream": "person_combined_credits"
       }
@@ -501,6 +1431,15 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}/external_ids",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/external_ids\"].get"
+      },
       "covered_by": {
         "stream": "person_external_ids"
       }
@@ -508,34 +1447,47 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "person_images"
       }
     },
     {
       "method": "GET",
-      "path": "/3/person/latest",
-      "covered_by": {
-        "stream": "person_latest_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/person/{person_id}/movie_credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/movie_credits\"].get"
+      },
       "covered_by": {
         "stream": "person_movie_credits"
       }
     },
     {
       "method": "GET",
-      "path": "/3/person/{person_id}/tv_credits",
-      "covered_by": {
-        "stream": "person_tv_credits"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/person/{person_id}/tagged_images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/tagged_images\"].get"
+      },
       "covered_by": {
         "stream": "person_tagged_images"
       }
@@ -543,13 +1495,47 @@
     {
       "method": "GET",
       "path": "/3/person/{person_id}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/translations\"].get"
+      },
       "covered_by": {
         "stream": "translations"
       }
     },
     {
       "method": "GET",
+      "path": "/3/person/{person_id}/tv_credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/person/{person_id}/tv_credits\"].get"
+      },
+      "covered_by": {
+        "stream": "person_tv_credits"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/review/{review_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/review/{review_id}\"].get"
+      },
       "covered_by": {
         "stream": "review_details"
       }
@@ -557,6 +1543,15 @@
     {
       "method": "GET",
       "path": "/3/search/collection",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/collection\"].get"
+      },
       "covered_by": {
         "stream": "search_collection"
       }
@@ -564,6 +1559,15 @@
     {
       "method": "GET",
       "path": "/3/search/company",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/company\"].get"
+      },
       "covered_by": {
         "stream": "search_company"
       }
@@ -571,6 +1575,15 @@
     {
       "method": "GET",
       "path": "/3/search/keyword",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/keyword\"].get"
+      },
       "covered_by": {
         "stream": "search_keyword"
       }
@@ -578,6 +1591,15 @@
     {
       "method": "GET",
       "path": "/3/search/movie",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/movie\"].get"
+      },
       "covered_by": {
         "stream": "search_movies"
       }
@@ -585,6 +1607,15 @@
     {
       "method": "GET",
       "path": "/3/search/multi",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/multi\"].get"
+      },
       "covered_by": {
         "stream": "search_multi"
       }
@@ -592,6 +1623,15 @@
     {
       "method": "GET",
       "path": "/3/search/person",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/person\"].get"
+      },
       "covered_by": {
         "stream": "search_person"
       }
@@ -599,6 +1639,15 @@
     {
       "method": "GET",
       "path": "/3/search/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/search/tv\"].get"
+      },
       "covered_by": {
         "stream": "search_tv"
       }
@@ -606,6 +1655,15 @@
     {
       "method": "GET",
       "path": "/3/trending/all/{time_window}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/trending/all/{time_window}\"].get"
+      },
       "covered_by": {
         "stream": "trending_all"
       }
@@ -613,6 +1671,15 @@
     {
       "method": "GET",
       "path": "/3/trending/movie/{time_window}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/trending/movie/{time_window}\"].get"
+      },
       "covered_by": {
         "stream": "trending_movies"
       }
@@ -620,6 +1687,15 @@
     {
       "method": "GET",
       "path": "/3/trending/person/{time_window}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/trending/person/{time_window}\"].get"
+      },
       "covered_by": {
         "stream": "trending_people"
       }
@@ -627,6 +1703,15 @@
     {
       "method": "GET",
       "path": "/3/trending/tv/{time_window}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/trending/tv/{time_window}\"].get"
+      },
       "covered_by": {
         "stream": "trending_tv"
       }
@@ -634,13 +1719,95 @@
     {
       "method": "GET",
       "path": "/3/tv/airing_today",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/airing_today\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_airing_today_list"
       }
     },
     {
       "method": "GET",
+      "path": "/3/tv/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/changes\"].get"
+      },
+      "covered_by": {
+        "stream": "changes_tv_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/episode/{episode_id}/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/episode/{episode_id}/changes\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_episode_changes_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/episode_group/{tv_episode_group_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/episode_group/{tv_episode_group_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_episode_group_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/latest",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_series_latest_id"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/tv/on_the_air",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/on_the_air\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_on_the_air_list"
       }
@@ -648,13 +1815,47 @@
     {
       "method": "GET",
       "path": "/3/tv/popular",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/popular\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_popular_list"
       }
     },
     {
       "method": "GET",
+      "path": "/3/tv/season/{season_id}/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/season/{season_id}/changes\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_season_changes_by_id"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/tv/top_rated",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/top_rated\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_top_rated_list"
       }
@@ -662,6 +1863,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_details"
       }
@@ -669,6 +1879,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/account_states",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/account_states\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_account_states"
       }
@@ -676,6 +1895,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/aggregate_credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/aggregate_credits\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_aggregate_credits"
       }
@@ -683,6 +1911,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/alternative_titles",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/alternative_titles\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_alternative_titles"
       }
@@ -690,6 +1927,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/changes",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/changes\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_changes"
       }
@@ -697,6 +1943,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/content_ratings",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/content_ratings\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_content_ratings"
       }
@@ -704,6 +1959,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/credits\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_credits"
       }
@@ -711,6 +1975,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/episode_groups",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/episode_groups\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_episode_groups"
       }
@@ -718,6 +1991,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/external_ids",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/external_ids\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_external_ids"
       }
@@ -725,6 +2007,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/images\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_images"
       }
@@ -732,27 +2023,89 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/keywords",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/keywords\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_keywords"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/latest",
-      "covered_by": {
-        "stream": "tv_series_latest_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/tv/{series_id}/lists",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/lists\"].get"
+      },
       "covered_by": {
         "stream": "lists_copy"
       }
     },
     {
+      "method": "POST",
+      "path": "/3/tv/{series_id}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/rating\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/tv/{series_id}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/rating\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/tv/{series_id}/recommendations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/recommendations\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_recommendations"
       }
@@ -760,6 +2113,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/reviews",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/reviews\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_reviews"
       }
@@ -767,41 +2129,31 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/screened_theatrically",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/screened_theatrically\"].get"
+      },
       "covered_by": {
         "stream": "tv_series_screened_theatrically"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/{series_id}/similar",
-      "covered_by": {
-        "stream": "tv_series_similar"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/translations",
-      "covered_by": {
-        "stream": "tv_series_translations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/videos",
-      "covered_by": {
-        "stream": "tv_series_videos"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/watch/providers",
-      "covered_by": {
-        "stream": "tv_series_watch_providers"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}\"].get"
+      },
       "covered_by": {
         "stream": "tv_season_details"
       }
@@ -809,6 +2161,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/account_states",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/account_states\"].get"
+      },
       "covered_by": {
         "stream": "tv_season_account_states"
       }
@@ -816,62 +2177,47 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/aggregate_credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/aggregate_credits\"].get"
+      },
       "covered_by": {
         "stream": "tv_season_aggregate_credits"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/season/{season_id}/changes",
-      "covered_by": {
-        "stream": "tv_season_changes_by_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/credits\"].get"
+      },
       "covered_by": {
         "stream": "tv_season_credits"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/{series_id}/season/{season_number}/external_ids",
-      "covered_by": {
-        "stream": "tv_season_external_ids"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/season/{season_number}/images",
-      "covered_by": {
-        "stream": "tv_season_images"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/season/{season_number}/translations",
-      "covered_by": {
-        "stream": "tv_season_translations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/season/{season_number}/videos",
-      "covered_by": {
-        "stream": "tv_season_videos"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/3/tv/{series_id}/season/{season_number}/watch/providers",
-      "covered_by": {
-        "stream": "tv_season_watch_providers"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_details"
       }
@@ -879,20 +2225,31 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_account_states"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/episode/{episode_id}/changes",
-      "covered_by": {
-        "stream": "tv_episode_changes_by_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/credits",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/credits\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_credits"
       }
@@ -900,6 +2257,15 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/external_ids",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/external_ids\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_external_ids"
       }
@@ -907,13 +2273,73 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/images\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_images"
       }
     },
     {
+      "method": "POST",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/translations\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_translations"
       }
@@ -921,172 +2347,209 @@
     {
       "method": "GET",
       "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos\"].get"
+      },
       "covered_by": {
         "stream": "tv_episode_videos"
       }
     },
     {
       "method": "GET",
-      "path": "/3/tv/episode_group/{tv_episode_group_id}",
+      "path": "/3/tv/{series_id}/season/{season_number}/external_ids",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/external_ids\"].get"
+      },
       "covered_by": {
-        "stream": "tv_episode_group_details"
+        "stream": "tv_season_external_ids"
       }
     },
     {
       "method": "GET",
-      "path": "/3/watch/providers/regions",
+      "path": "/3/tv/{series_id}/season/{season_number}/images",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/images\"].get"
+      },
       "covered_by": {
-        "stream": "watch_providers_available_regions"
+        "stream": "tv_season_images"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/translations\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_season_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/videos",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/videos\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_season_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/season/{season_number}/watch/providers",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/season/{season_number}/watch/providers\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_season_watch_providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/similar",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/similar\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_series_similar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/translations",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/translations\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_series_translations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/videos",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/videos\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_series_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/3/tv/{series_id}/watch/providers",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/tv/{series_id}/watch/providers\"].get"
+      },
+      "covered_by": {
+        "stream": "tv_series_watch_providers"
       }
     },
     {
       "method": "GET",
       "path": "/3/watch/providers/movie",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/watch/providers/movie\"].get"
+      },
       "covered_by": {
         "stream": "watch_providers_movie_list"
       }
     },
     {
       "method": "GET",
+      "path": "/3/watch/providers/regions",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/watch/providers/regions\"].get"
+      },
+      "covered_by": {
+        "stream": "watch_providers_available_regions"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/3/watch/providers/tv",
+      "provenance": {
+        "artifact": "tmdb-artifact-2026-08-09",
+        "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b",
+        "coordinate": "paths[\"/3/watch/providers/tv\"].get"
+      },
       "covered_by": {
         "stream": "watch_provider_tv_list"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/account/{account_id}/favorite",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/account/{account_id}/watchlist",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/authentication/session/new",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/authentication/session/convert/4",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/authentication/token/validate_with_login",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/3/authentication/session",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authentication session lifecycle endpoint, not a data write action for ETL"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/list/{list_id}/add_item",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/list/{list_id}/clear",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/list",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/3/list/{list_id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/list/{list_id}/remove_item",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/movie/{movie_id}/rating",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/3/movie/{movie_id}/rating",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/tv/{series_id}/rating",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/3/tv/{series_id}/rating",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector"
       }
     }
   ]

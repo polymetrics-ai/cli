@@ -1,0 +1,130 @@
+{
+  "operations": [
+    {
+      "id": "google-forms.post.forms",
+      "kind": "rest_write",
+      "summary": "POST /forms",
+      "description": "form creation requires a broader write scope than a read-only source connector needs",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.get.forms-formid-responses-responseid",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/responses/{responseId}",
+      "description": "The responses stream already lists every response; /forms/{formId}/responses/{responseId} is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/responses/{responseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.get.forms-formid-watches",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/watches",
+      "description": "/forms/{formId}/watches is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/watches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.post.forms-formid-watches",
+      "kind": "rest_write",
+      "summary": "POST /forms/{formId}/watches",
+      "description": "/forms/{formId}/watches is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/forms/{formId}/watches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.delete.forms-formid-watches-watchid",
+      "kind": "rest_write",
+      "summary": "DELETE /forms/{formId}/watches/{watchId}",
+      "description": "watch deletion is a destructive admin action, not a syncable read/write record",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/forms/{formId}/watches/{watchId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.post.forms-formid-batchupdate",
+      "kind": "rest_write",
+      "summary": "POST /forms/{formId}:batchUpdate",
+      "description": "/forms/{formId}:batchUpdate is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/forms/{formId}:batchUpdate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.post.v1-forms-formid-watches-watchid-renew",
+      "kind": "rest_write",
+      "summary": "POST /v1/forms/{formId}/watches/{watchId}:renew",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/forms/{formId}/watches/{watchId}:renew",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-forms.post.v1-forms-formid-setpublishsettings",
+      "kind": "rest_write",
+      "summary": "POST /v1/forms/{formId}:setPublishSettings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/forms/{formId}:setPublishSettings",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

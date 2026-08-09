@@ -1,0 +1,3628 @@
+{
+  "tagline": "Run Thinkific's declared streams and reverse-ETL actions.",
+  "usage": "pm thinkific \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api public v1 bundles id",
+        "api get api public v1 bundles id courses",
+        "api get api public v1 bundles id enrollments",
+        "api get api public v1 chapters id",
+        "api get api public v1 chapters id contents",
+        "api get api public v1 collections id",
+        "api get api public v1 collections id products",
+        "api get api public v1 contents id",
+        "api get api public v1 coupons id",
+        "api get api public v1 course-reviews id",
+        "api get api public v1 courses id",
+        "api get api public v1 courses id chapters",
+        "api get api public v1 enrollments id",
+        "api get api public v1 groups group-id analysts",
+        "api get api public v1 groups id",
+        "api get api public v1 instructors id",
+        "api get api public v1 orders id",
+        "api get api public v1 product-publish-requests id",
+        "api get api public v1 products id",
+        "api get api public v1 products id related",
+        "api get api public v1 promotions by-coupon",
+        "api get api public v1 promotions id",
+        "api get api public v1 site-scripts id",
+        "api get api public v1 users id",
+        "api get api public v1 users id authentications provider",
+        "api get bundles id",
+        "api get bundles id courses",
+        "api get bundles id enrollments",
+        "api get chapters id",
+        "api get chapters id contents",
+        "api get collections",
+        "api get collections id",
+        "api get collections id products",
+        "api get contents id",
+        "api get coupons",
+        "api get coupons id",
+        "api get course-reviews",
+        "api get course-reviews id",
+        "api get courses",
+        "api get courses id",
+        "api get courses id chapters",
+        "api get custom-profile-field-definitions",
+        "api get enrollments",
+        "api get enrollments id",
+        "api get groups",
+        "api get groups group-id analysts",
+        "api get groups id",
+        "api get instructors",
+        "api get instructors id",
+        "api get orders",
+        "api get orders id",
+        "api get product-publish-requests",
+        "api get product-publish-requests id",
+        "api get products",
+        "api get products id",
+        "api get products id related",
+        "api get promotions",
+        "api get promotions by-coupon",
+        "api get promotions id",
+        "api get site-scripts",
+        "api get site-scripts id",
+        "api get users",
+        "api get users id",
+        "api get users id authentications provider",
+        "collections list",
+        "coupons list",
+        "course reviews list",
+        "courses list",
+        "custom profile field definitions list",
+        "enrollments list",
+        "groups list",
+        "instructors list",
+        "orders list",
+        "product publish requests list",
+        "products list",
+        "promotions list",
+        "site scripts list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add products to collection apply",
+        "add user to groups apply",
+        "api delete api public v1 group-analysts user-id groups group-id",
+        "api delete api public v1 groups group-id analysts user-id",
+        "api delete collection-memberships id",
+        "api delete collections id",
+        "api delete coupons id",
+        "api delete group-analysts user-id groups group-id",
+        "api delete groups group-id analysts user-id",
+        "api delete groups id",
+        "api delete instructors id",
+        "api delete promotions id",
+        "api delete site-scripts id",
+        "api delete users id",
+        "api post api public v1 bundles id enrollments",
+        "api post api public v1 coupons bulk-create",
+        "api post api public v1 external-orders",
+        "api post api public v1 external-orders id transactions purchase",
+        "api post api public v1 external-orders id transactions refund",
+        "api post api public v1 group-analysts user-id groups",
+        "api post api public v1 groups group-id analysts",
+        "api post bundles id enrollments",
+        "api post collection-memberships id",
+        "api post collections",
+        "api post coupons",
+        "api post coupons bulk-create",
+        "api post course-reviews",
+        "api post enrollments",
+        "api post external-orders",
+        "api post external-orders id transactions purchase",
+        "api post external-orders id transactions refund",
+        "api post group-analysts user-id groups",
+        "api post group-users",
+        "api post groups",
+        "api post groups group-id analysts",
+        "api post instructors",
+        "api post product-publish-requests id approve",
+        "api post product-publish-requests id deny",
+        "api post promotions",
+        "api post site-scripts",
+        "api post users",
+        "api put api public v1 bundles id enrollments",
+        "api put bundles id enrollments",
+        "api put collections id",
+        "api put coupons id",
+        "api put enrollments id",
+        "api put instructors id",
+        "api put promotions id",
+        "api put site-scripts id",
+        "api put users id",
+        "approve product publish request apply",
+        "create collection apply",
+        "create coupon apply",
+        "create course review apply",
+        "create enrollment apply",
+        "create group apply",
+        "create instructor apply",
+        "create promotion apply",
+        "create site script apply",
+        "create user apply",
+        "delete collection apply",
+        "delete coupon apply",
+        "delete group apply",
+        "delete instructor apply",
+        "delete promotion apply",
+        "delete site script apply",
+        "delete user apply",
+        "deny product publish request apply",
+        "remove products from collection apply",
+        "update collection apply",
+        "update coupon apply",
+        "update enrollment apply",
+        "update instructor apply",
+        "update promotion apply",
+        "update site script apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add products to collection apply",
+      "summary": "Plan and execute the add products to collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_products_to_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific add products to collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/collection_memberships/{id}"
+        }
+      ],
+      "risk": "adds one or more products (courses/bundles) to a public category, changing what appears on that category's landing page",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add user to groups apply",
+      "summary": "Plan and execute the add user to groups reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_user_to_groups",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "group_names",
+          "type": "string_array",
+          "summary": "Required group names record field.",
+          "maps_to": "record.group_names",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific add user to groups apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/group_users"
+        }
+      ],
+      "risk": "adds a user to one or more existing Groups by name; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete api public v1 group-analysts user-id groups group-id",
+      "summary": "Documented DELETE /api/public/v1/group_analysts/{user_id}/groups/{group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete api public v1 group-analysts user-id groups group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/group_analysts/{user_id}/groups/{group_id}"
+        }
+      ],
+      "operation": "thinkific.delete.api-public-v1-group-analysts-user-id-groups-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api public v1 groups group-id analysts user-id",
+      "summary": "Documented DELETE /api/public/v1/groups/{group_id}/analysts/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete api public v1 groups group-id analysts user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/groups/{group_id}/analysts/{user_id}"
+        }
+      ],
+      "operation": "thinkific.delete.api-public-v1-groups-group-id-analysts-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete collection-memberships id",
+      "summary": "Documented DELETE /collection_memberships/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete collection-memberships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collection_memberships/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.collection-memberships-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete collections id",
+      "summary": "Documented DELETE /collections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.collections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete coupons id",
+      "summary": "Documented DELETE /coupons/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.coupons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete group-analysts user-id groups group-id",
+      "summary": "Documented DELETE /group_analysts/{user_id}/groups/{group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete group-analysts user-id groups group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/group_analysts/{user_id}/groups/{group_id}"
+        }
+      ],
+      "operation": "thinkific.delete.group-analysts-user-id-groups-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete groups group-id analysts user-id",
+      "summary": "Documented DELETE /groups/{group_id}/analysts/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete groups group-id analysts user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{group_id}/analysts/{user_id}"
+        }
+      ],
+      "operation": "thinkific.delete.groups-group-id-analysts-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete groups id",
+      "summary": "Documented DELETE /groups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/groups/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.groups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete instructors id",
+      "summary": "Documented DELETE /instructors/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete instructors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/instructors/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.instructors-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete promotions id",
+      "summary": "Documented DELETE /promotions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete promotions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/promotions/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.promotions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete site-scripts id",
+      "summary": "Documented DELETE /site_scripts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete site-scripts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/site_scripts/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.site-scripts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users id",
+      "summary": "Documented DELETE /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api delete users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "thinkific.delete.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api public v1 bundles id",
+      "summary": "Documented GET /api/public/v1/bundles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 bundles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/bundles/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-bundles-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 bundles id courses",
+      "summary": "Documented GET /api/public/v1/bundles/{id}/courses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 bundles id courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/bundles/{id}/courses"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-bundles-id-courses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 bundles id enrollments",
+      "summary": "Documented GET /api/public/v1/bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-bundles-id-enrollments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 chapters id",
+      "summary": "Documented GET /api/public/v1/chapters/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 chapters id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/chapters/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-chapters-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 chapters id contents",
+      "summary": "Documented GET /api/public/v1/chapters/{id}/contents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 chapters id contents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/chapters/{id}/contents"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-chapters-id-contents",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 collections id",
+      "summary": "Documented GET /api/public/v1/collections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/collections/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-collections-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 collections id products",
+      "summary": "Documented GET /api/public/v1/collections/{id}/products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 collections id products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/collections/{id}/products"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-collections-id-products",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 contents id",
+      "summary": "Documented GET /api/public/v1/contents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 contents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/contents/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-contents-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 coupons id",
+      "summary": "Documented GET /api/public/v1/coupons/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/coupons/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-coupons-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 course-reviews id",
+      "summary": "Documented GET /api/public/v1/course_reviews/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 course-reviews id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/course_reviews/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-course-reviews-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 courses id",
+      "summary": "Documented GET /api/public/v1/courses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/courses/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-courses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 courses id chapters",
+      "summary": "Documented GET /api/public/v1/courses/{id}/chapters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 courses id chapters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/courses/{id}/chapters"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-courses-id-chapters",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 enrollments id",
+      "summary": "Documented GET /api/public/v1/enrollments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 enrollments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/enrollments/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-enrollments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 groups group-id analysts",
+      "summary": "Documented GET /api/public/v1/groups/{group_id}/analysts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 groups group-id analysts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/groups/{group_id}/analysts"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-groups-group-id-analysts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 groups id",
+      "summary": "Documented GET /api/public/v1/groups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/groups/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-groups-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 instructors id",
+      "summary": "Documented GET /api/public/v1/instructors/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 instructors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/instructors/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-instructors-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 orders id",
+      "summary": "Documented GET /api/public/v1/orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/orders/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-orders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 product-publish-requests id",
+      "summary": "Documented GET /api/public/v1/product_publish_requests/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 product-publish-requests id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/product_publish_requests/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-product-publish-requests-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 products id",
+      "summary": "Documented GET /api/public/v1/products/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/products/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-products-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 products id related",
+      "summary": "Documented GET /api/public/v1/products/{id}/related (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 products id related --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/products/{id}/related"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-products-id-related",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 promotions by-coupon",
+      "summary": "Documented GET /api/public/v1/promotions/by_coupon (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 promotions by-coupon --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/promotions/by_coupon"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-promotions-by-coupon",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 promotions id",
+      "summary": "Documented GET /api/public/v1/promotions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 promotions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/promotions/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-promotions-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 site-scripts id",
+      "summary": "Documented GET /api/public/v1/site_scripts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 site-scripts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/site_scripts/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-site-scripts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 users id",
+      "summary": "Documented GET /api/public/v1/users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/users/{id}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api public v1 users id authentications provider",
+      "summary": "Documented GET /api/public/v1/users/{id}/authentications/{provider} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get api public v1 users id authentications provider --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/users/{id}/authentications/{provider}"
+        }
+      ],
+      "operation": "thinkific.get.api-public-v1-users-id-authentications-provider",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bundles id",
+      "summary": "Documented GET /bundles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get bundles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}"
+        }
+      ],
+      "operation": "thinkific.get.bundles-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bundles id courses",
+      "summary": "Documented GET /bundles/{id}/courses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get bundles id courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}/courses"
+        }
+      ],
+      "operation": "thinkific.get.bundles-id-courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get bundles id enrollments",
+      "summary": "Documented GET /bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.get.bundles-id-enrollments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get chapters id",
+      "summary": "Documented GET /chapters/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get chapters id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/chapters/{id}"
+        }
+      ],
+      "operation": "thinkific.get.chapters-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get chapters id contents",
+      "summary": "Documented GET /chapters/{id}/contents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get chapters id contents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/chapters/{id}/contents"
+        }
+      ],
+      "operation": "thinkific.get.chapters-id-contents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collections",
+      "summary": "Documented GET /collections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections"
+        }
+      ],
+      "operation": "thinkific.get.collections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collections id",
+      "summary": "Documented GET /collections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "thinkific.get.collections-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collections id products",
+      "summary": "Documented GET /collections/{id}/products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get collections id products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collections/{id}/products"
+        }
+      ],
+      "operation": "thinkific.get.collections-id-products",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contents id",
+      "summary": "Documented GET /contents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get contents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contents/{id}"
+        }
+      ],
+      "operation": "thinkific.get.contents-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupons",
+      "summary": "Documented GET /coupons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get coupons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons"
+        }
+      ],
+      "operation": "thinkific.get.coupons",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupons id",
+      "summary": "Documented GET /coupons/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "operation": "thinkific.get.coupons-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get course-reviews",
+      "summary": "Documented GET /course_reviews (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get course-reviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/course_reviews"
+        }
+      ],
+      "operation": "thinkific.get.course-reviews",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get course-reviews id",
+      "summary": "Documented GET /course_reviews/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get course-reviews id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/course_reviews/{id}"
+        }
+      ],
+      "operation": "thinkific.get.course-reviews-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get courses",
+      "summary": "Documented GET /courses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses"
+        }
+      ],
+      "operation": "thinkific.get.courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get courses id",
+      "summary": "Documented GET /courses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses/{id}"
+        }
+      ],
+      "operation": "thinkific.get.courses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get courses id chapters",
+      "summary": "Documented GET /courses/{id}/chapters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get courses id chapters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/courses/{id}/chapters"
+        }
+      ],
+      "operation": "thinkific.get.courses-id-chapters",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-profile-field-definitions",
+      "summary": "Documented GET /custom_profile_field_definitions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get custom-profile-field-definitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_profile_field_definitions"
+        }
+      ],
+      "operation": "thinkific.get.custom-profile-field-definitions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get enrollments",
+      "summary": "Documented GET /enrollments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/enrollments"
+        }
+      ],
+      "operation": "thinkific.get.enrollments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get enrollments id",
+      "summary": "Documented GET /enrollments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get enrollments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/enrollments/{id}"
+        }
+      ],
+      "operation": "thinkific.get.enrollments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups",
+      "summary": "Documented GET /groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "operation": "thinkific.get.groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups group-id analysts",
+      "summary": "Documented GET /groups/{group_id}/analysts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get groups group-id analysts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{group_id}/analysts"
+        }
+      ],
+      "operation": "thinkific.get.groups-group-id-analysts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups id",
+      "summary": "Documented GET /groups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ],
+      "operation": "thinkific.get.groups-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get instructors",
+      "summary": "Documented GET /instructors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get instructors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instructors"
+        }
+      ],
+      "operation": "thinkific.get.instructors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get instructors id",
+      "summary": "Documented GET /instructors/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get instructors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instructors/{id}"
+        }
+      ],
+      "operation": "thinkific.get.instructors-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders",
+      "summary": "Documented GET /orders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders"
+        }
+      ],
+      "operation": "thinkific.get.orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders id",
+      "summary": "Documented GET /orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{id}"
+        }
+      ],
+      "operation": "thinkific.get.orders-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product-publish-requests",
+      "summary": "Documented GET /product_publish_requests (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get product-publish-requests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product_publish_requests"
+        }
+      ],
+      "operation": "thinkific.get.product-publish-requests",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product-publish-requests id",
+      "summary": "Documented GET /product_publish_requests/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get product-publish-requests id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product_publish_requests/{id}"
+        }
+      ],
+      "operation": "thinkific.get.product-publish-requests-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products",
+      "summary": "Documented GET /products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "operation": "thinkific.get.products",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id",
+      "summary": "Documented GET /products/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "thinkific.get.products-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id related",
+      "summary": "Documented GET /products/{id}/related (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get products id related --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/related"
+        }
+      ],
+      "operation": "thinkific.get.products-id-related",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get promotions",
+      "summary": "Documented GET /promotions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get promotions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions"
+        }
+      ],
+      "operation": "thinkific.get.promotions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get promotions by-coupon",
+      "summary": "Documented GET /promotions/by_coupon (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get promotions by-coupon --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/by_coupon"
+        }
+      ],
+      "operation": "thinkific.get.promotions-by-coupon",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get promotions id",
+      "summary": "Documented GET /promotions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get promotions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/promotions/{id}"
+        }
+      ],
+      "operation": "thinkific.get.promotions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get site-scripts",
+      "summary": "Documented GET /site_scripts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get site-scripts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/site_scripts"
+        }
+      ],
+      "operation": "thinkific.get.site-scripts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get site-scripts id",
+      "summary": "Documented GET /site_scripts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get site-scripts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/site_scripts/{id}"
+        }
+      ],
+      "operation": "thinkific.get.site-scripts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "thinkific.get.users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "thinkific.get.users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id authentications provider",
+      "summary": "Documented GET /users/{id}/authentications/{provider} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api get users id authentications provider --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/authentications/{provider}"
+        }
+      ],
+      "operation": "thinkific.get.users-id-authentications-provider",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api public v1 bundles id enrollments",
+      "summary": "Documented POST /api/public/v1/bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-bundles-id-enrollments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 coupons bulk-create",
+      "summary": "Documented POST /api/public/v1/coupons/bulk_create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 coupons bulk-create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/coupons/bulk_create"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-coupons-bulk-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 external-orders",
+      "summary": "Documented POST /api/public/v1/external_orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 external-orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/external_orders"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-external-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 external-orders id transactions purchase",
+      "summary": "Documented POST /api/public/v1/external_orders/{id}/transactions/purchase (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 external-orders id transactions purchase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/external_orders/{id}/transactions/purchase"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-external-orders-id-transactions-purchase",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 external-orders id transactions refund",
+      "summary": "Documented POST /api/public/v1/external_orders/{id}/transactions/refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 external-orders id transactions refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/external_orders/{id}/transactions/refund"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-external-orders-id-transactions-refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 group-analysts user-id groups",
+      "summary": "Documented POST /api/public/v1/group_analysts/{user_id}/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 group-analysts user-id groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/group_analysts/{user_id}/groups"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-group-analysts-user-id-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api public v1 groups group-id analysts",
+      "summary": "Documented POST /api/public/v1/groups/{group_id}/analysts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post api public v1 groups group-id analysts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/groups/{group_id}/analysts"
+        }
+      ],
+      "operation": "thinkific.post.api-public-v1-groups-group-id-analysts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post bundles id enrollments",
+      "summary": "Documented POST /bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.post.bundles-id-enrollments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post collection-memberships id",
+      "summary": "Documented POST /collection_memberships/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post collection-memberships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collection_memberships/{id}"
+        }
+      ],
+      "operation": "thinkific.post.collection-memberships-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post collections",
+      "summary": "Documented POST /collections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/collections"
+        }
+      ],
+      "operation": "thinkific.post.collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupons",
+      "summary": "Documented POST /coupons (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post coupons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons"
+        }
+      ],
+      "operation": "thinkific.post.coupons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupons bulk-create",
+      "summary": "Documented POST /coupons/bulk_create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post coupons bulk-create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons/bulk_create"
+        }
+      ],
+      "operation": "thinkific.post.coupons-bulk-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post course-reviews",
+      "summary": "Documented POST /course_reviews (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post course-reviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/course_reviews"
+        }
+      ],
+      "operation": "thinkific.post.course-reviews",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post enrollments",
+      "summary": "Documented POST /enrollments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/enrollments"
+        }
+      ],
+      "operation": "thinkific.post.enrollments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post external-orders",
+      "summary": "Documented POST /external_orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post external-orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders"
+        }
+      ],
+      "operation": "thinkific.post.external-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post external-orders id transactions purchase",
+      "summary": "Documented POST /external_orders/{id}/transactions/purchase (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post external-orders id transactions purchase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders/{id}/transactions/purchase"
+        }
+      ],
+      "operation": "thinkific.post.external-orders-id-transactions-purchase",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post external-orders id transactions refund",
+      "summary": "Documented POST /external_orders/{id}/transactions/refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post external-orders id transactions refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/external_orders/{id}/transactions/refund"
+        }
+      ],
+      "operation": "thinkific.post.external-orders-id-transactions-refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post group-analysts user-id groups",
+      "summary": "Documented POST /group_analysts/{user_id}/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post group-analysts user-id groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/group_analysts/{user_id}/groups"
+        }
+      ],
+      "operation": "thinkific.post.group-analysts-user-id-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post group-users",
+      "summary": "Documented POST /group_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post group-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/group_users"
+        }
+      ],
+      "operation": "thinkific.post.group-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post groups",
+      "summary": "Documented POST /groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups"
+        }
+      ],
+      "operation": "thinkific.post.groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post groups group-id analysts",
+      "summary": "Documented POST /groups/{group_id}/analysts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post groups group-id analysts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups/{group_id}/analysts"
+        }
+      ],
+      "operation": "thinkific.post.groups-group-id-analysts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post instructors",
+      "summary": "Documented POST /instructors (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post instructors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/instructors"
+        }
+      ],
+      "operation": "thinkific.post.instructors",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post product-publish-requests id approve",
+      "summary": "Documented POST /product_publish_requests/{id}/approve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post product-publish-requests id approve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product_publish_requests/{id}/approve"
+        }
+      ],
+      "operation": "thinkific.post.product-publish-requests-id-approve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post product-publish-requests id deny",
+      "summary": "Documented POST /product_publish_requests/{id}/deny (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post product-publish-requests id deny --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product_publish_requests/{id}/deny"
+        }
+      ],
+      "operation": "thinkific.post.product-publish-requests-id-deny",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post promotions",
+      "summary": "Documented POST /promotions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post promotions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/promotions"
+        }
+      ],
+      "operation": "thinkific.post.promotions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post site-scripts",
+      "summary": "Documented POST /site_scripts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post site-scripts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/site_scripts"
+        }
+      ],
+      "operation": "thinkific.post.site-scripts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "thinkific.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api public v1 bundles id enrollments",
+      "summary": "Documented PUT /api/public/v1/bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put api public v1 bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.put.api-public-v1-bundles-id-enrollments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put bundles id enrollments",
+      "summary": "Documented PUT /bundles/{id}/enrollments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put bundles id enrollments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/bundles/{id}/enrollments"
+        }
+      ],
+      "operation": "thinkific.put.bundles-id-enrollments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put collections id",
+      "summary": "Documented PUT /collections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/collections/{id}"
+        }
+      ],
+      "operation": "thinkific.put.collections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put coupons id",
+      "summary": "Documented PUT /coupons/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "operation": "thinkific.put.coupons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put enrollments id",
+      "summary": "Documented PUT /enrollments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put enrollments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/enrollments/{id}"
+        }
+      ],
+      "operation": "thinkific.put.enrollments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put instructors id",
+      "summary": "Documented PUT /instructors/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put instructors id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/instructors/{id}"
+        }
+      ],
+      "operation": "thinkific.put.instructors-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put promotions id",
+      "summary": "Documented PUT /promotions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put promotions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/promotions/{id}"
+        }
+      ],
+      "operation": "thinkific.put.promotions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put site-scripts id",
+      "summary": "Documented PUT /site_scripts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put site-scripts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/site_scripts/{id}"
+        }
+      ],
+      "operation": "thinkific.put.site-scripts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users id",
+      "summary": "Documented PUT /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific api put users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "thinkific.put.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve product publish request apply",
+      "summary": "Plan and execute the approve product publish request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_product_publish_request",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific approve product publish request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/product_publish_requests/{id}/approve"
+        }
+      ],
+      "risk": "approves a pending course-publish request, making the course publicly visible/purchasable; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "collections list",
+      "summary": "Run the collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collections",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/collections"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "coupons list",
+      "summary": "Run the coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/coupons"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "course reviews list",
+      "summary": "Run the course reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "course_reviews",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific course reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/course_reviews"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "courses list",
+      "summary": "Run the courses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "courses",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific courses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/courses"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create collection apply",
+      "summary": "Plan and execute the create collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Required slug record field.",
+          "maps_to": "record.slug",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/collections"
+        }
+      ],
+      "risk": "creates a new course category (Collection); low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create coupon apply",
+      "summary": "Plan and execute the create coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "Required code record field.",
+          "maps_to": "record.code",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/coupons"
+        }
+      ],
+      "risk": "creates a discount coupon code redeemable at checkout; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create course review apply",
+      "summary": "Plan and execute the create course review reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_course_review",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "approved",
+          "type": "boolean",
+          "summary": "Required approved record field.",
+          "maps_to": "record.approved",
+          "required": true
+        },
+        {
+          "name": "rating",
+          "type": "number",
+          "summary": "Required rating record field.",
+          "maps_to": "record.rating",
+          "required": true
+        },
+        {
+          "name": "review_text",
+          "type": "string",
+          "summary": "Required review text record field.",
+          "maps_to": "record.review_text",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create course review apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/course_reviews"
+        }
+      ],
+      "risk": "creates a course review that, once approved, is publicly visible on the course landing page; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create enrollment apply",
+      "summary": "Plan and execute the create enrollment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific create enrollment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/enrollments"
+        }
+      ],
+      "risk": "grants a user access to a course; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create group apply",
+      "summary": "Plan and execute the create group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/groups"
+        }
+      ],
+      "risk": "creates a new Group (used for bulk enrollment/organization management); low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create instructor apply",
+      "summary": "Plan and execute the create instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Required slug record field.",
+          "maps_to": "record.slug",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/instructors"
+        }
+      ],
+      "risk": "creates a new public Instructor profile; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create promotion apply",
+      "summary": "Plan and execute the create promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "amount",
+          "type": "number",
+          "summary": "Required amount record field.",
+          "maps_to": "record.amount",
+          "required": true
+        },
+        {
+          "name": "discount_type",
+          "type": "string",
+          "summary": "Required discount type record field.",
+          "maps_to": "record.discount_type",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/promotions"
+        }
+      ],
+      "risk": "creates a discount promotion applied automatically at checkout for the targeted products; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create site script apply",
+      "summary": "Plan and execute the create site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Required category record field.",
+          "maps_to": "record.category",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "page_scopes",
+          "type": "string_array",
+          "summary": "Required page scopes record field.",
+          "maps_to": "record.page_scopes",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/site_scripts"
+        }
+      ],
+      "risk": "injects arbitrary third-party HTML/JavaScript into every scoped page of the public site; high-risk external mutation (site-wide script injection), approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/users"
+        }
+      ],
+      "risk": "creates a new Thinkific user account; low-risk additive external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "custom profile field definitions list",
+      "summary": "Run the custom profile field definitions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_profile_field_definitions",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific custom profile field definitions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/custom_profile_field_definitions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "delete collection apply",
+      "summary": "Plan and execute the delete collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/collections/{id}"
+        }
+      ],
+      "risk": "permanently deletes a course category; any public page linking to it will 404",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete coupon apply",
+      "summary": "Plan and execute the delete coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/coupons/{id}"
+        }
+      ],
+      "risk": "permanently deletes a coupon; any customer relying on the code at checkout will see it rejected",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete group apply",
+      "summary": "Plan and execute the delete group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/groups/{id}"
+        }
+      ],
+      "risk": "permanently deletes a Group; members lose any group-scoped access/reporting association",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete instructor apply",
+      "summary": "Plan and execute the delete instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/instructors/{id}"
+        }
+      ],
+      "risk": "permanently deletes an Instructor profile; any course crediting them loses that attribution",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete promotion apply",
+      "summary": "Plan and execute the delete promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/promotions/{id}"
+        }
+      ],
+      "risk": "permanently deletes an active discount promotion; checkout pricing reverts to full price immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete site script apply",
+      "summary": "Plan and execute the delete site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/site_scripts/{id}"
+        }
+      ],
+      "risk": "removes an injected site script from every scoped page immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/users/{id}"
+        }
+      ],
+      "risk": "permanently deletes a Thinkific user account and revokes their access to every enrolled course; destructive, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "deny product publish request apply",
+      "summary": "Plan and execute the deny product publish request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deny_product_publish_request",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific deny product publish request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/public/v1/product_publish_requests/{id}/deny"
+        }
+      ],
+      "risk": "denies a pending course-publish request, blocking the course from going live",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "enrollments list",
+      "summary": "Run the enrollments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "enrollments",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific enrollments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/enrollments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/groups"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "instructors list",
+      "summary": "Run the instructors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instructors",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific instructors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/instructors"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/orders"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "product publish requests list",
+      "summary": "Run the product publish requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_publish_requests",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific product publish requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/product_publish_requests"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/products"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "promotions list",
+      "summary": "Run the promotions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "promotions",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific promotions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/promotions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "remove products from collection apply",
+      "summary": "Plan and execute the remove products from collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "remove_products_from_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific remove products from collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/public/v1/collection_memberships/{id}"
+        }
+      ],
+      "risk": "removes one or more products from a public category, which can hide previously-listed courses from that category's landing page",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "site scripts list",
+      "summary": "Run the site scripts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "site_scripts",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific site scripts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/site_scripts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update collection apply",
+      "summary": "Plan and execute the update collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_collection",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/collections/{id}"
+        }
+      ],
+      "risk": "renames or re-slugs an existing category, which changes its public landing-page URL",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update coupon apply",
+      "summary": "Plan and execute the update coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_coupon",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "Required code record field.",
+          "maps_to": "record.code",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/coupons/{id}"
+        }
+      ],
+      "risk": "mutates an existing coupon's code, quantity, or usage counter; can change a customer-facing discount code that has already been shared",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update enrollment apply",
+      "summary": "Plan and execute the update enrollment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_enrollment",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update enrollment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/enrollments/{id}"
+        }
+      ],
+      "risk": "changes an enrollment's activation or expiry date, which can extend or revoke a user's access window to a course",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update instructor apply",
+      "summary": "Plan and execute the update instructor reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_instructor",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Required slug record field.",
+          "maps_to": "record.slug",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update instructor apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/instructors/{id}"
+        }
+      ],
+      "risk": "mutates a public Instructor profile's name, bio, or slug, changing what's shown on every course page that credits them",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update promotion apply",
+      "summary": "Plan and execute the update promotion reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_promotion",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "amount",
+          "type": "number",
+          "summary": "Required amount record field.",
+          "maps_to": "record.amount",
+          "required": true
+        },
+        {
+          "name": "discount_type",
+          "type": "string",
+          "summary": "Required discount type record field.",
+          "maps_to": "record.discount_type",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update promotion apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/promotions/{id}"
+        }
+      ],
+      "risk": "mutates an active discount promotion's amount, type, or eligible products, directly changing checkout pricing",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update site script apply",
+      "summary": "Plan and execute the update site script reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_site_script",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Required category record field.",
+          "maps_to": "record.category",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "page_scopes",
+          "type": "string_array",
+          "summary": "Required page scopes record field.",
+          "maps_to": "record.page_scopes",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update site script apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/site_scripts/{id}"
+        }
+      ],
+      "risk": "changes the injected third-party HTML/JavaScript payload site-wide; high-risk external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm thinkific update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/public/v1/users/{id}"
+        }
+      ],
+      "risk": "mutates an existing user's profile, email, password, or role assignment; a role change can grant or revoke site-admin/course-admin access",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "examples": [
+        "pm thinkific users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/public/v1/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

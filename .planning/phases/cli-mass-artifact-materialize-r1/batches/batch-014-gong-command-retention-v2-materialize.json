@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-011-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "gong",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d9a751a49708b6122b2f5e3873e1b7269810c5d12d2b42b21335ba140969b4d6"
+      },
+      "artifact_operations": 69,
+      "declared_operations": 69,
+      "operation_split": {
+        "executable": 69,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 69,
+      "implemented_commands": 45,
+      "named_dependency_commands": 0,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 17
+    }
+  ],
+  "dropped": []
+}

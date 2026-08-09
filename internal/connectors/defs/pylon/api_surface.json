@@ -1,33 +1,80 @@
 {
-  "api": "Pylon API (https://static.usepylon.com/openapi.json)",
+  "api": "Pylon API (https://static.usepylon.com/openapi.json); provider artifact version: Pylon API 1.0.0; OpenAPI 3.0.3",
   "docs": "https://docs.usepylon.com/pylon-docs/developer/api/api-reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Complete documented Pylon OpenAPI REST surface. JSON and path-only mutations are covered as concrete write actions; multipart file-upload endpoints are excluded as binary_payload. The legacy /messages stream is retained for parity with internal/connectors/pylon even though the current OpenAPI documents issue-scoped messages instead.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (137 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "pylon-artifact-2026-08-09",
+      "url": "https://static.usepylon.com/openapi.json",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/accounts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts\"].get"
+      },
       "covered_by": {
         "stream": "accounts"
       }
     },
     {
+      "method": "POST",
+      "path": "/accounts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts\"].post"
+      },
+      "covered_by": {
+        "write": "create_account"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/accounts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts\"].patch"
+      },
       "covered_by": {
         "write": "update_accounts"
       }
     },
     {
       "method": "POST",
-      "path": "/accounts",
-      "covered_by": {
-        "write": "create_account"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/accounts/merge",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/merge\"].post"
+      },
       "covered_by": {
         "write": "merge_accounts"
       }
@@ -35,6 +82,15 @@
     {
       "method": "POST",
       "path": "/accounts/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/search\"].post"
+      },
       "covered_by": {
         "write": "search_accounts"
       }
@@ -42,27 +98,63 @@
     {
       "method": "POST",
       "path": "/accounts/{account_id}/highlights",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/highlights\"].post"
+      },
       "covered_by": {
         "write": "create_account_highlight"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/accounts/{account_id}/highlights/{highlight_id}",
-      "covered_by": {
-        "write": "delete_account_highlight"
-      }
-    },
-    {
       "method": "PATCH",
       "path": "/accounts/{account_id}/highlights/{highlight_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/highlights/{highlight_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_account_highlight"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/highlights/{highlight_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/highlights/{highlight_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_account_highlight"
+      }
+    },
+    {
       "method": "POST",
       "path": "/accounts/{account_id}/relationship",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/relationship\"].post"
+      },
       "covered_by": {
         "write": "create_account_relationship"
       }
@@ -70,6 +162,15 @@
     {
       "method": "GET",
       "path": "/accounts/{account_id}/relationships",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/relationships\"].get"
+      },
       "covered_by": {
         "stream": "account_relationships"
       }
@@ -77,20 +178,31 @@
     {
       "method": "DELETE",
       "path": "/accounts/{account_id}/relationships/{relationship_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{account_id}/relationships/{relationship_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_account_relationship"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/accounts/{id}",
-      "covered_by": {
-        "write": "delete_account"
-      }
-    },
-    {
       "method": "GET",
       "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{id}\"].get"
+      },
       "covered_by": {
         "stream": "account"
       }
@@ -98,13 +210,47 @@
     {
       "method": "PATCH",
       "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_account"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_account"
+      }
+    },
+    {
       "method": "POST",
       "path": "/accounts/{id}/activities",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{id}/activities\"].post"
+      },
       "covered_by": {
         "write": "create_activity"
       }
@@ -112,14 +258,36 @@
     {
       "method": "POST",
       "path": "/accounts/{id}/files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect"
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/accounts/{id}/files\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/activity-types",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/activity-types\"].get"
+      },
       "covered_by": {
         "stream": "activity_types"
       }
@@ -127,14 +295,36 @@
     {
       "method": "POST",
       "path": "/attachments",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect"
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/attachments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/audit-logs",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/audit-logs\"].get"
+      },
       "covered_by": {
         "stream": "audit_logs"
       }
@@ -142,6 +332,15 @@
     {
       "method": "POST",
       "path": "/audit-logs/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/audit-logs/search\"].post"
+      },
       "covered_by": {
         "write": "search_audit_logs"
       }
@@ -149,20 +348,31 @@
     {
       "method": "POST",
       "path": "/call-recordings/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/call-recordings/search\"].post"
+      },
       "covered_by": {
         "write": "search_call_recordings"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/call-recordings/{id}",
-      "covered_by": {
-        "write": "delete_call_recording"
-      }
-    },
-    {
       "method": "GET",
       "path": "/call-recordings/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/call-recordings/{id}\"].get"
+      },
       "covered_by": {
         "stream": "call_recording"
       }
@@ -170,13 +380,47 @@
     {
       "method": "PATCH",
       "path": "/call-recordings/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/call-recordings/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_call_recording"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/call-recordings/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/call-recordings/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_call_recording"
+      }
+    },
+    {
       "method": "GET",
       "path": "/contacts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts\"].get"
+      },
       "covered_by": {
         "stream": "contacts"
       }
@@ -184,6 +428,15 @@
     {
       "method": "POST",
       "path": "/contacts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts\"].post"
+      },
       "covered_by": {
         "write": "create_contact"
       }
@@ -191,20 +444,31 @@
     {
       "method": "POST",
       "path": "/contacts/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts/search\"].post"
+      },
       "covered_by": {
         "write": "search_contacts"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/contacts/{id}",
-      "covered_by": {
-        "write": "delete_contact"
-      }
-    },
-    {
       "method": "GET",
       "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts/{id}\"].get"
+      },
       "covered_by": {
         "stream": "contact"
       }
@@ -212,13 +476,47 @@
     {
       "method": "PATCH",
       "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_contact"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/contacts/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
       "method": "GET",
       "path": "/custom-fields",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-fields\"].get"
+      },
       "covered_by": {
         "stream": "custom_fields"
       }
@@ -226,6 +524,15 @@
     {
       "method": "POST",
       "path": "/custom-fields",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-fields\"].post"
+      },
       "covered_by": {
         "write": "create_custom_field"
       }
@@ -233,6 +540,15 @@
     {
       "method": "GET",
       "path": "/custom-fields/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-fields/{id}\"].get"
+      },
       "covered_by": {
         "stream": "custom_field"
       }
@@ -240,6 +556,15 @@
     {
       "method": "PATCH",
       "path": "/custom-fields/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-fields/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_custom_field"
       }
@@ -247,41 +572,79 @@
     {
       "method": "GET",
       "path": "/custom-objects/{type}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}\"].get"
+      },
       "covered_by": {
         "stream": "custom_objects"
       }
     },
     {
+      "method": "POST",
+      "path": "/custom-objects/{type}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}\"].post"
+      },
+      "covered_by": {
+        "write": "create_custom_object"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/custom-objects/{type}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}\"].patch"
+      },
       "covered_by": {
         "write": "update_custom_objects"
       }
     },
     {
       "method": "POST",
-      "path": "/custom-objects/{type}",
-      "covered_by": {
-        "write": "create_custom_object"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/custom-objects/{type}/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}/search\"].post"
+      },
       "covered_by": {
         "write": "search_custom_objects"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/custom-objects/{type}/{id}",
-      "covered_by": {
-        "write": "delete_custom_object"
-      }
-    },
-    {
       "method": "GET",
       "path": "/custom-objects/{type}/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}/{id}\"].get"
+      },
       "covered_by": {
         "stream": "custom_object"
       }
@@ -289,34 +652,100 @@
     {
       "method": "PATCH",
       "path": "/custom-objects/{type}/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_custom_object"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/custom-objects/{type}/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/custom-objects/{type}/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_custom_object"
+      }
+    },
+    {
       "method": "POST",
       "path": "/feature-requests",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests\"].post"
+      },
       "covered_by": {
         "write": "create_feature_request"
       }
     },
     {
       "method": "POST",
+      "path": "/feature-requests/merge",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/merge\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/feature-requests/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/search\"].post"
+      },
       "covered_by": {
         "write": "search_feature_requests"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/feature-requests/{id}",
-      "covered_by": {
-        "write": "delete_feature_request"
-      }
-    },
-    {
       "method": "GET",
       "path": "/feature-requests/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/{id}\"].get"
+      },
       "covered_by": {
         "stream": "feature_request"
       }
@@ -324,13 +753,47 @@
     {
       "method": "PATCH",
       "path": "/feature-requests/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_feature_request"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/feature-requests/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_feature_request"
+      }
+    },
+    {
       "method": "POST",
       "path": "/feature-requests/{id}/set-portal-visibility",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/feature-requests/{id}/set-portal-visibility\"].post"
+      },
       "covered_by": {
         "write": "set_feature_request_portal_visibility"
       }
@@ -338,6 +801,15 @@
     {
       "method": "POST",
       "path": "/import/contacts",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/import/contacts\"].post"
+      },
       "covered_by": {
         "write": "import_contact"
       }
@@ -345,6 +817,15 @@
     {
       "method": "POST",
       "path": "/import/issues",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/import/issues\"].post"
+      },
       "covered_by": {
         "write": "import_issue"
       }
@@ -352,6 +833,15 @@
     {
       "method": "POST",
       "path": "/import/issues/{id}/messages",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/import/issues/{id}/messages\"].post"
+      },
       "covered_by": {
         "write": "import_messages"
       }
@@ -359,6 +849,15 @@
     {
       "method": "GET",
       "path": "/issue-statuses",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issue-statuses\"].get"
+      },
       "covered_by": {
         "stream": "issue_statuses"
       }
@@ -366,6 +865,15 @@
     {
       "method": "GET",
       "path": "/issues",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues\"].get"
+      },
       "covered_by": {
         "stream": "issues"
       }
@@ -373,6 +881,15 @@
     {
       "method": "POST",
       "path": "/issues",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues\"].post"
+      },
       "covered_by": {
         "write": "create_issue"
       }
@@ -380,20 +897,31 @@
     {
       "method": "POST",
       "path": "/issues/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/search\"].post"
+      },
       "covered_by": {
         "write": "search_issues"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/issues/{id}",
-      "covered_by": {
-        "write": "delete_issue"
-      }
-    },
-    {
       "method": "GET",
       "path": "/issues/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}\"].get"
+      },
       "covered_by": {
         "stream": "issue"
       }
@@ -401,13 +929,47 @@
     {
       "method": "PATCH",
       "path": "/issues/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_issue"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/issues/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_issue"
+      }
+    },
+    {
       "method": "POST",
       "path": "/issues/{id}/ai-response",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/ai-response\"].post"
+      },
       "covered_by": {
         "write": "create_issue_ai_response"
       }
@@ -415,6 +977,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/external-issues",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/external-issues\"].post"
+      },
       "covered_by": {
         "write": "link_external_issue"
       }
@@ -422,6 +993,15 @@
     {
       "method": "GET",
       "path": "/issues/{id}/followers",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/followers\"].get"
+      },
       "covered_by": {
         "stream": "issue_followers"
       }
@@ -429,6 +1009,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/followers",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/followers\"].post"
+      },
       "covered_by": {
         "write": "add_issue_followers"
       }
@@ -436,6 +1025,15 @@
     {
       "method": "GET",
       "path": "/issues/{id}/messages",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/messages\"].get"
+      },
       "covered_by": {
         "stream": "issue_messages"
       }
@@ -443,6 +1041,15 @@
     {
       "method": "DELETE",
       "path": "/issues/{id}/messages/{message_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/messages/{message_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_message"
       }
@@ -450,6 +1057,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/messages/{message_id}/redact",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/messages/{message_id}/redact\"].post"
+      },
       "covered_by": {
         "write": "redact_message"
       }
@@ -457,6 +1073,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/note",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/note\"].post"
+      },
       "covered_by": {
         "write": "create_issue_note"
       }
@@ -464,6 +1089,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/reply",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/reply\"].post"
+      },
       "covered_by": {
         "write": "create_issue_reply"
       }
@@ -471,6 +1105,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/snooze",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/snooze\"].post"
+      },
       "covered_by": {
         "write": "snooze_issue"
       }
@@ -478,6 +1121,15 @@
     {
       "method": "GET",
       "path": "/issues/{id}/threads",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/threads\"].get"
+      },
       "covered_by": {
         "stream": "issue_threads"
       }
@@ -485,6 +1137,15 @@
     {
       "method": "POST",
       "path": "/issues/{id}/threads",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/threads\"].post"
+      },
       "covered_by": {
         "write": "create_issue_thread"
       }
@@ -492,6 +1153,15 @@
     {
       "method": "GET",
       "path": "/issues/{id}/voice-calls",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/issues/{id}/voice-calls\"].get"
+      },
       "covered_by": {
         "stream": "issue_voice_calls"
       }
@@ -499,6 +1169,15 @@
     {
       "method": "GET",
       "path": "/knowledge-bases",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases\"].get"
+      },
       "covered_by": {
         "stream": "knowledge_bases"
       }
@@ -506,6 +1185,15 @@
     {
       "method": "GET",
       "path": "/knowledge-bases/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}\"].get"
+      },
       "covered_by": {
         "stream": "knowledge_base"
       }
@@ -513,6 +1201,15 @@
     {
       "method": "GET",
       "path": "/knowledge-bases/{id}/articles",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles\"].get"
+      },
       "covered_by": {
         "stream": "articles"
       }
@@ -520,20 +1217,31 @@
     {
       "method": "POST",
       "path": "/knowledge-bases/{id}/articles",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles\"].post"
+      },
       "covered_by": {
         "write": "create_article"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/knowledge-bases/{id}/articles/{article_id}",
-      "covered_by": {
-        "write": "delete_article"
-      }
-    },
-    {
       "method": "GET",
       "path": "/knowledge-bases/{id}/articles/{article_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles/{article_id}\"].get"
+      },
       "covered_by": {
         "stream": "article"
       }
@@ -541,13 +1249,47 @@
     {
       "method": "PATCH",
       "path": "/knowledge-bases/{id}/articles/{article_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles/{article_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_article"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/knowledge-bases/{id}/articles/{article_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles/{article_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_article"
+      }
+    },
+    {
       "method": "POST",
       "path": "/knowledge-bases/{id}/articles/{article_id}/request-review",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/articles/{article_id}/request-review\"].post"
+      },
       "covered_by": {
         "write": "request_article_review"
       }
@@ -555,6 +1297,15 @@
     {
       "method": "GET",
       "path": "/knowledge-bases/{id}/collections",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/collections\"].get"
+      },
       "covered_by": {
         "stream": "collections"
       }
@@ -562,20 +1313,31 @@
     {
       "method": "POST",
       "path": "/knowledge-bases/{id}/collections",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/collections\"].post"
+      },
       "covered_by": {
         "write": "create_collection"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/knowledge-bases/{id}/collections/{collection_id}",
-      "covered_by": {
-        "write": "delete_collection"
-      }
-    },
-    {
       "method": "GET",
       "path": "/knowledge-bases/{id}/collections/{collection_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/collections/{collection_id}\"].get"
+      },
       "covered_by": {
         "stream": "collection"
       }
@@ -583,13 +1345,47 @@
     {
       "method": "PATCH",
       "path": "/knowledge-bases/{id}/collections/{collection_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/collections/{collection_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_collection"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/knowledge-bases/{id}/collections/{collection_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/collections/{collection_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
       "method": "POST",
       "path": "/knowledge-bases/{id}/route-redirects",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/knowledge-bases/{id}/route-redirects\"].post"
+      },
       "covered_by": {
         "write": "create_route_redirect"
       }
@@ -597,6 +1393,15 @@
     {
       "method": "GET",
       "path": "/macro-groups",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macro-groups\"].get"
+      },
       "covered_by": {
         "stream": "macro_groups"
       }
@@ -604,6 +1409,15 @@
     {
       "method": "GET",
       "path": "/macros",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macros\"].get"
+      },
       "covered_by": {
         "stream": "macros"
       }
@@ -611,6 +1425,15 @@
     {
       "method": "POST",
       "path": "/macros",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macros\"].post"
+      },
       "covered_by": {
         "write": "create_macro"
       }
@@ -618,6 +1441,15 @@
     {
       "method": "GET",
       "path": "/macros/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macros/{id}\"].get"
+      },
       "covered_by": {
         "stream": "macro"
       }
@@ -625,34 +1457,101 @@
     {
       "method": "PATCH",
       "path": "/macros/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macros/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_macro"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/macros/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/macros/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/me",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/me\"].get"
+      },
       "covered_by": {
         "stream": "me"
       }
     },
     {
+      "method": "GET",
+      "path": "/messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "Pylon API 1.0.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "existing-surface[GET /messages]"
+      },
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
       "method": "POST",
       "path": "/milestones",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/milestones\"].post"
+      },
       "covered_by": {
         "write": "create_milestone"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/milestones/{id}",
-      "covered_by": {
-        "write": "delete_milestone"
-      }
-    },
-    {
       "method": "GET",
       "path": "/milestones/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/milestones/{id}\"].get"
+      },
       "covered_by": {
         "stream": "milestone"
       }
@@ -660,13 +1559,47 @@
     {
       "method": "PATCH",
       "path": "/milestones/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/milestones/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_milestone"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/milestones/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/milestones/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_milestone"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/projects\"].post"
+      },
       "covered_by": {
         "write": "create_project"
       }
@@ -674,20 +1607,31 @@
     {
       "method": "POST",
       "path": "/projects/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/projects/search\"].post"
+      },
       "covered_by": {
         "write": "search_projects"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/projects/{id}",
-      "covered_by": {
-        "write": "delete_project"
-      }
-    },
-    {
       "method": "GET",
       "path": "/projects/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/projects/{id}\"].get"
+      },
       "covered_by": {
         "stream": "project"
       }
@@ -695,13 +1639,47 @@
     {
       "method": "PATCH",
       "path": "/projects/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/projects/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_project"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/projects/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/projects/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_project"
+      }
+    },
+    {
       "method": "GET",
       "path": "/surveys",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/surveys\"].get"
+      },
       "covered_by": {
         "stream": "surveys"
       }
@@ -709,6 +1687,15 @@
     {
       "method": "POST",
       "path": "/surveys/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/surveys/search\"].post"
+      },
       "covered_by": {
         "write": "search_surveys"
       }
@@ -716,6 +1703,15 @@
     {
       "method": "GET",
       "path": "/surveys/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/surveys/{id}\"].get"
+      },
       "covered_by": {
         "stream": "survey"
       }
@@ -723,6 +1719,15 @@
     {
       "method": "GET",
       "path": "/surveys/{id}/responses",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/surveys/{id}/responses\"].get"
+      },
       "covered_by": {
         "stream": "survey_responses"
       }
@@ -730,6 +1735,15 @@
     {
       "method": "GET",
       "path": "/tags",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tags\"].get"
+      },
       "covered_by": {
         "stream": "tags"
       }
@@ -737,20 +1751,31 @@
     {
       "method": "POST",
       "path": "/tags",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tags\"].post"
+      },
       "covered_by": {
         "write": "create_tag"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/tags/{id}",
-      "covered_by": {
-        "write": "delete_tag"
-      }
-    },
-    {
       "method": "GET",
       "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tags/{id}\"].get"
+      },
       "covered_by": {
         "stream": "tag"
       }
@@ -758,13 +1783,47 @@
     {
       "method": "PATCH",
       "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tags/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_tag"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tags/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
       "method": "GET",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks\"].get"
+      },
       "covered_by": {
         "stream": "tasks"
       }
@@ -772,6 +1831,15 @@
     {
       "method": "POST",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks\"].post"
+      },
       "covered_by": {
         "write": "create_task"
       }
@@ -779,20 +1847,31 @@
     {
       "method": "POST",
       "path": "/tasks/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/search\"].post"
+      },
       "covered_by": {
         "write": "search_tasks"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/tasks/{id}",
-      "covered_by": {
-        "write": "delete_task"
-      }
-    },
-    {
       "method": "GET",
       "path": "/tasks/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}\"].get"
+      },
       "covered_by": {
         "stream": "task"
       }
@@ -800,13 +1879,47 @@
     {
       "method": "PATCH",
       "path": "/tasks/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_task"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/tasks/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_task"
+      }
+    },
+    {
       "method": "GET",
       "path": "/tasks/{id}/comments",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}/comments\"].get"
+      },
       "covered_by": {
         "stream": "task_comments"
       }
@@ -814,27 +1927,63 @@
     {
       "method": "POST",
       "path": "/tasks/{id}/comments",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}/comments\"].post"
+      },
       "covered_by": {
         "write": "create_task_comment"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/tasks/{id}/comments/{comment_id}",
-      "covered_by": {
-        "write": "delete_task_comment"
-      }
-    },
-    {
       "method": "PATCH",
       "path": "/tasks/{id}/comments/{comment_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}/comments/{comment_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_task_comment"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/tasks/{id}/comments/{comment_id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/tasks/{id}/comments/{comment_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_task_comment"
+      }
+    },
+    {
       "method": "GET",
       "path": "/teams",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/teams\"].get"
+      },
       "covered_by": {
         "stream": "teams"
       }
@@ -842,6 +1991,15 @@
     {
       "method": "POST",
       "path": "/teams",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/teams\"].post"
+      },
       "covered_by": {
         "write": "create_team"
       }
@@ -849,6 +2007,15 @@
     {
       "method": "GET",
       "path": "/teams/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/teams/{id}\"].get"
+      },
       "covered_by": {
         "stream": "team"
       }
@@ -856,6 +2023,15 @@
     {
       "method": "PATCH",
       "path": "/teams/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/teams/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_team"
       }
@@ -863,6 +2039,15 @@
     {
       "method": "GET",
       "path": "/ticket-forms",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/ticket-forms\"].get"
+      },
       "covered_by": {
         "stream": "ticket_forms"
       }
@@ -870,6 +2055,15 @@
     {
       "method": "GET",
       "path": "/ticket-forms/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/ticket-forms/{id}\"].get"
+      },
       "covered_by": {
         "stream": "ticket_form"
       }
@@ -877,6 +2071,15 @@
     {
       "method": "GET",
       "path": "/training-data",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data\"].get"
+      },
       "covered_by": {
         "stream": "training_data"
       }
@@ -884,6 +2087,15 @@
     {
       "method": "POST",
       "path": "/training-data",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data\"].post"
+      },
       "covered_by": {
         "write": "create_training_data"
       }
@@ -891,14 +2103,36 @@
     {
       "method": "POST",
       "path": "/training-data/upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect"
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data/upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/training-data/upload-content",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data/upload-content\"].post"
+      },
       "covered_by": {
         "write": "upload_training_data_file_content"
       }
@@ -906,6 +2140,15 @@
     {
       "method": "GET",
       "path": "/training-data/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data/{id}\"].get"
+      },
       "covered_by": {
         "stream": "training_data_detail"
       }
@@ -913,6 +2156,15 @@
     {
       "method": "DELETE",
       "path": "/training-data/{id}/documents",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/training-data/{id}/documents\"].delete"
+      },
       "covered_by": {
         "write": "delete_training_data_documents"
       }
@@ -920,6 +2172,15 @@
     {
       "method": "GET",
       "path": "/user-roles",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/user-roles\"].get"
+      },
       "covered_by": {
         "stream": "user_roles"
       }
@@ -927,6 +2188,15 @@
     {
       "method": "GET",
       "path": "/users",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/users\"].get"
+      },
       "covered_by": {
         "stream": "users"
       }
@@ -934,6 +2204,15 @@
     {
       "method": "POST",
       "path": "/users/search",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/users/search\"].post"
+      },
       "covered_by": {
         "write": "search_users"
       }
@@ -941,6 +2220,15 @@
     {
       "method": "GET",
       "path": "/users/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/users/{id}\"].get"
+      },
       "covered_by": {
         "stream": "user"
       }
@@ -948,15 +2236,17 @@
     {
       "method": "PATCH",
       "path": "/users/{id}",
+      "provenance": {
+        "artifact": "pylon-artifact-2026-08-09",
+        "source_url": "https://static.usepylon.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1",
+        "coordinate": "paths[\"/users/{id}\"].patch"
+      },
       "covered_by": {
         "write": "update_user"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/messages",
-      "covered_by": {
-        "stream": "messages"
       }
     }
   ]

@@ -1,0 +1,1435 @@
+{
+  "operations": [
+    {
+      "id": "solarwinds-service-desk.put.asset-links-delete-asset-link-by-id",
+      "kind": "rest_write",
+      "summary": "PUT /asset_links/delete_asset_link_by_id",
+      "description": "removes a specific asset-to-asset dependency link by its own link id, which is only obtainable via a configuration-item detail response, not any covered list stream; niche relationship-management action, breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/asset_links/delete_asset_link_by_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.attachments",
+      "kind": "rest_write",
+      "summary": "POST /attachments",
+      "description": "requires a multipart/form-data file upload (curl -F 'file[attachment]=@/PATH/TO/FILE'), not a JSON/form record body this dialect's write actions can express",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.catalog-items",
+      "kind": "rest_write",
+      "summary": "POST /catalog_items",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"catalog_item\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/catalog_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.catalog-items-id",
+      "kind": "rest_read",
+      "summary": "GET /catalog_items/{id}",
+      "description": "single-catalog-item-by-id detail; identical record shape already covered by the catalog_items list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/catalog_items/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.catalog-items-id",
+      "kind": "rest_write",
+      "summary": "PUT /catalog_items/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"catalog_item\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/catalog_items/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.catalog-items-id-service-requests",
+      "kind": "rest_write",
+      "summary": "POST /catalog_items/{id}/service_requests",
+      "description": "raises a new service request from a catalog-item template; a compound workflow action distinct from plain CRUD, not implemented this pass; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/catalog_items/{id}/service_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.categories",
+      "kind": "rest_write",
+      "summary": "POST /categories",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"category\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.categories-id",
+      "kind": "rest_read",
+      "summary": "GET /categories/{id}",
+      "description": "single-category-by-id detail; identical record shape already covered by the categories list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.categories-id",
+      "kind": "rest_write",
+      "summary": "PUT /categories/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"category\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.change-catalogs",
+      "kind": "rest_write",
+      "summary": "POST /change_catalogs",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"change_catalog\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/change_catalogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.change-catalogs-id",
+      "kind": "rest_read",
+      "summary": "GET /change_catalogs/{id}",
+      "description": "single-change-catalog-by-id detail; identical record shape already covered by the change_catalogs list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/change_catalogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.change-catalogs-id",
+      "kind": "rest_write",
+      "summary": "PUT /change_catalogs/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"change_catalog\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/change_catalogs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.change-catalogs-id-change-requests",
+      "kind": "rest_write",
+      "summary": "POST /change_catalogs/{id}/change_requests",
+      "description": "raises a new change request from a change-catalog template; a compound workflow action distinct from plain CRUD, not implemented this pass; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/change_catalogs/{id}/change_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.changes",
+      "kind": "rest_write",
+      "summary": "POST /changes",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"change\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.changes-id",
+      "kind": "rest_read",
+      "summary": "GET /changes/{id}",
+      "description": "single-change-by-id detail; identical record shape already covered by the changes list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/changes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.changes-id",
+      "kind": "rest_write",
+      "summary": "PUT /changes/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"change\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/changes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.configuration-items",
+      "kind": "rest_write",
+      "summary": "POST /configuration_items",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"configuration_item\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/configuration_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.configuration-items-id",
+      "kind": "rest_read",
+      "summary": "GET /configuration_items/{id}",
+      "description": "single-configuration-item-by-id detail; identical record shape already covered by the configuration_items list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/configuration_items/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.configuration-items-id",
+      "kind": "rest_write",
+      "summary": "PUT /configuration_items/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"configuration_item\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/configuration_items/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.configuration-items-id-append-multiple-dependent-assets",
+      "kind": "rest_write",
+      "summary": "PUT /configuration_items/{id}/append_multiple_dependent_assets",
+      "description": "attaches multiple dependent CI records by id array; a niche relationship-management action, not core CRUD; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/configuration_items/{id}/append_multiple_dependent_assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.contracts",
+      "kind": "rest_write",
+      "summary": "POST /contracts",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"contract\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contracts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.contracts-contract-id-items-item-id",
+      "kind": "rest_write",
+      "summary": "PUT /contracts/{contract_id}/items/{item_id}",
+      "description": "ENGINE_GAP: same body-wrap gap on a contract line-item sub-resource",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contracts/{contract_id}/items/{item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.contracts-contract-id-items-item-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contracts/{contract_id}/items/{item_id}",
+      "description": "deletes a specific contract line item; its item_id is only obtainable via the contract's own detail response, not a covered list stream; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contracts/{contract_id}/items/{item_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.contracts-id",
+      "kind": "rest_read",
+      "summary": "GET /contracts/{id}",
+      "description": "single-contract-by-id detail; identical record shape already covered by the contracts list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contracts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.contracts-id",
+      "kind": "rest_write",
+      "summary": "PUT /contracts/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"contract\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contracts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.contracts-id-items",
+      "kind": "rest_write",
+      "summary": "POST /contracts/{id}/items",
+      "description": "ENGINE_GAP: adds a contract line-item; body-wrap shape (same recurring gap) plus a niche sub-resource",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contracts/{id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.departments",
+      "kind": "rest_write",
+      "summary": "POST /departments",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"department\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/departments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.departments-id",
+      "kind": "rest_read",
+      "summary": "GET /departments/{id}",
+      "description": "single-department-by-id detail; identical record shape already covered by the departments list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.departments-id",
+      "kind": "rest_write",
+      "summary": "PUT /departments/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"department\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.groups",
+      "kind": "rest_write",
+      "summary": "POST /groups",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"group\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.groups-id",
+      "kind": "rest_read",
+      "summary": "GET /groups/{id}",
+      "description": "single-group-by-id detail; identical record shape already covered by the groups list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.groups-id",
+      "kind": "rest_write",
+      "summary": "PUT /groups/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"group\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.hardwares",
+      "kind": "rest_write",
+      "summary": "POST /hardwares",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"hardware\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/hardwares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.hardwares-hardware-id-warranties-warranty-id",
+      "kind": "rest_write",
+      "summary": "PUT /hardwares/{hardware_id}/warranties/{warranty_id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"warranty\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/hardwares/{hardware_id}/warranties/{warranty_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.hardwares-hardware-id-warranties-warranty-id",
+      "kind": "rest_write",
+      "summary": "DELETE /hardwares/{hardware_id}/warranties/{warranty_id}",
+      "description": "deletes a specific hardware warranty sub-record; its warranty_id is only obtainable via the excluded warranties sub-resource listing, not any covered stream; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/hardwares/{hardware_id}/warranties/{warranty_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.hardwares-id",
+      "kind": "rest_read",
+      "summary": "GET /hardwares/{id}",
+      "description": "single-hardware-asset-by-id detail; identical record shape already covered by the hardwares list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/hardwares/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.hardwares-id",
+      "kind": "rest_write",
+      "summary": "PUT /hardwares/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"hardware\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/hardwares/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.hardwares-id-warranties",
+      "kind": "rest_read",
+      "summary": "GET /hardwares/{id}/warranties",
+      "description": "per-hardware-asset warranty sub-resource listing; a drill-down detail view, not core asset data; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/hardwares/{id}/warranties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.hardwares-id-warranties",
+      "kind": "rest_write",
+      "summary": "POST /hardwares/{id}/warranties",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"warranty\" key (this API's uniform wrap convention); see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/hardwares/{id}/warranties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.incidents",
+      "kind": "rest_write",
+      "summary": "POST /incidents",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"incident\" key ({\"incident\": {...}}); this dialect's write.go has no body-envelope/namespacing mechanism (body_type json/form/none all send the record flush, never nested under a declared key) -- same gap as defs/statuspage/docs.md's Write actions \u0026 risks section; forbidden to add a new hook package this pass",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/incidents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.incidents-id",
+      "kind": "rest_read",
+      "summary": "GET /incidents/{id}",
+      "description": "single-incident-by-id detail; identical record shape already covered by the incidents list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/incidents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.incidents-id",
+      "kind": "rest_write",
+      "summary": "PUT /incidents/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"incident\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/incidents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.memberships",
+      "kind": "rest_write",
+      "summary": "POST /memberships",
+      "description": "ENGINE_GAP: takes group_id/user_ids as QUERY parameters with no request body at all -- expressible in principle, but this dialect's writes.json has no declared-query-parameter mechanism (only path/path_fields/body_type/body_fields), so the write path has no field to carry group_id/user_ids into the query string; also account/access-control administration (relates a user to a group), out of remit for a data-sync connector even if it were wired",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.memberships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /memberships/{id}",
+      "description": "no GET/list endpoint exists for memberships at all, so there is no stream to source a valid membership id from; a lone delete-by-id with no discovery path is not implementable as a syncable write action",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.mobiles",
+      "kind": "rest_write",
+      "summary": "POST /mobiles",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"mobile\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mobiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.mobiles-id",
+      "kind": "rest_read",
+      "summary": "GET /mobiles/{id}",
+      "description": "single-mobile-device-by-id detail; identical record shape already covered by the mobiles list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mobiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.mobiles-id",
+      "kind": "rest_write",
+      "summary": "PUT /mobiles/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"mobile\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/mobiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.other-assets",
+      "kind": "rest_write",
+      "summary": "POST /other_assets",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"other_asset\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/other_assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.other-assets-id",
+      "kind": "rest_read",
+      "summary": "GET /other_assets/{id}",
+      "description": "single-other-asset-by-id detail; identical record shape already covered by the other_assets list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/other_assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.other-assets-id",
+      "kind": "rest_write",
+      "summary": "PUT /other_assets/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"other_asset\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/other_assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.printers-id",
+      "kind": "rest_read",
+      "summary": "GET /printers/{id}",
+      "description": "single-printer-by-id detail; identical record shape already covered by the printers list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/printers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.printers-id",
+      "kind": "rest_write",
+      "summary": "PUT /printers/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"printer\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/printers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.problems",
+      "kind": "rest_write",
+      "summary": "POST /problems",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"problem\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/problems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.problems-id",
+      "kind": "rest_read",
+      "summary": "GET /problems/{id}",
+      "description": "single-problem-by-id detail; identical record shape already covered by the problems list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/problems/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.problems-id",
+      "kind": "rest_write",
+      "summary": "PUT /problems/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"problem\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/problems/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.purchase-orders",
+      "kind": "rest_write",
+      "summary": "POST /purchase_orders",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"purchase_order\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchase_orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.purchase-orders-id",
+      "kind": "rest_read",
+      "summary": "GET /purchase_orders/{id}",
+      "description": "single-purchase-order-by-id detail; identical record shape already covered by the purchase_orders list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/purchase_orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.purchase-orders-id",
+      "kind": "rest_write",
+      "summary": "PUT /purchase_orders/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"purchase_order\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/purchase_orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.releases",
+      "kind": "rest_write",
+      "summary": "POST /releases",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"release\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.releases-id",
+      "kind": "rest_read",
+      "summary": "GET /releases/{id}",
+      "description": "single-release-by-id detail; identical record shape already covered by the releases list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/releases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.releases-id",
+      "kind": "rest_write",
+      "summary": "PUT /releases/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"release\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/releases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.roles",
+      "kind": "rest_write",
+      "summary": "POST /roles",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"role\" key; see POST /incidents' reason. Also independently role/permission administration, typically requiring elevated admin rights.",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.roles-id",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}",
+      "description": "single-role-by-id detail; identical record shape already covered by the roles list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.roles-id",
+      "kind": "rest_write",
+      "summary": "PUT /roles/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"role\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.sites",
+      "kind": "rest_write",
+      "summary": "POST /sites",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"site\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.sites-id",
+      "kind": "rest_read",
+      "summary": "GET /sites/{id}",
+      "description": "single-site-by-id detail; identical record shape already covered by the sites list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sites/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.sites-id",
+      "kind": "rest_write",
+      "summary": "PUT /sites/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"site\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sites/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.softwares-id",
+      "kind": "rest_read",
+      "summary": "GET /softwares/{id}",
+      "description": "single-software-asset-by-id detail; identical record shape already covered by the softwares list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/softwares/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.solutions",
+      "kind": "rest_write",
+      "summary": "POST /solutions",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"solution\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/solutions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.solutions-id",
+      "kind": "rest_read",
+      "summary": "GET /solutions/{id}",
+      "description": "single-solution-by-id detail; identical record shape already covered by the solutions list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/solutions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.solutions-id",
+      "kind": "rest_write",
+      "summary": "PUT /solutions/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"solution\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/solutions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"user\" key; see POST /incidents' reason. Also independently a user-provisioning action typically requiring elevated admin rights on the live API.",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "single-user-by-id detail; identical record shape already covered by the users list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.users-id",
+      "kind": "rest_write",
+      "summary": "PUT /users/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"user\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.vendors",
+      "kind": "rest_write",
+      "summary": "POST /vendors",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"vendor\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.vendors-id",
+      "kind": "rest_read",
+      "summary": "GET /vendors/{id}",
+      "description": "single-vendor-by-id detail; identical record shape already covered by the vendors list stream's full result set",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.vendors-id",
+      "kind": "rest_write",
+      "summary": "PUT /vendors/{id}",
+      "description": "ENGINE_GAP: request body must be wrapped under a root \"vendor\" key; see POST /incidents' reason",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.object-type-id-audits",
+      "kind": "rest_read",
+      "summary": "GET /{object_type}/{id}/audits",
+      "description": "per-parent-record audit-trail filter; a narrower view of the same audit-event data the audits stream already returns organization-wide",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{object_type}/{id}/audits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.object-type-id-comments",
+      "kind": "rest_write",
+      "summary": "POST /{object_type}/{id}/comments",
+      "description": "ENGINE_GAP: sub-resource wrapped under a root \"comment\" key on a dynamic {object_type} path segment; same recurring body-wrap gap, additionally requiring a dynamic-object-type path",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{object_type}/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.object-type-id-comments-comment-id",
+      "kind": "rest_write",
+      "summary": "PUT /{object_type}/{id}/comments/{comment_id}",
+      "description": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST comments",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/{object_type}/{id}/comments/{comment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.object-type-id-comments-comment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /{object_type}/{id}/comments/{comment_id}",
+      "description": "deletes a comment sub-record on a dynamic {object_type} parent; its comment_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{object_type}/{id}/comments/{comment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.object-type-id-purchases",
+      "kind": "rest_write",
+      "summary": "POST /{object_type}/{id}/purchases",
+      "description": "ENGINE_GAP: sub-resource wrapped under a root \"purchase\" key on a dynamic {object_type} path segment; same recurring body-wrap gap",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{object_type}/{id}/purchases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.object-type-id-purchases-purchase-id",
+      "kind": "rest_write",
+      "summary": "PUT /{object_type}/{id}/purchases/{purchase_id}",
+      "description": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST purchases",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/{object_type}/{id}/purchases/{purchase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.object-type-id-purchases-purchase-id",
+      "kind": "rest_write",
+      "summary": "DELETE /{object_type}/{id}/purchases/{purchase_id}",
+      "description": "deletes a purchase sub-record on a dynamic {object_type} parent; its purchase_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{object_type}/{id}/purchases/{purchase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.object-type-id-tasks",
+      "kind": "rest_write",
+      "summary": "POST /{object_type}/{id}/tasks",
+      "description": "ENGINE_GAP: sub-resource wrapped under a root \"task\" key on a dynamic {object_type} path segment (incident/problem/change/etc.); same recurring body-wrap gap, additionally requiring a dynamic-object-type path this dialect's declarative streams/writes have no wired mechanism for across resource types",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{object_type}/{id}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.object-type-id-tasks-task-id",
+      "kind": "rest_write",
+      "summary": "PUT /{object_type}/{id}/tasks/{task_id}",
+      "description": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST tasks",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/{object_type}/{id}/tasks/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.object-type-id-tasks-task-id",
+      "kind": "rest_write",
+      "summary": "DELETE /{object_type}/{id}/tasks/{task_id}",
+      "description": "deletes a task sub-record on a dynamic {object_type} parent; its task_id is only reachable via a parent-object detail response this pass does not model per-resource; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{object_type}/{id}/tasks/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.get.object-type-id-time-tracks",
+      "kind": "rest_read",
+      "summary": "GET /{object_type}/{id}/time_tracks",
+      "description": "per-parent-record time-tracking entries on a dynamic {object_type} path segment; a drill-down sub-resource this pass does not model per-resource; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{object_type}/{id}/time_tracks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.post.object-type-id-time-tracks",
+      "kind": "rest_write",
+      "summary": "POST /{object_type}/{id}/time_tracks",
+      "description": "ENGINE_GAP: sub-resource wrapped under a root \"time_track\" key on a dynamic {object_type} path segment; same recurring body-wrap gap",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/{object_type}/{id}/time_tracks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.put.object-type-id-time-tracks-time-track-id",
+      "kind": "rest_write",
+      "summary": "PUT /{object_type}/{id}/time_tracks/{time_track_id}",
+      "description": "ENGINE_GAP: same body-wrap + dynamic-object-type gap as POST time_tracks",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/{object_type}/{id}/time_tracks/{time_track_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "solarwinds-service-desk.delete.object-type-id-time-tracks-time-track-id",
+      "kind": "rest_write",
+      "summary": "DELETE /{object_type}/{id}/time_tracks/{time_track_id}",
+      "description": "deletes a time-track sub-record on a dynamic {object_type} parent; its time_track_id is only reachable via the excluded time_tracks listing; breadth-vs-cost triage",
+      "source_url": "https://apidoc.samanage.com/redoc/schema/resolved_schema.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/{object_type}/{id}/time_tracks/{time_track_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

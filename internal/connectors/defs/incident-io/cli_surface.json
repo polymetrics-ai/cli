@@ -1,0 +1,4499 @@
+{
+  "tagline": "Run Incident.io's declared streams and reverse-ETL actions.",
+  "usage": "pm incident-io \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 actions",
+        "api get v1 actions id",
+        "api get v1 alert-notes",
+        "api get v1 alert-notes id",
+        "api get v1 alerts",
+        "api get v1 api-keys",
+        "api get v1 api-keys id",
+        "api get v1 custom-field-options",
+        "api get v1 custom-field-options id",
+        "api get v1 custom-fields",
+        "api get v1 custom-fields id",
+        "api get v1 identity",
+        "api get v1 incident-attachments",
+        "api get v1 incident-relationships",
+        "api get v1 incident-roles",
+        "api get v1 incident-roles id",
+        "api get v1 incident-statuses",
+        "api get v1 incident-statuses id",
+        "api get v1 incident-types",
+        "api get v1 incident-types id",
+        "api get v1 incidents",
+        "api get v1 incidents id",
+        "api get v1 ip-allowlists",
+        "api get v1 maintenance-windows",
+        "api get v1 maintenance-windows id",
+        "api get v1 openapiv3-json",
+        "api get v1 postmortem-documents",
+        "api get v1 postmortem-documents id",
+        "api get v1 postmortem-documents id content",
+        "api get v1 severities id",
+        "api get v1 status-pages id incidents incident-id response-incidents",
+        "api get v2 actions",
+        "api get v2 actions id",
+        "api get v2 alert-attributes",
+        "api get v2 alert-attributes id",
+        "api get v2 alert-routes",
+        "api get v2 alert-routes id",
+        "api get v2 alert-sources",
+        "api get v2 alert-sources id",
+        "api get v2 alerts",
+        "api get v2 alerts id",
+        "api get v2 catalog-entries",
+        "api get v2 catalog-entries id",
+        "api get v2 catalog-resources",
+        "api get v2 catalog-types",
+        "api get v2 catalog-types id",
+        "api get v2 custom-fields",
+        "api get v2 custom-fields id",
+        "api get v2 escalation-paths",
+        "api get v2 escalation-paths id",
+        "api get v2 escalations",
+        "api get v2 escalations id",
+        "api get v2 follow-ups id",
+        "api get v2 heartbeat alert-source-config-id ping",
+        "api get v2 incident-alerts",
+        "api get v2 incident-participant-workloads",
+        "api get v2 incident-participants",
+        "api get v2 incident-roles id",
+        "api get v2 incident-timestamps",
+        "api get v2 incident-timestamps id",
+        "api get v2 incident-updates",
+        "api get v2 incidents id",
+        "api get v2 schedule-entries",
+        "api get v2 schedule-overrides",
+        "api get v2 schedule-sync-targets",
+        "api get v2 schedule-sync-targets id",
+        "api get v2 schedules",
+        "api get v2 schedules id",
+        "api get v2 schedules schedule-id replicas",
+        "api get v2 schedules schedule-id replicas id",
+        "api get v2 schedules schedule-id sync-rules",
+        "api get v2 schedules schedule-id sync-rules id",
+        "api get v2 secrets",
+        "api get v2 secrets id",
+        "api get v2 status-page-incidents",
+        "api get v2 status-page-incidents status-page-incident-id",
+        "api get v2 status-page-maintenances",
+        "api get v2 status-page-maintenances status-page-maintenance-id",
+        "api get v2 status-page-structures status-page-id",
+        "api get v2 status-pages",
+        "api get v2 users id",
+        "api get v2 users user-id notification-methods",
+        "api get v2 users user-id notification-rules",
+        "api get v2 users user-id paging-provider",
+        "api get v2 workflow-runs",
+        "api get v2 workflow-runs id",
+        "api get v2 workflows",
+        "api get v2 workflows id",
+        "api get v3 alert-routes",
+        "api get v3 alert-routes id",
+        "api get v3 catalog-entries",
+        "api get v3 catalog-entries id",
+        "api get v3 catalog-resources",
+        "api get v3 catalog-types",
+        "api get v3 catalog-types id",
+        "api get v3 teams",
+        "api get v3 teams id",
+        "follow ups list",
+        "incident roles list",
+        "incidents list",
+        "severities list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 alert-notes id",
+        "api delete v1 api-keys id",
+        "api delete v1 custom-field-options id",
+        "api delete v1 custom-fields id",
+        "api delete v1 incident-attachments id",
+        "api delete v1 incident-roles id",
+        "api delete v1 incident-statuses id",
+        "api delete v1 maintenance-windows id",
+        "api delete v1 severities id",
+        "api delete v2 actions id",
+        "api delete v2 alert-attributes id",
+        "api delete v2 alert-routes id",
+        "api delete v2 alert-sources id",
+        "api delete v2 catalog-entries id",
+        "api delete v2 catalog-types id",
+        "api delete v2 custom-fields id",
+        "api delete v2 escalation-paths id",
+        "api delete v2 follow-ups id",
+        "api delete v2 incident-roles id",
+        "api delete v2 schedule-sync-targets id",
+        "api delete v2 schedules id",
+        "api delete v2 schedules schedule-id replicas id",
+        "api delete v2 schedules schedule-id sync-rules id",
+        "api delete v2 secrets id",
+        "api delete v2 workflows id",
+        "api delete v3 alert-routes id",
+        "api delete v3 catalog-entries id",
+        "api delete v3 catalog-types id",
+        "api post v1 alert-notes",
+        "api post v1 api-keys",
+        "api post v1 api-keys id actions rotate",
+        "api post v1 custom-field-options",
+        "api post v1 custom-fields",
+        "api post v1 incident-attachments",
+        "api post v1 incident-memberships",
+        "api post v1 incident-memberships actions revoke",
+        "api post v1 incident-roles",
+        "api post v1 incident-statuses",
+        "api post v1 incidents",
+        "api post v1 maintenance-windows",
+        "api post v1 postmortem-documents actions attach",
+        "api post v1 severities",
+        "api post v2 actions",
+        "api post v2 alert-attributes",
+        "api post v2 alert-events http alert-source-config-id",
+        "api post v2 alert-routes",
+        "api post v2 alert-sources",
+        "api post v2 alerts id actions resolve",
+        "api post v2 catalog-entries",
+        "api post v2 catalog-types",
+        "api post v2 catalog-types id actions update-schema",
+        "api post v2 custom-fields",
+        "api post v2 escalation-paths",
+        "api post v2 escalations",
+        "api post v2 escalations id actions cancel",
+        "api post v2 follow-ups",
+        "api post v2 follow-ups id actions connect-external-issue",
+        "api post v2 heartbeat alert-source-config-id ping",
+        "api post v2 incident-roles",
+        "api post v2 incidents",
+        "api post v2 incidents id actions edit",
+        "api post v2 incidents id actions import-postmortem-document",
+        "api post v2 schedule-overrides",
+        "api post v2 schedule-sync-targets",
+        "api post v2 schedules",
+        "api post v2 schedules id actions preview-entries",
+        "api post v2 schedules schedule-id replicas",
+        "api post v2 schedules schedule-id sync-rules",
+        "api post v2 secrets",
+        "api post v2 secrets id actions rotate",
+        "api post v2 status-page-incident-updates",
+        "api post v2 status-page-incidents",
+        "api post v2 status-page-maintenance-updates",
+        "api post v2 status-page-maintenances",
+        "api post v2 status-page-retrospective-incidents",
+        "api post v2 users user-id paging-provider",
+        "api post v2 workflows",
+        "api post v3 alert-routes",
+        "api post v3 catalog-entries",
+        "api post v3 catalog-entries actions bulk-update",
+        "api post v3 catalog-types",
+        "api post v3 catalog-types id actions update-schema",
+        "api put v1 alert-notes id",
+        "api put v1 api-keys id",
+        "api put v1 custom-field-options id",
+        "api put v1 custom-fields id",
+        "api put v1 incident-roles id",
+        "api put v1 incident-statuses id",
+        "api put v1 ip-allowlists",
+        "api put v1 maintenance-windows id",
+        "api put v1 postmortem-documents id",
+        "api put v1 severities id",
+        "api put v2 actions id",
+        "api put v2 alert-attributes id",
+        "api put v2 alert-routes id",
+        "api put v2 alert-sources id",
+        "api put v2 catalog-entries id",
+        "api put v2 catalog-types id",
+        "api put v2 custom-fields id",
+        "api put v2 escalation-paths id",
+        "api put v2 follow-ups id",
+        "api put v2 incident-roles id",
+        "api put v2 schedule-sync-targets id",
+        "api put v2 schedules id",
+        "api put v2 schedules schedule-id sync-rules id",
+        "api put v2 secrets id",
+        "api put v2 status-page-incidents status-page-incident-id",
+        "api put v2 telemetry data-sources id",
+        "api put v2 workflows id",
+        "api put v3 alert-routes id",
+        "api put v3 catalog-entries id",
+        "api put v3 catalog-types id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 alert-notes id",
+      "summary": "Documented DELETE /v1/alert_notes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 alert-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/alert_notes/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-alert-notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 api-keys id",
+      "summary": "Documented DELETE /v1/api_keys/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 api-keys id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/api_keys/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-api-keys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 custom-field-options id",
+      "summary": "Documented DELETE /v1/custom_field_options/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 custom-field-options id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/custom_field_options/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-custom-field-options-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 custom-fields id",
+      "summary": "Documented DELETE /v1/custom_fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 incident-attachments id",
+      "summary": "Documented DELETE /v1/incident_attachments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 incident-attachments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/incident_attachments/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-incident-attachments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 incident-roles id",
+      "summary": "Documented DELETE /v1/incident_roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-incident-roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 incident-statuses id",
+      "summary": "Documented DELETE /v1/incident_statuses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 incident-statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/incident_statuses/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-incident-statuses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 maintenance-windows id",
+      "summary": "Documented DELETE /v1/maintenance_windows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 maintenance-windows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/maintenance_windows/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-maintenance-windows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 severities id",
+      "summary": "Documented DELETE /v1/severities/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v1 severities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/severities/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v1-severities-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 actions id",
+      "summary": "Documented DELETE /v2/actions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 actions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/actions/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-actions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 alert-attributes id",
+      "summary": "Documented DELETE /v2/alert_attributes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 alert-attributes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/alert_attributes/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-alert-attributes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 alert-routes id",
+      "summary": "Documented DELETE /v2/alert_routes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-alert-routes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 alert-sources id",
+      "summary": "Documented DELETE /v2/alert_sources/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 alert-sources id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/alert_sources/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-alert-sources-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 catalog-entries id",
+      "summary": "Documented DELETE /v2/catalog_entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-catalog-entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 catalog-types id",
+      "summary": "Documented DELETE /v2/catalog_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-catalog-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 custom-fields id",
+      "summary": "Documented DELETE /v2/custom_fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 escalation-paths id",
+      "summary": "Documented DELETE /v2/escalation_paths/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 escalation-paths id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/escalation_paths/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-escalation-paths-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 follow-ups id",
+      "summary": "Documented DELETE /v2/follow_ups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 follow-ups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/follow_ups/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-follow-ups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 incident-roles id",
+      "summary": "Documented DELETE /v2/incident_roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-incident-roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 schedule-sync-targets id",
+      "summary": "Documented DELETE /v2/schedule_sync_targets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 schedule-sync-targets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/schedule_sync_targets/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-schedule-sync-targets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 schedules id",
+      "summary": "Documented DELETE /v2/schedules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/schedules/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-schedules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 schedules schedule-id replicas id",
+      "summary": "Documented DELETE /v2/schedules/{schedule_id}/replicas/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 schedules schedule-id replicas id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/schedules/{schedule_id}/replicas/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-schedules-schedule-id-replicas-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 schedules schedule-id sync-rules id",
+      "summary": "Documented DELETE /v2/schedules/{schedule_id}/sync_rules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 schedules schedule-id sync-rules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/schedules/{schedule_id}/sync_rules/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-schedules-schedule-id-sync-rules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 secrets id",
+      "summary": "Documented DELETE /v2/secrets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 secrets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/secrets/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-secrets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 workflows id",
+      "summary": "Documented DELETE /v2/workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v2 workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/workflows/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v2-workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 alert-routes id",
+      "summary": "Documented DELETE /v3/alert_routes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v3 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v3-alert-routes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 catalog-entries id",
+      "summary": "Documented DELETE /v3/catalog_entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v3 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v3-catalog-entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 catalog-types id",
+      "summary": "Documented DELETE /v3/catalog_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api delete v3 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.delete.v3-catalog-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 actions",
+      "summary": "Documented GET /v1/actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/actions"
+        }
+      ],
+      "operation": "incident-io.get.v1-actions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 actions id",
+      "summary": "Documented GET /v1/actions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 actions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/actions/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-actions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 alert-notes",
+      "summary": "Documented GET /v1/alert_notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 alert-notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/alert_notes"
+        }
+      ],
+      "operation": "incident-io.get.v1-alert-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 alert-notes id",
+      "summary": "Documented GET /v1/alert_notes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 alert-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/alert_notes/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-alert-notes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 alerts",
+      "summary": "Documented GET /v1/alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/alerts"
+        }
+      ],
+      "operation": "incident-io.get.v1-alerts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api-keys",
+      "summary": "Documented GET /v1/api_keys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 api-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api_keys"
+        }
+      ],
+      "operation": "incident-io.get.v1-api-keys",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api-keys id",
+      "summary": "Documented GET /v1/api_keys/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 api-keys id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api_keys/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-api-keys-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-field-options",
+      "summary": "Documented GET /v1/custom_field_options (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 custom-field-options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_options"
+        }
+      ],
+      "operation": "incident-io.get.v1-custom-field-options",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-field-options id",
+      "summary": "Documented GET /v1/custom_field_options/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 custom-field-options id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_field_options/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-custom-field-options-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-fields",
+      "summary": "Documented GET /v1/custom_fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_fields"
+        }
+      ],
+      "operation": "incident-io.get.v1-custom-fields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-fields id",
+      "summary": "Documented GET /v1/custom_fields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-custom-fields-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 identity",
+      "summary": "Documented GET /v1/identity (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 identity --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/identity"
+        }
+      ],
+      "operation": "incident-io.get.v1-identity",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-attachments",
+      "summary": "Documented GET /v1/incident_attachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_attachments"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-attachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-relationships",
+      "summary": "Documented GET /v1/incident_relationships (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-relationships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_relationships"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-relationships",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-roles",
+      "summary": "Documented GET /v1/incident_roles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_roles"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-roles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-roles id",
+      "summary": "Documented GET /v1/incident_roles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-roles-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-statuses",
+      "summary": "Documented GET /v1/incident_statuses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_statuses"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-statuses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-statuses id",
+      "summary": "Documented GET /v1/incident_statuses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_statuses/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-statuses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-types",
+      "summary": "Documented GET /v1/incident_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_types"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incident-types id",
+      "summary": "Documented GET /v1/incident_types/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incident-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incident_types/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-incident-types-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incidents",
+      "summary": "Documented GET /v1/incidents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incidents"
+        }
+      ],
+      "operation": "incident-io.get.v1-incidents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 incidents id",
+      "summary": "Documented GET /v1/incidents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 incidents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/incidents/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-incidents-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 ip-allowlists",
+      "summary": "Documented GET /v1/ip_allowlists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 ip-allowlists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ip_allowlists"
+        }
+      ],
+      "operation": "incident-io.get.v1-ip-allowlists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 maintenance-windows",
+      "summary": "Documented GET /v1/maintenance_windows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 maintenance-windows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/maintenance_windows"
+        }
+      ],
+      "operation": "incident-io.get.v1-maintenance-windows",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 maintenance-windows id",
+      "summary": "Documented GET /v1/maintenance_windows/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 maintenance-windows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/maintenance_windows/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-maintenance-windows-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 openapiv3-json",
+      "summary": "Documented GET /v1/openapiV3.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 openapiv3-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/openapiV3.json"
+        }
+      ],
+      "operation": "incident-io.get.v1-openapiv3-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 postmortem-documents",
+      "summary": "Documented GET /v1/postmortem_documents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 postmortem-documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/postmortem_documents"
+        }
+      ],
+      "operation": "incident-io.get.v1-postmortem-documents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 postmortem-documents id",
+      "summary": "Documented GET /v1/postmortem_documents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 postmortem-documents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/postmortem_documents/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-postmortem-documents-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 postmortem-documents id content",
+      "summary": "Documented GET /v1/postmortem_documents/{id}/content (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 postmortem-documents id content --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/postmortem_documents/{id}/content"
+        }
+      ],
+      "operation": "incident-io.get.v1-postmortem-documents-id-content",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 severities id",
+      "summary": "Documented GET /v1/severities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 severities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/severities/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v1-severities-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 status-pages id incidents incident-id response-incidents",
+      "summary": "Documented GET /v1/status-pages/{id}/incidents/{incident_id}/response-incidents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v1 status-pages id incidents incident-id response-incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/status-pages/{id}/incidents/{incident_id}/response-incidents"
+        }
+      ],
+      "operation": "incident-io.get.v1-status-pages-id-incidents-incident-id-response-incidents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 actions",
+      "summary": "Documented GET /v2/actions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/actions"
+        }
+      ],
+      "operation": "incident-io.get.v2-actions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 actions id",
+      "summary": "Documented GET /v2/actions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 actions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/actions/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-actions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-attributes",
+      "summary": "Documented GET /v2/alert_attributes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_attributes"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-attributes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-attributes id",
+      "summary": "Documented GET /v2/alert_attributes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-attributes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_attributes/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-attributes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-routes",
+      "summary": "Documented GET /v2/alert_routes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_routes"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-routes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-routes id",
+      "summary": "Documented GET /v2/alert_routes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-routes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-sources",
+      "summary": "Documented GET /v2/alert_sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_sources"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alert-sources id",
+      "summary": "Documented GET /v2/alert_sources/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alert-sources id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alert_sources/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-alert-sources-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alerts",
+      "summary": "Documented GET /v2/alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alerts"
+        }
+      ],
+      "operation": "incident-io.get.v2-alerts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 alerts id",
+      "summary": "Documented GET /v2/alerts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 alerts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/alerts/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-alerts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 catalog-entries",
+      "summary": "Documented GET /v2/catalog_entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 catalog-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog_entries"
+        }
+      ],
+      "operation": "incident-io.get.v2-catalog-entries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 catalog-entries id",
+      "summary": "Documented GET /v2/catalog_entries/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-catalog-entries-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 catalog-resources",
+      "summary": "Documented GET /v2/catalog_resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 catalog-resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog_resources"
+        }
+      ],
+      "operation": "incident-io.get.v2-catalog-resources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 catalog-types",
+      "summary": "Documented GET /v2/catalog_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 catalog-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog_types"
+        }
+      ],
+      "operation": "incident-io.get.v2-catalog-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 catalog-types id",
+      "summary": "Documented GET /v2/catalog_types/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-catalog-types-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 custom-fields",
+      "summary": "Documented GET /v2/custom_fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/custom_fields"
+        }
+      ],
+      "operation": "incident-io.get.v2-custom-fields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 custom-fields id",
+      "summary": "Documented GET /v2/custom_fields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-custom-fields-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 escalation-paths",
+      "summary": "Documented GET /v2/escalation_paths (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 escalation-paths --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/escalation_paths"
+        }
+      ],
+      "operation": "incident-io.get.v2-escalation-paths",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 escalation-paths id",
+      "summary": "Documented GET /v2/escalation_paths/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 escalation-paths id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/escalation_paths/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-escalation-paths-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 escalations",
+      "summary": "Documented GET /v2/escalations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 escalations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/escalations"
+        }
+      ],
+      "operation": "incident-io.get.v2-escalations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 escalations id",
+      "summary": "Documented GET /v2/escalations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 escalations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/escalations/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-escalations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 follow-ups id",
+      "summary": "Documented GET /v2/follow_ups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 follow-ups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/follow_ups/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-follow-ups-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 heartbeat alert-source-config-id ping",
+      "summary": "Documented GET /v2/heartbeat/{alert_source_config_id}/ping (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 heartbeat alert-source-config-id ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/heartbeat/{alert_source_config_id}/ping"
+        }
+      ],
+      "operation": "incident-io.get.v2-heartbeat-alert-source-config-id-ping",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-alerts",
+      "summary": "Documented GET /v2/incident_alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_alerts"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-alerts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-participant-workloads",
+      "summary": "Documented GET /v2/incident_participant_workloads (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-participant-workloads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_participant_workloads"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-participant-workloads",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-participants",
+      "summary": "Documented GET /v2/incident_participants (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-participants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_participants"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-participants",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-roles id",
+      "summary": "Documented GET /v2/incident_roles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-roles-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-timestamps",
+      "summary": "Documented GET /v2/incident_timestamps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-timestamps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_timestamps"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-timestamps",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-timestamps id",
+      "summary": "Documented GET /v2/incident_timestamps/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-timestamps id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_timestamps/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-timestamps-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incident-updates",
+      "summary": "Documented GET /v2/incident_updates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incident-updates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_updates"
+        }
+      ],
+      "operation": "incident-io.get.v2-incident-updates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 incidents id",
+      "summary": "Documented GET /v2/incidents/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 incidents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incidents/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-incidents-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedule-entries",
+      "summary": "Documented GET /v2/schedule_entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedule-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedule_entries"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedule-entries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedule-overrides",
+      "summary": "Documented GET /v2/schedule_overrides (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedule-overrides --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedule_overrides"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedule-overrides",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedule-sync-targets",
+      "summary": "Documented GET /v2/schedule_sync_targets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedule-sync-targets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedule_sync_targets"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedule-sync-targets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedule-sync-targets id",
+      "summary": "Documented GET /v2/schedule_sync_targets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedule-sync-targets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedule_sync_targets/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedule-sync-targets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules",
+      "summary": "Documented GET /v2/schedules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules id",
+      "summary": "Documented GET /v2/schedules/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules schedule-id replicas",
+      "summary": "Documented GET /v2/schedules/{schedule_id}/replicas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules schedule-id replicas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules/{schedule_id}/replicas"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules-schedule-id-replicas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules schedule-id replicas id",
+      "summary": "Documented GET /v2/schedules/{schedule_id}/replicas/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules schedule-id replicas id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules/{schedule_id}/replicas/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules-schedule-id-replicas-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules schedule-id sync-rules",
+      "summary": "Documented GET /v2/schedules/{schedule_id}/sync_rules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules schedule-id sync-rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules/{schedule_id}/sync_rules"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules-schedule-id-sync-rules",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 schedules schedule-id sync-rules id",
+      "summary": "Documented GET /v2/schedules/{schedule_id}/sync_rules/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 schedules schedule-id sync-rules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/schedules/{schedule_id}/sync_rules/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-schedules-schedule-id-sync-rules-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 secrets",
+      "summary": "Documented GET /v2/secrets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 secrets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/secrets"
+        }
+      ],
+      "operation": "incident-io.get.v2-secrets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 secrets id",
+      "summary": "Documented GET /v2/secrets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 secrets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/secrets/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-secrets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-page-incidents",
+      "summary": "Documented GET /v2/status_page_incidents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-page-incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_page_incidents"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-page-incidents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-page-incidents status-page-incident-id",
+      "summary": "Documented GET /v2/status_page_incidents/{status_page_incident_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-page-incidents status-page-incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_page_incidents/{status_page_incident_id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-page-incidents-status-page-incident-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-page-maintenances",
+      "summary": "Documented GET /v2/status_page_maintenances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-page-maintenances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_page_maintenances"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-page-maintenances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-page-maintenances status-page-maintenance-id",
+      "summary": "Documented GET /v2/status_page_maintenances/{status_page_maintenance_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-page-maintenances status-page-maintenance-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_page_maintenances/{status_page_maintenance_id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-page-maintenances-status-page-maintenance-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-page-structures status-page-id",
+      "summary": "Documented GET /v2/status_page_structures/{status_page_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-page-structures status-page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_page_structures/{status_page_id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-page-structures-status-page-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 status-pages",
+      "summary": "Documented GET /v2/status_pages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 status-pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/status_pages"
+        }
+      ],
+      "operation": "incident-io.get.v2-status-pages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users id",
+      "summary": "Documented GET /v2/users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users user-id notification-methods",
+      "summary": "Documented GET /v2/users/{user_id}/notification_methods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 users user-id notification-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/notification_methods"
+        }
+      ],
+      "operation": "incident-io.get.v2-users-user-id-notification-methods",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users user-id notification-rules",
+      "summary": "Documented GET /v2/users/{user_id}/notification_rules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 users user-id notification-rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/notification_rules"
+        }
+      ],
+      "operation": "incident-io.get.v2-users-user-id-notification-rules",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users user-id paging-provider",
+      "summary": "Documented GET /v2/users/{user_id}/paging_provider (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 users user-id paging-provider --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/paging_provider"
+        }
+      ],
+      "operation": "incident-io.get.v2-users-user-id-paging-provider",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflow-runs",
+      "summary": "Documented GET /v2/workflow_runs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 workflow-runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflow_runs"
+        }
+      ],
+      "operation": "incident-io.get.v2-workflow-runs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflow-runs id",
+      "summary": "Documented GET /v2/workflow_runs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 workflow-runs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflow_runs/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-workflow-runs-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflows",
+      "summary": "Documented GET /v2/workflows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows"
+        }
+      ],
+      "operation": "incident-io.get.v2-workflows",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflows id",
+      "summary": "Documented GET /v2/workflows/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v2 workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v2-workflows-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 alert-routes",
+      "summary": "Documented GET /v3/alert_routes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 alert-routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/alert_routes"
+        }
+      ],
+      "operation": "incident-io.get.v3-alert-routes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 alert-routes id",
+      "summary": "Documented GET /v3/alert_routes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v3-alert-routes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 catalog-entries",
+      "summary": "Documented GET /v3/catalog_entries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 catalog-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/catalog_entries"
+        }
+      ],
+      "operation": "incident-io.get.v3-catalog-entries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 catalog-entries id",
+      "summary": "Documented GET /v3/catalog_entries/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v3-catalog-entries-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 catalog-resources",
+      "summary": "Documented GET /v3/catalog_resources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 catalog-resources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/catalog_resources"
+        }
+      ],
+      "operation": "incident-io.get.v3-catalog-resources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 catalog-types",
+      "summary": "Documented GET /v3/catalog_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 catalog-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/catalog_types"
+        }
+      ],
+      "operation": "incident-io.get.v3-catalog-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 catalog-types id",
+      "summary": "Documented GET /v3/catalog_types/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v3-catalog-types-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 teams",
+      "summary": "Documented GET /v3/teams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 teams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/teams"
+        }
+      ],
+      "operation": "incident-io.get.v3-teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 teams id",
+      "summary": "Documented GET /v3/teams/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api get v3 teams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/teams/{id}"
+        }
+      ],
+      "operation": "incident-io.get.v3-teams-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 alert-notes",
+      "summary": "Documented POST /v1/alert_notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 alert-notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/alert_notes"
+        }
+      ],
+      "operation": "incident-io.post.v1-alert-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api-keys",
+      "summary": "Documented POST /v1/api_keys (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 api-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api_keys"
+        }
+      ],
+      "operation": "incident-io.post.v1-api-keys",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api-keys id actions rotate",
+      "summary": "Documented POST /v1/api_keys/{id}/actions/rotate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 api-keys id actions rotate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api_keys/{id}/actions/rotate"
+        }
+      ],
+      "operation": "incident-io.post.v1-api-keys-id-actions-rotate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 custom-field-options",
+      "summary": "Documented POST /v1/custom_field_options (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 custom-field-options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/custom_field_options"
+        }
+      ],
+      "operation": "incident-io.post.v1-custom-field-options",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 custom-fields",
+      "summary": "Documented POST /v1/custom_fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/custom_fields"
+        }
+      ],
+      "operation": "incident-io.post.v1-custom-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incident-attachments",
+      "summary": "Documented POST /v1/incident_attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incident-attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incident_attachments"
+        }
+      ],
+      "operation": "incident-io.post.v1-incident-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incident-memberships",
+      "summary": "Documented POST /v1/incident_memberships (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incident-memberships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incident_memberships"
+        }
+      ],
+      "operation": "incident-io.post.v1-incident-memberships",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incident-memberships actions revoke",
+      "summary": "Documented POST /v1/incident_memberships/actions/revoke (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incident-memberships actions revoke --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incident_memberships/actions/revoke"
+        }
+      ],
+      "operation": "incident-io.post.v1-incident-memberships-actions-revoke",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incident-roles",
+      "summary": "Documented POST /v1/incident_roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incident-roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incident_roles"
+        }
+      ],
+      "operation": "incident-io.post.v1-incident-roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incident-statuses",
+      "summary": "Documented POST /v1/incident_statuses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incident-statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incident_statuses"
+        }
+      ],
+      "operation": "incident-io.post.v1-incident-statuses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 incidents",
+      "summary": "Documented POST /v1/incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/incidents"
+        }
+      ],
+      "operation": "incident-io.post.v1-incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 maintenance-windows",
+      "summary": "Documented POST /v1/maintenance_windows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 maintenance-windows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/maintenance_windows"
+        }
+      ],
+      "operation": "incident-io.post.v1-maintenance-windows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 postmortem-documents actions attach",
+      "summary": "Documented POST /v1/postmortem_documents/actions/attach (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 postmortem-documents actions attach --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/postmortem_documents/actions/attach"
+        }
+      ],
+      "operation": "incident-io.post.v1-postmortem-documents-actions-attach",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 severities",
+      "summary": "Documented POST /v1/severities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v1 severities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/severities"
+        }
+      ],
+      "operation": "incident-io.post.v1-severities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 actions",
+      "summary": "Documented POST /v2/actions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 actions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/actions"
+        }
+      ],
+      "operation": "incident-io.post.v2-actions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 alert-attributes",
+      "summary": "Documented POST /v2/alert_attributes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 alert-attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/alert_attributes"
+        }
+      ],
+      "operation": "incident-io.post.v2-alert-attributes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 alert-events http alert-source-config-id",
+      "summary": "Documented POST /v2/alert_events/http/{alert_source_config_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 alert-events http alert-source-config-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/alert_events/http/{alert_source_config_id}"
+        }
+      ],
+      "operation": "incident-io.post.v2-alert-events-http-alert-source-config-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 alert-routes",
+      "summary": "Documented POST /v2/alert_routes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 alert-routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/alert_routes"
+        }
+      ],
+      "operation": "incident-io.post.v2-alert-routes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 alert-sources",
+      "summary": "Documented POST /v2/alert_sources (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 alert-sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/alert_sources"
+        }
+      ],
+      "operation": "incident-io.post.v2-alert-sources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 alerts id actions resolve",
+      "summary": "Documented POST /v2/alerts/{id}/actions/resolve (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 alerts id actions resolve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/alerts/{id}/actions/resolve"
+        }
+      ],
+      "operation": "incident-io.post.v2-alerts-id-actions-resolve",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 catalog-entries",
+      "summary": "Documented POST /v2/catalog_entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 catalog-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/catalog_entries"
+        }
+      ],
+      "operation": "incident-io.post.v2-catalog-entries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 catalog-types",
+      "summary": "Documented POST /v2/catalog_types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 catalog-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/catalog_types"
+        }
+      ],
+      "operation": "incident-io.post.v2-catalog-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 catalog-types id actions update-schema",
+      "summary": "Documented POST /v2/catalog_types/{id}/actions/update_schema (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 catalog-types id actions update-schema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/catalog_types/{id}/actions/update_schema"
+        }
+      ],
+      "operation": "incident-io.post.v2-catalog-types-id-actions-update-schema",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 custom-fields",
+      "summary": "Documented POST /v2/custom_fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/custom_fields"
+        }
+      ],
+      "operation": "incident-io.post.v2-custom-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 escalation-paths",
+      "summary": "Documented POST /v2/escalation_paths (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 escalation-paths --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/escalation_paths"
+        }
+      ],
+      "operation": "incident-io.post.v2-escalation-paths",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 escalations",
+      "summary": "Documented POST /v2/escalations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 escalations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/escalations"
+        }
+      ],
+      "operation": "incident-io.post.v2-escalations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 escalations id actions cancel",
+      "summary": "Documented POST /v2/escalations/{id}/actions/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 escalations id actions cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/escalations/{id}/actions/cancel"
+        }
+      ],
+      "operation": "incident-io.post.v2-escalations-id-actions-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 follow-ups",
+      "summary": "Documented POST /v2/follow_ups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 follow-ups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/follow_ups"
+        }
+      ],
+      "operation": "incident-io.post.v2-follow-ups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 follow-ups id actions connect-external-issue",
+      "summary": "Documented POST /v2/follow_ups/{id}/actions/connect_external_issue (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 follow-ups id actions connect-external-issue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/follow_ups/{id}/actions/connect_external_issue"
+        }
+      ],
+      "operation": "incident-io.post.v2-follow-ups-id-actions-connect-external-issue",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 heartbeat alert-source-config-id ping",
+      "summary": "Documented POST /v2/heartbeat/{alert_source_config_id}/ping (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 heartbeat alert-source-config-id ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/heartbeat/{alert_source_config_id}/ping"
+        }
+      ],
+      "operation": "incident-io.post.v2-heartbeat-alert-source-config-id-ping",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 incident-roles",
+      "summary": "Documented POST /v2/incident_roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 incident-roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/incident_roles"
+        }
+      ],
+      "operation": "incident-io.post.v2-incident-roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 incidents",
+      "summary": "Documented POST /v2/incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/incidents"
+        }
+      ],
+      "operation": "incident-io.post.v2-incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 incidents id actions edit",
+      "summary": "Documented POST /v2/incidents/{id}/actions/edit (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 incidents id actions edit --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/incidents/{id}/actions/edit"
+        }
+      ],
+      "operation": "incident-io.post.v2-incidents-id-actions-edit",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 incidents id actions import-postmortem-document",
+      "summary": "Documented POST /v2/incidents/{id}/actions/import_postmortem_document (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 incidents id actions import-postmortem-document --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/incidents/{id}/actions/import_postmortem_document"
+        }
+      ],
+      "operation": "incident-io.post.v2-incidents-id-actions-import-postmortem-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedule-overrides",
+      "summary": "Documented POST /v2/schedule_overrides (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedule-overrides --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedule_overrides"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedule-overrides",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedule-sync-targets",
+      "summary": "Documented POST /v2/schedule_sync_targets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedule-sync-targets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedule_sync_targets"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedule-sync-targets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedules",
+      "summary": "Documented POST /v2/schedules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedules"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedules id actions preview-entries",
+      "summary": "Documented POST /v2/schedules/{id}/actions/preview_entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedules id actions preview-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedules/{id}/actions/preview_entries"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedules-id-actions-preview-entries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedules schedule-id replicas",
+      "summary": "Documented POST /v2/schedules/{schedule_id}/replicas (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedules schedule-id replicas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedules/{schedule_id}/replicas"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedules-schedule-id-replicas",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 schedules schedule-id sync-rules",
+      "summary": "Documented POST /v2/schedules/{schedule_id}/sync_rules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 schedules schedule-id sync-rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/schedules/{schedule_id}/sync_rules"
+        }
+      ],
+      "operation": "incident-io.post.v2-schedules-schedule-id-sync-rules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 secrets",
+      "summary": "Documented POST /v2/secrets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 secrets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/secrets"
+        }
+      ],
+      "operation": "incident-io.post.v2-secrets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 secrets id actions rotate",
+      "summary": "Documented POST /v2/secrets/{id}/actions/rotate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 secrets id actions rotate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/secrets/{id}/actions/rotate"
+        }
+      ],
+      "operation": "incident-io.post.v2-secrets-id-actions-rotate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 status-page-incident-updates",
+      "summary": "Documented POST /v2/status_page_incident_updates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 status-page-incident-updates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/status_page_incident_updates"
+        }
+      ],
+      "operation": "incident-io.post.v2-status-page-incident-updates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 status-page-incidents",
+      "summary": "Documented POST /v2/status_page_incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 status-page-incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/status_page_incidents"
+        }
+      ],
+      "operation": "incident-io.post.v2-status-page-incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 status-page-maintenance-updates",
+      "summary": "Documented POST /v2/status_page_maintenance_updates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 status-page-maintenance-updates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/status_page_maintenance_updates"
+        }
+      ],
+      "operation": "incident-io.post.v2-status-page-maintenance-updates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 status-page-maintenances",
+      "summary": "Documented POST /v2/status_page_maintenances (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 status-page-maintenances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/status_page_maintenances"
+        }
+      ],
+      "operation": "incident-io.post.v2-status-page-maintenances",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 status-page-retrospective-incidents",
+      "summary": "Documented POST /v2/status_page_retrospective_incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 status-page-retrospective-incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/status_page_retrospective_incidents"
+        }
+      ],
+      "operation": "incident-io.post.v2-status-page-retrospective-incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 users user-id paging-provider",
+      "summary": "Documented POST /v2/users/{user_id}/paging_provider (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 users user-id paging-provider --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users/{user_id}/paging_provider"
+        }
+      ],
+      "operation": "incident-io.post.v2-users-user-id-paging-provider",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workflows",
+      "summary": "Documented POST /v2/workflows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v2 workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workflows"
+        }
+      ],
+      "operation": "incident-io.post.v2-workflows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 alert-routes",
+      "summary": "Documented POST /v3/alert_routes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v3 alert-routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/alert_routes"
+        }
+      ],
+      "operation": "incident-io.post.v3-alert-routes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 catalog-entries",
+      "summary": "Documented POST /v3/catalog_entries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v3 catalog-entries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/catalog_entries"
+        }
+      ],
+      "operation": "incident-io.post.v3-catalog-entries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 catalog-entries actions bulk-update",
+      "summary": "Documented POST /v3/catalog_entries/actions/bulk_update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v3 catalog-entries actions bulk-update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/catalog_entries/actions/bulk_update"
+        }
+      ],
+      "operation": "incident-io.post.v3-catalog-entries-actions-bulk-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 catalog-types",
+      "summary": "Documented POST /v3/catalog_types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v3 catalog-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/catalog_types"
+        }
+      ],
+      "operation": "incident-io.post.v3-catalog-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 catalog-types id actions update-schema",
+      "summary": "Documented POST /v3/catalog_types/{id}/actions/update_schema (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api post v3 catalog-types id actions update-schema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/catalog_types/{id}/actions/update_schema"
+        }
+      ],
+      "operation": "incident-io.post.v3-catalog-types-id-actions-update-schema",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 alert-notes id",
+      "summary": "Documented PUT /v1/alert_notes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 alert-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/alert_notes/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-alert-notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 api-keys id",
+      "summary": "Documented PUT /v1/api_keys/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 api-keys id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/api_keys/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-api-keys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 custom-field-options id",
+      "summary": "Documented PUT /v1/custom_field_options/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 custom-field-options id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/custom_field_options/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-custom-field-options-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 custom-fields id",
+      "summary": "Documented PUT /v1/custom_fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 incident-roles id",
+      "summary": "Documented PUT /v1/incident_roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-incident-roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 incident-statuses id",
+      "summary": "Documented PUT /v1/incident_statuses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 incident-statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/incident_statuses/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-incident-statuses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 ip-allowlists",
+      "summary": "Documented PUT /v1/ip_allowlists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 ip-allowlists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/ip_allowlists"
+        }
+      ],
+      "operation": "incident-io.put.v1-ip-allowlists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 maintenance-windows id",
+      "summary": "Documented PUT /v1/maintenance_windows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 maintenance-windows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/maintenance_windows/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-maintenance-windows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 postmortem-documents id",
+      "summary": "Documented PUT /v1/postmortem_documents/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 postmortem-documents id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/postmortem_documents/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-postmortem-documents-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 severities id",
+      "summary": "Documented PUT /v1/severities/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v1 severities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/severities/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v1-severities-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 actions id",
+      "summary": "Documented PUT /v2/actions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 actions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/actions/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-actions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 alert-attributes id",
+      "summary": "Documented PUT /v2/alert_attributes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 alert-attributes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/alert_attributes/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-alert-attributes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 alert-routes id",
+      "summary": "Documented PUT /v2/alert_routes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-alert-routes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 alert-sources id",
+      "summary": "Documented PUT /v2/alert_sources/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 alert-sources id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/alert_sources/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-alert-sources-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 catalog-entries id",
+      "summary": "Documented PUT /v2/catalog_entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-catalog-entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 catalog-types id",
+      "summary": "Documented PUT /v2/catalog_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-catalog-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 custom-fields id",
+      "summary": "Documented PUT /v2/custom_fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/custom_fields/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 escalation-paths id",
+      "summary": "Documented PUT /v2/escalation_paths/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 escalation-paths id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/escalation_paths/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-escalation-paths-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 follow-ups id",
+      "summary": "Documented PUT /v2/follow_ups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 follow-ups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/follow_ups/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-follow-ups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 incident-roles id",
+      "summary": "Documented PUT /v2/incident_roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 incident-roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/incident_roles/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-incident-roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 schedule-sync-targets id",
+      "summary": "Documented PUT /v2/schedule_sync_targets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 schedule-sync-targets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/schedule_sync_targets/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-schedule-sync-targets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 schedules id",
+      "summary": "Documented PUT /v2/schedules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 schedules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/schedules/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-schedules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 schedules schedule-id sync-rules id",
+      "summary": "Documented PUT /v2/schedules/{schedule_id}/sync_rules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 schedules schedule-id sync-rules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/schedules/{schedule_id}/sync_rules/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-schedules-schedule-id-sync-rules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 secrets id",
+      "summary": "Documented PUT /v2/secrets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 secrets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/secrets/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-secrets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 status-page-incidents status-page-incident-id",
+      "summary": "Documented PUT /v2/status_page_incidents/{status_page_incident_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 status-page-incidents status-page-incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/status_page_incidents/{status_page_incident_id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-status-page-incidents-status-page-incident-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 telemetry data-sources id",
+      "summary": "Documented PUT /v2/telemetry/data_sources/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 telemetry data-sources id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/telemetry/data_sources/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-telemetry-data-sources-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 workflows id",
+      "summary": "Documented PUT /v2/workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v2 workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/workflows/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v2-workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 alert-routes id",
+      "summary": "Documented PUT /v3/alert_routes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v3 alert-routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/alert_routes/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v3-alert-routes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 catalog-entries id",
+      "summary": "Documented PUT /v3/catalog_entries/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v3 catalog-entries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/catalog_entries/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v3-catalog-entries-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 catalog-types id",
+      "summary": "Documented PUT /v3/catalog_types/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io api put v3 catalog-types id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/catalog_types/{id}"
+        }
+      ],
+      "operation": "incident-io.put.v3-catalog-types-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "follow ups list",
+      "summary": "Run the follow ups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "follow_ups",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io follow ups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/follow_ups"
+        }
+      ]
+    },
+    {
+      "path": "incident roles list",
+      "summary": "Run the incident roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incident_roles",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io incident roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incident_roles"
+        }
+      ]
+    },
+    {
+      "path": "incidents list",
+      "summary": "Run the incidents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incidents",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io incidents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/incidents"
+        }
+      ]
+    },
+    {
+      "path": "severities list",
+      "summary": "Run the severities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "severities",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io severities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/severities"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://api.incident.io/v1/openapiV3.json",
+      "examples": [
+        "pm incident-io users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ]
+    }
+  ]
+}

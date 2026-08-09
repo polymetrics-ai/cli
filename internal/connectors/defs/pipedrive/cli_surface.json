@@ -1,0 +1,4702 @@
+{
+  "tagline": "Run Pipedrive's declared streams and reverse-ETL actions.",
+  "usage": "pm pipedrive \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "activities list",
+        "activity types list",
+        "api get activityfields",
+        "api get billing subscriptions addons",
+        "api get calllogs",
+        "api get calllogs id",
+        "api get dealfields id",
+        "api get deals archived",
+        "api get deals id changelog",
+        "api get deals id files",
+        "api get deals id flow",
+        "api get deals id followers",
+        "api get deals id mailmessages",
+        "api get deals id participants",
+        "api get deals id participantschangelog",
+        "api get deals id permittedusers",
+        "api get deals summary",
+        "api get deals summary archived",
+        "api get deals timeline",
+        "api get deals timeline archived",
+        "api get files",
+        "api get files id",
+        "api get files id download",
+        "api get filters helpers",
+        "api get filters id",
+        "api get goals find",
+        "api get goals id results",
+        "api get leads archived",
+        "api get leads id",
+        "api get leads id permittedusers",
+        "api get leads search",
+        "api get legacyteams id",
+        "api get legacyteams id users",
+        "api get legacyteams user id",
+        "api get mailbox mailmessages id",
+        "api get mailbox mailthreads",
+        "api get mailbox mailthreads id",
+        "api get mailbox mailthreads id mailmessages",
+        "api get notefields",
+        "api get notes id",
+        "api get notes id comments",
+        "api get notes id comments commentid",
+        "api get oauth authorize",
+        "api get organizationfields id",
+        "api get organizationrelationships",
+        "api get organizationrelationships id",
+        "api get organizations id changelog",
+        "api get organizations id files",
+        "api get organizations id flow",
+        "api get organizations id followers",
+        "api get organizations id mailmessages",
+        "api get organizations id permittedusers",
+        "api get permissionsets",
+        "api get permissionsets id",
+        "api get permissionsets id assignments",
+        "api get personfields id",
+        "api get persons id changelog",
+        "api get persons id files",
+        "api get persons id flow",
+        "api get persons id followers",
+        "api get persons id mailmessages",
+        "api get persons id permittedusers",
+        "api get persons id products",
+        "api get pipelines id conversion-statistics",
+        "api get pipelines id deals",
+        "api get pipelines id movement-statistics",
+        "api get productfields id",
+        "api get products id deals",
+        "api get products id files",
+        "api get products id followers",
+        "api get products id permittedusers",
+        "api get projects",
+        "api get projects boards",
+        "api get projects boards id",
+        "api get projects id",
+        "api get projects id activities",
+        "api get projects id groups",
+        "api get projects id plan",
+        "api get projects id tasks",
+        "api get projects phases",
+        "api get projects phases id",
+        "api get projecttemplates",
+        "api get projecttemplates id",
+        "api get recents",
+        "api get roles id",
+        "api get roles id assignments",
+        "api get roles id pipelines",
+        "api get roles id settings",
+        "api get stages id deals",
+        "api get tasks",
+        "api get tasks id",
+        "api get userconnections",
+        "api get users find",
+        "api get users id",
+        "api get users id followers",
+        "api get users id permissions",
+        "api get users id roleassignments",
+        "api get users id rolesettings",
+        "api get users me",
+        "api get usersettings",
+        "currencies list",
+        "deal fields list",
+        "deals list",
+        "filters list",
+        "lead fields list",
+        "lead labels list",
+        "lead sources list",
+        "leads list",
+        "legacy teams list",
+        "notes list",
+        "organization fields list",
+        "organizations list",
+        "person fields list",
+        "persons list",
+        "product fields list",
+        "products list",
+        "roles list",
+        "users list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete calllogs id",
+        "api delete channels channel-id conversations conversation-id",
+        "api delete channels id",
+        "api delete dealfields",
+        "api delete dealfields id",
+        "api delete deals id followers follower-id",
+        "api delete deals id participants deal-participant-id",
+        "api delete files id",
+        "api delete filters",
+        "api delete goals id",
+        "api delete legacyteams id users",
+        "api delete mailbox mailthreads id",
+        "api delete meetings userproviderlinks id",
+        "api delete notes id comments commentid",
+        "api delete organizationfields",
+        "api delete organizationfields id",
+        "api delete organizationrelationships id",
+        "api delete organizations id followers follower-id",
+        "api delete personfields",
+        "api delete personfields id",
+        "api delete persons id followers follower-id",
+        "api delete persons id picture",
+        "api delete productfields",
+        "api delete productfields id",
+        "api delete products id followers follower-id",
+        "api delete projects id",
+        "api delete roles id",
+        "api delete roles id assignments",
+        "api delete tasks id",
+        "api post calllogs",
+        "api post calllogs id recordings",
+        "api post channels",
+        "api post channels messages receive",
+        "api post dealfields",
+        "api post deals id duplicate",
+        "api post deals id followers",
+        "api post deals id participants",
+        "api post files",
+        "api post files remote",
+        "api post files remotelink",
+        "api post goals",
+        "api post legacyteams",
+        "api post legacyteams id users",
+        "api post meetings userproviderlinks",
+        "api post notes id comments",
+        "api post oauth token",
+        "api post oauth token operation",
+        "api post organizationfields",
+        "api post organizationrelationships",
+        "api post organizations id followers",
+        "api post personfields",
+        "api post persons id followers",
+        "api post persons id picture",
+        "api post productfields",
+        "api post products id followers",
+        "api post projects",
+        "api post projects id archive",
+        "api post roles",
+        "api post roles id assignments",
+        "api post roles id settings",
+        "api post tasks",
+        "api post users",
+        "api put dealfields id",
+        "api put deals id merge",
+        "api put files id",
+        "api put goals id",
+        "api put legacyteams id",
+        "api put mailbox mailthreads id",
+        "api put notes id comments commentid",
+        "api put organizationfields id",
+        "api put organizationrelationships id",
+        "api put organizations id merge",
+        "api put personfields id",
+        "api put persons id merge",
+        "api put productfields id",
+        "api put projects id",
+        "api put projects id plan activities activityid",
+        "api put projects id plan tasks taskid",
+        "api put roles id",
+        "api put roles id pipelines",
+        "api put tasks id",
+        "api put users id",
+        "create activity type apply",
+        "create filter apply",
+        "create lead apply",
+        "create lead label apply",
+        "create note apply",
+        "create webhook apply",
+        "delete activity type apply",
+        "delete filter apply",
+        "delete lead apply",
+        "delete lead label apply",
+        "delete note apply",
+        "delete webhook apply",
+        "update activity type apply",
+        "update filter apply",
+        "update lead apply",
+        "update lead label apply",
+        "update note apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "activity types list",
+      "summary": "Run the activity types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_types",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive activity types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activityTypes"
+        }
+      ]
+    },
+    {
+      "path": "api delete calllogs id",
+      "summary": "Documented DELETE /callLogs/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete calllogs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/callLogs/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.calllogs-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete channels channel-id conversations conversation-id",
+      "summary": "Documented DELETE /channels/{channel-id}/conversations/{conversation-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete channels channel-id conversations conversation-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/channels/{channel-id}/conversations/{conversation-id}"
+        }
+      ],
+      "operation": "pipedrive.delete.channels-channel-id-conversations-conversation-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete channels id",
+      "summary": "Documented DELETE /channels/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete channels id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/channels/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.channels-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete dealfields",
+      "summary": "Documented DELETE /dealFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete dealfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dealFields"
+        }
+      ],
+      "operation": "pipedrive.delete.dealfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete dealfields id",
+      "summary": "Documented DELETE /dealFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete dealfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/dealFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.dealfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete deals id followers follower-id",
+      "summary": "Documented DELETE /deals/{id}/followers/{follower_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete deals id followers follower-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/deals/{id}/followers/{follower_id}"
+        }
+      ],
+      "operation": "pipedrive.delete.deals-id-followers-follower-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete deals id participants deal-participant-id",
+      "summary": "Documented DELETE /deals/{id}/participants/{deal_participant_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete deals id participants deal-participant-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/deals/{id}/participants/{deal_participant_id}"
+        }
+      ],
+      "operation": "pipedrive.delete.deals-id-participants-deal-participant-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete files id",
+      "summary": "Documented DELETE /files/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/files/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete filters",
+      "summary": "Documented DELETE /filters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete filters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/filters"
+        }
+      ],
+      "operation": "pipedrive.delete.filters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete goals id",
+      "summary": "Documented DELETE /goals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete goals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/goals/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.goals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete legacyteams id users",
+      "summary": "Documented DELETE /legacyTeams/{id}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete legacyteams id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/legacyTeams/{id}/users"
+        }
+      ],
+      "operation": "pipedrive.delete.legacyteams-id-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete mailbox mailthreads id",
+      "summary": "Documented DELETE /mailbox/mailThreads/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete mailbox mailthreads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/mailbox/mailThreads/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.mailbox-mailthreads-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete meetings userproviderlinks id",
+      "summary": "Documented DELETE /meetings/userProviderLinks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete meetings userproviderlinks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/meetings/userProviderLinks/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.meetings-userproviderlinks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete notes id comments commentid",
+      "summary": "Documented DELETE /notes/{id}/comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete notes id comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/{id}/comments/{commentId}"
+        }
+      ],
+      "operation": "pipedrive.delete.notes-id-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizationfields",
+      "summary": "Documented DELETE /organizationFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete organizationfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizationFields"
+        }
+      ],
+      "operation": "pipedrive.delete.organizationfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizationfields id",
+      "summary": "Documented DELETE /organizationFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete organizationfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizationFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.organizationfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizationrelationships id",
+      "summary": "Documented DELETE /organizationRelationships/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete organizationrelationships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizationRelationships/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.organizationrelationships-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations id followers follower-id",
+      "summary": "Documented DELETE /organizations/{id}/followers/{follower_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete organizations id followers follower-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{id}/followers/{follower_id}"
+        }
+      ],
+      "operation": "pipedrive.delete.organizations-id-followers-follower-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete personfields",
+      "summary": "Documented DELETE /personFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete personfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/personFields"
+        }
+      ],
+      "operation": "pipedrive.delete.personfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete personfields id",
+      "summary": "Documented DELETE /personFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete personfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/personFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.personfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete persons id followers follower-id",
+      "summary": "Documented DELETE /persons/{id}/followers/{follower_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete persons id followers follower-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/persons/{id}/followers/{follower_id}"
+        }
+      ],
+      "operation": "pipedrive.delete.persons-id-followers-follower-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete persons id picture",
+      "summary": "Documented DELETE /persons/{id}/picture (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete persons id picture --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/persons/{id}/picture"
+        }
+      ],
+      "operation": "pipedrive.delete.persons-id-picture",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete productfields",
+      "summary": "Documented DELETE /productFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete productfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/productFields"
+        }
+      ],
+      "operation": "pipedrive.delete.productfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete productfields id",
+      "summary": "Documented DELETE /productFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete productfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/productFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.productfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products id followers follower-id",
+      "summary": "Documented DELETE /products/{id}/followers/{follower_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete products id followers follower-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{id}/followers/{follower_id}"
+        }
+      ],
+      "operation": "pipedrive.delete.products-id-followers-follower-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects id",
+      "summary": "Documented DELETE /projects/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.projects-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete roles id",
+      "summary": "Documented DELETE /roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/roles/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete roles id assignments",
+      "summary": "Documented DELETE /roles/{id}/assignments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete roles id assignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/roles/{id}/assignments"
+        }
+      ],
+      "operation": "pipedrive.delete.roles-id-assignments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tasks id",
+      "summary": "Documented DELETE /tasks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api delete tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "operation": "pipedrive.delete.tasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get activityfields",
+      "summary": "Documented GET /activityFields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get activityfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activityFields"
+        }
+      ],
+      "operation": "pipedrive.get.activityfields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get billing subscriptions addons",
+      "summary": "Documented GET /billing/subscriptions/addons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get billing subscriptions addons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/billing/subscriptions/addons"
+        }
+      ],
+      "operation": "pipedrive.get.billing-subscriptions-addons",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get calllogs",
+      "summary": "Documented GET /callLogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get calllogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/callLogs"
+        }
+      ],
+      "operation": "pipedrive.get.calllogs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get calllogs id",
+      "summary": "Documented GET /callLogs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get calllogs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/callLogs/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.calllogs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dealfields id",
+      "summary": "Documented GET /dealFields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get dealfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dealFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.dealfields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals archived",
+      "summary": "Documented GET /deals/archived (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals archived --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/archived"
+        }
+      ],
+      "operation": "pipedrive.get.deals-archived",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id changelog",
+      "summary": "Documented GET /deals/{id}/changelog (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id changelog --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/changelog"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-changelog",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id files",
+      "summary": "Documented GET /deals/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/files"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id flow",
+      "summary": "Documented GET /deals/{id}/flow (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id flow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/flow"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-flow",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id followers",
+      "summary": "Documented GET /deals/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id mailmessages",
+      "summary": "Documented GET /deals/{id}/mailMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id mailmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/mailMessages"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-mailmessages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id participants",
+      "summary": "Documented GET /deals/{id}/participants (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id participants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/participants"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-participants",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id participantschangelog",
+      "summary": "Documented GET /deals/{id}/participantsChangelog (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id participantschangelog --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/participantsChangelog"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-participantschangelog",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals id permittedusers",
+      "summary": "Documented GET /deals/{id}/permittedUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals id permittedusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{id}/permittedUsers"
+        }
+      ],
+      "operation": "pipedrive.get.deals-id-permittedusers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals summary",
+      "summary": "Documented GET /deals/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/summary"
+        }
+      ],
+      "operation": "pipedrive.get.deals-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals summary archived",
+      "summary": "Documented GET /deals/summary/archived (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals summary archived --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/summary/archived"
+        }
+      ],
+      "operation": "pipedrive.get.deals-summary-archived",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals timeline",
+      "summary": "Documented GET /deals/timeline (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals timeline --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/timeline"
+        }
+      ],
+      "operation": "pipedrive.get.deals-timeline",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deals timeline archived",
+      "summary": "Documented GET /deals/timeline/archived (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get deals timeline archived --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/timeline/archived"
+        }
+      ],
+      "operation": "pipedrive.get.deals-timeline-archived",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files",
+      "summary": "Documented GET /files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files"
+        }
+      ],
+      "operation": "pipedrive.get.files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files id",
+      "summary": "Documented GET /files/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.files-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files id download",
+      "summary": "Documented GET /files/{id}/download (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get files id download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/{id}/download"
+        }
+      ],
+      "operation": "pipedrive.get.files-id-download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get filters helpers",
+      "summary": "Documented GET /filters/helpers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get filters helpers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters/helpers"
+        }
+      ],
+      "operation": "pipedrive.get.filters-helpers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get filters id",
+      "summary": "Documented GET /filters/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get filters id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.filters-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get goals find",
+      "summary": "Documented GET /goals/find (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get goals find --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/goals/find"
+        }
+      ],
+      "operation": "pipedrive.get.goals-find",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get goals id results",
+      "summary": "Documented GET /goals/{id}/results (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get goals id results --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/goals/{id}/results"
+        }
+      ],
+      "operation": "pipedrive.get.goals-id-results",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads archived",
+      "summary": "Documented GET /leads/archived (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get leads archived --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/archived"
+        }
+      ],
+      "operation": "pipedrive.get.leads-archived",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads id",
+      "summary": "Documented GET /leads/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get leads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.leads-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads id permittedusers",
+      "summary": "Documented GET /leads/{id}/permittedUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get leads id permittedusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/{id}/permittedUsers"
+        }
+      ],
+      "operation": "pipedrive.get.leads-id-permittedusers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get leads search",
+      "summary": "Documented GET /leads/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get leads search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads/search"
+        }
+      ],
+      "operation": "pipedrive.get.leads-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get legacyteams id",
+      "summary": "Documented GET /legacyTeams/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get legacyteams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/legacyTeams/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.legacyteams-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get legacyteams id users",
+      "summary": "Documented GET /legacyTeams/{id}/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get legacyteams id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/legacyTeams/{id}/users"
+        }
+      ],
+      "operation": "pipedrive.get.legacyteams-id-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get legacyteams user id",
+      "summary": "Documented GET /legacyTeams/user/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get legacyteams user id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/legacyTeams/user/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.legacyteams-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mailbox mailmessages id",
+      "summary": "Documented GET /mailbox/mailMessages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get mailbox mailmessages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mailbox/mailMessages/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.mailbox-mailmessages-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mailbox mailthreads",
+      "summary": "Documented GET /mailbox/mailThreads (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get mailbox mailthreads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mailbox/mailThreads"
+        }
+      ],
+      "operation": "pipedrive.get.mailbox-mailthreads",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mailbox mailthreads id",
+      "summary": "Documented GET /mailbox/mailThreads/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get mailbox mailthreads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mailbox/mailThreads/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.mailbox-mailthreads-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mailbox mailthreads id mailmessages",
+      "summary": "Documented GET /mailbox/mailThreads/{id}/mailMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get mailbox mailthreads id mailmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mailbox/mailThreads/{id}/mailMessages"
+        }
+      ],
+      "operation": "pipedrive.get.mailbox-mailthreads-id-mailmessages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notefields",
+      "summary": "Documented GET /noteFields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get notefields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/noteFields"
+        }
+      ],
+      "operation": "pipedrive.get.notefields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notes id",
+      "summary": "Documented GET /notes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.notes-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notes id comments",
+      "summary": "Documented GET /notes/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get notes id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{id}/comments"
+        }
+      ],
+      "operation": "pipedrive.get.notes-id-comments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get notes id comments commentid",
+      "summary": "Documented GET /notes/{id}/comments/{commentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get notes id comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{id}/comments/{commentId}"
+        }
+      ],
+      "operation": "pipedrive.get.notes-id-comments-commentid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get oauth authorize",
+      "summary": "Documented GET /oauth/authorize (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get oauth authorize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/oauth/authorize"
+        }
+      ],
+      "operation": "pipedrive.get.oauth-authorize",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizationfields id",
+      "summary": "Documented GET /organizationFields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizationfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizationFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.organizationfields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizationrelationships",
+      "summary": "Documented GET /organizationRelationships (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizationrelationships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizationRelationships"
+        }
+      ],
+      "operation": "pipedrive.get.organizationrelationships",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizationrelationships id",
+      "summary": "Documented GET /organizationRelationships/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizationrelationships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizationRelationships/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.organizationrelationships-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id changelog",
+      "summary": "Documented GET /organizations/{id}/changelog (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id changelog --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/changelog"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-changelog",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id files",
+      "summary": "Documented GET /organizations/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/files"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id flow",
+      "summary": "Documented GET /organizations/{id}/flow (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id flow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/flow"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-flow",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id followers",
+      "summary": "Documented GET /organizations/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id mailmessages",
+      "summary": "Documented GET /organizations/{id}/mailMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id mailmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/mailMessages"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-mailmessages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations id permittedusers",
+      "summary": "Documented GET /organizations/{id}/permittedUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get organizations id permittedusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{id}/permittedUsers"
+        }
+      ],
+      "operation": "pipedrive.get.organizations-id-permittedusers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permissionsets",
+      "summary": "Documented GET /permissionSets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get permissionsets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permissionSets"
+        }
+      ],
+      "operation": "pipedrive.get.permissionsets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permissionsets id",
+      "summary": "Documented GET /permissionSets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get permissionsets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permissionSets/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.permissionsets-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get permissionsets id assignments",
+      "summary": "Documented GET /permissionSets/{id}/assignments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get permissionsets id assignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/permissionSets/{id}/assignments"
+        }
+      ],
+      "operation": "pipedrive.get.permissionsets-id-assignments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get personfields id",
+      "summary": "Documented GET /personFields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get personfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/personFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.personfields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id changelog",
+      "summary": "Documented GET /persons/{id}/changelog (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id changelog --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/changelog"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-changelog",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id files",
+      "summary": "Documented GET /persons/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/files"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id flow",
+      "summary": "Documented GET /persons/{id}/flow (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id flow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/flow"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-flow",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id followers",
+      "summary": "Documented GET /persons/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id mailmessages",
+      "summary": "Documented GET /persons/{id}/mailMessages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id mailmessages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/mailMessages"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-mailmessages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id permittedusers",
+      "summary": "Documented GET /persons/{id}/permittedUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id permittedusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/permittedUsers"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-permittedusers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get persons id products",
+      "summary": "Documented GET /persons/{id}/products (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get persons id products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons/{id}/products"
+        }
+      ],
+      "operation": "pipedrive.get.persons-id-products",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines id conversion-statistics",
+      "summary": "Documented GET /pipelines/{id}/conversion_statistics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get pipelines id conversion-statistics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{id}/conversion_statistics"
+        }
+      ],
+      "operation": "pipedrive.get.pipelines-id-conversion-statistics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines id deals",
+      "summary": "Documented GET /pipelines/{id}/deals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get pipelines id deals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{id}/deals"
+        }
+      ],
+      "operation": "pipedrive.get.pipelines-id-deals",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines id movement-statistics",
+      "summary": "Documented GET /pipelines/{id}/movement_statistics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get pipelines id movement-statistics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{id}/movement_statistics"
+        }
+      ],
+      "operation": "pipedrive.get.pipelines-id-movement-statistics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get productfields id",
+      "summary": "Documented GET /productFields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get productfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.productfields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id deals",
+      "summary": "Documented GET /products/{id}/deals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get products id deals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/deals"
+        }
+      ],
+      "operation": "pipedrive.get.products-id-deals",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id files",
+      "summary": "Documented GET /products/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get products id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/files"
+        }
+      ],
+      "operation": "pipedrive.get.products-id-files",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id followers",
+      "summary": "Documented GET /products/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get products id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.get.products-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id permittedusers",
+      "summary": "Documented GET /products/{id}/permittedUsers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get products id permittedusers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/permittedUsers"
+        }
+      ],
+      "operation": "pipedrive.get.products-id-permittedusers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects",
+      "summary": "Documented GET /projects (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ],
+      "operation": "pipedrive.get.projects",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects boards",
+      "summary": "Documented GET /projects/boards (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects boards --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/boards"
+        }
+      ],
+      "operation": "pipedrive.get.projects-boards",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects boards id",
+      "summary": "Documented GET /projects/boards/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects boards id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/boards/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.projects-boards-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id",
+      "summary": "Documented GET /projects/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.projects-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id activities",
+      "summary": "Documented GET /projects/{id}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/activities"
+        }
+      ],
+      "operation": "pipedrive.get.projects-id-activities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id groups",
+      "summary": "Documented GET /projects/{id}/groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects id groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/groups"
+        }
+      ],
+      "operation": "pipedrive.get.projects-id-groups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id plan",
+      "summary": "Documented GET /projects/{id}/plan (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects id plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/plan"
+        }
+      ],
+      "operation": "pipedrive.get.projects-id-plan",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id tasks",
+      "summary": "Documented GET /projects/{id}/tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects id tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/tasks"
+        }
+      ],
+      "operation": "pipedrive.get.projects-id-tasks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects phases",
+      "summary": "Documented GET /projects/phases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects phases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/phases"
+        }
+      ],
+      "operation": "pipedrive.get.projects-phases",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects phases id",
+      "summary": "Documented GET /projects/phases/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projects phases id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/phases/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.projects-phases-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projecttemplates",
+      "summary": "Documented GET /projectTemplates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projecttemplates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projectTemplates"
+        }
+      ],
+      "operation": "pipedrive.get.projecttemplates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projecttemplates id",
+      "summary": "Documented GET /projectTemplates/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get projecttemplates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projectTemplates/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.projecttemplates-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get recents",
+      "summary": "Documented GET /recents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get recents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recents"
+        }
+      ],
+      "operation": "pipedrive.get.recents",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles id",
+      "summary": "Documented GET /roles/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.roles-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles id assignments",
+      "summary": "Documented GET /roles/{id}/assignments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get roles id assignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}/assignments"
+        }
+      ],
+      "operation": "pipedrive.get.roles-id-assignments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles id pipelines",
+      "summary": "Documented GET /roles/{id}/pipelines (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get roles id pipelines --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}/pipelines"
+        }
+      ],
+      "operation": "pipedrive.get.roles-id-pipelines",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles id settings",
+      "summary": "Documented GET /roles/{id}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get roles id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{id}/settings"
+        }
+      ],
+      "operation": "pipedrive.get.roles-id-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stages id deals",
+      "summary": "Documented GET /stages/{id}/deals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get stages id deals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stages/{id}/deals"
+        }
+      ],
+      "operation": "pipedrive.get.stages-id-deals",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks",
+      "summary": "Documented GET /tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "pipedrive.get.tasks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks id",
+      "summary": "Documented GET /tasks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.tasks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get userconnections",
+      "summary": "Documented GET /userConnections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get userconnections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/userConnections"
+        }
+      ],
+      "operation": "pipedrive.get.userconnections",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users find",
+      "summary": "Documented GET /users/find (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users find --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/find"
+        }
+      ],
+      "operation": "pipedrive.get.users-find",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "pipedrive.get.users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id followers",
+      "summary": "Documented GET /users/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.get.users-id-followers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id permissions",
+      "summary": "Documented GET /users/{id}/permissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users id permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/permissions"
+        }
+      ],
+      "operation": "pipedrive.get.users-id-permissions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id roleassignments",
+      "summary": "Documented GET /users/{id}/roleAssignments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users id roleassignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/roleAssignments"
+        }
+      ],
+      "operation": "pipedrive.get.users-id-roleassignments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id rolesettings",
+      "summary": "Documented GET /users/{id}/roleSettings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users id rolesettings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/roleSettings"
+        }
+      ],
+      "operation": "pipedrive.get.users-id-rolesettings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users me",
+      "summary": "Documented GET /users/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me"
+        }
+      ],
+      "operation": "pipedrive.get.users-me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get usersettings",
+      "summary": "Documented GET /userSettings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api get usersettings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/userSettings"
+        }
+      ],
+      "operation": "pipedrive.get.usersettings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post calllogs",
+      "summary": "Documented POST /callLogs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post calllogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/callLogs"
+        }
+      ],
+      "operation": "pipedrive.post.calllogs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post calllogs id recordings",
+      "summary": "Documented POST /callLogs/{id}/recordings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post calllogs id recordings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/callLogs/{id}/recordings"
+        }
+      ],
+      "operation": "pipedrive.post.calllogs-id-recordings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post channels",
+      "summary": "Documented POST /channels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post channels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels"
+        }
+      ],
+      "operation": "pipedrive.post.channels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post channels messages receive",
+      "summary": "Documented POST /channels/messages/receive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post channels messages receive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/messages/receive"
+        }
+      ],
+      "operation": "pipedrive.post.channels-messages-receive",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post dealfields",
+      "summary": "Documented POST /dealFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post dealfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dealFields"
+        }
+      ],
+      "operation": "pipedrive.post.dealfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post deals id duplicate",
+      "summary": "Documented POST /deals/{id}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post deals id duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deals/{id}/duplicate"
+        }
+      ],
+      "operation": "pipedrive.post.deals-id-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post deals id followers",
+      "summary": "Documented POST /deals/{id}/followers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post deals id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deals/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.post.deals-id-followers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post deals id participants",
+      "summary": "Documented POST /deals/{id}/participants (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post deals id participants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deals/{id}/participants"
+        }
+      ],
+      "operation": "pipedrive.post.deals-id-participants",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post files",
+      "summary": "Documented POST /files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/files"
+        }
+      ],
+      "operation": "pipedrive.post.files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post files remote",
+      "summary": "Documented POST /files/remote (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post files remote --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/files/remote"
+        }
+      ],
+      "operation": "pipedrive.post.files-remote",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post files remotelink",
+      "summary": "Documented POST /files/remoteLink (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post files remotelink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/files/remoteLink"
+        }
+      ],
+      "operation": "pipedrive.post.files-remotelink",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post goals",
+      "summary": "Documented POST /goals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post goals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/goals"
+        }
+      ],
+      "operation": "pipedrive.post.goals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post legacyteams",
+      "summary": "Documented POST /legacyTeams (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post legacyteams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/legacyTeams"
+        }
+      ],
+      "operation": "pipedrive.post.legacyteams",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post legacyteams id users",
+      "summary": "Documented POST /legacyTeams/{id}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post legacyteams id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/legacyTeams/{id}/users"
+        }
+      ],
+      "operation": "pipedrive.post.legacyteams-id-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post meetings userproviderlinks",
+      "summary": "Documented POST /meetings/userProviderLinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post meetings userproviderlinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/meetings/userProviderLinks"
+        }
+      ],
+      "operation": "pipedrive.post.meetings-userproviderlinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post notes id comments",
+      "summary": "Documented POST /notes/{id}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post notes id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes/{id}/comments"
+        }
+      ],
+      "operation": "pipedrive.post.notes-id-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth token",
+      "summary": "Documented POST /oauth/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post oauth token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/token"
+        }
+      ],
+      "operation": "pipedrive.post.oauth-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post oauth token operation",
+      "summary": "Documented POST /oauth/token/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post oauth token operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth/token/"
+        }
+      ],
+      "operation": "pipedrive.post.oauth-token-2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizationfields",
+      "summary": "Documented POST /organizationFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post organizationfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizationFields"
+        }
+      ],
+      "operation": "pipedrive.post.organizationfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizationrelationships",
+      "summary": "Documented POST /organizationRelationships (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post organizationrelationships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizationRelationships"
+        }
+      ],
+      "operation": "pipedrive.post.organizationrelationships",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations id followers",
+      "summary": "Documented POST /organizations/{id}/followers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post organizations id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.post.organizations-id-followers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post personfields",
+      "summary": "Documented POST /personFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post personfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/personFields"
+        }
+      ],
+      "operation": "pipedrive.post.personfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post persons id followers",
+      "summary": "Documented POST /persons/{id}/followers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post persons id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/persons/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.post.persons-id-followers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post persons id picture",
+      "summary": "Documented POST /persons/{id}/picture (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post persons id picture --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/persons/{id}/picture"
+        }
+      ],
+      "operation": "pipedrive.post.persons-id-picture",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post productfields",
+      "summary": "Documented POST /productFields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post productfields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/productFields"
+        }
+      ],
+      "operation": "pipedrive.post.productfields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products id followers",
+      "summary": "Documented POST /products/{id}/followers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post products id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{id}/followers"
+        }
+      ],
+      "operation": "pipedrive.post.products-id-followers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects",
+      "summary": "Documented POST /projects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "operation": "pipedrive.post.projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects id archive",
+      "summary": "Documented POST /projects/{id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post projects id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{id}/archive"
+        }
+      ],
+      "operation": "pipedrive.post.projects-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post roles",
+      "summary": "Documented POST /roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/roles"
+        }
+      ],
+      "operation": "pipedrive.post.roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post roles id assignments",
+      "summary": "Documented POST /roles/{id}/assignments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post roles id assignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/roles/{id}/assignments"
+        }
+      ],
+      "operation": "pipedrive.post.roles-id-assignments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post roles id settings",
+      "summary": "Documented POST /roles/{id}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post roles id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/roles/{id}/settings"
+        }
+      ],
+      "operation": "pipedrive.post.roles-id-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks",
+      "summary": "Documented POST /tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "pipedrive.post.tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "pipedrive.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put dealfields id",
+      "summary": "Documented PUT /dealFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put dealfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dealFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.dealfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put deals id merge",
+      "summary": "Documented PUT /deals/{id}/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put deals id merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/deals/{id}/merge"
+        }
+      ],
+      "operation": "pipedrive.put.deals-id-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put files id",
+      "summary": "Documented PUT /files/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/files/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put goals id",
+      "summary": "Documented PUT /goals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put goals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/goals/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.goals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put legacyteams id",
+      "summary": "Documented PUT /legacyTeams/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put legacyteams id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/legacyTeams/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.legacyteams-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put mailbox mailthreads id",
+      "summary": "Documented PUT /mailbox/mailThreads/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put mailbox mailthreads id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/mailbox/mailThreads/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.mailbox-mailthreads-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put notes id comments commentid",
+      "summary": "Documented PUT /notes/{id}/comments/{commentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put notes id comments commentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/notes/{id}/comments/{commentId}"
+        }
+      ],
+      "operation": "pipedrive.put.notes-id-comments-commentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizationfields id",
+      "summary": "Documented PUT /organizationFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put organizationfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizationFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.organizationfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizationrelationships id",
+      "summary": "Documented PUT /organizationRelationships/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put organizationrelationships id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizationRelationships/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.organizationrelationships-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations id merge",
+      "summary": "Documented PUT /organizations/{id}/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put organizations id merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{id}/merge"
+        }
+      ],
+      "operation": "pipedrive.put.organizations-id-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put personfields id",
+      "summary": "Documented PUT /personFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put personfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/personFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.personfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put persons id merge",
+      "summary": "Documented PUT /persons/{id}/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put persons id merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/persons/{id}/merge"
+        }
+      ],
+      "operation": "pipedrive.put.persons-id-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put productfields id",
+      "summary": "Documented PUT /productFields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put productfields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/productFields/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.productfields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put projects id",
+      "summary": "Documented PUT /projects/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.projects-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put projects id plan activities activityid",
+      "summary": "Documented PUT /projects/{id}/plan/activities/{activityId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put projects id plan activities activityid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{id}/plan/activities/{activityId}"
+        }
+      ],
+      "operation": "pipedrive.put.projects-id-plan-activities-activityid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put projects id plan tasks taskid",
+      "summary": "Documented PUT /projects/{id}/plan/tasks/{taskId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put projects id plan tasks taskid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{id}/plan/tasks/{taskId}"
+        }
+      ],
+      "operation": "pipedrive.put.projects-id-plan-tasks-taskid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put roles id",
+      "summary": "Documented PUT /roles/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put roles id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/roles/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.roles-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put roles id pipelines",
+      "summary": "Documented PUT /roles/{id}/pipelines (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put roles id pipelines --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/roles/{id}/pipelines"
+        }
+      ],
+      "operation": "pipedrive.put.roles-id-pipelines",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tasks id",
+      "summary": "Documented PUT /tasks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.tasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put users id",
+      "summary": "Documented PUT /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive api put users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "pipedrive.put.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create activity type apply",
+      "summary": "Plan and execute the create activity type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_activity_type",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "icon_key",
+          "type": "string",
+          "summary": "Required icon key record field.",
+          "maps_to": "record.icon_key",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive create activity type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activityTypes"
+        }
+      ],
+      "risk": "creates a new custom activity type; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create filter apply",
+      "summary": "Plan and execute the create filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_filter",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive create filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/filters"
+        }
+      ],
+      "risk": "creates a new saved filter; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create lead apply",
+      "summary": "Plan and execute the create lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_lead",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive create lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leads"
+        }
+      ],
+      "risk": "creates a new lead; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create lead label apply",
+      "summary": "Plan and execute the create lead label reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_lead_label",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Required color record field.",
+          "maps_to": "record.color",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive create lead label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/leadLabels"
+        }
+      ],
+      "risk": "creates a new lead label; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create note apply",
+      "summary": "Plan and execute the create note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive create note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes"
+        }
+      ],
+      "risk": "creates a new note attached to a deal/person/organization/lead; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "event_action",
+          "type": "string",
+          "summary": "Required event action record field.",
+          "maps_to": "record.event_action",
+          "required": true
+        },
+        {
+          "name": "event_object",
+          "type": "string",
+          "summary": "Required event object record field.",
+          "maps_to": "record.event_object",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "subscription_url",
+          "type": "string",
+          "summary": "Required subscription url record field.",
+          "maps_to": "record.subscription_url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "risk": "registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "currencies list",
+      "summary": "Run the currencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "currencies",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive currencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currencies"
+        }
+      ]
+    },
+    {
+      "path": "deal fields list",
+      "summary": "Run the deal fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_fields",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive deal fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dealFields"
+        }
+      ]
+    },
+    {
+      "path": "deals list",
+      "summary": "Run the deals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deals",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive deals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "delete activity type apply",
+      "summary": "Plan and execute the delete activity type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_activity_type",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete activity type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/activityTypes/{id}"
+        }
+      ],
+      "risk": "permanently deletes a custom activity type; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete filter apply",
+      "summary": "Plan and execute the delete filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_filter",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/filters/{id}"
+        }
+      ],
+      "risk": "permanently deletes a saved filter; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete lead apply",
+      "summary": "Plan and execute the delete lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_lead",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/leads/{id}"
+        }
+      ],
+      "risk": "permanently deletes a lead; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete lead label apply",
+      "summary": "Plan and execute the delete lead label reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_lead_label",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete lead label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/leadLabels/{id}"
+        }
+      ],
+      "risk": "permanently deletes a lead label; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete note apply",
+      "summary": "Plan and execute the delete note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_note",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/{id}"
+        }
+      ],
+      "risk": "permanently deletes a note; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "risk": "permanently deletes a webhook subscription; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "filters list",
+      "summary": "Run the filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filters",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters"
+        }
+      ]
+    },
+    {
+      "path": "lead fields list",
+      "summary": "Run the lead fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_fields",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive lead fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leadFields"
+        }
+      ]
+    },
+    {
+      "path": "lead labels list",
+      "summary": "Run the lead labels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_labels",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive lead labels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leadLabels"
+        }
+      ]
+    },
+    {
+      "path": "lead sources list",
+      "summary": "Run the lead sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_sources",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive lead sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leadSources"
+        }
+      ]
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/leads"
+        }
+      ]
+    },
+    {
+      "path": "legacy teams list",
+      "summary": "Run the legacy teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "legacy_teams",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive legacy teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/legacyTeams"
+        }
+      ]
+    },
+    {
+      "path": "notes list",
+      "summary": "Run the notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "path": "organization fields list",
+      "summary": "Run the organization fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization_fields",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive organization fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizationFields"
+        }
+      ]
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "person fields list",
+      "summary": "Run the person fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_fields",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive person fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/personFields"
+        }
+      ]
+    },
+    {
+      "path": "persons list",
+      "summary": "Run the persons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "persons",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive persons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/persons"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "product fields list",
+      "summary": "Run the product fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product_fields",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive product fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/productFields"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles"
+        }
+      ]
+    },
+    {
+      "path": "update activity type apply",
+      "summary": "Plan and execute the update activity type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_activity_type",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive update activity type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/activityTypes/{id}"
+        }
+      ],
+      "risk": "updates an existing activity type's name/color/order; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update filter apply",
+      "summary": "Plan and execute the update filter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_filter",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive update filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/filters/{id}"
+        }
+      ],
+      "risk": "updates an existing saved filter's name/conditions; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update lead apply",
+      "summary": "Plan and execute the update lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_lead",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive update lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/leads/{id}"
+        }
+      ],
+      "risk": "updates an existing lead's fields (partial patch); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update lead label apply",
+      "summary": "Plan and execute the update lead label reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_lead_label",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive update lead label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/leadLabels/{id}"
+        }
+      ],
+      "risk": "updates an existing lead label's name/color; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update note apply",
+      "summary": "Plan and execute the update note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_note",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pipedrive update note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/notes/{id}"
+        }
+      ],
+      "risk": "updates an existing note's content; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
+      "examples": [
+        "pm pipedrive webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    }
+  ]
+}

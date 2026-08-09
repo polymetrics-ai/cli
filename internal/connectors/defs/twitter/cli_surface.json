@@ -1,0 +1,3753 @@
+{
+  "tagline": "Run Twitter's declared streams and reverse-ETL actions.",
+  "usage": "pm twitter \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get 2 account-activity subscriptions count",
+        "api get 2 account-activity webhooks webhook-id subscriptions all",
+        "api get 2 account-activity webhooks webhook-id subscriptions all list",
+        "api get 2 activity stream",
+        "api get 2 activity subscriptions",
+        "api get 2 broadcasts",
+        "api get 2 broadcasts id",
+        "api get 2 broadcasts scheduled",
+        "api get 2 broadcasts scheduled id",
+        "api get 2 chat conversations",
+        "api get 2 chat conversations id",
+        "api get 2 chat conversations id events",
+        "api get 2 chat media id media-hash-key",
+        "api get 2 communities id",
+        "api get 2 communities search",
+        "api get 2 compliance jobs",
+        "api get 2 compliance jobs id",
+        "api get 2 connections",
+        "api get 2 dm-conversations id dm-events",
+        "api get 2 dm-conversations media dm-id media-id resource-id",
+        "api get 2 dm-conversations with participant-id dm-events",
+        "api get 2 dm-events",
+        "api get 2 dm-events event-id",
+        "api get 2 likes compliance stream",
+        "api get 2 likes firehose stream",
+        "api get 2 likes sample10 stream",
+        "api get 2 lists id",
+        "api get 2 lists id followers",
+        "api get 2 lists id members",
+        "api get 2 lists id tweets",
+        "api get 2 media",
+        "api get 2 media analytics",
+        "api get 2 media media-key",
+        "api get 2 media upload",
+        "api get 2 news id",
+        "api get 2 news search",
+        "api get 2 notes search notes-written",
+        "api get 2 notes search posts-eligible-for-notes",
+        "api get 2 openapi-json",
+        "api get 2 spaces",
+        "api get 2 spaces by creator-ids",
+        "api get 2 spaces id",
+        "api get 2 spaces id buyers",
+        "api get 2 spaces id tweets",
+        "api get 2 spaces search",
+        "api get 2 trends by woeid woeid",
+        "api get 2 tweets",
+        "api get 2 tweets analytics",
+        "api get 2 tweets compliance stream",
+        "api get 2 tweets counts all",
+        "api get 2 tweets counts recent",
+        "api get 2 tweets firehose stream",
+        "api get 2 tweets firehose stream lang en",
+        "api get 2 tweets firehose stream lang ja",
+        "api get 2 tweets firehose stream lang ko",
+        "api get 2 tweets firehose stream lang pt",
+        "api get 2 tweets id",
+        "api get 2 tweets id liking-users",
+        "api get 2 tweets id quote-tweets",
+        "api get 2 tweets id retweeted-by",
+        "api get 2 tweets id retweets",
+        "api get 2 tweets label stream",
+        "api get 2 tweets sample stream",
+        "api get 2 tweets sample10 stream",
+        "api get 2 tweets search all",
+        "api get 2 tweets search stream",
+        "api get 2 tweets search stream rules",
+        "api get 2 tweets search stream rules counts",
+        "api get 2 tweets search webhooks",
+        "api get 2 usage tweets",
+        "api get 2 users",
+        "api get 2 users by",
+        "api get 2 users by username username",
+        "api get 2 users compliance stream",
+        "api get 2 users id",
+        "api get 2 users id affiliates",
+        "api get 2 users id blocking",
+        "api get 2 users id bookmarks",
+        "api get 2 users id bookmarks folders",
+        "api get 2 users id bookmarks folders folder-id",
+        "api get 2 users id followed-lists",
+        "api get 2 users id followers",
+        "api get 2 users id following",
+        "api get 2 users id liked-tweets",
+        "api get 2 users id list-memberships",
+        "api get 2 users id mentions",
+        "api get 2 users id muting",
+        "api get 2 users id owned-lists",
+        "api get 2 users id pinned-lists",
+        "api get 2 users id public-keys",
+        "api get 2 users id timelines reverse-chronological",
+        "api get 2 users id tweets",
+        "api get 2 users me",
+        "api get 2 users personalized-trends",
+        "api get 2 users public-keys",
+        "api get 2 users reposts-of-me",
+        "api get 2 users search",
+        "api get 2 webhooks",
+        "authors list",
+        "tweets list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete 2 account-activity webhooks webhook-id subscriptions user-id all",
+        "api delete 2 activity subscriptions",
+        "api delete 2 activity subscriptions subscription-id",
+        "api delete 2 broadcasts id chat message-id",
+        "api delete 2 broadcasts id chat mutes user-id",
+        "api delete 2 broadcasts scheduled id",
+        "api delete 2 connections",
+        "api delete 2 connections all",
+        "api delete 2 connections endpoint-id",
+        "api delete 2 dm-events event-id",
+        "api delete 2 lists id",
+        "api delete 2 lists id members user-id",
+        "api delete 2 media subtitles",
+        "api delete 2 notes id",
+        "api delete 2 tweets id",
+        "api delete 2 tweets search webhooks webhook-id",
+        "api delete 2 users id bookmarks tweet-id",
+        "api delete 2 users id followed-lists list-id",
+        "api delete 2 users id likes tweet-id",
+        "api delete 2 users id pinned-lists list-id",
+        "api delete 2 users id retweets source-tweet-id",
+        "api delete 2 users source-user-id following target-user-id",
+        "api delete 2 users source-user-id muting target-user-id",
+        "api delete 2 webhooks webhook-id",
+        "api post 2 account-activity webhooks webhook-id subscriptions all",
+        "api post 2 activity subscriptions",
+        "api post 2 articles article-id publish",
+        "api post 2 articles draft",
+        "api post 2 broadcasts id chat",
+        "api post 2 broadcasts id chat mutes",
+        "api post 2 broadcasts scheduled",
+        "api post 2 broadcasts scheduled id live",
+        "api post 2 chat conversations group",
+        "api post 2 chat conversations group initialize",
+        "api post 2 chat conversations id keys",
+        "api post 2 chat conversations id members",
+        "api post 2 chat conversations id messages",
+        "api post 2 chat conversations id messages delete",
+        "api post 2 chat conversations id read",
+        "api post 2 chat conversations id typing",
+        "api post 2 chat media upload id append",
+        "api post 2 chat media upload id finalize",
+        "api post 2 chat media upload initialize",
+        "api post 2 compliance jobs",
+        "api post 2 dm-conversations",
+        "api post 2 dm-conversations dm-conversation-id messages",
+        "api post 2 dm-conversations with participant-id messages",
+        "api post 2 lists",
+        "api post 2 lists id members",
+        "api post 2 media metadata",
+        "api post 2 media subtitles",
+        "api post 2 media upload",
+        "api post 2 media upload id append",
+        "api post 2 media upload id finalize",
+        "api post 2 media upload initialize",
+        "api post 2 notes",
+        "api post 2 notes evaluate",
+        "api post 2 tweets",
+        "api post 2 tweets search stream rules",
+        "api post 2 tweets search webhooks webhook-id",
+        "api post 2 users id bookmarks",
+        "api post 2 users id bookmarks folders",
+        "api post 2 users id dm block",
+        "api post 2 users id dm unblock",
+        "api post 2 users id followed-lists",
+        "api post 2 users id following",
+        "api post 2 users id likes",
+        "api post 2 users id muting",
+        "api post 2 users id pinned-lists",
+        "api post 2 users id public-keys",
+        "api post 2 users id retweets",
+        "api post 2 webhooks",
+        "api post 2 webhooks replay",
+        "api put 2 activity subscriptions subscription-id",
+        "api put 2 broadcasts scheduled id",
+        "api put 2 lists id",
+        "api put 2 tweets tweet-id hidden",
+        "api put 2 webhooks webhook-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete 2 account-activity webhooks webhook-id subscriptions user-id all",
+      "summary": "Documented DELETE /2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 account-activity webhooks webhook-id subscriptions user-id all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all"
+        }
+      ],
+      "operation": "twitter.delete.2-account-activity-webhooks-webhook-id-subscriptions-user-id-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 activity subscriptions",
+      "summary": "Documented DELETE /2/activity/subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 activity subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/activity/subscriptions"
+        }
+      ],
+      "operation": "twitter.delete.2-activity-subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 activity subscriptions subscription-id",
+      "summary": "Documented DELETE /2/activity/subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 activity subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/activity/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-activity-subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 broadcasts id chat message-id",
+      "summary": "Documented DELETE /2/broadcasts/{id}/chat/{message_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 broadcasts id chat message-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/broadcasts/{id}/chat/{message_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-broadcasts-id-chat-message-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 broadcasts id chat mutes user-id",
+      "summary": "Documented DELETE /2/broadcasts/{id}/chat/mutes/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 broadcasts id chat mutes user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/broadcasts/{id}/chat/mutes/{user_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-broadcasts-id-chat-mutes-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 broadcasts scheduled id",
+      "summary": "Documented DELETE /2/broadcasts/scheduled/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 broadcasts scheduled id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/broadcasts/scheduled/{id}"
+        }
+      ],
+      "operation": "twitter.delete.2-broadcasts-scheduled-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 connections",
+      "summary": "Documented DELETE /2/connections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 connections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/connections"
+        }
+      ],
+      "operation": "twitter.delete.2-connections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 connections all",
+      "summary": "Documented DELETE /2/connections/all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 connections all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/connections/all"
+        }
+      ],
+      "operation": "twitter.delete.2-connections-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 connections endpoint-id",
+      "summary": "Documented DELETE /2/connections/{endpoint_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 connections endpoint-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/connections/{endpoint_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-connections-endpoint-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 dm-events event-id",
+      "summary": "Documented DELETE /2/dm_events/{event_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 dm-events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/dm_events/{event_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-dm-events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 lists id",
+      "summary": "Documented DELETE /2/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/lists/{id}"
+        }
+      ],
+      "operation": "twitter.delete.2-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 lists id members user-id",
+      "summary": "Documented DELETE /2/lists/{id}/members/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 lists id members user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/lists/{id}/members/{user_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-lists-id-members-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 media subtitles",
+      "summary": "Documented DELETE /2/media/subtitles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 media subtitles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/media/subtitles"
+        }
+      ],
+      "operation": "twitter.delete.2-media-subtitles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 notes id",
+      "summary": "Documented DELETE /2/notes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/notes/{id}"
+        }
+      ],
+      "operation": "twitter.delete.2-notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 tweets id",
+      "summary": "Documented DELETE /2/tweets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 tweets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/tweets/{id}"
+        }
+      ],
+      "operation": "twitter.delete.2-tweets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 tweets search webhooks webhook-id",
+      "summary": "Documented DELETE /2/tweets/search/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 tweets search webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/tweets/search/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-tweets-search-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users id bookmarks tweet-id",
+      "summary": "Documented DELETE /2/users/{id}/bookmarks/{tweet_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users id bookmarks tweet-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{id}/bookmarks/{tweet_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-id-bookmarks-tweet-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users id followed-lists list-id",
+      "summary": "Documented DELETE /2/users/{id}/followed_lists/{list_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users id followed-lists list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{id}/followed_lists/{list_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-id-followed-lists-list-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users id likes tweet-id",
+      "summary": "Documented DELETE /2/users/{id}/likes/{tweet_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users id likes tweet-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{id}/likes/{tweet_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-id-likes-tweet-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users id pinned-lists list-id",
+      "summary": "Documented DELETE /2/users/{id}/pinned_lists/{list_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users id pinned-lists list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{id}/pinned_lists/{list_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-id-pinned-lists-list-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users id retweets source-tweet-id",
+      "summary": "Documented DELETE /2/users/{id}/retweets/{source_tweet_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users id retweets source-tweet-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{id}/retweets/{source_tweet_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-id-retweets-source-tweet-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users source-user-id following target-user-id",
+      "summary": "Documented DELETE /2/users/{source_user_id}/following/{target_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users source-user-id following target-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{source_user_id}/following/{target_user_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-source-user-id-following-target-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 users source-user-id muting target-user-id",
+      "summary": "Documented DELETE /2/users/{source_user_id}/muting/{target_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 users source-user-id muting target-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/users/{source_user_id}/muting/{target_user_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-users-source-user-id-muting-target-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 2 webhooks webhook-id",
+      "summary": "Documented DELETE /2/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api delete 2 webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/2/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "twitter.delete.2-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get 2 account-activity subscriptions count",
+      "summary": "Documented GET /2/account_activity/subscriptions/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 account-activity subscriptions count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/account_activity/subscriptions/count"
+        }
+      ],
+      "operation": "twitter.get.2-account-activity-subscriptions-count",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 account-activity webhooks webhook-id subscriptions all",
+      "summary": "Documented GET /2/account_activity/webhooks/{webhook_id}/subscriptions/all (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 account-activity webhooks webhook-id subscriptions all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all"
+        }
+      ],
+      "operation": "twitter.get.2-account-activity-webhooks-webhook-id-subscriptions-all",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 account-activity webhooks webhook-id subscriptions all list",
+      "summary": "Documented GET /2/account_activity/webhooks/{webhook_id}/subscriptions/all/list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 account-activity webhooks webhook-id subscriptions all list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all/list"
+        }
+      ],
+      "operation": "twitter.get.2-account-activity-webhooks-webhook-id-subscriptions-all-list",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 activity stream",
+      "summary": "Documented GET /2/activity/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 activity stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/activity/stream"
+        }
+      ],
+      "operation": "twitter.get.2-activity-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 activity subscriptions",
+      "summary": "Documented GET /2/activity/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 activity subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/activity/subscriptions"
+        }
+      ],
+      "operation": "twitter.get.2-activity-subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 broadcasts",
+      "summary": "Documented GET /2/broadcasts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 broadcasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/broadcasts"
+        }
+      ],
+      "operation": "twitter.get.2-broadcasts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 broadcasts id",
+      "summary": "Documented GET /2/broadcasts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 broadcasts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/broadcasts/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-broadcasts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 broadcasts scheduled",
+      "summary": "Documented GET /2/broadcasts/scheduled (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 broadcasts scheduled --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/broadcasts/scheduled"
+        }
+      ],
+      "operation": "twitter.get.2-broadcasts-scheduled",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 broadcasts scheduled id",
+      "summary": "Documented GET /2/broadcasts/scheduled/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 broadcasts scheduled id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/broadcasts/scheduled/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-broadcasts-scheduled-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 chat conversations",
+      "summary": "Documented GET /2/chat/conversations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 chat conversations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/chat/conversations"
+        }
+      ],
+      "operation": "twitter.get.2-chat-conversations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 chat conversations id",
+      "summary": "Documented GET /2/chat/conversations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 chat conversations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/chat/conversations/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-chat-conversations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 chat conversations id events",
+      "summary": "Documented GET /2/chat/conversations/{id}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 chat conversations id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/chat/conversations/{id}/events"
+        }
+      ],
+      "operation": "twitter.get.2-chat-conversations-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 chat media id media-hash-key",
+      "summary": "Documented GET /2/chat/media/{id}/{media_hash_key} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 chat media id media-hash-key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/chat/media/{id}/{media_hash_key}"
+        }
+      ],
+      "operation": "twitter.get.2-chat-media-id-media-hash-key",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 communities id",
+      "summary": "Documented GET /2/communities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 communities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/communities/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-communities-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 communities search",
+      "summary": "Documented GET /2/communities/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 communities search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/communities/search"
+        }
+      ],
+      "operation": "twitter.get.2-communities-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 compliance jobs",
+      "summary": "Documented GET /2/compliance/jobs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 compliance jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/compliance/jobs"
+        }
+      ],
+      "operation": "twitter.get.2-compliance-jobs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 compliance jobs id",
+      "summary": "Documented GET /2/compliance/jobs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 compliance jobs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/compliance/jobs/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-compliance-jobs-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 connections",
+      "summary": "Documented GET /2/connections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 connections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/connections"
+        }
+      ],
+      "operation": "twitter.get.2-connections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 dm-conversations id dm-events",
+      "summary": "Documented GET /2/dm_conversations/{id}/dm_events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 dm-conversations id dm-events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/dm_conversations/{id}/dm_events"
+        }
+      ],
+      "operation": "twitter.get.2-dm-conversations-id-dm-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 dm-conversations media dm-id media-id resource-id",
+      "summary": "Documented GET /2/dm_conversations/media/{dm_id}/{media_id}/{resource_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 dm-conversations media dm-id media-id resource-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/dm_conversations/media/{dm_id}/{media_id}/{resource_id}"
+        }
+      ],
+      "operation": "twitter.get.2-dm-conversations-media-dm-id-media-id-resource-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 dm-conversations with participant-id dm-events",
+      "summary": "Documented GET /2/dm_conversations/with/{participant_id}/dm_events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 dm-conversations with participant-id dm-events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/dm_conversations/with/{participant_id}/dm_events"
+        }
+      ],
+      "operation": "twitter.get.2-dm-conversations-with-participant-id-dm-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 dm-events",
+      "summary": "Documented GET /2/dm_events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 dm-events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/dm_events"
+        }
+      ],
+      "operation": "twitter.get.2-dm-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 dm-events event-id",
+      "summary": "Documented GET /2/dm_events/{event_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 dm-events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/dm_events/{event_id}"
+        }
+      ],
+      "operation": "twitter.get.2-dm-events-event-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 likes compliance stream",
+      "summary": "Documented GET /2/likes/compliance/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 likes compliance stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/likes/compliance/stream"
+        }
+      ],
+      "operation": "twitter.get.2-likes-compliance-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 likes firehose stream",
+      "summary": "Documented GET /2/likes/firehose/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 likes firehose stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/likes/firehose/stream"
+        }
+      ],
+      "operation": "twitter.get.2-likes-firehose-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 likes sample10 stream",
+      "summary": "Documented GET /2/likes/sample10/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 likes sample10 stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/likes/sample10/stream"
+        }
+      ],
+      "operation": "twitter.get.2-likes-sample10-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 lists id",
+      "summary": "Documented GET /2/lists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/lists/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-lists-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 lists id followers",
+      "summary": "Documented GET /2/lists/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 lists id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/lists/{id}/followers"
+        }
+      ],
+      "operation": "twitter.get.2-lists-id-followers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 lists id members",
+      "summary": "Documented GET /2/lists/{id}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 lists id members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/lists/{id}/members"
+        }
+      ],
+      "operation": "twitter.get.2-lists-id-members",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 lists id tweets",
+      "summary": "Documented GET /2/lists/{id}/tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 lists id tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/lists/{id}/tweets"
+        }
+      ],
+      "operation": "twitter.get.2-lists-id-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 media",
+      "summary": "Documented GET /2/media (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 media --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/media"
+        }
+      ],
+      "operation": "twitter.get.2-media",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 media analytics",
+      "summary": "Documented GET /2/media/analytics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 media analytics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/media/analytics"
+        }
+      ],
+      "operation": "twitter.get.2-media-analytics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 media media-key",
+      "summary": "Documented GET /2/media/{media_key} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 media media-key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/media/{media_key}"
+        }
+      ],
+      "operation": "twitter.get.2-media-media-key",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 media upload",
+      "summary": "Documented GET /2/media/upload (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 media upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/media/upload"
+        }
+      ],
+      "operation": "twitter.get.2-media-upload",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 news id",
+      "summary": "Documented GET /2/news/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 news id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/news/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-news-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 news search",
+      "summary": "Documented GET /2/news/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 news search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/news/search"
+        }
+      ],
+      "operation": "twitter.get.2-news-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 notes search notes-written",
+      "summary": "Documented GET /2/notes/search/notes_written (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 notes search notes-written --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/notes/search/notes_written"
+        }
+      ],
+      "operation": "twitter.get.2-notes-search-notes-written",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 notes search posts-eligible-for-notes",
+      "summary": "Documented GET /2/notes/search/posts_eligible_for_notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 notes search posts-eligible-for-notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/notes/search/posts_eligible_for_notes"
+        }
+      ],
+      "operation": "twitter.get.2-notes-search-posts-eligible-for-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 openapi-json",
+      "summary": "Documented GET /2/openapi.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 openapi-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/openapi.json"
+        }
+      ],
+      "operation": "twitter.get.2-openapi-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces",
+      "summary": "Documented GET /2/spaces (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces"
+        }
+      ],
+      "operation": "twitter.get.2-spaces",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces by creator-ids",
+      "summary": "Documented GET /2/spaces/by/creator_ids (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces by creator-ids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces/by/creator_ids"
+        }
+      ],
+      "operation": "twitter.get.2-spaces-by-creator-ids",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces id",
+      "summary": "Documented GET /2/spaces/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-spaces-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces id buyers",
+      "summary": "Documented GET /2/spaces/{id}/buyers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces id buyers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces/{id}/buyers"
+        }
+      ],
+      "operation": "twitter.get.2-spaces-id-buyers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces id tweets",
+      "summary": "Documented GET /2/spaces/{id}/tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces id tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces/{id}/tweets"
+        }
+      ],
+      "operation": "twitter.get.2-spaces-id-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 spaces search",
+      "summary": "Documented GET /2/spaces/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 spaces search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/spaces/search"
+        }
+      ],
+      "operation": "twitter.get.2-spaces-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 trends by woeid woeid",
+      "summary": "Documented GET /2/trends/by/woeid/{woeid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 trends by woeid woeid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/trends/by/woeid/{woeid}"
+        }
+      ],
+      "operation": "twitter.get.2-trends-by-woeid-woeid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets",
+      "summary": "Documented GET /2/tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets"
+        }
+      ],
+      "operation": "twitter.get.2-tweets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets analytics",
+      "summary": "Documented GET /2/tweets/analytics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets analytics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/analytics"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-analytics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets compliance stream",
+      "summary": "Documented GET /2/tweets/compliance/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets compliance stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/compliance/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-compliance-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets counts all",
+      "summary": "Documented GET /2/tweets/counts/all (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets counts all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/counts/all"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-counts-all",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets counts recent",
+      "summary": "Documented GET /2/tweets/counts/recent (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets counts recent --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/counts/recent"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-counts-recent",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets firehose stream",
+      "summary": "Documented GET /2/tweets/firehose/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets firehose stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/firehose/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-firehose-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets firehose stream lang en",
+      "summary": "Documented GET /2/tweets/firehose/stream/lang/en (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets firehose stream lang en --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/firehose/stream/lang/en"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-firehose-stream-lang-en",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets firehose stream lang ja",
+      "summary": "Documented GET /2/tweets/firehose/stream/lang/ja (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets firehose stream lang ja --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/firehose/stream/lang/ja"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-firehose-stream-lang-ja",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets firehose stream lang ko",
+      "summary": "Documented GET /2/tweets/firehose/stream/lang/ko (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets firehose stream lang ko --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/firehose/stream/lang/ko"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-firehose-stream-lang-ko",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets firehose stream lang pt",
+      "summary": "Documented GET /2/tweets/firehose/stream/lang/pt (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets firehose stream lang pt --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/firehose/stream/lang/pt"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-firehose-stream-lang-pt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets id",
+      "summary": "Documented GET /2/tweets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets id liking-users",
+      "summary": "Documented GET /2/tweets/{id}/liking_users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets id liking-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/{id}/liking_users"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-id-liking-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets id quote-tweets",
+      "summary": "Documented GET /2/tweets/{id}/quote_tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets id quote-tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/{id}/quote_tweets"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-id-quote-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets id retweeted-by",
+      "summary": "Documented GET /2/tweets/{id}/retweeted_by (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets id retweeted-by --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/{id}/retweeted_by"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-id-retweeted-by",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets id retweets",
+      "summary": "Documented GET /2/tweets/{id}/retweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets id retweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/{id}/retweets"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-id-retweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets label stream",
+      "summary": "Documented GET /2/tweets/label/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets label stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/label/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-label-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets sample stream",
+      "summary": "Documented GET /2/tweets/sample/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets sample stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/sample/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-sample-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets sample10 stream",
+      "summary": "Documented GET /2/tweets/sample10/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets sample10 stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/sample10/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-sample10-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets search all",
+      "summary": "Documented GET /2/tweets/search/all (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets search all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/all"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-search-all",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets search stream",
+      "summary": "Documented GET /2/tweets/search/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets search stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/stream"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-search-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets search stream rules",
+      "summary": "Documented GET /2/tweets/search/stream/rules (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets search stream rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/stream/rules"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-search-stream-rules",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets search stream rules counts",
+      "summary": "Documented GET /2/tweets/search/stream/rules/counts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets search stream rules counts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/stream/rules/counts"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-search-stream-rules-counts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 tweets search webhooks",
+      "summary": "Documented GET /2/tweets/search/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 tweets search webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/webhooks"
+        }
+      ],
+      "operation": "twitter.get.2-tweets-search-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 usage tweets",
+      "summary": "Documented GET /2/usage/tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 usage tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/usage/tweets"
+        }
+      ],
+      "operation": "twitter.get.2-usage-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users",
+      "summary": "Documented GET /2/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users"
+        }
+      ],
+      "operation": "twitter.get.2-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users by",
+      "summary": "Documented GET /2/users/by (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users by --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/by"
+        }
+      ],
+      "operation": "twitter.get.2-users-by",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users by username username",
+      "summary": "Documented GET /2/users/by/username/{username} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users by username username --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/by/username/{username}"
+        }
+      ],
+      "operation": "twitter.get.2-users-by-username-username",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users compliance stream",
+      "summary": "Documented GET /2/users/compliance/stream (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users compliance stream --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/compliance/stream"
+        }
+      ],
+      "operation": "twitter.get.2-users-compliance-stream",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id",
+      "summary": "Documented GET /2/users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}"
+        }
+      ],
+      "operation": "twitter.get.2-users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id affiliates",
+      "summary": "Documented GET /2/users/{id}/affiliates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id affiliates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/affiliates"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-affiliates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id blocking",
+      "summary": "Documented GET /2/users/{id}/blocking (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id blocking --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/blocking"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-blocking",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id bookmarks",
+      "summary": "Documented GET /2/users/{id}/bookmarks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id bookmarks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/bookmarks"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-bookmarks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id bookmarks folders",
+      "summary": "Documented GET /2/users/{id}/bookmarks/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id bookmarks folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/bookmarks/folders"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-bookmarks-folders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id bookmarks folders folder-id",
+      "summary": "Documented GET /2/users/{id}/bookmarks/folders/{folder_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id bookmarks folders folder-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/bookmarks/folders/{folder_id}"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-bookmarks-folders-folder-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id followed-lists",
+      "summary": "Documented GET /2/users/{id}/followed_lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id followed-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/followed_lists"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-followed-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id followers",
+      "summary": "Documented GET /2/users/{id}/followers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id followers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/followers"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-followers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id following",
+      "summary": "Documented GET /2/users/{id}/following (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id following --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/following"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-following",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id liked-tweets",
+      "summary": "Documented GET /2/users/{id}/liked_tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id liked-tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/liked_tweets"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-liked-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id list-memberships",
+      "summary": "Documented GET /2/users/{id}/list_memberships (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id list-memberships --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/list_memberships"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-list-memberships",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id mentions",
+      "summary": "Documented GET /2/users/{id}/mentions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id mentions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/mentions"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-mentions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id muting",
+      "summary": "Documented GET /2/users/{id}/muting (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id muting --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/muting"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-muting",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id owned-lists",
+      "summary": "Documented GET /2/users/{id}/owned_lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id owned-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/owned_lists"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-owned-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id pinned-lists",
+      "summary": "Documented GET /2/users/{id}/pinned_lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id pinned-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/pinned_lists"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-pinned-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id public-keys",
+      "summary": "Documented GET /2/users/{id}/public_keys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id public-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/public_keys"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-public-keys",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id timelines reverse-chronological",
+      "summary": "Documented GET /2/users/{id}/timelines/reverse_chronological (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id timelines reverse-chronological --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/timelines/reverse_chronological"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-timelines-reverse-chronological",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users id tweets",
+      "summary": "Documented GET /2/users/{id}/tweets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users id tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/{id}/tweets"
+        }
+      ],
+      "operation": "twitter.get.2-users-id-tweets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users me",
+      "summary": "Documented GET /2/users/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/me"
+        }
+      ],
+      "operation": "twitter.get.2-users-me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users personalized-trends",
+      "summary": "Documented GET /2/users/personalized_trends (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users personalized-trends --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/personalized_trends"
+        }
+      ],
+      "operation": "twitter.get.2-users-personalized-trends",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users public-keys",
+      "summary": "Documented GET /2/users/public_keys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users public-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/public_keys"
+        }
+      ],
+      "operation": "twitter.get.2-users-public-keys",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users reposts-of-me",
+      "summary": "Documented GET /2/users/reposts_of_me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users reposts-of-me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/reposts_of_me"
+        }
+      ],
+      "operation": "twitter.get.2-users-reposts-of-me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 users search",
+      "summary": "Documented GET /2/users/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 users search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/users/search"
+        }
+      ],
+      "operation": "twitter.get.2-users-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 2 webhooks",
+      "summary": "Documented GET /2/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api get 2 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/webhooks"
+        }
+      ],
+      "operation": "twitter.get.2-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post 2 account-activity webhooks webhook-id subscriptions all",
+      "summary": "Documented POST /2/account_activity/webhooks/{webhook_id}/subscriptions/all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 account-activity webhooks webhook-id subscriptions all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all"
+        }
+      ],
+      "operation": "twitter.post.2-account-activity-webhooks-webhook-id-subscriptions-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 activity subscriptions",
+      "summary": "Documented POST /2/activity/subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 activity subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/activity/subscriptions"
+        }
+      ],
+      "operation": "twitter.post.2-activity-subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 articles article-id publish",
+      "summary": "Documented POST /2/articles/{article_id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 articles article-id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/articles/{article_id}/publish"
+        }
+      ],
+      "operation": "twitter.post.2-articles-article-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 articles draft",
+      "summary": "Documented POST /2/articles/draft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 articles draft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/articles/draft"
+        }
+      ],
+      "operation": "twitter.post.2-articles-draft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 broadcasts id chat",
+      "summary": "Documented POST /2/broadcasts/{id}/chat (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 broadcasts id chat --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/broadcasts/{id}/chat"
+        }
+      ],
+      "operation": "twitter.post.2-broadcasts-id-chat",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 broadcasts id chat mutes",
+      "summary": "Documented POST /2/broadcasts/{id}/chat/mutes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 broadcasts id chat mutes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/broadcasts/{id}/chat/mutes"
+        }
+      ],
+      "operation": "twitter.post.2-broadcasts-id-chat-mutes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 broadcasts scheduled",
+      "summary": "Documented POST /2/broadcasts/scheduled (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 broadcasts scheduled --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/broadcasts/scheduled"
+        }
+      ],
+      "operation": "twitter.post.2-broadcasts-scheduled",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 broadcasts scheduled id live",
+      "summary": "Documented POST /2/broadcasts/scheduled/{id}/live (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 broadcasts scheduled id live --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/broadcasts/scheduled/{id}/live"
+        }
+      ],
+      "operation": "twitter.post.2-broadcasts-scheduled-id-live",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations group",
+      "summary": "Documented POST /2/chat/conversations/group (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations group --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/group"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-group",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations group initialize",
+      "summary": "Documented POST /2/chat/conversations/group/initialize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations group initialize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/group/initialize"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-group-initialize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id keys",
+      "summary": "Documented POST /2/chat/conversations/{id}/keys (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/keys"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-keys",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id members",
+      "summary": "Documented POST /2/chat/conversations/{id}/members (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/members"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-members",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id messages",
+      "summary": "Documented POST /2/chat/conversations/{id}/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/messages"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id messages delete",
+      "summary": "Documented POST /2/chat/conversations/{id}/messages/delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id messages delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/messages/delete"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-messages-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id read",
+      "summary": "Documented POST /2/chat/conversations/{id}/read (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id read --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/read"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-read",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat conversations id typing",
+      "summary": "Documented POST /2/chat/conversations/{id}/typing (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat conversations id typing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/conversations/{id}/typing"
+        }
+      ],
+      "operation": "twitter.post.2-chat-conversations-id-typing",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat media upload id append",
+      "summary": "Documented POST /2/chat/media/upload/{id}/append (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat media upload id append --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/media/upload/{id}/append"
+        }
+      ],
+      "operation": "twitter.post.2-chat-media-upload-id-append",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat media upload id finalize",
+      "summary": "Documented POST /2/chat/media/upload/{id}/finalize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat media upload id finalize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/media/upload/{id}/finalize"
+        }
+      ],
+      "operation": "twitter.post.2-chat-media-upload-id-finalize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 chat media upload initialize",
+      "summary": "Documented POST /2/chat/media/upload/initialize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 chat media upload initialize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/chat/media/upload/initialize"
+        }
+      ],
+      "operation": "twitter.post.2-chat-media-upload-initialize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 compliance jobs",
+      "summary": "Documented POST /2/compliance/jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 compliance jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/compliance/jobs"
+        }
+      ],
+      "operation": "twitter.post.2-compliance-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 dm-conversations",
+      "summary": "Documented POST /2/dm_conversations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 dm-conversations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/dm_conversations"
+        }
+      ],
+      "operation": "twitter.post.2-dm-conversations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 dm-conversations dm-conversation-id messages",
+      "summary": "Documented POST /2/dm_conversations/{dm_conversation_id}/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 dm-conversations dm-conversation-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/dm_conversations/{dm_conversation_id}/messages"
+        }
+      ],
+      "operation": "twitter.post.2-dm-conversations-dm-conversation-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 dm-conversations with participant-id messages",
+      "summary": "Documented POST /2/dm_conversations/with/{participant_id}/messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 dm-conversations with participant-id messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/dm_conversations/with/{participant_id}/messages"
+        }
+      ],
+      "operation": "twitter.post.2-dm-conversations-with-participant-id-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 lists",
+      "summary": "Documented POST /2/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/lists"
+        }
+      ],
+      "operation": "twitter.post.2-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 lists id members",
+      "summary": "Documented POST /2/lists/{id}/members (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 lists id members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/lists/{id}/members"
+        }
+      ],
+      "operation": "twitter.post.2-lists-id-members",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media metadata",
+      "summary": "Documented POST /2/media/metadata (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media metadata --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/metadata"
+        }
+      ],
+      "operation": "twitter.post.2-media-metadata",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media subtitles",
+      "summary": "Documented POST /2/media/subtitles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media subtitles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/subtitles"
+        }
+      ],
+      "operation": "twitter.post.2-media-subtitles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media upload",
+      "summary": "Documented POST /2/media/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/upload"
+        }
+      ],
+      "operation": "twitter.post.2-media-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media upload id append",
+      "summary": "Documented POST /2/media/upload/{id}/append (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media upload id append --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/upload/{id}/append"
+        }
+      ],
+      "operation": "twitter.post.2-media-upload-id-append",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media upload id finalize",
+      "summary": "Documented POST /2/media/upload/{id}/finalize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media upload id finalize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/upload/{id}/finalize"
+        }
+      ],
+      "operation": "twitter.post.2-media-upload-id-finalize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 media upload initialize",
+      "summary": "Documented POST /2/media/upload/initialize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 media upload initialize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/media/upload/initialize"
+        }
+      ],
+      "operation": "twitter.post.2-media-upload-initialize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 notes",
+      "summary": "Documented POST /2/notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/notes"
+        }
+      ],
+      "operation": "twitter.post.2-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 notes evaluate",
+      "summary": "Documented POST /2/notes/evaluate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 notes evaluate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/notes/evaluate"
+        }
+      ],
+      "operation": "twitter.post.2-notes-evaluate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 tweets",
+      "summary": "Documented POST /2/tweets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 tweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/tweets"
+        }
+      ],
+      "operation": "twitter.post.2-tweets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 tweets search stream rules",
+      "summary": "Documented POST /2/tweets/search/stream/rules (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 tweets search stream rules --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/tweets/search/stream/rules"
+        }
+      ],
+      "operation": "twitter.post.2-tweets-search-stream-rules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 tweets search webhooks webhook-id",
+      "summary": "Documented POST /2/tweets/search/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 tweets search webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/tweets/search/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "twitter.post.2-tweets-search-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id bookmarks",
+      "summary": "Documented POST /2/users/{id}/bookmarks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id bookmarks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/bookmarks"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-bookmarks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id bookmarks folders",
+      "summary": "Documented POST /2/users/{id}/bookmarks/folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id bookmarks folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/bookmarks/folders"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-bookmarks-folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id dm block",
+      "summary": "Documented POST /2/users/{id}/dm/block (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id dm block --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/dm/block"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-dm-block",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id dm unblock",
+      "summary": "Documented POST /2/users/{id}/dm/unblock (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id dm unblock --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/dm/unblock"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-dm-unblock",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id followed-lists",
+      "summary": "Documented POST /2/users/{id}/followed_lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id followed-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/followed_lists"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-followed-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id following",
+      "summary": "Documented POST /2/users/{id}/following (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id following --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/following"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-following",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id likes",
+      "summary": "Documented POST /2/users/{id}/likes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id likes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/likes"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-likes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id muting",
+      "summary": "Documented POST /2/users/{id}/muting (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id muting --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/muting"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-muting",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id pinned-lists",
+      "summary": "Documented POST /2/users/{id}/pinned_lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id pinned-lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/pinned_lists"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-pinned-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id public-keys",
+      "summary": "Documented POST /2/users/{id}/public_keys (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id public-keys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/public_keys"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-public-keys",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 users id retweets",
+      "summary": "Documented POST /2/users/{id}/retweets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 users id retweets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/users/{id}/retweets"
+        }
+      ],
+      "operation": "twitter.post.2-users-id-retweets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 webhooks",
+      "summary": "Documented POST /2/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/webhooks"
+        }
+      ],
+      "operation": "twitter.post.2-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 2 webhooks replay",
+      "summary": "Documented POST /2/webhooks/replay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api post 2 webhooks replay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/2/webhooks/replay"
+        }
+      ],
+      "operation": "twitter.post.2-webhooks-replay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put 2 activity subscriptions subscription-id",
+      "summary": "Documented PUT /2/activity/subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api put 2 activity subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/2/activity/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "twitter.put.2-activity-subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put 2 broadcasts scheduled id",
+      "summary": "Documented PUT /2/broadcasts/scheduled/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api put 2 broadcasts scheduled id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/2/broadcasts/scheduled/{id}"
+        }
+      ],
+      "operation": "twitter.put.2-broadcasts-scheduled-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put 2 lists id",
+      "summary": "Documented PUT /2/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api put 2 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/2/lists/{id}"
+        }
+      ],
+      "operation": "twitter.put.2-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put 2 tweets tweet-id hidden",
+      "summary": "Documented PUT /2/tweets/{tweet_id}/hidden (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api put 2 tweets tweet-id hidden --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/2/tweets/{tweet_id}/hidden"
+        }
+      ],
+      "operation": "twitter.put.2-tweets-tweet-id-hidden",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put 2 webhooks webhook-id",
+      "summary": "Documented PUT /2/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter api put 2 webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/2/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "twitter.put.2-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "authors list",
+      "summary": "Run the authors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "authors",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter authors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/recent (includes.users expansion)"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tweets list",
+      "summary": "Run the tweets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tweets",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "examples": [
+        "pm twitter tweets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/2/tweets/search/recent"
+        }
+      ]
+    }
+  ]
+}

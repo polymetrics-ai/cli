@@ -1,0 +1,470 @@
+{
+  "operations": [
+    {
+      "id": "firehydrant.get.v1-catalogs-catalog-id-refresh",
+      "kind": "rest_read",
+      "summary": "GET /v1/catalogs/{catalog_id}/refresh",
+      "description": "Side-effecting refresh scheduler exposed as GET; not a read stream and not a JSON write action.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/catalogs/{catalog_id}/refresh",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.post.v1-incidents-incident-id-attachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/incidents/{incident_id}/attachments",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.post.v1-incidents-incident-id-retrospectives-export",
+      "kind": "rest_write",
+      "summary": "POST /v1/incidents/{incident_id}/retrospectives/export",
+      "description": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/retrospectives/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.post.v1-incidents-incident-id-retrospectives-export-markdown",
+      "kind": "rest_write",
+      "summary": "POST /v1/incidents/{incident_id}/retrospectives/export_markdown",
+      "description": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incidents/{incident_id}/retrospectives/export_markdown",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-incidents-incident-id-retrospectives-retrospective-id-fields-field-id-inputs",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}/inputs",
+      "description": "Requires query parameters (dynamic_input_field_id) on a mutation; writes.json has no query-parameter dialect.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/retrospectives/{retrospective_id}/fields/{field_id}/inputs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-incidents-incident-id-team-assignments-team-assignment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/incidents/{incident_id}/team_assignments/{team_assignment_id}",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/incidents/{incident_id}/team_assignments/{team_assignment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-metrics-milestone-funnel",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/milestone_funnel",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/milestone_funnel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-metrics-mttx",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/mttx",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/mttx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-metrics-ticket-funnel",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/ticket_funnel",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/ticket_funnel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-noauth-ping",
+      "kind": "rest_read",
+      "summary": "GET /v1/noauth/ping",
+      "description": "Connectivity health endpoint; connector health is covered by the declarative check request.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/noauth/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.put.v1-nunc-connections-nunc-connection-id-images-type",
+      "kind": "rest_write",
+      "summary": "PUT /v1/nunc_connections/{nunc_connection_id}/images/{type}",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/images/{type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-nunc-connections-nunc-connection-id-subscribers",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/nunc_connections/{nunc_connection_id}/subscribers",
+      "description": "Requires query parameters (subscriber_ids) on a mutation; writes.json has no query-parameter dialect.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/nunc_connections/{nunc_connection_id}/subscribers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-ping",
+      "kind": "rest_read",
+      "summary": "GET /v1/ping",
+      "description": "Connectivity health endpoint; connector health is covered by the declarative check request.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-runbook-audits",
+      "kind": "rest_read",
+      "summary": "GET /v1/runbook_audits",
+      "description": "Documented as deprecated by FireHydrant; not exposed as a new connector capability.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/runbook_audits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-runbooks-executions-execution-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/runbooks/executions/{execution_id}",
+      "description": "Requires query parameters (reason) on a mutation; writes.json has no query-parameter dialect.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/runbooks/executions/{execution_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-scim-v2-groups",
+      "kind": "rest_read",
+      "summary": "GET /v1/scim/v2/Groups",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/scim/v2/Groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.post.v1-scim-v2-groups",
+      "kind": "rest_write",
+      "summary": "POST /v1/scim/v2/Groups",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/scim/v2/Groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-scim-v2-groups-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/scim/v2/Groups/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.put.v1-scim-v2-groups-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/scim/v2/Groups/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.patch.v1-scim-v2-groups-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/scim/v2/Groups/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-scim-v2-groups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/scim/v2/Groups/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/scim/v2/Groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-scim-v2-users",
+      "kind": "rest_read",
+      "summary": "GET /v1/scim/v2/Users",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/scim/v2/Users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.post.v1-scim-v2-users",
+      "kind": "rest_write",
+      "summary": "POST /v1/scim/v2/Users",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/scim/v2/Users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-scim-v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/scim/v2/Users/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/scim/v2/Users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.put.v1-scim-v2-users-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/scim/v2/Users/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/scim/v2/Users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.patch.v1-scim-v2-users-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/scim/v2/Users/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/scim/v2/Users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.delete.v1-scim-v2-users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/scim/v2/Users/{id}",
+      "description": "SCIM provisioning endpoints require directory-administration scope and SCIM payload semantics outside this REST ETL connector.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/scim/v2/Users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-signals-analytics-shifts-export",
+      "kind": "rest_read",
+      "summary": "GET /v1/signals/analytics/shifts/export",
+      "description": "Export/download endpoint produces a file or asynchronous export artifact rather than a durable JSON resource stream.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/signals/analytics/shifts/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-signals-heartbeat-endpoints-addresses",
+      "kind": "rest_read",
+      "summary": "GET /v1/signals/heartbeat_endpoints/addresses",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/signals/heartbeat_endpoints/addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "firehydrant.get.v1-signals-heartbeat-endpoints-statuses",
+      "kind": "rest_read",
+      "summary": "GET /v1/signals/heartbeat_endpoints/statuses",
+      "description": "Endpoint uses multipart/form-data or file-like payloads that the JSON write dialect cannot represent.",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/signals/heartbeat_endpoints/statuses",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

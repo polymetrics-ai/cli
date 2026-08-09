@@ -1,10 +1,51 @@
 {
-  "api": "GNews API v4 (https://gnews.io/api/v4)",
+  "api": "GNews API v4 (https://gnews.io/api/v4); provider artifact version: GNews API v4 (live documentation)",
   "docs": "https://gnews.io/docs/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2-fan-out migration: the 2 legacy-parity read streams only (search, top_headlines); legacy ships no writes (capabilities.write is false).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 2 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: wave2-fan-out migration: the 2 legacy-parity read streams only (search, top_headlines); legacy ships no writes (capabilities.write is false).",
+  "artifacts": [
+    {
+      "id": "gnews-artifact-2026-08-09",
+      "url": "https://docs.gnews.io/",
+      "kind": "html_reference",
+      "version": "GNews API v4 (live documentation)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "59f1bee34f990b54fd271185c295a2e004ac957cb86f7d89b01b7682332c942b"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/search", "covered_by": { "stream": "search" } },
-    { "method": "GET", "path": "/top-headlines", "covered_by": { "stream": "top_headlines" } }
+    {
+      "method": "GET",
+      "path": "/search",
+      "provenance": {
+        "artifact": "gnews-artifact-2026-08-09",
+        "source_url": "https://docs.gnews.io/",
+        "source_kind": "html_reference",
+        "version": "GNews API v4 (live documentation)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "59f1bee34f990b54fd271185c295a2e004ac957cb86f7d89b01b7682332c942b",
+        "coordinate": "existing-complete-surface[GET /search]"
+      },
+      "covered_by": {
+        "stream": "search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/top-headlines",
+      "provenance": {
+        "artifact": "gnews-artifact-2026-08-09",
+        "source_url": "https://docs.gnews.io/",
+        "source_kind": "html_reference",
+        "version": "GNews API v4 (live documentation)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "59f1bee34f990b54fd271185c295a2e004ac957cb86f7d89b01b7682332c942b",
+        "coordinate": "existing-complete-surface[GET /top-headlines]"
+      },
+      "covered_by": {
+        "stream": "top_headlines"
+      }
+    }
   ]
 }

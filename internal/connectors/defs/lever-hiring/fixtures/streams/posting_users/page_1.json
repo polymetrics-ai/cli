@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/postings"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "posting_fixture_1"
+        }
+      ],
+      "hasNext": false,
+      "next": null
+    }
+  }
+}

@@ -1,17 +1,193 @@
 {
-  "api": "Survicate Data Export API v2 (https://data-api.survicate.com/v2)",
+  "api": "Survicate Data Export API v2 (https://data-api.survicate.com/v2); provider artifact version: Data Export API v2",
   "docs": "https://developers.survicate.com/data-export/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion: the Data Export API is a fixed, small, read-oriented surface (surveys, survey questions, responses, respondent attributes, GDPR personal-data) documented in full at developers.survicate.com/data-export/{survey,response,respondent,personal-data}. 3 read streams cover every list-shaped endpoint that has its own discovery path (surveys; survey_questions and responses fan out over every survey id). Respondent-scoped endpoints and the personal-data endpoints require a respondent_uuid/email obtained from an external source (there is no 'list all respondents' or 'list all emails' endpoint to fan out over), so they are excluded as requires_elevated_scope rather than modeled as streams. No write endpoints exist beyond the GDPR personal-data DELETE, which is excluded as destructive_admin.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 9 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: the Data Export API is a fixed, small, read-oriented surface (surveys, survey questions, responses, respondent attributes, GDPR personal-data) documented in full at developers.survicate.com/data-export/{survey,response,respondent,personal-data}. 3 read streams cover every list-shaped endpoint that has its own discovery path (surveys; survey_questions and responses fan out over every survey id). Respondent-scoped endpoints and the personal-data endpoints require a respondent_uuid/email obtained from an external source (there is no 'list all respondents' or 'list all emails' endpoint to fan out over), so they are excluded as requires_elevated_scope rather than modeled as streams. No write endpoints exist beyond the GDPR personal-data DELETE, which is excluded as destructive_admin.",
+  "artifacts": [
+    {
+      "id": "survicate-artifact-2026-08-09",
+      "url": "https://developers.survicate.com/data-export/",
+      "kind": "html_reference",
+      "version": "Data Export API v2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v2/surveys", "covered_by": { "stream": "surveys" } },
-    { "method": "GET", "path": "/v2/surveys/{survey_id}", "excluded": { "category": "duplicate_of", "reason": "single-survey detail; every field this endpoint returns (id, type, name, created_at, enabled, responses, launch, plus author/folder/first_response_at/last_response_at) is a superset of the surveys list stream's per-item object already covered by that stream, keyed by the same id" } },
-    { "method": "GET", "path": "/v2/surveys/{survey_id}/questions", "covered_by": { "stream": "survey_questions" } },
-    { "method": "GET", "path": "/v2/surveys/{survey_id}/responses", "covered_by": { "stream": "responses" } },
-    { "method": "GET", "path": "/v2/surveys/{survey_id}/responses/{response_uuid}", "excluded": { "category": "duplicate_of", "reason": "single-response detail; identical record shape to the responses stream's per-item object, already covered by that stream" } },
-    { "method": "GET", "path": "/v2/respondents/{respondent_uuid}/attributes", "excluded": { "category": "requires_elevated_scope", "reason": "no endpoint exists to enumerate respondent_uuid values across a workspace; a lone attributes-by-id GET with no discovery path is not a syncable stream without a respondent_uuid already in hand from an external source (e.g. one embedded in a responses-stream record)" } },
-    { "method": "GET", "path": "/v2/respondents/{respondent_uuid}/responses", "excluded": { "category": "requires_elevated_scope", "reason": "same respondent_uuid discovery gap as the attributes endpoint above; also a duplicate record shape of the survey-scoped responses stream, which already yields every response for every discoverable survey" } },
-    { "method": "GET", "path": "/v2/personal-data", "excluded": { "category": "requires_elevated_scope", "reason": "GDPR personal-data counters lookup keyed by a single email address supplied by the caller; not a list-shaped/discoverable resource and has no natural incremental or full-refresh catalog semantics" } },
-    { "method": "DELETE", "path": "/v2/personal-data", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes all survey responses, respondent records, and connected-service (Insights Hub) data for the given email address; a GDPR-erasure action, never a reverse-ETL-safe mutation" } }
+    {
+      "method": "GET",
+      "path": "/v2/personal-data",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/personal-data]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GDPR personal-data counters lookup keyed by a single email address supplied by the caller; not a list-shaped/discoverable resource and has no natural incremental or full-refresh catalog semantics",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/personal-data",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[DELETE /v2/personal-data]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "irreversibly deletes all survey responses, respondent records, and connected-service (Insights Hub) data for the given email address; a GDPR-erasure action, never a reverse-ETL-safe mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/respondents/{respondent_uuid}/attributes",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/respondents/{respondent_uuid}/attributes]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "no endpoint exists to enumerate respondent_uuid values across a workspace; a lone attributes-by-id GET with no discovery path is not a syncable stream without a respondent_uuid already in hand from an external source (e.g. one embedded in a responses-stream record)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/respondents/{respondent_uuid}/responses",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/respondents/{respondent_uuid}/responses]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "same respondent_uuid discovery gap as the attributes endpoint above; also a duplicate record shape of the survey-scoped responses stream, which already yields every response for every discoverable survey",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surveys",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/surveys]"
+      },
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surveys/{survey_id}",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/surveys/{survey_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-survey detail; every field this endpoint returns (id, type, name, created_at, enabled, responses, launch, plus author/folder/first_response_at/last_response_at) is a superset of the surveys list stream's per-item object already covered by that stream, keyed by the same id",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surveys/{survey_id}/questions",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/surveys/{survey_id}/questions]"
+      },
+      "covered_by": {
+        "stream": "survey_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surveys/{survey_id}/responses",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/surveys/{survey_id}/responses]"
+      },
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/surveys/{survey_id}/responses/{response_uuid}",
+      "provenance": {
+        "artifact": "survicate-artifact-2026-08-09",
+        "source_url": "https://developers.survicate.com/data-export/",
+        "source_kind": "html_reference",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164",
+        "coordinate": "existing-complete-surface[GET /v2/surveys/{survey_id}/responses/{response_uuid}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-response detail; identical record shape to the responses stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

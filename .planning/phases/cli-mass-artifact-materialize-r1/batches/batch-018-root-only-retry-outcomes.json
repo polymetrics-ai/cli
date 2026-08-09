@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "batch": "batch-018-root-only-retry",
+  "manifest": "batches/batch-018-reference-machine-manifest.json",
+  "outcomes": [
+    {
+      "connector": "plausible",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-018-root-only-retry-materialize.json"
+    },
+    {
+      "connector": "pypi",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-018-root-only-retry-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://warehouse.pypa.io/api-reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

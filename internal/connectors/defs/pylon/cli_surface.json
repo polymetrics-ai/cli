@@ -1,0 +1,3572 @@
+{
+  "tagline": "Run Pylon's declared streams and reverse-ETL actions.",
+  "usage": "pm pylon \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account list",
+        "account relationships list",
+        "accounts list",
+        "activity types list",
+        "article list",
+        "articles list",
+        "audit logs list",
+        "call recording list",
+        "collection list",
+        "collections list",
+        "contact list",
+        "contacts list",
+        "custom field list",
+        "custom fields list",
+        "custom object list",
+        "custom objects list",
+        "feature request list",
+        "issue followers list",
+        "issue list",
+        "issue messages list",
+        "issue statuses list",
+        "issue threads list",
+        "issue voice calls list",
+        "issues list",
+        "knowledge base list",
+        "knowledge bases list",
+        "macro groups list",
+        "macro list",
+        "macros list",
+        "me list",
+        "messages list",
+        "milestone list",
+        "project list",
+        "survey list",
+        "survey responses list",
+        "surveys list",
+        "tag list",
+        "tags list",
+        "task comments list",
+        "task list",
+        "tasks list",
+        "team list",
+        "teams list",
+        "ticket form list",
+        "ticket forms list",
+        "training data detail list",
+        "training data list",
+        "user list",
+        "user roles list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add issue followers apply",
+        "api delete macros id",
+        "api post accounts id files",
+        "api post attachments",
+        "api post feature-requests merge",
+        "api post training-data upload",
+        "create account apply",
+        "create account highlight apply",
+        "create account relationship apply",
+        "create activity apply",
+        "create article apply",
+        "create collection apply",
+        "create contact apply",
+        "create custom field apply",
+        "create custom object apply",
+        "create feature request apply",
+        "create issue ai response apply",
+        "create issue apply",
+        "create issue note apply",
+        "create issue reply apply",
+        "create issue thread apply",
+        "create macro apply",
+        "create milestone apply",
+        "create project apply",
+        "create route redirect apply",
+        "create tag apply",
+        "create task apply",
+        "create task comment apply",
+        "create team apply",
+        "create training data apply",
+        "delete account apply",
+        "delete account highlight apply",
+        "delete account relationship apply",
+        "delete article apply",
+        "delete call recording apply",
+        "delete collection apply",
+        "delete contact apply",
+        "delete custom object apply",
+        "delete feature request apply",
+        "delete issue apply",
+        "delete message apply",
+        "delete milestone apply",
+        "delete project apply",
+        "delete tag apply",
+        "delete task apply",
+        "delete task comment apply",
+        "delete training data documents apply",
+        "import contact apply",
+        "import issue apply",
+        "import messages apply",
+        "link external issue apply",
+        "merge accounts apply",
+        "redact message apply",
+        "request article review apply",
+        "search accounts apply",
+        "search audit logs apply",
+        "search call recordings apply",
+        "search contacts apply",
+        "search custom objects apply",
+        "search feature requests apply",
+        "search issues apply",
+        "search projects apply",
+        "search surveys apply",
+        "search tasks apply",
+        "search users apply",
+        "set feature request portal visibility apply",
+        "snooze issue apply",
+        "update account apply",
+        "update account highlight apply",
+        "update accounts apply",
+        "update article apply",
+        "update call recording apply",
+        "update collection apply",
+        "update contact apply",
+        "update custom field apply",
+        "update custom object apply",
+        "update custom objects apply",
+        "update feature request apply",
+        "update issue apply",
+        "update macro apply",
+        "update milestone apply",
+        "update project apply",
+        "update tag apply",
+        "update task apply",
+        "update task comment apply",
+        "update team apply",
+        "update user apply",
+        "upload training data file content apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account list",
+      "summary": "Run the account ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon account list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "account relationships list",
+      "summary": "Run the account relationships ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_relationships",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon account relationships list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/relationships"
+        }
+      ]
+    },
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ]
+    },
+    {
+      "path": "activity types list",
+      "summary": "Run the activity types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_types",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon activity types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activity-types"
+        }
+      ]
+    },
+    {
+      "path": "add issue followers apply",
+      "summary": "Plan and execute the add issue followers reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_issue_followers",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon add issue followers apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/followers"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/followers; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete macros id",
+      "summary": "Documented DELETE /macros/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon api delete macros id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/macros/{id}"
+        }
+      ],
+      "operation": "pylon.delete.macros-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post accounts id files",
+      "summary": "Documented POST /accounts/{id}/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon api post accounts id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{id}/files"
+        }
+      ],
+      "operation": "pylon.post.accounts-id-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post attachments",
+      "summary": "Documented POST /attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon api post attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "operation": "pylon.post.attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post feature-requests merge",
+      "summary": "Documented POST /feature-requests/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon api post feature-requests merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feature-requests/merge"
+        }
+      ],
+      "operation": "pylon.post.feature-requests-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post training-data upload",
+      "summary": "Documented POST /training-data/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon api post training-data upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/training-data/upload"
+        }
+      ],
+      "operation": "pylon.post.training-data-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "article list",
+      "summary": "Run the article ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "article",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon article list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases/{id}/articles/{article_id}"
+        }
+      ]
+    },
+    {
+      "path": "articles list",
+      "summary": "Run the articles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "articles",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon articles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases/{id}/articles"
+        }
+      ]
+    },
+    {
+      "path": "audit logs list",
+      "summary": "Run the audit logs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_logs",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon audit logs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audit-logs"
+        }
+      ]
+    },
+    {
+      "path": "call recording list",
+      "summary": "Run the call recording ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_recording",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon call recording list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/call-recordings/{id}"
+        }
+      ]
+    },
+    {
+      "path": "collection list",
+      "summary": "Run the collection ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon collection list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases/{id}/collections/{collection_id}"
+        }
+      ]
+    },
+    {
+      "path": "collections list",
+      "summary": "Run the collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collections",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases/{id}/collections"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "Run the contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create account apply",
+      "summary": "Plan and execute the create account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts"
+        }
+      ],
+      "risk": "external Pylon POST /accounts; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create account highlight apply",
+      "summary": "Plan and execute the create account highlight reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account_highlight",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "content_html",
+          "type": "string",
+          "summary": "Required content html record field.",
+          "maps_to": "record.content_html",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create account highlight apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{account_id}/highlights"
+        }
+      ],
+      "risk": "external Pylon POST /accounts/{account_id}/highlights; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create account relationship apply",
+      "summary": "Plan and execute the create account relationship reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_account_relationship",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "related_object_id",
+          "type": "string",
+          "summary": "Required related object id record field.",
+          "maps_to": "record.related_object_id",
+          "required": true
+        },
+        {
+          "name": "relationship_type",
+          "type": "string",
+          "summary": "Required relationship type record field.",
+          "maps_to": "record.relationship_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create account relationship apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{account_id}/relationship"
+        }
+      ],
+      "risk": "external Pylon POST /accounts/{account_id}/relationship; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create activity apply",
+      "summary": "Plan and execute the create activity reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_activity",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Required slug record field.",
+          "maps_to": "record.slug",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create activity apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/{id}/activities"
+        }
+      ],
+      "risk": "external Pylon POST /accounts/{id}/activities; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create article apply",
+      "summary": "Plan and execute the create article reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_article",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "author_user_id",
+          "type": "string",
+          "summary": "Required author user id record field.",
+          "maps_to": "record.author_user_id",
+          "required": true
+        },
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create article apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/knowledge-bases/{id}/articles"
+        }
+      ],
+      "risk": "external Pylon POST /knowledge-bases/{id}/articles; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create collection apply",
+      "summary": "Plan and execute the create collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_collection",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/knowledge-bases/{id}/collections"
+        }
+      ],
+      "risk": "external Pylon POST /knowledge-bases/{id}/collections; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "external Pylon POST /contacts; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create custom field apply",
+      "summary": "Plan and execute the create custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_field",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "object_type",
+          "type": "string",
+          "summary": "Required object type record field.",
+          "maps_to": "record.object_type",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom-fields"
+        }
+      ],
+      "risk": "external Pylon POST /custom-fields; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create custom object apply",
+      "summary": "Plan and execute the create custom object reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_object",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "custom_object_type",
+          "type": "string",
+          "summary": "Required custom object type record field.",
+          "maps_to": "record.custom_object_type",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create custom object apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom-objects/{type}"
+        }
+      ],
+      "risk": "external Pylon POST /custom-objects/{type}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create feature request apply",
+      "summary": "Plan and execute the create feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_feature_request",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feature-requests"
+        }
+      ],
+      "risk": "external Pylon POST /feature-requests; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create issue ai response apply",
+      "summary": "Plan and execute the create issue ai response reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue_ai_response",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "ai_agent_id",
+          "type": "string",
+          "summary": "Required ai agent id record field.",
+          "maps_to": "record.ai_agent_id",
+          "required": true
+        },
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create issue ai response apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/ai-response"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/ai-response; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create issue apply",
+      "summary": "Plan and execute the create issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues"
+        }
+      ],
+      "risk": "external Pylon POST /issues; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create issue note apply",
+      "summary": "Plan and execute the create issue note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue_note",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create issue note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/note"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/note; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create issue reply apply",
+      "summary": "Plan and execute the create issue reply reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue_reply",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        },
+        {
+          "name": "message_id",
+          "type": "string",
+          "summary": "Required message id record field.",
+          "maps_to": "record.message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create issue reply apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/reply"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/reply; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create issue thread apply",
+      "summary": "Plan and execute the create issue thread reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue_thread",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create issue thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/threads"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/threads; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create macro apply",
+      "summary": "Plan and execute the create macro reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_macro",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "macro_group_id",
+          "type": "string",
+          "summary": "Required macro group id record field.",
+          "maps_to": "record.macro_group_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "text_html",
+          "type": "string",
+          "summary": "Required text html record field.",
+          "maps_to": "record.text_html",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create macro apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/macros"
+        }
+      ],
+      "risk": "external Pylon POST /macros; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create milestone apply",
+      "summary": "Plan and execute the create milestone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_milestone",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create milestone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/milestones"
+        }
+      ],
+      "risk": "external Pylon POST /milestones; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create project apply",
+      "summary": "Plan and execute the create project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_project",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "risk": "external Pylon POST /projects; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create route redirect apply",
+      "summary": "Plan and execute the create route redirect reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_route_redirect",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "from_path",
+          "type": "string",
+          "summary": "Required from path record field.",
+          "maps_to": "record.from_path",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        },
+        {
+          "name": "object_id",
+          "type": "string",
+          "summary": "Required object id record field.",
+          "maps_to": "record.object_id",
+          "required": true
+        },
+        {
+          "name": "object_type",
+          "type": "string",
+          "summary": "Required object type record field.",
+          "maps_to": "record.object_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create route redirect apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/knowledge-bases/{id}/route-redirects"
+        }
+      ],
+      "risk": "external Pylon POST /knowledge-bases/{id}/route-redirects; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "object_type",
+          "type": "string",
+          "summary": "Required object type record field.",
+          "maps_to": "record.object_type",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "risk": "external Pylon POST /tags; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "risk": "external Pylon POST /tasks; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task comment apply",
+      "summary": "Plan and execute the create task comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task_comment",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon create task comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/{id}/comments"
+        }
+      ],
+      "risk": "external Pylon POST /tasks/{id}/comments; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/teams"
+        }
+      ],
+      "risk": "external Pylon POST /teams; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create training data apply",
+      "summary": "Plan and execute the create training data reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_training_data",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon create training data apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/training-data"
+        }
+      ],
+      "risk": "external Pylon POST /training-data; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "custom field list",
+      "summary": "Run the custom field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon custom field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields/{id}"
+        }
+      ]
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields"
+        }
+      ]
+    },
+    {
+      "path": "custom object list",
+      "summary": "Run the custom object ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_object",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon custom object list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-objects/{type}/{id}"
+        }
+      ]
+    },
+    {
+      "path": "custom objects list",
+      "summary": "Run the custom objects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_objects",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon custom objects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-objects/{type}"
+        }
+      ]
+    },
+    {
+      "path": "delete account apply",
+      "summary": "Plan and execute the delete account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_account",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accounts/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /accounts/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete account highlight apply",
+      "summary": "Plan and execute the delete account highlight reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_account_highlight",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "highlight_id",
+          "type": "string",
+          "summary": "Required highlight id record field.",
+          "maps_to": "record.highlight_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete account highlight apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accounts/{account_id}/highlights/{highlight_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /accounts/{account_id}/highlights/{highlight_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete account relationship apply",
+      "summary": "Plan and execute the delete account relationship reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_account_relationship",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "relationship_id",
+          "type": "string",
+          "summary": "Required relationship id record field.",
+          "maps_to": "record.relationship_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete account relationship apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accounts/{account_id}/relationships/{relationship_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /accounts/{account_id}/relationships/{relationship_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete article apply",
+      "summary": "Plan and execute the delete article reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_article",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "article_id",
+          "type": "string",
+          "summary": "Required article id record field.",
+          "maps_to": "record.article_id",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete article apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/knowledge-bases/{id}/articles/{article_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /knowledge-bases/{id}/articles/{article_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete call recording apply",
+      "summary": "Plan and execute the delete call recording reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_call_recording",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "call_recording_id",
+          "type": "string",
+          "summary": "Required call recording id record field.",
+          "maps_to": "record.call_recording_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete call recording apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/call-recordings/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /call-recordings/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete collection apply",
+      "summary": "Plan and execute the delete collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_collection",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "collection_id",
+          "type": "string",
+          "summary": "Required collection id record field.",
+          "maps_to": "record.collection_id",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/knowledge-bases/{id}/collections/{collection_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /knowledge-bases/{id}/collections/{collection_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /contacts/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete custom object apply",
+      "summary": "Plan and execute the delete custom object reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "custom_object_id",
+          "type": "string",
+          "summary": "Required custom object id record field.",
+          "maps_to": "record.custom_object_id",
+          "required": true
+        },
+        {
+          "name": "custom_object_type",
+          "type": "string",
+          "summary": "Required custom object type record field.",
+          "maps_to": "record.custom_object_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete custom object apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom-objects/{type}/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /custom-objects/{type}/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete feature request apply",
+      "summary": "Plan and execute the delete feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feature_request",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/feature-requests/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /feature-requests/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete issue apply",
+      "summary": "Plan and execute the delete issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/issues/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /issues/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete message apply",
+      "summary": "Plan and execute the delete message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        },
+        {
+          "name": "message_id",
+          "type": "string",
+          "summary": "Required message id record field.",
+          "maps_to": "record.message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/issues/{id}/messages/{message_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /issues/{id}/messages/{message_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete milestone apply",
+      "summary": "Plan and execute the delete milestone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_milestone",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "milestone_id",
+          "type": "string",
+          "summary": "Required milestone id record field.",
+          "maps_to": "record.milestone_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete milestone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/milestones/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /milestones/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete project apply",
+      "summary": "Plan and execute the delete project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_project",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /projects/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /tags/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /tasks/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task comment apply",
+      "summary": "Plan and execute the delete task comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task_comment",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "comment_id",
+          "type": "string",
+          "summary": "Required comment id record field.",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete task comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}/comments/{comment_id}"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /tasks/{id}/comments/{comment_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete training data documents apply",
+      "summary": "Plan and execute the delete training data documents reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_training_data_documents",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "training_data_id",
+          "type": "string",
+          "summary": "Required training data id record field.",
+          "maps_to": "record.training_data_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon delete training data documents apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/training-data/{id}/documents"
+        }
+      ],
+      "risk": "destructive external Pylon DELETE /training-data/{id}/documents; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "feature request list",
+      "summary": "Run the feature request ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_request",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon feature request list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/feature-requests/{id}"
+        }
+      ]
+    },
+    {
+      "path": "import contact apply",
+      "summary": "Plan and execute the import contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import_contact",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon import contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/import/contacts"
+        }
+      ],
+      "risk": "external Pylon POST /import/contacts; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "import issue apply",
+      "summary": "Plan and execute the import issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "import_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon import issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/import/issues"
+        }
+      ],
+      "risk": "external Pylon POST /import/issues; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "import messages apply",
+      "summary": "Plan and execute the import messages reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "import_messages",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon import messages apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/import/issues/{id}/messages"
+        }
+      ],
+      "risk": "external Pylon POST /import/issues/{id}/messages; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "issue followers list",
+      "summary": "Run the issue followers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_followers",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue followers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues/{id}/followers"
+        }
+      ]
+    },
+    {
+      "path": "issue list",
+      "summary": "Run the issue ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues/{id}"
+        }
+      ]
+    },
+    {
+      "path": "issue messages list",
+      "summary": "Run the issue messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_messages",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues/{id}/messages"
+        }
+      ]
+    },
+    {
+      "path": "issue statuses list",
+      "summary": "Run the issue statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_statuses",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issue-statuses"
+        }
+      ]
+    },
+    {
+      "path": "issue threads list",
+      "summary": "Run the issue threads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_threads",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue threads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues/{id}/threads"
+        }
+      ]
+    },
+    {
+      "path": "issue voice calls list",
+      "summary": "Run the issue voice calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_voice_calls",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issue voice calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues/{id}/voice-calls"
+        }
+      ]
+    },
+    {
+      "path": "issues list",
+      "summary": "Run the issues ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon issues list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues"
+        }
+      ]
+    },
+    {
+      "path": "knowledge base list",
+      "summary": "Run the knowledge base ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "knowledge_base",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon knowledge base list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases/{id}"
+        }
+      ]
+    },
+    {
+      "path": "knowledge bases list",
+      "summary": "Run the knowledge bases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "knowledge_bases",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon knowledge bases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge-bases"
+        }
+      ]
+    },
+    {
+      "path": "link external issue apply",
+      "summary": "Plan and execute the link external issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "link_external_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "external_issue_id",
+          "type": "string",
+          "summary": "Required external issue id record field.",
+          "maps_to": "record.external_issue_id",
+          "required": true
+        },
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "summary": "Required source record field.",
+          "maps_to": "record.source",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon link external issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/external-issues"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/external-issues; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "macro groups list",
+      "summary": "Run the macro groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "macro_groups",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon macro groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macro-groups"
+        }
+      ]
+    },
+    {
+      "path": "macro list",
+      "summary": "Run the macro ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "macro",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon macro list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros/{id}"
+        }
+      ]
+    },
+    {
+      "path": "macros list",
+      "summary": "Run the macros ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "macros",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon macros list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros"
+        }
+      ]
+    },
+    {
+      "path": "me list",
+      "summary": "Run the me ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "me",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon me list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ]
+    },
+    {
+      "path": "merge accounts apply",
+      "summary": "Plan and execute the merge accounts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "merge_accounts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon merge accounts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/merge"
+        }
+      ],
+      "risk": "destructive external Pylon POST /accounts/merge; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "messages list",
+      "summary": "Run the messages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon messages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "milestone list",
+      "summary": "Run the milestone ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "milestone",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon milestone list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/milestones/{id}"
+        }
+      ]
+    },
+    {
+      "path": "project list",
+      "summary": "Run the project ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon project list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}"
+        }
+      ]
+    },
+    {
+      "path": "redact message apply",
+      "summary": "Plan and execute the redact message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "redact_message",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        },
+        {
+          "name": "message_id",
+          "type": "string",
+          "summary": "Required message id record field.",
+          "maps_to": "record.message_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon redact message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/messages/{message_id}/redact"
+        }
+      ],
+      "risk": "destructive external Pylon POST /issues/{id}/messages/{message_id}/redact; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "request article review apply",
+      "summary": "Plan and execute the request article review reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "request_article_review",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "article_id",
+          "type": "string",
+          "summary": "Required article id record field.",
+          "maps_to": "record.article_id",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon request article review apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/knowledge-bases/{id}/articles/{article_id}/request-review"
+        }
+      ],
+      "risk": "external Pylon POST /knowledge-bases/{id}/articles/{article_id}/request-review; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search accounts apply",
+      "summary": "Plan and execute the search accounts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "search_accounts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search accounts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accounts/search"
+        }
+      ],
+      "risk": "external Pylon POST /accounts/search; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "search audit logs apply",
+      "summary": "Plan and execute the search audit logs reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_audit_logs",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search audit logs apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/audit-logs/search"
+        }
+      ],
+      "risk": "external Pylon POST /audit-logs/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search call recordings apply",
+      "summary": "Plan and execute the search call recordings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_call_recordings",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search call recordings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/call-recordings/search"
+        }
+      ],
+      "risk": "external Pylon POST /call-recordings/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search contacts apply",
+      "summary": "Plan and execute the search contacts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "search_contacts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search contacts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/search"
+        }
+      ],
+      "risk": "external Pylon POST /contacts/search; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "search custom objects apply",
+      "summary": "Plan and execute the search custom objects reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "search_custom_objects",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search custom objects apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom-objects/{type}/search"
+        }
+      ],
+      "risk": "external Pylon POST /custom-objects/{type}/search; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "search feature requests apply",
+      "summary": "Plan and execute the search feature requests reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_feature_requests",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search feature requests apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feature-requests/search"
+        }
+      ],
+      "risk": "external Pylon POST /feature-requests/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search issues apply",
+      "summary": "Plan and execute the search issues reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "search_issues",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search issues apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/search"
+        }
+      ],
+      "risk": "external Pylon POST /issues/search; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "search projects apply",
+      "summary": "Plan and execute the search projects reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_projects",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search projects apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/search"
+        }
+      ],
+      "risk": "external Pylon POST /projects/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search surveys apply",
+      "summary": "Plan and execute the search surveys reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_surveys",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search surveys apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/surveys/search"
+        }
+      ],
+      "risk": "external Pylon POST /surveys/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search tasks apply",
+      "summary": "Plan and execute the search tasks reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "search_tasks",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search tasks apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks/search"
+        }
+      ],
+      "risk": "external Pylon POST /tasks/search; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "search users apply",
+      "summary": "Plan and execute the search users reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "search_users",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon search users apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/search"
+        }
+      ],
+      "risk": "external Pylon POST /users/search; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "set feature request portal visibility apply",
+      "summary": "Plan and execute the set feature request portal visibility reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "set_feature_request_portal_visibility",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon set feature request portal visibility apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/feature-requests/{id}/set-portal-visibility"
+        }
+      ],
+      "risk": "external Pylon POST /feature-requests/{id}/set-portal-visibility; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "snooze issue apply",
+      "summary": "Plan and execute the snooze issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "snooze_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        },
+        {
+          "name": "snooze_until",
+          "type": "string",
+          "summary": "Required snooze until record field.",
+          "maps_to": "record.snooze_until",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon snooze issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/issues/{id}/snooze"
+        }
+      ],
+      "risk": "external Pylon POST /issues/{id}/snooze; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "survey list",
+      "summary": "Run the survey ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon survey list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/surveys/{id}"
+        }
+      ]
+    },
+    {
+      "path": "survey responses list",
+      "summary": "Run the survey responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_responses",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon survey responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/surveys/{id}/responses"
+        }
+      ]
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/surveys"
+        }
+      ]
+    },
+    {
+      "path": "tag list",
+      "summary": "Run the tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "task comments list",
+      "summary": "Run the task comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_comments",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon task comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}/comments"
+        }
+      ]
+    },
+    {
+      "path": "task list",
+      "summary": "Run the task ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon task list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "team list",
+      "summary": "Run the team ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon team list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{id}"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ]
+    },
+    {
+      "path": "ticket form list",
+      "summary": "Run the ticket form ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_form",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon ticket form list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket-forms/{id}"
+        }
+      ]
+    },
+    {
+      "path": "ticket forms list",
+      "summary": "Run the ticket forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_forms",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon ticket forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket-forms"
+        }
+      ]
+    },
+    {
+      "path": "training data detail list",
+      "summary": "Run the training data detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "training_data_detail",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon training data detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/training-data/{id}"
+        }
+      ]
+    },
+    {
+      "path": "training data list",
+      "summary": "Run the training data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "training_data",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon training data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/training-data"
+        }
+      ]
+    },
+    {
+      "path": "update account apply",
+      "summary": "Plan and execute the update account reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update account apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/accounts/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /accounts/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update account highlight apply",
+      "summary": "Plan and execute the update account highlight reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_account_highlight",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "account_id",
+          "type": "string",
+          "summary": "Required account id record field.",
+          "maps_to": "record.account_id",
+          "required": true
+        },
+        {
+          "name": "highlight_id",
+          "type": "string",
+          "summary": "Required highlight id record field.",
+          "maps_to": "record.highlight_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update account highlight apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/accounts/{account_id}/highlights/{highlight_id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /accounts/{account_id}/highlights/{highlight_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update accounts apply",
+      "summary": "Plan and execute the update accounts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_accounts",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon update accounts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/accounts"
+        }
+      ],
+      "risk": "external Pylon PATCH /accounts; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update article apply",
+      "summary": "Plan and execute the update article reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_article",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "article_id",
+          "type": "string",
+          "summary": "Required article id record field.",
+          "maps_to": "record.article_id",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update article apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/knowledge-bases/{id}/articles/{article_id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /knowledge-bases/{id}/articles/{article_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update call recording apply",
+      "summary": "Plan and execute the update call recording reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_call_recording",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "call_recording_id",
+          "type": "string",
+          "summary": "Required call recording id record field.",
+          "maps_to": "record.call_recording_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update call recording apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/call-recordings/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /call-recordings/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update collection apply",
+      "summary": "Plan and execute the update collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_collection",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "collection_id",
+          "type": "string",
+          "summary": "Required collection id record field.",
+          "maps_to": "record.collection_id",
+          "required": true
+        },
+        {
+          "name": "knowledge_base_id",
+          "type": "string",
+          "summary": "Required knowledge base id record field.",
+          "maps_to": "record.knowledge_base_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/knowledge-bases/{id}/collections/{collection_id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /knowledge-bases/{id}/collections/{collection_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/contacts/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /contacts/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update custom field apply",
+      "summary": "Plan and execute the update custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_field",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "custom_field_id",
+          "type": "string",
+          "summary": "Required custom field id record field.",
+          "maps_to": "record.custom_field_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/custom-fields/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /custom-fields/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update custom object apply",
+      "summary": "Plan and execute the update custom object reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_object",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "custom_object_id",
+          "type": "string",
+          "summary": "Required custom object id record field.",
+          "maps_to": "record.custom_object_id",
+          "required": true
+        },
+        {
+          "name": "custom_object_type",
+          "type": "string",
+          "summary": "Required custom object type record field.",
+          "maps_to": "record.custom_object_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update custom object apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/custom-objects/{type}/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /custom-objects/{type}/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update custom objects apply",
+      "summary": "Plan and execute the update custom objects reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_custom_objects",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon update custom objects apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/custom-objects/{type}"
+        }
+      ],
+      "risk": "external Pylon PATCH /custom-objects/{type}; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update feature request apply",
+      "summary": "Plan and execute the update feature request reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_feature_request",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "feature_request_id",
+          "type": "string",
+          "summary": "Required feature request id record field.",
+          "maps_to": "record.feature_request_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update feature request apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/feature-requests/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /feature-requests/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update issue apply",
+      "summary": "Plan and execute the update issue reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_issue",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "issue_id",
+          "type": "string",
+          "summary": "Required issue id record field.",
+          "maps_to": "record.issue_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update issue apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/issues/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /issues/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update macro apply",
+      "summary": "Plan and execute the update macro reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_macro",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "macro_id",
+          "type": "string",
+          "summary": "Required macro id record field.",
+          "maps_to": "record.macro_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update macro apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/macros/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /macros/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update milestone apply",
+      "summary": "Plan and execute the update milestone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_milestone",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "milestone_id",
+          "type": "string",
+          "summary": "Required milestone id record field.",
+          "maps_to": "record.milestone_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update milestone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/milestones/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /milestones/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update project apply",
+      "summary": "Plan and execute the update project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_project",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /projects/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tags/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /tags/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the update task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /tasks/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update task comment apply",
+      "summary": "Plan and execute the update task comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task_comment",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "body_html",
+          "type": "string",
+          "summary": "Required body html record field.",
+          "maps_to": "record.body_html",
+          "required": true
+        },
+        {
+          "name": "comment_id",
+          "type": "string",
+          "summary": "Required comment id record field.",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "string",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update task comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/{id}/comments/{comment_id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /tasks/{id}/comments/{comment_id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update team apply",
+      "summary": "Plan and execute the update team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "team_id",
+          "type": "string",
+          "summary": "Required team id record field.",
+          "maps_to": "record.team_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/teams/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /teams/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "flags": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pylon update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{id}"
+        }
+      ],
+      "risk": "external Pylon PATCH /users/{id}; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "upload training data file content apply",
+      "summary": "Plan and execute the upload training data file content reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_training_data_file_content",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon upload training data file content apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/training-data/upload-content"
+        }
+      ],
+      "risk": "external Pylon POST /training-data/upload-content; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ]
+    },
+    {
+      "path": "user roles list",
+      "summary": "Run the user roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_roles",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon user roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user-roles"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "examples": [
+        "pm pylon users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1625 @@
+{
+  "operations": [
+    {
+      "id": "google-classroom.get.v1-courses",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-aliases",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/aliases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-aliases",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/aliases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/aliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-aliases-alias",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/aliases/{alias}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/aliases/{alias}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-announcements",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/announcements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/announcements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-announcements",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/announcements",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/announcements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-announcements-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/announcements/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/announcements/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-announcements-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/announcements/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/announcements/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-announcements-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/announcements/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/announcements/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-announcements-id-modifyassignees",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/announcements/{id}:modifyAssignees",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/announcements/{id}:modifyAssignees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-announcements-itemid-addonattachments",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-announcements-itemid-addonattachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-announcements-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-announcements-itemid-addoncontext",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/announcements/{itemId}/addOnContext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/announcements/{itemId}/addOnContext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-rubric",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/rubric",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubric",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-rubrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-rubrics",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-coursework-courseworkid-rubrics-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/rubrics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-studentsubmissions",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-modifyattachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:modifyAttachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:modifyAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-reclaim",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:reclaim",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:reclaim",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-return",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:return",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:return",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-courseworkid-studentsubmissions-id-turnin",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:turnIn",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{courseWorkId}/studentSubmissions/{id}:turnIn",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-coursework-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/courseWork/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/courseWork/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-id-modifyassignees",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{id}:modifyAssignees",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{id}:modifyAssignees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-coursework-itemid-addonattachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-coursework-itemid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-coursework-itemid-addoncontext",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWork/{itemId}/addOnContext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWork/{itemId}/addOnContext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-courseworkmaterials",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWorkMaterials",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-courseworkmaterials",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWorkMaterials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-courseworkmaterials-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWorkMaterials/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-courseworkmaterials-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWorkMaterials/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-courseworkmaterials-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/courseWorkMaterials/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addonattachments",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-courseworkmaterials-itemid-addonattachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-courseworkmaterials-itemid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-courseworkmaterials-itemid-addoncontext",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnContext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/courseWorkMaterials/{itemId}/addOnContext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-gradingperiodsettings",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/gradingPeriodSettings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/gradingPeriodSettings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-gradingperiodsettings",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/gradingPeriodSettings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/gradingPeriodSettings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-posts-postid-addonattachments",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/posts/{postId}/addOnAttachments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-posts-postid-addonattachments-attachmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-posts-postid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-posts-postid-addonattachments-attachmentid-studentsubmissions-submissionid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnAttachments/{attachmentId}/studentSubmissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-posts-postid-addoncontext",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/posts/{postId}/addOnContext",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/posts/{postId}/addOnContext",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-studentgroups",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/studentGroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/studentGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-studentgroups",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/studentGroups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/studentGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-studentgroups-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/studentGroups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/studentGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-studentgroups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/studentGroups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/studentGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-studentgroups-studentgroupid-studentgroupmembers-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/studentGroups/{studentGroupId}/studentGroupMembers/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-students",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/students",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/students",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-students",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/students",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/students",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-students-userid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/students/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/students/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-students-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/students/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/students/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-teachers",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/teachers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/teachers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-teachers",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/teachers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/teachers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-teachers-userid",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/teachers/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/teachers/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-teachers-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/teachers/{userId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/teachers/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-topics",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/topics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-courses-courseid-topics",
+      "kind": "rest_write",
+      "summary": "POST /v1/courses/{courseId}/topics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/courses/{courseId}/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-courseid-topics-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{courseId}/topics/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{courseId}/topics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-courseid-topics-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{courseId}/topics/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{courseId}/topics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-courseid-topics-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{courseId}/topics/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{courseId}/topics/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-courses-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/courses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.put.v1-courses-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/courses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-courses-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/courses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-courses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/courses/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-invitations",
+      "kind": "rest_read",
+      "summary": "GET /v1/invitations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-invitations",
+      "kind": "rest_write",
+      "summary": "POST /v1/invitations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-invitations-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/invitations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/invitations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-invitations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/invitations/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/invitations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-invitations-id-accept",
+      "kind": "rest_write",
+      "summary": "POST /v1/invitations/{id}:accept",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/invitations/{id}:accept",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-registrations",
+      "kind": "rest_write",
+      "summary": "POST /v1/registrations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/registrations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-registrations-registrationid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/registrations/{registrationId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/registrations/{registrationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-userprofiles-studentid-guardianinvitations",
+      "kind": "rest_read",
+      "summary": "GET /v1/userProfiles/{studentId}/guardianInvitations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/userProfiles/{studentId}/guardianInvitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.post.v1-userprofiles-studentid-guardianinvitations",
+      "kind": "rest_write",
+      "summary": "POST /v1/userProfiles/{studentId}/guardianInvitations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/userProfiles/{studentId}/guardianInvitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-userprofiles-studentid-guardianinvitations-invitationid",
+      "kind": "rest_read",
+      "summary": "GET /v1/userProfiles/{studentId}/guardianInvitations/{invitationId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/userProfiles/{studentId}/guardianInvitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.patch.v1-userprofiles-studentid-guardianinvitations-invitationid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/userProfiles/{studentId}/guardianInvitations/{invitationId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/userProfiles/{studentId}/guardianInvitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-userprofiles-studentid-guardians",
+      "kind": "rest_read",
+      "summary": "GET /v1/userProfiles/{studentId}/guardians",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/userProfiles/{studentId}/guardians",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-userprofiles-studentid-guardians-guardianid",
+      "kind": "rest_read",
+      "summary": "GET /v1/userProfiles/{studentId}/guardians/{guardianId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/userProfiles/{studentId}/guardians/{guardianId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.delete.v1-userprofiles-studentid-guardians-guardianid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/userProfiles/{studentId}/guardians/{guardianId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/userProfiles/{studentId}/guardians/{guardianId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-classroom.get.v1-userprofiles-userid",
+      "kind": "rest_read",
+      "summary": "GET /v1/userProfiles/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/userProfiles/{userId}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

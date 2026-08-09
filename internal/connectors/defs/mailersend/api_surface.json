@@ -1,33 +1,2196 @@
 {
-  "api": "MailerSend API v1 (https://api.mailersend.com/v1)",
+  "api": "MailerSend API v1 (https://api.mailersend.com/v1); provider artifact version: 1.0.0-oas3.1 (OpenAPI 3.1.0)",
   "docs": "https://developers.mailersend.com/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B review of the MailerSend developer documentation. This bundle covers the legacy email source streams plus documented Email API/account list and analytics endpoints that fit the declarative JSON read dialect. ID-scoped details, transactional send/verification/SMS operations, exports, and account/configuration mutations are excluded with closed categories.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (97 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "mailersend-artifact-2026-08-09",
+      "url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/activity/{domain_id}", "covered_by": { "stream": "activity" } },
-    { "method": "GET", "path": "/analytics/date", "covered_by": { "stream": "analytics_by_date" } },
-    { "method": "GET", "path": "/analytics/country", "covered_by": { "stream": "analytics_country" } },
-    { "method": "GET", "path": "/analytics/ua-name", "covered_by": { "stream": "analytics_user_agents" } },
-    { "method": "GET", "path": "/analytics/ua-type", "covered_by": { "stream": "analytics_reading_environment" } },
-    { "method": "GET", "path": "/domains", "covered_by": { "stream": "domains" } },
-    { "method": "GET", "path": "/messages", "covered_by": { "stream": "messages" } },
-    { "method": "GET", "path": "/recipients", "covered_by": { "stream": "recipients" } },
-    { "method": "GET", "path": "/templates", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "/message-schedules", "covered_by": { "stream": "scheduled_messages" } },
-    { "method": "GET", "path": "/identities", "covered_by": { "stream": "sender_identities" } },
-    { "method": "GET", "path": "/inbound", "covered_by": { "stream": "inbound_routes" } },
-    { "method": "GET", "path": "/users", "covered_by": { "stream": "account_users" } },
-    { "method": "GET", "path": "/invites", "covered_by": { "stream": "invites" } },
-    { "method": "GET", "path": "/token", "covered_by": { "stream": "tokens" } },
-    { "method": "GET", "path": "/webhooks", "covered_by": { "stream": "webhooks" } },
-    { "method": "GET", "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}", "excluded": { "category": "duplicate_of", "reason": "Detail lookups return the same object families as covered list streams and require caller-supplied IDs or emails instead of producing independent collections." } },
-    { "method": "GET", "path": "/domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources", "excluded": { "category": "out_of_scope", "reason": "Domain subresources require per-domain fan-out and separate nested schemas outside the legacy domain/message/recipient record contract." } },
-    { "method": "GET", "path": "/smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources", "excluded": { "category": "requires_elevated_scope", "reason": "Account administration and monitoring endpoints require elevated account scopes beyond the default Email API source-read contract." } },
-    { "method": "GET", "path": "/email-verification lists/results and all /sms/* list/detail endpoints", "excluded": { "category": "out_of_scope", "reason": "Email verification and SMS resources use separate product surfaces/scopes and are outside the legacy MailerSend email source connector contract." } },
-    { "method": "POST", "path": "/email, /bulk-email, /sms and related send endpoints", "excluded": { "category": "requires_elevated_scope", "reason": "Transactional email/SMS send endpoints deliver messages to recipients and require explicit send approval semantics, not a generic reverse-ETL write." } },
-    { "method": "GET", "path": "/bulk-email/{bulk_email_id}", "excluded": { "category": "non_data_endpoint", "reason": "Bulk-email status is an async job-status lookup for a send request, not a syncable business-object collection." } },
-    { "method": "POST", "path": "/templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints", "excluded": { "category": "requires_elevated_scope", "reason": "Template, identity, inbound-route, user/invite, token, webhook, and verification actions mutate account configuration or initiate verification workflows." } },
-    { "method": "PUT", "path": "/templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints", "excluded": { "category": "requires_elevated_scope", "reason": "Update endpoints mutate sending templates, identities, routes, users, tokens, webhooks, domain settings, or SMS configuration." } },
-    { "method": "DELETE", "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints", "excluded": { "category": "destructive_admin", "reason": "Delete/cancel endpoints remove account configuration, users/invites/tokens, sender identities, routes, webhooks, scheduled sends, or product data." } }
+    {
+      "method": "GET",
+      "path": "/activities/{activity_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/activities/{activity_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/activity/{domain_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/activity/{domain_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "activity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/country",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/analytics/country\"].get"
+      },
+      "covered_by": {
+        "stream": "analytics_country"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/date",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/analytics/date\"].get"
+      },
+      "covered_by": {
+        "stream": "analytics_by_date"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/ua-name",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/analytics/ua-name\"].get"
+      },
+      "covered_by": {
+        "stream": "analytics_user_agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/ua-type",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/analytics/ua-type\"].get"
+      },
+      "covered_by": {
+        "stream": "analytics_reading_environment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api-quota",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/api-quota\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bulk-email",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/bulk-email\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bulk-email/{bulk_email_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/bulk-email/{bulk_email_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Bulk-email status is an async job-status lookup for a send request, not a syncable business-object collection.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains\"].get"
+      },
+      "covered_by": {
+        "stream": "domains"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/domains",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/domains/{domain_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/dns-records",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/dns-records\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Domain subresources require per-domain fan-out and separate nested schemas outside the legacy domain/message/recipient record contract.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/recipients",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/recipients\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domain_id}/settings",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/settings\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/smtp-users",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/smtp-users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/smtp-users/{smtp_user_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/smtp-users/{smtp_user_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/smtp-users/{smtp_user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/{domain_id}/verify",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/domains/{domain_id}/verify\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email, /bulk-email, /sms and related send endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[POST /email, /bulk-email, /sms and related send endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Transactional email/SMS send endpoints deliver messages to recipients and require explicit send approval semantics, not a generic reverse-ETL write.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-verification",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email-verification",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-verification lists/results and all /sms/* list/detail endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /email-verification lists/results and all /sms/* list/detail endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Email verification and SMS resources use separate product surfaces/scopes and are outside the legacy MailerSend email source connector contract.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/email-verification/verify",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification/verify\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-verification/{email_verification_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification/{email_verification_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-verification/{email_verification_id}/results",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification/{email_verification_id}/results\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email-verification/{email_verification_id}/verify",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/email-verification/{email_verification_id}/verify\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/identities",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities\"].get"
+      },
+      "covered_by": {
+        "stream": "sender_identities"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/identities",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/identities/email/{client@email.com}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/email/{client@email.com}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/identities/email/{client@email.com}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/email/{client@email.com}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/identities/email/{client@email.com}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/email/{client@email.com}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/identities/{identity_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/{identity_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/identities/{identity_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/{identity_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/identities/{identity_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/identities/{identity_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/inbound\"].get"
+      },
+      "covered_by": {
+        "stream": "inbound_routes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inbound",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/inbound\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inbound/{inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/inbound/{inbound_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/inbound/{inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/inbound/{inbound_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/inbound/{inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/inbound/{inbound_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invites",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /invites]"
+      },
+      "covered_by": {
+        "stream": "invites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message-schedules",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/message-schedules\"].get"
+      },
+      "covered_by": {
+        "stream": "scheduled_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message-schedules/{message_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/message-schedules/{message_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/message-schedules/{message_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/message-schedules/{message_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/messages\"].get"
+      },
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/messages/{message_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recipients",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/recipients\"].get"
+      },
+      "covered_by": {
+        "stream": "recipients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/recipients/{recipient_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/recipients/{recipient_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/recipients/{recipient_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/recipients/{recipient_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-activity",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-activity\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-activity/{sms_message_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-activity/{sms_message_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-inbounds",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-inbounds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms-inbounds",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-inbounds\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-inbounds/{sms_inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-inbounds/{sms_inbound_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms-inbounds/{sms_inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-inbounds/{sms_inbound_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms-inbounds/{sms_inbound_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-inbounds/{sms_inbound_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-messages",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-messages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-messages/{sms_message_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-messages/{sms_message_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-numbers",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-numbers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-numbers/{sms_number_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-numbers/{sms_number_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms-numbers/{sms_number_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-numbers/{sms_number_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms-numbers/{sms_number_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-numbers/{sms_number_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-recipients",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-recipients\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-recipients/{sms_recipient_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-recipients/{sms_recipient_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms-recipients/{sms_recipient_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-recipients/{sms_recipient_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-webhooks",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms-webhooks",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms-webhooks/{sms_webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-webhooks/{sms_webhook_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/sms-webhooks/{sms_webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-webhooks/{sms_webhook_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms-webhooks/{sms_webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/sms-webhooks/{sms_webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Account administration and monitoring endpoints require elevated account scopes beyond the default Email API source-read contract.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions/blocklist",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/blocklist\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppressions/blocklist",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/blocklist\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppressions/blocklist",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/blocklist\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions/hard-bounces",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/hard-bounces\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppressions/hard-bounces",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/hard-bounces\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppressions/hard-bounces",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/hard-bounces\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions/spam-complaints",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/spam-complaints\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppressions/spam-complaints",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/spam-complaints\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppressions/spam-complaints",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/spam-complaints\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suppressions/unsubscribes",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/unsubscribes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/suppressions/unsubscribes",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/unsubscribes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/suppressions/unsubscribes",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/suppressions/unsubscribes\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/templates\"].get"
+      },
+      "covered_by": {
+        "stream": "templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[POST /templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Template, identity, inbound-route, user/invite, token, webhook, and verification actions mutate account configuration or initiate verification workflows.",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[PUT /templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update endpoints mutate sending templates, identities, routes, users, tokens, webhooks, domain settings, or SMS configuration.",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Detail lookups return the same object families as covered list streams and require caller-supplied IDs or emails instead of producing independent collections.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[DELETE /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete/cancel endpoints remove account configuration, users/invites/tokens, sender identities, routes, webhooks, scheduled sends, or product data.",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/token",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "existing-surface[GET /token]"
+      },
+      "covered_by": {
+        "stream": "tokens"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/token",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/token\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/token/{token_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/token/{token_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/token/{token_id}/settings",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/token/{token_id}/settings\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/users\"].get"
+      },
+      "covered_by": {
+        "stream": "account_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/users\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/users/{user_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/users/{user_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{user_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/users/{user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/webhooks\"].get"
+      },
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/webhooks/{webhook_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/webhooks/{webhook_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "mailersend-artifact-2026-08-09",
+        "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "21cb17bd4d57e1e09c74b76be309f6d527469dd764ffade79bedfc3efb09a621",
+        "coordinate": "paths[\"/webhooks/{webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

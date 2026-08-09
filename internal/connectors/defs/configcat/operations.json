@@ -1,0 +1,1324 @@
+{
+  "operations": [
+    {
+      "id": "configcat.post.v1-code-references",
+      "kind": "rest_write",
+      "summary": "POST /v1/code-references",
+      "description": "uploads CI/CD code-scanning references (which source files reference which flags); a developer-tooling ingestion surface, not CLM record data.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/code-references",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-code-references-delete-reports",
+      "kind": "rest_write",
+      "summary": "POST /v1/code-references/delete-reports",
+      "description": "deletes uploaded code-reference reports; deferred alongside code-reference upload.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/code-references/delete-reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-configs-configid-environments-environmentid-values",
+      "kind": "rest_write",
+      "summary": "POST /v1/configs/{configId}/environments/{environmentId}/values",
+      "description": "bulk-posts flag VALUE changes across every setting in a config+environment at once; same live-evaluation-safety reason as the single-flag-value exclusions above.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/configs/{configId}/environments/{environmentId}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-configs-configid-environments-environmentid-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v1/configs/{configId}/environments/{environmentId}/webhooks",
+      "description": "creates a webhook scoped to a specific config+environment (a variant creation path distinct from the covered webhooks/webhook read streams); write-side webhook creation deferred pending its own schema review.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/configs/{configId}/environments/{environmentId}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-environments-environmentid-settings-settingid-integrationlinks-integrationlinktype-key",
+      "kind": "rest_write",
+      "summary": "POST /v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+      "description": "creates a third-party integration link on a specific flag; deferred alongside the delete side.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-environments-environmentid-settings-settingid-integrationlinks-integrationlinktype-key",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+      "description": "third-party integration-link (e.g. Jira ticket) management on a specific flag; a narrow cross-tool wiring feature outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/environments/{environmentId}/settings/{settingId}/integrationLinks/{integrationLinkType}/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-environments-environmentid-settings-settingid-value",
+      "kind": "rest_read",
+      "summary": "GET /v1/environments/{environmentId}/settings/{settingId}/value",
+      "description": "an environment+setting-scoped alternate path for the same flag-value data excluded above; same live-evaluation-safety reason.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-environments-environmentid-settings-settingid-value",
+      "kind": "rest_write",
+      "summary": "PUT /v1/environments/{environmentId}/settings/{settingId}/value",
+      "description": "environment+setting-scoped flag-value write; same live-evaluation-safety reason as the settingKeyOrId path.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v1-environments-environmentid-settings-settingid-value",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/environments/{environmentId}/settings/{settingId}/value",
+      "description": "environment+setting-scoped flag-value write; same live-evaluation-safety reason as the settingKeyOrId path.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-integrationlink-integrationlinktype-key-details",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrationLink/{integrationLinkType}/{key}/details",
+      "description": "resolves integration-link detail metadata for a third-party key; a narrow cross-tool wiring feature, not core CLM/flag data.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrationLink/{integrationLinkType}/{key}/details",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-integrations-integrationid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/integrations/{integrationId}",
+      "description": "reconfigures a third-party integration connection; organization/product-admin configuration surface outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/integrations/{integrationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-integrations-integrationid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/integrations/{integrationId}",
+      "description": "deletes a configured third-party integration connection; organization/product-admin configuration surface outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/integrations/{integrationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-invitations-invitationid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/invitations/{invitationId}",
+      "description": "revokes a pending user invitation; an organization-admin user-provisioning action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/invitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-jira-connect",
+      "kind": "rest_write",
+      "summary": "POST /v1/jira/connect",
+      "description": "establishes an org-level Jira OAuth connection; an organization-admin integration-provisioning action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/jira/connect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-jira-environments-environmentid-settings-settingid-integrationlinks-key",
+      "kind": "rest_write",
+      "summary": "POST /v1/jira/environments/{environmentId}/settings/{settingId}/integrationLinks/{key}",
+      "description": "creates a Jira-specific integration link on a flag; deferred alongside the generic integration-link exclusions above.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/jira/environments/{environmentId}/settings/{settingId}/integrationLinks/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-organizations-organizationid-auditlogs",
+      "kind": "rest_read",
+      "summary": "GET /v1/organizations/{organizationId}/auditlogs",
+      "description": "organization-scoped audit-log listing, a broader-scoped variant of the same audit-log data the already-covered product-scoped audit_logs stream exposes; not modeled as a separate stream.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organizations/{organizationId}/auditlogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-organizations-organizationid-invitations",
+      "kind": "rest_read",
+      "summary": "GET /v1/organizations/{organizationId}/invitations",
+      "description": "pending organization-level invitations list; deferred pending its own schema review, a distinct user-provisioning surface from this connector's core CLM streams.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organizations/{organizationId}/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-organizations-organizationid-members-userid",
+      "kind": "rest_write",
+      "summary": "POST /v1/organizations/{organizationId}/members/{userId}",
+      "description": "updates an organization member's permissions; an organization-admin user-management action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organizations/{organizationId}/members/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-organizations-organizationid-members-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/organizations/{organizationId}/members/{userId}",
+      "description": "removes a member from the organization; an organization-admin user-management action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/organizations/{organizationId}/members/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-organizations-organizationid-organization-limitations",
+      "kind": "rest_read",
+      "summary": "GET /v1/organizations/{organizationId}/organization-limitations",
+      "description": "plan/usage-limitation metadata for the organization; deferred, a narrow supplementary read not yet reviewed for schema shape.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/organizations/{organizationId}/organization-limitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-organizations-organizationid-products",
+      "kind": "rest_write",
+      "summary": "POST /v1/organizations/{organizationId}/products",
+      "description": "creates a brand-new product within an organization (tenant-structure provisioning), an organization-admin action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organizations/{organizationId}/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-organizations-organizationid-proxy-profiles",
+      "kind": "rest_write",
+      "summary": "POST /v1/organizations/{organizationId}/proxy-profiles",
+      "description": "creates a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/organizations/{organizationId}/proxy-profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-permissions-permissiongroupid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/permissions/{permissionGroupId}",
+      "description": "updates a custom permission group's capability grants; a product-admin access-control configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/permissions/{permissionGroupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-permissions-permissiongroupid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/permissions/{permissionGroupId}",
+      "description": "deletes a custom permission group; a product-admin access-control configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/permissions/{permissionGroupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-products-productid",
+      "kind": "rest_read",
+      "summary": "GET /v1/products/{productId}",
+      "description": "single-product detail already enumerable via the covered products stream's own fan-out-free list; not modeled as a separate detail stream.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/products/{productId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-products-productid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/products/{productId}",
+      "description": "renames/reconfigures a product; deferred pending its own schema review, distinct from the config/environment-level create/update actions this pass models.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/products/{productId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-products-productid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/products/{productId}",
+      "description": "permanently deletes an entire ConfigCat product and every config/environment/flag within it; destructive beyond this pass's write scope (configs/environments/flags/tags only, not the product container itself).",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/products/{productId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-products-productid-integrations",
+      "kind": "rest_write",
+      "summary": "POST /v1/products/{productId}/integrations",
+      "description": "creates a new third-party integration connection; organization/product-admin configuration surface outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/products/{productId}/integrations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-products-productid-invitations",
+      "kind": "rest_read",
+      "summary": "GET /v1/products/{productId}/invitations",
+      "description": "pending product-level invitations list; same narrowing as the organization-level invitations list.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/products/{productId}/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-products-productid-members",
+      "kind": "rest_read",
+      "summary": "GET /v1/products/{productId}/members",
+      "description": "product-scoped member listing, a narrower variant of the already-covered organization-level members stream (every product member is also an organization member).",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/products/{productId}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-products-productid-members-invite",
+      "kind": "rest_write",
+      "summary": "POST /v1/products/{productId}/members/invite",
+      "description": "invites a new user into the product; a product-admin user-provisioning action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/products/{productId}/members/invite",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-products-productid-members-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/products/{productId}/members/{userId}",
+      "description": "removes a member from the product; a product-admin user-management action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/products/{productId}/members/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-products-productid-permissions",
+      "kind": "rest_write",
+      "summary": "POST /v1/products/{productId}/permissions",
+      "description": "creates a custom permission group; a product-admin access-control configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/products/{productId}/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-products-productid-preferences",
+      "kind": "rest_read",
+      "summary": "GET /v1/products/{productId}/preferences",
+      "description": "product-level preference settings (e.g. default reason-required/mandatory-tagging policy); deferred, a narrow supplementary read not yet reviewed for schema shape.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/products/{productId}/preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-products-productid-preferences",
+      "kind": "rest_write",
+      "summary": "POST /v1/products/{productId}/preferences",
+      "description": "updates product-level preference settings; a product-admin configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/products/{productId}/preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-products-productid-segments",
+      "kind": "rest_write",
+      "summary": "POST /v1/products/{productId}/segments",
+      "description": "creates a segment; deferred alongside update/delete for the same live-targeting-behavior concern, kept consistent (all three modeled together or none this pass).",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/products/{productId}/segments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-proxy-profiles-proxyprofileid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/proxy-profiles/{proxyProfileId}",
+      "description": "replaces a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/proxy-profiles/{proxyProfileId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v1-proxy-profiles-proxyprofileid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/proxy-profiles/{proxyProfileId}",
+      "description": "partially updates a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/proxy-profiles/{proxyProfileId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-proxy-profiles-proxyprofileid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/proxy-profiles/{proxyProfileId}",
+      "description": "deletes a ConfigCat Proxy deployment profile; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/proxy-profiles/{proxyProfileId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-proxy-profiles-proxyprofileid-sdk-keys",
+      "kind": "rest_read",
+      "summary": "GET /v1/proxy-profiles/{proxyProfileId}/sdk-keys",
+      "description": "SDK keys selected for a Proxy profile; a credential-adjacent listing tied to the excluded Proxy-profile write surface, not modeled this pass.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-proxy-profiles-proxyprofileid-sdk-keys-deselect",
+      "kind": "rest_write",
+      "summary": "POST /v1/proxy-profiles/{proxyProfileId}/sdk-keys/deselect",
+      "description": "modifies which SDK keys a Proxy profile serves; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/deselect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-proxy-profiles-proxyprofileid-sdk-keys-select",
+      "kind": "rest_write",
+      "summary": "POST /v1/proxy-profiles/{proxyProfileId}/sdk-keys/select",
+      "description": "modifies which SDK keys a Proxy profile serves; an infrastructure-configuration action outside this pass's write scope.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/proxy-profiles/{proxyProfileId}/sdk-keys/select",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v1-proxy-profiles-proxyprofileid-secret",
+      "kind": "rest_write",
+      "summary": "POST /v1/proxy-profiles/{proxyProfileId}/secret",
+      "description": "generates a new Proxy profile secret credential; a credential-generation action, never modeled as a connector write.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/proxy-profiles/{proxyProfileId}/secret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-segments-segmentid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/segments/{segmentId}",
+      "description": "updates a segment's comparison-rule targeting definition; deferred pending its own schema review -- a segment mutation, unlike this pass's flag-metadata mutations, changes live targeting behavior for every flag that references it.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/segments/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-segments-segmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/segments/{segmentId}",
+      "description": "deletes a segment; deferred alongside the update side, same live-targeting-behavior concern.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/segments/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v1-settings-settingid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/settings/{settingId}",
+      "description": "a partial-update variant of the already-covered update_flag (PUT) action; not modeled separately this pass.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/settings/{settingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-settings-settingid-code-references",
+      "kind": "rest_read",
+      "summary": "GET /v1/settings/{settingId}/code-references",
+      "description": "CI/CD code-scanning integration data (which source files reference this flag), a distinct developer-tooling surface unrelated to this connector's core CLM/flag-metadata streams.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/settings/{settingId}/code-references",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-settings-settingid-predefined-variations",
+      "kind": "rest_read",
+      "summary": "GET /v1/settings/{settingId}/predefined-variations",
+      "description": "predefined value/variation templates for a setting; deferred pending its own schema review, distinct from the setting metadata already covered.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/settings/{settingId}/predefined-variations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-settings-settingid-predefined-variations",
+      "kind": "rest_write",
+      "summary": "PUT /v1/settings/{settingId}/predefined-variations",
+      "description": "updates predefined variations; deferred alongside the read side.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/settings/{settingId}/predefined-variations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-settings-settingkeyorid-value",
+      "kind": "rest_read",
+      "summary": "GET /v1/settings/{settingKeyOrId}/value",
+      "description": "flag VALUE (per-environment targeting rules/rollout percentages actually served to SDKs) is a distinct, JSON-Patch/complex-targeting-rule shape from flag METADATA (name/hint/tags/order) this pass models; not modeled to avoid silently corrupting live flag evaluation logic for running applications.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-settings-settingkeyorid-value",
+      "kind": "rest_write",
+      "summary": "PUT /v1/settings/{settingKeyOrId}/value",
+      "description": "replaces a flag's evaluated value/targeting rules; deferred alongside the read side of flag-value data, for the same live-evaluation-safety reason.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v1-settings-settingkeyorid-value",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/settings/{settingKeyOrId}/value",
+      "description": "JSON-Patch-shaped partial update to a flag's value/targeting rules; deferred alongside the read side, for the same live-evaluation-safety reason.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-tags-tagid-settings",
+      "kind": "rest_read",
+      "summary": "GET /v1/tags/{tagId}/settings",
+      "description": "lists flags carrying a given tag, derivable by filtering the already-covered settings stream's own tags array; not modeled as a separate stream.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tags/{tagId}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v1-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "PUT /v1/webhooks/{webhookId}",
+      "description": "replaces an existing webhook's URL/headers/trigger config; deferred alongside webhook creation.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v1-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "PATCH /v1/webhooks/{webhookId}",
+      "description": "partially updates a webhook; deferred alongside webhook creation.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v1/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v1-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/webhooks/{webhookId}",
+      "description": "deletes a webhook; deferred alongside webhook creation.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v1-webhooks-webhookid-keys",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/{webhookId}/keys",
+      "description": "webhook HMAC signing key material; a credential-shaped value, not connector-relevant record data.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/{webhookId}/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v2-change-request-comments-commentid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/change-request-comments/{commentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/change-request-comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v2-change-request-comments-commentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/change-request-comments/{commentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/change-request-comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-change-requests-changerequestid",
+      "kind": "rest_read",
+      "summary": "GET /v2/change-requests/{changeRequestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/change-requests/{changeRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v2-change-requests-changerequestid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/change-requests/{changeRequestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/change-requests/{changeRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-apply",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/apply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/apply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-approve",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-claim-ownership",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/claim-ownership",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/claim-ownership",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-close",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/close",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/close",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-comments",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/comments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-change-requests-changerequestid-proposed-changes",
+      "kind": "rest_read",
+      "summary": "GET /v2/change-requests/{changeRequestId}/proposed-changes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/change-requests/{changeRequestId}/proposed-changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v2-change-requests-changerequestid-proposed-changes",
+      "kind": "rest_write",
+      "summary": "PUT /v2/change-requests/{changeRequestId}/proposed-changes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/change-requests/{changeRequestId}/proposed-changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.delete.v2-change-requests-changerequestid-proposed-changes-settingid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/change-requests/{changeRequestId}/proposed-changes/{settingId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/change-requests/{changeRequestId}/proposed-changes/{settingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-proposed-changes-settingid-resolve-conflicts",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/proposed-changes/{settingId}/resolve-conflicts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/proposed-changes/{settingId}/resolve-conflicts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-change-requests-changerequestid-remove-approval",
+      "kind": "rest_write",
+      "summary": "POST /v2/change-requests/{changeRequestId}/remove-approval",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/change-requests/{changeRequestId}/remove-approval",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-configs-configid-environments-environmentid-change-requests",
+      "kind": "rest_write",
+      "summary": "POST /v2/configs/{configId}/environments/{environmentId}/change-requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/configs/{configId}/environments/{environmentId}/change-requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-configs-configid-environments-environmentid-values",
+      "kind": "rest_read",
+      "summary": "GET /v2/configs/{configId}/environments/{environmentId}/values",
+      "description": "v2 variant of the already-covered config_setting_values read; not modeled as a separate stream (the v1 path is covered).",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/configs/{configId}/environments/{environmentId}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.post.v2-configs-configid-environments-environmentid-values",
+      "kind": "rest_write",
+      "summary": "POST /v2/configs/{configId}/environments/{environmentId}/values",
+      "description": "v2 variant of the bulk flag-value write already excluded at v1, same live-evaluation-safety reason.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/configs/{configId}/environments/{environmentId}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-environments-environmentid-settings-settingid-value",
+      "kind": "rest_read",
+      "summary": "GET /v2/environments/{environmentId}/settings/{settingId}/value",
+      "description": "v2 variant of the same excluded environment+setting-scoped flag-value data.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v2-environments-environmentid-settings-settingid-value",
+      "kind": "rest_write",
+      "summary": "PUT /v2/environments/{environmentId}/settings/{settingId}/value",
+      "description": "v2 variant of the same excluded environment+setting-scoped flag-value write.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v2-environments-environmentid-settings-settingid-value",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/environments/{environmentId}/settings/{settingId}/value",
+      "description": "v2 variant of the same excluded environment+setting-scoped flag-value write.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/environments/{environmentId}/settings/{settingId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-organizations-organizationid-auditlogs",
+      "kind": "rest_read",
+      "summary": "GET /v2/organizations/{organizationId}/auditlogs",
+      "description": "v2 variant of the same audit-log data; the v1 product-scoped audit_logs stream already covers this connector's audit-log surface.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/{organizationId}/auditlogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-organizations-organizationid-members",
+      "kind": "rest_read",
+      "summary": "GET /v2/organizations/{organizationId}/members",
+      "description": "v2 variant of the already-covered members stream; not modeled as a separate stream.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/{organizationId}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-products-productid-auditlogs",
+      "kind": "rest_read",
+      "summary": "GET /v2/products/{productId}/auditlogs",
+      "description": "v2 variant of the already-covered audit_logs stream; not modeled as a separate stream.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/products/{productId}/auditlogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-products-productid-change-requests",
+      "kind": "rest_read",
+      "summary": "GET /v2/products/{productId}/change-requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/products/{productId}/change-requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.get.v2-settings-settingkeyorid-value",
+      "kind": "rest_read",
+      "summary": "GET /v2/settings/{settingKeyOrId}/value",
+      "description": "v2 variant of the already-excluded flag-value read; same live-evaluation-safety reason as the v1 path.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.put.v2-settings-settingkeyorid-value",
+      "kind": "rest_write",
+      "summary": "PUT /v2/settings/{settingKeyOrId}/value",
+      "description": "v2 variant of the already-excluded flag-value write; same live-evaluation-safety reason as the v1 path.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "configcat.patch.v2-settings-settingkeyorid-value",
+      "kind": "rest_write",
+      "summary": "PATCH /v2/settings/{settingKeyOrId}/value",
+      "description": "v2 variant of the already-excluded flag-value write; same live-evaluation-safety reason as the v1 path.",
+      "source_url": "https://api.configcat.com/docs/v1/swagger.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/settings/{settingKeyOrId}/value",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

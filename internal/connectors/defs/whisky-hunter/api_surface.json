@@ -1,15 +1,105 @@
 {
-  "api": "Whisky Hunter public API (OpenAPI/Swagger 2.0 spec at https://whiskyhunter.net/api/?format=openapi)",
+  "api": "Whisky Hunter public API (OpenAPI/Swagger 2.0 spec at https://whiskyhunter.net/api/?format=openapi); provider artifact version: Swagger 2.0; Whisky Hunter API v1",
   "docs": "https://whiskyhunter.net/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion, re-confirmed against the live drf-yasg-generated OpenAPI 2.0 document (https://whiskyhunter.net/api/?format=openapi, fetched 2026-07-03) and every live JSON response it documents. The real Whisky Hunter public API publishes exactly 5 GET endpoints, all read-only and unauthenticated. This bundle covers all 5 and also restores the two legacy stream names (`auctions` and `distilleries`) as aliases over the same legacy paths so callers using the hand-written connector's stream names continue to receive the same raw records. There is no write capability of any kind.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited swagger artifact (5 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "whisky-hunter-artifact-2026-08-09",
+      "url": "https://whiskyhunter.net/api/?format=openapi",
+      "kind": "swagger",
+      "version": "2.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/auctions_data/", "covered_by": { "stream": "auctions" } },
-    { "method": "GET", "path": "/api/auctions_data/", "covered_by": { "stream": "auctions_data" } },
-    { "method": "GET", "path": "/api/auctions_info", "covered_by": { "stream": "auctions_info" } },
-    { "method": "GET", "path": "/api/distilleries_info/", "covered_by": { "stream": "distilleries" } },
-    { "method": "GET", "path": "/api/distilleries_info/", "covered_by": { "stream": "distilleries_info" } },
-    { "method": "GET", "path": "/api/auction_data/{slug}/", "covered_by": { "stream": "auction_data" } },
-    { "method": "GET", "path": "/api/distillery_data/{slug}/", "covered_by": { "stream": "distillery_data" } }
+    {
+      "method": "GET",
+      "path": "/api/auction_data/{slug}/",
+      "provenance": {
+        "artifact": "whisky-hunter-artifact-2026-08-09",
+        "source_url": "https://whiskyhunter.net/api/?format=openapi",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525",
+        "coordinate": "paths[\"/auction_data/{slug}/\"].get"
+      },
+      "covered_by": {
+        "stream": "auction_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/auctions_data/",
+      "provenance": {
+        "artifact": "whisky-hunter-artifact-2026-08-09",
+        "source_url": "https://whiskyhunter.net/api/?format=openapi",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525",
+        "coordinate": "paths[\"/auctions_data/\"].get"
+      },
+      "covered_by": {
+        "streams": [
+          "auctions",
+          "auctions_data"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/auctions_info",
+      "provenance": {
+        "artifact": "whisky-hunter-artifact-2026-08-09",
+        "source_url": "https://whiskyhunter.net/api/?format=openapi",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525",
+        "coordinate": "paths[\"/auctions_info\"].get"
+      },
+      "covered_by": {
+        "stream": "auctions_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/distilleries_info/",
+      "provenance": {
+        "artifact": "whisky-hunter-artifact-2026-08-09",
+        "source_url": "https://whiskyhunter.net/api/?format=openapi",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525",
+        "coordinate": "paths[\"/distilleries_info/\"].get"
+      },
+      "covered_by": {
+        "streams": [
+          "distilleries",
+          "distilleries_info"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/distillery_data/{slug}/",
+      "provenance": {
+        "artifact": "whisky-hunter-artifact-2026-08-09",
+        "source_url": "https://whiskyhunter.net/api/?format=openapi",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525",
+        "coordinate": "paths[\"/distillery_data/{slug}/\"].get"
+      },
+      "covered_by": {
+        "stream": "distillery_data"
+      }
+    }
   ]
 }

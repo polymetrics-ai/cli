@@ -1,19 +1,210 @@
 {
-  "api": "Campayn REST API v1 (https://<sub_domain>.campayn.com/api/v1)",
+  "api": "Campayn REST API v1 (https://\u003csub_domain\u003e.campayn.com/api/v1); provider artifact version: v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
   "docs": "https://github.com/nebojsac/Campayn-API (README.md + endpoints/{lists,contacts,forms,emails,reports,signup}.md, fetched 2026-07-04)",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion, re-confirmed against the live GitHub-hosted documentation (fetched 2026-07-04): the Campayn API's ENTIRE documented surface is 6 endpoint-doc pages covering lists/contacts/forms/emails/reports/signup. Every documented GET (list/detail) endpoint is now a stream; every documented, dialect-expressible mutation (unsubscribe, add contact, update contact) is now a writes.json action. The upstream README's own 'Writing through the API' and 'Dealing with failure' sections are literally marked 'TODO' by Campayn itself (not a Pass B scoping choice) - the only mutations that exist at all in the published docs are the 3 implemented here. 'Signup' (POST /signup, creating a brand-new Campayn ACCOUNT/tenant, not a data record) is explicitly documented as a privileged, separately-authorized call ('you are not authorized to use the signup API function' is the docs' own 'most likely error' example) and is excluded as requires_elevated_scope.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 11 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion, re-confirmed against the live GitHub-hosted documentation (fetched 2026-07-04): the Campayn API's ENTIRE documented surface is 6 endpoint-doc pages covering lists/contacts/forms/emails/reports/signup. Every documented GET (list/detail) endpoint is now a stream; every documented, dialect-expressible mutation (unsubscribe, add contact, update contact) is now a writes.json action. The upstream README's own 'Writing through the API' and 'Dealing with failure' sections are literally marked 'TODO' by Campayn itself (not a Pass B scoping choice) - the only mutations that exist at all in the published docs are the 3 implemented here. 'Signup' (POST /signup, creating a brand-new Campayn ACCOUNT/tenant, not a data record) is explicitly documented as a privileged, separately-authorized call ('you are not authorized to use the signup API function' is the docs' own 'most likely error' example) and is excluded as requires_elevated_scope.",
+  "artifacts": [
+    {
+      "id": "campayn-artifact-2026-08-09",
+      "url": "https://github.com/nebojsac/Campayn-API",
+      "kind": "html_reference",
+      "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/lists.json", "covered_by": { "stream": "lists" } },
-    { "method": "GET", "path": "/emails.json", "covered_by": { "stream": "emails" } },
-    { "method": "GET", "path": "/reports/calendar.json", "covered_by": { "stream": "reports" } },
-    { "method": "GET", "path": "/lists/{list_id}/forms.json", "covered_by": { "stream": "forms" } },
-    { "method": "GET", "path": "/lists/{list_id}/forms/{form_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-form detail; identical record shape to the forms stream's per-item object (id, contact_list_id, form_title, form_type, form_html, signup_count), already covered by that stream; the docs show no additional fields on the detail response" } },
-    { "method": "GET", "path": "/lists/{list_id}/contacts.json", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/contacts/{contact_id}.json", "excluded": { "category": "duplicate_of", "reason": "single-contact detail; the docs show it returns a superset of fields (title, company, address, country, city, state, zip, birthday, phones[], sites[], social[], custom_fields[]) versus the list endpoint's documented email/first_name/last_name/image_url subset only - modeling it as its own stream would require an id already discovered from the contacts stream and would emit a fundamentally different (richer) record shape for the same logical resource, which one schema-per-stream projection cannot express as a variant of the already-covered contacts stream without misrepresenting what the list variant actually returns" } },
-    { "method": "POST", "path": "/lists/{list_id}/contacts.json", "covered_by": { "write": "add_contact" } },
-    { "method": "PUT", "path": "/contacts/{contact_id}.json", "covered_by": { "write": "update_contact" } },
-    { "method": "POST", "path": "/lists/{list_id}/unsubscribe.json", "covered_by": { "write": "unsubscribe_contact" } },
-    { "method": "POST", "path": "/signup", "excluded": { "category": "requires_elevated_scope", "reason": "creates an entirely new Campayn account/tenant (not a data record within an existing account) and is documented as requiring separate, privileged API-key authorization from Campayn support; the docs' own 'most likely error' example shows this call rejected for unauthorized keys by default" } }
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /contacts/{contact_id}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-contact detail; the docs show it returns a superset of fields (title, company, address, country, city, state, zip, birthday, phones[], sites[], social[], custom_fields[]) versus the list endpoint's documented email/first_name/last_name/image_url subset only - modeling it as its own stream would require an id already discovered from the contacts stream and would emit a fundamentally different (richer) record shape for the same logical resource, which one schema-per-stream projection cannot express as a variant of the already-covered contacts stream without misrepresenting what the list variant actually returns",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[PUT /contacts/{contact_id}.json]"
+      },
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emails.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /emails.json]"
+      },
+      "covered_by": {
+        "stream": "emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /lists.json]"
+      },
+      "covered_by": {
+        "stream": "lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/contacts.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /lists/{list_id}/contacts.json]"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/contacts.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[POST /lists/{list_id}/contacts.json]"
+      },
+      "covered_by": {
+        "write": "add_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/forms.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /lists/{list_id}/forms.json]"
+      },
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lists/{list_id}/forms/{form_id}.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /lists/{list_id}/forms/{form_id}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-form detail; identical record shape to the forms stream's per-item object (id, contact_list_id, form_title, form_type, form_html, signup_count), already covered by that stream; the docs show no additional fields on the detail response",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lists/{list_id}/unsubscribe.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[POST /lists/{list_id}/unsubscribe.json]"
+      },
+      "covered_by": {
+        "write": "unsubscribe_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/calendar.json",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[GET /reports/calendar.json]"
+      },
+      "covered_by": {
+        "stream": "reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/signup",
+      "provenance": {
+        "artifact": "campayn-artifact-2026-08-09",
+        "source_url": "https://github.com/nebojsac/Campayn-API",
+        "source_kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8",
+        "coordinate": "existing-complete-surface[POST /signup]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates an entirely new Campayn account/tenant (not a data record within an existing account) and is documented as requiring separate, privileged API-key authorization from Campayn support; the docs' own 'most likely error' example shows this call rejected for unauthorized keys by default",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

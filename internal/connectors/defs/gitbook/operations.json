@@ -1,0 +1,189 @@
+{
+  "operations": [
+    {
+      "id": "gitbook.get.orgs-organizationid-ask-questions-stream",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/ask/questions/stream",
+      "description": "response media type is text/event-stream; the declarative reader extracts JSON records only",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/ask/questions/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-ask-stream",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/ask/stream",
+      "description": "response media type is text/event-stream; the declarative reader extracts JSON records only",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/ask/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-openapi-specslug-versions-latest-content-raw",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/openapi/{specSlug}/versions/latest/content/raw",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/openapi/{specSlug}/versions/latest/content/raw",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.post.orgs-organizationid-sites-siteid-agent-feedback",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{organizationId}/sites/{siteId}/agent-feedback",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{organizationId}/sites/{siteId}/agent-feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-sites-siteid-ask-questions",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/sites/{siteId}/ask/questions",
+      "description": "response media type is text/event-stream; the declarative reader extracts JSON records only",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/sites/{siteId}/ask/questions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.post.orgs-organizationid-sites-siteid-context-connections-sitecontextconnectionid-test",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{organizationId}/sites/{siteId}/context-connections/{siteContextConnectionId}/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.put.orgs-organizationid-sites-siteid-context-records",
+      "kind": "rest_write",
+      "summary": "PUT /orgs/{organizationId}/sites/{siteId}/context-records",
+      "description": "request body is a root JSON array; the declarative write engine builds object bodies from record fields and cannot emit an array root",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/orgs/{organizationId}/sites/{siteId}/context-records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.post.orgs-organizationid-sites-siteid-site-spaces-sitespaceid-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/duplicate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{organizationId}/sites/{siteId}/site-spaces/{siteSpaceId}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-sites-siteid-stats-findings",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/sites/{siteId}/stats/findings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/sites/{siteId}/stats/findings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.post.orgs-organizationid-sites-siteid-template",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{organizationId}/sites/{siteId}/template",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{organizationId}/sites/{siteId}/template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-styleguide-templates",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/styleguide-templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/styleguide-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gitbook.get.orgs-organizationid-styleguides",
+      "kind": "rest_read",
+      "summary": "GET /orgs/{organizationId}/styleguides",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.gitbook.com/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgs/{organizationId}/styleguides",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,2722 @@
+{
+  "operations": [
+    {
+      "id": "twitter.get.2-account-activity-subscriptions-count",
+      "kind": "rest_read",
+      "summary": "GET /2/account_activity/subscriptions/count",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/account_activity/subscriptions/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-account-activity-webhooks-webhook-id-subscriptions-all",
+      "kind": "rest_read",
+      "summary": "GET /2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-account-activity-webhooks-webhook-id-subscriptions-all",
+      "kind": "rest_write",
+      "summary": "POST /2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-account-activity-webhooks-webhook-id-subscriptions-all-list",
+      "kind": "rest_read",
+      "summary": "GET /2/account_activity/webhooks/{webhook_id}/subscriptions/all/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-account-activity-webhooks-webhook-id-subscriptions-user-id-all",
+      "kind": "rest_write",
+      "summary": "DELETE /2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-activity-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/activity/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/activity/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-activity-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /2/activity/subscriptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/activity/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-activity-subscriptions",
+      "kind": "rest_write",
+      "summary": "POST /2/activity/subscriptions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/activity/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-activity-subscriptions",
+      "kind": "rest_write",
+      "summary": "DELETE /2/activity/subscriptions",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/activity/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.put.2-activity-subscriptions-subscription-id",
+      "kind": "rest_write",
+      "summary": "PUT /2/activity/subscriptions/{subscription_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/2/activity/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-activity-subscriptions-subscription-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/activity/subscriptions/{subscription_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/activity/subscriptions/{subscription_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-articles-draft",
+      "kind": "rest_write",
+      "summary": "POST /2/articles/draft",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/articles/draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-articles-article-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /2/articles/{article_id}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/articles/{article_id}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-broadcasts",
+      "kind": "rest_read",
+      "summary": "GET /2/broadcasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/broadcasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-broadcasts-scheduled",
+      "kind": "rest_read",
+      "summary": "GET /2/broadcasts/scheduled",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/broadcasts/scheduled",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-broadcasts-scheduled",
+      "kind": "rest_write",
+      "summary": "POST /2/broadcasts/scheduled",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/broadcasts/scheduled",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-broadcasts-scheduled-id",
+      "kind": "rest_read",
+      "summary": "GET /2/broadcasts/scheduled/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/broadcasts/scheduled/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.put.2-broadcasts-scheduled-id",
+      "kind": "rest_write",
+      "summary": "PUT /2/broadcasts/scheduled/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/2/broadcasts/scheduled/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-broadcasts-scheduled-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/broadcasts/scheduled/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/broadcasts/scheduled/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-broadcasts-scheduled-id-live",
+      "kind": "rest_write",
+      "summary": "POST /2/broadcasts/scheduled/{id}/live",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/broadcasts/scheduled/{id}/live",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-broadcasts-id",
+      "kind": "rest_read",
+      "summary": "GET /2/broadcasts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/broadcasts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-broadcasts-id-chat",
+      "kind": "rest_write",
+      "summary": "POST /2/broadcasts/{id}/chat",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/broadcasts/{id}/chat",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-broadcasts-id-chat-mutes",
+      "kind": "rest_write",
+      "summary": "POST /2/broadcasts/{id}/chat/mutes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/broadcasts/{id}/chat/mutes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-broadcasts-id-chat-mutes-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/broadcasts/{id}/chat/mutes/{user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/broadcasts/{id}/chat/mutes/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-broadcasts-id-chat-message-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/broadcasts/{id}/chat/{message_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/broadcasts/{id}/chat/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-chat-conversations",
+      "kind": "rest_read",
+      "summary": "GET /2/chat/conversations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/chat/conversations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-group",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/group",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-group-initialize",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/group/initialize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/group/initialize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-chat-conversations-id",
+      "kind": "rest_read",
+      "summary": "GET /2/chat/conversations/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/chat/conversations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-chat-conversations-id-events",
+      "kind": "rest_read",
+      "summary": "GET /2/chat/conversations/{id}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/chat/conversations/{id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-keys",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/keys",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-members",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-messages-delete",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/messages/delete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/messages/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-read",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/read",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/read",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-conversations-id-typing",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/conversations/{id}/typing",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/conversations/{id}/typing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-media-upload-initialize",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/media/upload/initialize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/media/upload/initialize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-media-upload-id-append",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/media/upload/{id}/append",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/media/upload/{id}/append",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-chat-media-upload-id-finalize",
+      "kind": "rest_write",
+      "summary": "POST /2/chat/media/upload/{id}/finalize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/chat/media/upload/{id}/finalize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-chat-media-id-media-hash-key",
+      "kind": "rest_read",
+      "summary": "GET /2/chat/media/{id}/{media_hash_key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/chat/media/{id}/{media_hash_key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-communities-search",
+      "kind": "rest_read",
+      "summary": "GET /2/communities/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/communities/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-communities-id",
+      "kind": "rest_read",
+      "summary": "GET /2/communities/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/communities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-compliance-jobs",
+      "kind": "rest_read",
+      "summary": "GET /2/compliance/jobs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/compliance/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-compliance-jobs",
+      "kind": "rest_write",
+      "summary": "POST /2/compliance/jobs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/compliance/jobs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-compliance-jobs-id",
+      "kind": "rest_read",
+      "summary": "GET /2/compliance/jobs/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/compliance/jobs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-connections",
+      "kind": "rest_read",
+      "summary": "GET /2/connections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-connections",
+      "kind": "rest_write",
+      "summary": "DELETE /2/connections",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-connections-all",
+      "kind": "rest_write",
+      "summary": "DELETE /2/connections/all",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/connections/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-connections-endpoint-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/connections/{endpoint_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/connections/{endpoint_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-dm-conversations",
+      "kind": "rest_write",
+      "summary": "POST /2/dm_conversations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/dm_conversations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-dm-conversations-media-dm-id-media-id-resource-id",
+      "kind": "rest_read",
+      "summary": "GET /2/dm_conversations/media/{dm_id}/{media_id}/{resource_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/dm_conversations/media/{dm_id}/{media_id}/{resource_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-dm-conversations-with-participant-id-dm-events",
+      "kind": "rest_read",
+      "summary": "GET /2/dm_conversations/with/{participant_id}/dm_events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/dm_conversations/with/{participant_id}/dm_events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-dm-conversations-with-participant-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /2/dm_conversations/with/{participant_id}/messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/dm_conversations/with/{participant_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-dm-conversations-dm-conversation-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /2/dm_conversations/{dm_conversation_id}/messages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/dm_conversations/{dm_conversation_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-dm-conversations-id-dm-events",
+      "kind": "rest_read",
+      "summary": "GET /2/dm_conversations/{id}/dm_events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/dm_conversations/{id}/dm_events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-dm-events",
+      "kind": "rest_read",
+      "summary": "GET /2/dm_events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/dm_events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-dm-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /2/dm_events/{event_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/dm_events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-dm-events-event-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/dm_events/{event_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/dm_events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-likes-compliance-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/likes/compliance/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/likes/compliance/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-likes-firehose-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/likes/firehose/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/likes/firehose/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-likes-sample10-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/likes/sample10/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/likes/sample10/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-lists",
+      "kind": "rest_write",
+      "summary": "POST /2/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-lists-id",
+      "kind": "rest_read",
+      "summary": "GET /2/lists/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.put.2-lists-id",
+      "kind": "rest_write",
+      "summary": "PUT /2/lists/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/2/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-lists-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/lists/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-lists-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /2/lists/{id}/followers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/lists/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-lists-id-members",
+      "kind": "rest_read",
+      "summary": "GET /2/lists/{id}/members",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/lists/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-lists-id-members",
+      "kind": "rest_write",
+      "summary": "POST /2/lists/{id}/members",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/lists/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-lists-id-members-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/lists/{id}/members/{user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/lists/{id}/members/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-lists-id-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/lists/{id}/tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/lists/{id}/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-media",
+      "kind": "rest_read",
+      "summary": "GET /2/media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-media-analytics",
+      "kind": "rest_read",
+      "summary": "GET /2/media/analytics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/media/analytics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-metadata",
+      "kind": "rest_write",
+      "summary": "POST /2/media/metadata",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-subtitles",
+      "kind": "rest_write",
+      "summary": "POST /2/media/subtitles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/subtitles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-media-subtitles",
+      "kind": "rest_write",
+      "summary": "DELETE /2/media/subtitles",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/media/subtitles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-media-upload",
+      "kind": "rest_read",
+      "summary": "GET /2/media/upload",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/media/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-upload",
+      "kind": "rest_write",
+      "summary": "POST /2/media/upload",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-upload-initialize",
+      "kind": "rest_write",
+      "summary": "POST /2/media/upload/initialize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/upload/initialize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-upload-id-append",
+      "kind": "rest_write",
+      "summary": "POST /2/media/upload/{id}/append",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/upload/{id}/append",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-media-upload-id-finalize",
+      "kind": "rest_write",
+      "summary": "POST /2/media/upload/{id}/finalize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/media/upload/{id}/finalize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-media-media-key",
+      "kind": "rest_read",
+      "summary": "GET /2/media/{media_key}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/media/{media_key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-news-search",
+      "kind": "rest_read",
+      "summary": "GET /2/news/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/news/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-news-id",
+      "kind": "rest_read",
+      "summary": "GET /2/news/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/news/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-notes",
+      "kind": "rest_write",
+      "summary": "POST /2/notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-notes-evaluate",
+      "kind": "rest_write",
+      "summary": "POST /2/notes/evaluate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/notes/evaluate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-notes-search-notes-written",
+      "kind": "rest_read",
+      "summary": "GET /2/notes/search/notes_written",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/notes/search/notes_written",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-notes-search-posts-eligible-for-notes",
+      "kind": "rest_read",
+      "summary": "GET /2/notes/search/posts_eligible_for_notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/notes/search/posts_eligible_for_notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-notes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/notes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/notes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-openapi-json",
+      "kind": "rest_read",
+      "summary": "GET /2/openapi.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/openapi.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces",
+      "description": "/2/spaces is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces-by-creator-ids",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces/by/creator_ids",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces/by/creator_ids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces-search",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces-id",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces-id-buyers",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces/{id}/buyers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces/{id}/buyers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-spaces-id-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/spaces/{id}/tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/spaces/{id}/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-trends-by-woeid-woeid",
+      "kind": "rest_read",
+      "summary": "GET /2/trends/by/woeid/{woeid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/trends/by/woeid/{woeid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets",
+      "description": "/2/tweets is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-tweets",
+      "kind": "rest_write",
+      "summary": "POST /2/tweets",
+      "description": "/2/tweets is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-analytics",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/analytics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/analytics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-compliance-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/compliance/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/compliance/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-counts-all",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/counts/all",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/counts/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-counts-recent",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/counts/recent",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/counts/recent",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-firehose-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/firehose/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/firehose/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-firehose-stream-lang-en",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/firehose/stream/lang/en",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/firehose/stream/lang/en",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-firehose-stream-lang-ja",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/firehose/stream/lang/ja",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/firehose/stream/lang/ja",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-firehose-stream-lang-ko",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/firehose/stream/lang/ko",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/firehose/stream/lang/ko",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-firehose-stream-lang-pt",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/firehose/stream/lang/pt",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/firehose/stream/lang/pt",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-label-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/label/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/label/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-sample-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/sample/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/sample/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-sample10-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/sample10/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/sample10/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-search-all",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/search/all",
+      "description": "full-archive search requires Academic/Enterprise access tier, not exercised by legacy",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/search/all",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-search-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/search/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/search/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-search-stream-rules",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/search/stream/rules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/search/stream/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-tweets-search-stream-rules",
+      "kind": "rest_write",
+      "summary": "POST /2/tweets/search/stream/rules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/tweets/search/stream/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-search-stream-rules-counts",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/search/stream/rules/counts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/search/stream/rules/counts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-search-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/search/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/search/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-tweets-search-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "POST /2/tweets/search/webhooks/{webhook_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/tweets/search/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-tweets-search-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/tweets/search/webhooks/{webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/tweets/search/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-id",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-tweets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/tweets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/tweets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-id-liking-users",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/{id}/liking_users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/{id}/liking_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-id-quote-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/{id}/quote_tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/{id}/quote_tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-id-retweeted-by",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/{id}/retweeted_by",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/{id}/retweeted_by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-tweets-id-retweets",
+      "kind": "rest_read",
+      "summary": "GET /2/tweets/{id}/retweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/tweets/{id}/retweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.put.2-tweets-tweet-id-hidden",
+      "kind": "rest_write",
+      "summary": "PUT /2/tweets/{tweet_id}/hidden",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/2/tweets/{tweet_id}/hidden",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-usage-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/usage/tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/usage/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users",
+      "kind": "rest_read",
+      "summary": "GET /2/users",
+      "description": "/2/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-by",
+      "kind": "rest_read",
+      "summary": "GET /2/users/by",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-by-username-username",
+      "kind": "rest_read",
+      "summary": "GET /2/users/by/username/{username}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/by/username/{username}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-compliance-stream",
+      "kind": "rest_read",
+      "summary": "GET /2/users/compliance/stream",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/compliance/stream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-me",
+      "kind": "rest_read",
+      "summary": "GET /2/users/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-personalized-trends",
+      "kind": "rest_read",
+      "summary": "GET /2/users/personalized_trends",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/personalized_trends",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-public-keys",
+      "kind": "rest_read",
+      "summary": "GET /2/users/public_keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/public_keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-reposts-of-me",
+      "kind": "rest_read",
+      "summary": "GET /2/users/reposts_of_me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/reposts_of_me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-search",
+      "kind": "rest_read",
+      "summary": "GET /2/users/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-affiliates",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/affiliates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/affiliates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-blocking",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/blocking",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/blocking",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-bookmarks",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/bookmarks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/bookmarks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-bookmarks",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/bookmarks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/bookmarks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-bookmarks-folders",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/bookmarks/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/bookmarks/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-bookmarks-folders",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/bookmarks/folders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/bookmarks/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-bookmarks-folders-folder-id",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/bookmarks/folders/{folder_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/bookmarks/folders/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-id-bookmarks-tweet-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{id}/bookmarks/{tweet_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{id}/bookmarks/{tweet_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-dm-block",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/dm/block",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/dm/block",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-dm-unblock",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/dm/unblock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/dm/unblock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-followed-lists",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/followed_lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/followed_lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-followed-lists",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/followed_lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/followed_lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-id-followed-lists-list-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{id}/followed_lists/{list_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{id}/followed_lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-followers",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/followers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/followers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-following",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/following",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/following",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-following",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/following",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/following",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-liked-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/liked_tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/liked_tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-likes",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/likes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/likes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-id-likes-tweet-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{id}/likes/{tweet_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{id}/likes/{tweet_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-list-memberships",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/list_memberships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/list_memberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-mentions",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/mentions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/mentions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-muting",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/muting",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/muting",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-muting",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/muting",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/muting",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-owned-lists",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/owned_lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/owned_lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-pinned-lists",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/pinned_lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/pinned_lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-pinned-lists",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/pinned_lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/pinned_lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-id-pinned-lists-list-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{id}/pinned_lists/{list_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{id}/pinned_lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-public-keys",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/public_keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/public_keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-public-keys",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/public_keys",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/public_keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-users-id-retweets",
+      "kind": "rest_write",
+      "summary": "POST /2/users/{id}/retweets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/users/{id}/retweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-id-retweets-source-tweet-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{id}/retweets/{source_tweet_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{id}/retweets/{source_tweet_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-timelines-reverse-chronological",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/timelines/reverse_chronological",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/timelines/reverse_chronological",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-users-id-tweets",
+      "kind": "rest_read",
+      "summary": "GET /2/users/{id}/tweets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/users/{id}/tweets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-source-user-id-following-target-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{source_user_id}/following/{target_user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{source_user_id}/following/{target_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-users-source-user-id-muting-target-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/users/{source_user_id}/muting/{target_user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/users/{source_user_id}/muting/{target_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.get.2-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /2/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/2/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /2/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.post.2-webhooks-replay",
+      "kind": "rest_write",
+      "summary": "POST /2/webhooks/replay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/2/webhooks/replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.put.2-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /2/webhooks/{webhook_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/2/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "twitter.delete.2-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /2/webhooks/{webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.twitter.com/2/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/2/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

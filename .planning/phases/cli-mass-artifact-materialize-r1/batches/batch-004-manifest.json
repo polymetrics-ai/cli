@@ -1,0 +1,777 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 40,
+    "min_operations": 0,
+    "max_operations": 1000,
+    "criteria": "status=done; authoritative artifact_kind=openapi|swagger|openapi_fragments|postman|html_reference; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "google-webfonts",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+        "kind": "openapi",
+        "version": "Web Fonts Developer API v1; discovery revision 20260729",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/fonts/docs/developer_api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Web Fonts provider Discovery document and official Developer API reference",
+      "counting_note": "The live provider Discovery document contains one documented callable method: GET webfonts.list, which retrieves the current font list and is a read. Sort and filter parameters do not create additional operations.",
+      "processed_at": "2026-08-06T00:39:40Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "ip2whois",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.ip2whois.com/developers-api",
+        "kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.ip2whois.com/developers-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned IP2WHOIS Developers – Domain WHOIS REST API page",
+      "counting_note": "The provider's linked Domain WHOIS REST API reference documents one callable endpoint, GET https://api.ip2whois.com/v2, with required key and domain query parameters and optional response format. The site navigation separately names a Hosted Domains API, but the metadata-linked Domain WHOIS reference is the published API surface enumerated here.",
+      "processed_at": "2026-08-06T01:56:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "qualaroo",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://help.qualaroo.com/the-rest-reporting-api",
+        "kind": "html_reference",
+        "version": "Qualaroo REST Reporting API current help-center reference; last modified 2023-08-16",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://help.qualaroo.com/the-rest-reporting-api",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Qualaroo Help Center article is a current provider-owned REST Reporting API reference. It states that the REST API uses HTTP Basic Authentication, names the api.qualaroo.com/api/v1 endpoint, and explicitly instructs clients to send a GET request to the one responses route. A bounded unauthenticated request to that provider route returned HTTP 401 with a Basic authentication challenge, confirming the published access model without accessing data.",
+      "counting_note": "Qualaroo's current provider-published REST Reporting API article has one Endpoint section and one explicitly documented callable route: GET /api/v1/nudges/SURVEY_ID/responses.json. Its order, date-range, and pagination query examples are parameters on that same retrieval action, not separate operations. The Help Center's other API navigation entries document JavaScript/browser integrations or survey-link behavior rather than additional REST Reporting API method/path actions, so they are outside this read-only connector surface.",
+      "processed_at": "2026-08-06T14:19:30Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "gnews",
+      "operations_total": 2,
+      "operations_read": 2,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.gnews.io/",
+        "kind": "html_reference",
+        "version": "GNews API v4 (live documentation)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.gnews.io/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url redirects to the live provider documentation; its Get Started page and exhaustive Endpoints navigation",
+      "counting_note": "The provider's current systematic v4 documentation labels its exhaustive endpoint section “Two Powerful Endpoints” and the sidebar has exactly the Search Endpoint and Top Headlines Endpoint pages. Both are documented URL-query retrieval actions: GET /api/v4/search and GET /api/v4/top-headlines. Parameter variants are filters, not additional operations.",
+      "processed_at": "2026-08-06T03:10:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "gutendex",
+      "operations_total": 2,
+      "operations_read": 2,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://gutendex.com/",
+        "kind": "html_reference",
+        "version": "Gutendex API, live undated",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://gutendex.com/",
+      "auth_model": "none",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Gutendex documentation page",
+      "counting_note": "The provider's complete one-page reference documents two GET actions: /books for a filtered/paginated book list and /books/\u003cid\u003e for an individual book. The listed filters and sorts are query parameters, not separate operations.",
+      "processed_at": "2026-08-06T00:50:06Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "pypi",
+      "operations_total": 2,
+      "operations_read": 2,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.pypi.org/api/json/",
+        "kind": "html_reference",
+        "version": "PyPI-specific JSON API current Warehouse documentation",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://warehouse.pypa.io/api-reference/",
+      "auth_model": "none",
+      "access_model": "public",
+      "evidence_source": "PyPI's own Warehouse documentation directs non-XML-RPC API documentation to docs.pypi.org, where the current JSON API page explicitly labels itself PyPI-specific and enumerates its two Routes entries. A current pypi.org JSON release endpoint also responds as public JSON and advertises GET as its allowed method.",
+      "counting_note": "The provider's current PyPI-specific JSON API reference has exactly two Routes entries: GET /pypi/\u003cproject\u003e/json for latest project metadata and GET /pypi/\u003cproject\u003e/\u003cversion\u003e/json for a specified release. Both are public GET reads. The separate Index API and deprecated XML-RPC API are distinct API surfaces and were not mixed into this connector-named JSON API count.",
+      "processed_at": "2026-08-06T14:15:07Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "news-api",
+      "operations_total": 3,
+      "operations_read": 3,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://newsapi.org/docs/endpoints",
+        "kind": "html_reference",
+        "version": "News API v2",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://newsapi.org/docs",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-hosted News API v2 documentation and systematic Endpoints index, enumerated without credentials.",
+      "counting_note": "The provider's version-2 Endpoints index has exactly three endpoint pages: Everything, Top headlines, and Sources. Each provider page documents one GET method/path operation; query examples were normalized to their underlying paths, yielding GET /v2/everything, GET /v2/top-headlines, and GET /v2/top-headlines/sources.",
+      "processed_at": "2026-08-06T08:44:51Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "mailjet-sms",
+      "operations_total": 4,
+      "operations_read": 2,
+      "operations_write": 2,
+      "artifact": {
+        "url": "https://dev.mailjet.com/sms/reference/sms-messages/",
+        "kind": "html_reference",
+        "version": "SMS API v4",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://dev.mailjet.com/sms/reference/overview/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url; provider-hosted current Mailjet SMS Send Message and SMS Messages reference pages. The latter page’s embedded reference manifest lists all three SMS-message path/method entries.",
+      "counting_note": "The provider's current SMS reference has exactly two feature pages. Send Message documents POST /sms-send; SMS Messages’ embedded reference manifest enumerates GET /sms/export/{Job_ID}, POST /sms/export, and GET /sms/count. GET operations are reads and both POST actions send SMS or create an asynchronous export, so are writes. Inbound SMS/webhook events are not separately published as callable operations and are excluded.",
+      "processed_at": "2026-08-06T03:35:51Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "nytimes",
+      "operations_total": 4,
+      "operations_read": 4,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.nytimes.com/docs/most-popular-product/1/overview",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-published New York Times Developer Portal download-spec artifact, retrieved in-browser and parsed from its Swagger paths section without credentials.",
+      "counting_note": "The provider’s downloadable Swagger 2.0 Most Popular specification has four distinct GET operations: emailed articles, shared articles, shared articles by share type, and viewed articles. All are retrievals.",
+      "processed_at": "2026-08-06T09:04:24Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "plausible",
+      "operations_total": 4,
+      "operations_read": 4,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://plausible.io/docs/stats-api-v1",
+        "kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://plausible.io/docs/stats-api-v1",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Plausible's provider-owned current documentation links the legacy v1 reference from its Stats API v2 page. The v1 page itself is a complete method/path reference and was read without credentials.",
+      "counting_note": "The provider's complete legacy Stats API v1 reference explicitly enumerates four GET data endpoints: /api/v1/stats/realtime/visitors, /aggregate, /timeseries, and /breakdown. All four are read-only analytics queries. The same provider docs label v1 legacy and direct new integrations to the successor v2 single POST /api/v2/query endpoint; it is not mixed into this connector's expressly v1 API surface. The generic GET /api/health status check is infrastructure, not a Stats data operation.",
+      "processed_at": "2026-08-06T13:23:10Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "searxng",
+      "operations_total": 4,
+      "operations_read": 4,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.searxng.org/dev/search_api.html",
+        "kind": "html_reference",
+        "version": "2026.8.4+c63835bd2",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.searxng.org/dev/search_api.html",
+      "auth_model": "none",
+      "access_model": "public",
+      "evidence_source": "The active SearXNG project documentation labels the Search API version, lists all four method/path combinations, describes GET query parameters and POST form data, and identifies result formats. Its public example uses a deployment placeholder rather than a central hosted account or credential. No SearXNG instance, API request, credential, search query, search result, or other provider data was accessed.",
+      "counting_note": "SearXNG's official Search API reference explicitly enumerates GET /, GET /search, POST /, and POST /search. Both POST forms accept search parameters and return JSON, CSV, or RSS search results, so they are semantic reads. The documentation notes that a self-hosted instance may disable a requested output format; instance-specific deployment configuration is not converted into additional operations.",
+      "processed_at": "2026-08-06T17:16:29Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "buzzsprout",
+      "operations_total": 5,
+      "operations_read": 3,
+      "operations_write": 2,
+      "artifact": {
+        "url": "https://github.com/buzzsprout/buzzsprout-api",
+        "kind": "html_reference",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.buzzsprout.com/api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Buzzsprout API landing page and official Buzzsprout/buzzsprout-api repository README plus sections/episodes.md and sections/podcasts.md",
+      "counting_note": "Buzzsprout's provider-linked official API-documentation repository has exactly two resource sections. The podcast section documents GET /podcasts.json; the episode section documents GET list, GET detail, POST create, and PUT update. Counted these five REST actions once each. The repository also links a provider-published Postman collection, but its documented operations duplicate these reference sections rather than forming an additional API surface.",
+      "processed_at": "2026-08-05T18:37:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "openweather",
+      "operations_total": 5,
+      "operations_read": 5,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://openweathermap.org/api/one-call-3",
+        "kind": "html_reference",
+        "version": "OpenWeather One Call API 3.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://openweathermap.org/api/one-call-3",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-published One Call API 3.0 reference, inspected in a browser without credentials; the product-concept section supplies the explicit five-endpoint total.",
+      "counting_note": "The provider's current One Call API 3.0 reference explicitly states that the product contains five endpoints: current/forecast, timestamp weather, daily aggregation, weather overview, and AI Weather Assistant. The reference shows the first four as query-parameter API URLs and describes the fifth as retrieving weather advice/data through the assistant endpoint; all are semantically reads. These five are the connector-named One Call 3.0 surface; unrelated OpenWeather product APIs were excluded. The provider recommends One Call 4.0 for new integrations but continues publishing this 3.0 reference.",
+      "processed_at": "2026-08-06T09:35:29Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "the-guardian-api",
+      "operations_total": 5,
+      "operations_read": 5,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://open-platform.theguardian.com/documentation/",
+        "kind": "html_reference",
+        "version": "Guardian Open Platform current live documentation",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://open-platform.theguardian.com/documentation/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "The Guardian's live Open Platform documentation labels the endpoint inventory as Content, Tags, Sections, Editions, and Single item, and its five linked reference pages state the corresponding endpoint URLs. The overview says API access requires a self-service API key; the live page carries the provider's 2026 copyright. Research was limited to public documentation; no API key, API request, content query, article, tag, section, edition, or other provider data was accessed.",
+      "counting_note": "The provider's compact documentation overview explicitly enumerates five endpoint types, each documented on its own live reference page: GET /search (Content), GET /tags, GET /sections, GET /editions, and the generic single-item GET rooted at /. The single-item route is the provider's documented lookup for any content, tag, or section identifier, so it counts once rather than once per data type. All five are retrieval actions; no write method or inbound webhook delivery is documented.",
+      "processed_at": "2026-08-06T20:43:20Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "weatherstack",
+      "operations_total": 5,
+      "operations_read": 5,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://weatherstack.com/documentation",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Weatherstack's official documentation redirects to the live APILayer-managed Weatherstack reference, which identifies the current API and its five-endpoint summary. The page documents Free-through-paid plan availability and current API-key usage. Research was limited to public documentation; no Weatherstack account, credential value, location query, weather observation, forecast, historical record, marine observation, or autocomplete data was accessed.",
+      "counting_note": "The metadata-linked Weatherstack documentation now redirects to its live provider-published APILayer reference. Its explicit endpoint summary enumerates exactly five callable REST endpoints: current weather, historical weather, forecast, marine weather, and location autocomplete. All are documented retrieval actions; no write action or inbound event type is listed. The result is 5 data actions: 5 reads and 0 writes.",
+      "processed_at": "2026-08-06T23:02:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "exchange-rates",
+      "operations_total": 6,
+      "operations_read": 6,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://exchangeratesapi.io/documentation/",
+        "kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://exchangeratesapi.io/documentation/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Exchange Rates API v1 documentation endpoint navigation and API-key section",
+      "counting_note": "The provider's complete v1 HTML reference enumerates six callable GET endpoints: supported symbols, latest rates, date-addressed historical rates, conversion, time-series, and fluctuation. `symbols` and base/symbol selection are parameters/supporting sections, not extra operations. All six are read-only data retrievals; no inbound webhook event is documented.",
+      "processed_at": "2026-08-06T00:00:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "cimis",
+      "operations_total": 7,
+      "operations_read": 7,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://et.water.ca.gov/Rest/Index",
+        "kind": "html_reference",
+        "version": "CIMIS Web API REST Services; last modified 2014-05-27",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://et.water.ca.gov/Home/Index",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; California Department of Water Resources CIMIS upgrade notice, CIMIS Web API overview, and provider-published REST Services index",
+      "counting_note": "The California Department of Water Resources' complete CIMIS REST Services index documents seven distinct GET actions: weather/evapotranspiration data, all stations, station by station number, all weather-station zip codes, weather-station zip information by zip, all spatial zip codes, and spatial zip information by zip. The rendered reference supplies one method/path form for each; query examples are not separate operations. The API publishes no mutation endpoint.",
+      "processed_at": "2026-08-06T01:30:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "open-exchange-rates",
+      "operations_total": 7,
+      "operations_read": 7,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.openexchangerates.org/reference",
+        "kind": "html_reference",
+        "version": "Open Exchange Rates API documentation v0.7",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.openexchangerates.org/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-published current Open Exchange Rates HTML Reference v0.7; its embedded API-reference manifest was enumerated directly without credentials.",
+      "counting_note": "The provider's systematic current API-reference manifest contains seven visible, non-deprecated endpoint pages, all marked GET: /latest.json, /historical/*.json, /currencies.json, /time-series.json, /convert, /ohlc.json, and /usage.json. Historical wildcard dates are a parameterized form of one documented operation, not separate operations. All seven retrieve rates, currencies, conversion, OHLC, or account-usage data and count as reads.",
+      "processed_at": "2026-08-06T09:30:54Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "marketstack",
+      "operations_total": 8,
+      "operations_read": 8,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://marketstack.com/documentation",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url redirects to the provider’s current APILayer-hosted Marketstack API Endpoints v1 HTML reference. Its rendered request examples expose the eight unique v1 paths and state that requests use GET parameters.",
+      "counting_note": "The provider’s current v1 reference systematically renders eight distinct request paths: eod, intraday, splits, dividends, tickers, exchanges, currencies, and timezones. Its overview states API requests use HTTP GET parameters, so all eight are reads. The Market Indices and Historical Data headings explain use of those endpoints rather than introducing distinct method/path operations.",
+      "processed_at": "2026-08-06T03:48:28Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "pexels-api",
+      "operations_total": 9,
+      "operations_read": 9,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.pexels.com/api/documentation/",
+        "kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.pexels.com/api/documentation/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Pexels's official API Reference has an exhaustive Photos, Videos, and Collections navigation that lists all nine endpoint headings with method/path. Its Authorization section says anyone with a Pexels account can request an API key instantly and must send it in the Authorization header. Direct bounded browser and curl retrieval encountered Pexels's Cloudflare challenge, but the provider page remained available through the web document renderer and its linked Pexels Help Center confirms the live free API.",
+      "counting_note": "Pexels's complete provider-rendered API navigation names nine callable REST actions: three photo GETs (search, curated, retrieve), three video GETs (search, popular, retrieve), and three collection GETs (featured, own collections, collection media). Each endpoint heading explicitly includes its GET URL. Request Statistics documents response rate-limit headers rather than a callable operation. The collections overview expressly says collections cannot be created or modified using the API, and no other write action is documented. Pagination parameters, resource schemas, client-library samples, changelog entries, and response-media links do not add operations.",
+      "processed_at": "2026-08-06T14:38:35Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "rentcast",
+      "operations_total": 10,
+      "operations_read": 10,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://developers.rentcast.io/reference",
+        "kind": "html_reference",
+        "version": "RentCast API current rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.rentcast.io/reference/introduction",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "RentCast's current provider-owned documentation calls itself the property-data API reference and systematically separates its ten GET endpoint pages from narrative and schema pages. Its live Introduction says a free API plan provides 50 requests per month, and that a developer can create an account to generate an API key in the API dashboard before using any available endpoint. The provider offers paid and enterprise plans too, but ordinary developer signup and the free plan make the documented surface publicly available with an API key. No account, API key, API request, property, owner, valuation, listing, market, or other provider data was accessed.",
+      "counting_note": "RentCast's live provider-rendered API Reference navigation lists ten unique method-labelled endpoint pages, all GET: property records, random property records, property record by ID, value estimate, rent estimate, sale listings, sale listing by ID, rental listings, rental listing by ID, and market statistics. The responsive desktop/mobile copies of that navigation are de-duplicated by reference URL. Every listed endpoint retrieves property, listing, valuation, or market data, so all ten actions are reads. Overview, schema, billing, security, integration, query, pagination, property-type, response-code, and rate-limit pages do not add callable operations.",
+      "processed_at": "2026-08-06T15:28:48Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "campayn",
+      "operations_total": 11,
+      "operations_read": 7,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://github.com/nebojsac/Campayn-API",
+        "kind": "html_reference",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://github.com/nebojsac/Campayn-API/blob/1635142d9799e0a50ba6fdc84118e027114ae734/README.md",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Campayn-API README and complete endpoint-document set at the recorded master commit",
+      "counting_note": "The metadata-linked repository identifies itself as Campayn's official v1 API documentation and links exactly six endpoint documents. Counted unique documented HTTP method/path actions after collapsing query/filter examples and repeated snippets: seven GET reads; POST create-contact, unsubscribe, and signup plus PUT update-contact are writes. The repository's generic note that the API uses all four HTTP verbs does not create undocumented operations.",
+      "processed_at": "2026-08-05T18:53:23Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "ebay-finance",
+      "operations_total": 11,
+      "operations_read": 11,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://developer.ebay.com/develop/api/sell/finances_api",
+        "kind": "html_reference",
+        "version": "eBay Sell Finances API v1.19.0 (provider release notes current release)",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.ebay.com/api-docs/sell/finances/overview.html",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; eBay Developers Program's current Finances API catalog/current endpoint list; provider Finances API release notes",
+      "counting_note": "Counted every endpoint in eBay's provider-rendered current Finances API catalog: GET /order_earnings, /order_earnings/{order_id}, /order_earnings_summary, /payout/{payout_Id}, /payout, /payout_summary, /seller_funds_summary, /transaction, /transaction_summary, /transfer/{transfer_Id}, and /billing_activity. All eleven are GET retrievals and therefore reads. The reference contains no callable mutation or inbound webhook operation for this API.",
+      "processed_at": "2026-08-05T22:40:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "operations_total": 11,
+      "operations_read": 11,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://huggingface.co/docs/dataset-viewer/index",
+        "kind": "html_reference",
+        "version": "Dataset viewer documentation main",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://huggingface.co/docs/dataset-viewer/index",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Hugging Face Dataset Viewer documentation navigation and eleven endpoint guides",
+      "counting_note": "The provider's Dataset Viewer navigation has eleven endpoint guides: /is-valid, /splits, /info, /first-rows, /rows, /search, /filter, /parquet, /size, /statistics, and Croissant metadata. Each guide's provider example uses requests.get, so all eleven are reads. The Croissant guide exposes one public Hub metadata action, while explaining that it uses datasets-server /croissant-crumbs internally; that internal implementation call is not counted a second time.",
+      "processed_at": "2026-08-06T01:15:21Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "countercyclical",
+      "operations_total": 12,
+      "operations_read": 10,
+      "operations_write": 2,
+      "artifact": {
+        "url": "https://docs.countercyclical.io/developers/endpoints",
+        "kind": "html_reference",
+        "version": "Countercyclical API v1; current GitBook developer reference",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.countercyclical.io/llms.txt",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Countercyclical's provider-published llms index exhaustively lists its Endpoint children and their Markdown references render the exact method/path blocks",
+      "counting_note": "Counted the complete provider-published endpoint hierarchy enumerated by the docs' llms index: six general GET resource endpoints (investments, valuations, memos, teams, assumptions, pipelines), two GET authentication checks, two GET investment triggers, and two POST investment-creation actions across the separate Zapier and Make integration routes. GET actions are reads; the two POST actions create investments and are writes. The provider's separately documented webhook payload/event types are inbound and excluded; it exposes no documented HTTP webhook-management route in this reference.",
+      "processed_at": "2026-08-05T20:45:14Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "mailtrap",
+      "operations_total": 13,
+      "operations_read": 7,
+      "operations_write": 6,
+      "artifact": {
+        "url": "https://github.com/mailtrap/mailtrap-openapi/blob/main/specs/account-management.openapi.yml",
+        "kind": "openapi",
+        "version": "Account Management 2.0.0 (OpenAPI 3.1.0; main commit de598ffc5a7c002739594fdcea8c761c4da97801)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.mailtrap.io/developers/openapi-specs",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "The provider’s current OpenAPI Specs documentation links its public official mailtrap/mailtrap-openapi repository. The connector-scoped Account Management specification is an OpenAPI 3.1.0 document titled Account Management, version 2.0.0.",
+      "counting_note": "Mailtrap’s provider-published Account Management OpenAPI artifact has 13 active operations: 7 GET, 3 POST, 1 PUT, and 2 DELETE. GET operations are reads; token creation/reset, sub-account creation, access deletion, bulk permission update, and token deletion are writes. Other Mailtrap product specs are excluded because this connector’s metadata expressly scopes it to the account-management REST API.",
+      "processed_at": "2026-08-06T03:42:39Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "ticketmaster",
+      "operations_total": 13,
+      "operations_read": 13,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Ticketmaster's live developer reference identifies the current Discovery API v2, explicitly labels each of its 13 endpoint sections as GET, and documents API-key authentication. Research was limited to public documentation artifacts; no Ticketmaster account, API key, request, or event, venue, attraction, classification, or other provider response data was accessed.",
+      "counting_note": "The current provider-published Discovery API v2 reference has 13 endpoint sections, each explicitly labelled GET: Event Search, Event Details, Event Images, Attraction Search and Details, Classification Search and Details, Genre Details, Segment Details, Sub-Genre Details, Venue Search and Details, and Find Suggest. Its Supported Country Codes, Markets, Sources, Locales, and DMA sections are documentation value tables rather than callable actions and are excluded. The only deprecation wording concerns a query parameter, not an operation.",
+      "processed_at": "2026-08-06T20:53:09Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "google-tasks",
+      "operations_total": 14,
+      "operations_read": 4,
+      "operations_write": 10,
+      "artifact": {
+        "url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+        "kind": "openapi",
+        "version": "Google Tasks API v1; discovery revision 20260804",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/tasks/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Tasks provider Discovery document linked from its official REST reference",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Tasks v1 Discovery document: four GET, four POST, two PATCH, two PUT, and two DELETE. GET methods are reads. Each POST creates, clears, or moves a task/task list, so none is a semantic query; every non-GET method is a write.",
+      "processed_at": "2026-08-06T00:39:02Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "simfin",
+      "operations_total": 14,
+      "operations_read": 14,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://simfin.readme.io/llms.txt",
+        "kind": "html_reference",
+        "version": "SimFin API v3.0; 14 current provider reference OpenAPI 3.0.1 blocks",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://simfin.readme.io/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "SimFin's active provider-owned ReadMe API Reference identifies version 3.0 and publishes an llms index for the complete reference. The index and all 14 current callable pages were retrieved and their embedded OpenAPI blocks parsed read-only. The provider's getting-started reference documents Authorization-header API-key authentication. No SimFin account, credential, API request, company, financial statement, price, share, filing, change-log entry, or other provider data was accessed.",
+      "counting_note": "SimFin's current provider ReadMe v3.0 llms index systematically lists 14 callable API-reference pages after its two overview pages. Each linked page embeds one OpenAPI 3.0.1 block, and together they define 14 unique method/path pairs. All 14 are GET actions for company general, list, financial-statement, price, share-outstanding, filing, changed-company, and database-change data; none is marked deprecated and no write action is documented.",
+      "processed_at": "2026-08-06T18:44:21Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "operations_total": 15,
+      "operations_read": 8,
+      "operations_write": 7,
+      "artifact": {
+        "url": "https://developer.ebay.com/develop/api/sell/fulfillment_api",
+        "kind": "html_reference",
+        "version": "eBay Sell Fulfillment API v1.20.7 (provider release notes current release)",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.ebay.com/api-docs/sell/fulfillment/overview.html",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; eBay Developers Program's current Fulfillment API catalog/current endpoint list; provider Fulfillment API release notes",
+      "counting_note": "Counted every endpoint in eBay's provider-rendered current Fulfillment API catalog: eight GET operations (single/list orders, list/single shipping fulfillments, and four payment-dispute retrievals) and seven POST operations (issue refund, create fulfillment, and five dispute contest/accept/evidence operations). GET operations are reads; all seven POST operations visibly issue a refund, create a shipment fulfillment, contest/accept a dispute, or upload/add/update evidence and are writes. The reference contains no inbound webhook operation.",
+      "processed_at": "2026-08-05T22:50:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "stockdata",
+      "operations_total": 16,
+      "operations_read": 16,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.stockdata.org/documentation",
+        "kind": "html_reference",
+        "version": "API v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.stockdata.org/documentation",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "StockData's live documentation provides a systematic API-endpoint navigation and 16 rendered Endpoint blocks. Each block was enumerated directly from its provider-published GET method/path declaration; the documentation states that a free signup supplies an API token that is passed as a GET parameter. Read-only documentation retrieval was used; no StockData account, API token, API request, ticker, quote, price, dividend, split, news item, entity, market statistic, source, or other provider data was accessed.",
+      "counting_note": "StockData's live provider-owned one-page API reference has 16 explicit Endpoint blocks, each with a distinct GET method/path operation. Every documented operation is a market-data, news, analysis, entity-metadata, or source retrieval action and counts as a read. Concrete UUID URLs appear only in request examples and were not treated as separate operations; endpoint blocks use the corresponding placeholder route. No deprecated operation is marked in the current reference.",
+      "processed_at": "2026-08-06T19:54:10Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "freshcaller",
+      "operations_total": 18,
+      "operations_read": 12,
+      "operations_write": 6,
+      "artifact": {
+        "url": "https://developers.freshcaller.com/api/",
+        "kind": "html_reference",
+        "version": "Freshcaller Core API v1 (current provider-rendered reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.freshcaller.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Freshcaller's provider-published Core API Reference single-page endpoint list, method-labelled request sections, and Authorization section",
+      "counting_note": "Enumerated the complete single-page provider Core API reference's method/path declarations, then de-duplicated repeated endpoint-list and cURL examples: 18 distinct paths—12 GET, three POST, two PUT, and one DELETE. The three POST endpoints create a user, team, or asynchronous export job; the export explicitly creates a job and may deliver a report, so it is a write rather than a plain retrieval. PUT and DELETE modify/remove state. The page explicitly renders both GET `/api/v1/user_statuses` and GET `/api/v1/user-statuses`; because the provider does not label either legacy or a replacement, their distinct documented paths are retained rather than silently merged. No inbound webhook delivery action is presented; the export job-status retrieve is a read.",
+      "processed_at": "2026-08-06T02:05:00Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "kissmetrics",
+      "operations_total": 18,
+      "operations_read": 11,
+      "operations_write": 7,
+      "artifact": {
+        "url": "https://support.kissmetrics.io/reference",
+        "kind": "html_reference",
+        "version": "Kissmetrics API v3 (live ReadMe reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://support.kissmetrics.io/reference/authorization",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Kissmetrics API v3 systematic HTML reference, individual Query API pages, API Specifications, and Beacon documentation",
+      "counting_note": "The provider's v3 REST API sidebar has 17 method-labelled pages (duplicated in the rendered navigation). Five pages under the explicitly labelled Ad-hoc Query Examples section are body/query-type examples of the same POST /v3/queries operation, so they collapse to the primary Ad-hoc Query page. The REST Query API therefore contributes 12 actions: six GET reads; three POST query actions and two separately named POST export-to-CSV/export-to-S3 actions treated as semantic reads; and DELETE cancel-query as a write. The same provider reference's API Specifications page documents three distinct tracking paths (/e record event, /s set properties, /a alias identities), each expressly accepting GET or POST; these six method/path actions all alter analytics data and are writes. The Beacon page is only a GET /e illustration and is not double-counted. JavaScript/mobile/library method lists are SDK documentation, not separate REST actions.",
+      "processed_at": "2026-08-06T02:37:36Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "eventzilla",
+      "operations_total": 20,
+      "operations_read": 11,
+      "operations_write": 9,
+      "artifact": {
+        "url": "https://developer.eventzilla.net/docs/",
+        "kind": "openapi",
+        "version": "Eventzilla API v2; OpenAPI 3.0.0 embedded in provider reference",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.eventzilla.net/docs/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Eventzilla provider-published v2 Redoc reference and its embedded OpenAPI 3.0.0 state; Authentication and Webhooks sections",
+      "counting_note": "Eventzilla's current provider v2 reference embeds a complete OpenAPI 3.0.0 contract. Parsed all 20 unique operation objects: 11 GET reads, eight POST, and one PATCH. Every non-GET action toggles sales, cancels/confirms an order, creates/updates a ticket type, checks in/out an attendee, or creates/fills/confirms a checkout order, so is a write; no POST is a semantic query. The separate Webhooks page is inbound event documentation, not callable REST operations, and is excluded.",
+      "processed_at": "2026-08-05T22:27:33Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "linkrunner",
+      "operations_total": 20,
+      "operations_read": 5,
+      "operations_write": 15,
+      "artifact": {
+        "url": "https://docs.linkrunner.io/api-reference/data-apis",
+        "kind": "html_reference",
+        "version": "current rendered reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.linkrunner.io/api-reference/data-apis",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Linkrunner's provider-hosted API Reference navigation and SDK-less API Reference. The Data Reference declares the v1 base URL and server-key header; each listed reference page provides the endpoint request lines used for the count.",
+      "counting_note": "Systematically read all five pages in Linkrunner's current API Reference navigation (Data, Revenue Tracking, Events Capture, Campaign, and Reporting) plus the separately documented SDK-less client API that metadata links directly. The server reference has ten unique method/path operations after de-duplicating GET /campaigns across Data and Campaign pages (four reads, six writes). The SDK-less page names ten POST client actions; its attribution-data action returns a cached attribution result and is a semantic read, while its other nine actions mutate/record state. Inbound webhooks are excluded.",
+      "processed_at": "2026-08-06T03:10:30Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "poplar",
+      "operations_total": 20,
+      "operations_read": 13,
+      "operations_write": 7,
+      "artifact": {
+        "url": "https://docs.heypoplar.com/llms.txt",
+        "kind": "html_reference",
+        "version": "Poplar API v1 current GitBook reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.heypoplar.com/api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "The configured docs.poplar.studio host no longer resolves, but Poplar's active provider-owned GitBook documentation at docs.heypoplar.com publishes an explicit complete API index and Markdown endpoint references. Its Authentication page requires a test or production access token sent in the Bearer authorization header.",
+      "counting_note": "Used Poplar's provider-published complete GitBook documentation index and every linked current API endpoint page. The systematic reference names 20 distinct method/path actions: 11 GET, 8 POST, and 1 DELETE. The batch address-standardization POST and attribution-report POST are semantic reads because they compute or request data rather than mutate a provider resource; the remaining seven POST/DELETE actions create or modify mailings, orders, do-not-mail state, audience state, or data-subject requests. Authentication, HTTP-error, output-key, and explanatory pages add no action; inbound webhook deliveries are excluded.",
+      "processed_at": "2026-08-06T13:33:27Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "paypal-transaction",
+      "operations_total": 21,
+      "operations_read": 6,
+      "operations_write": 15,
+      "artifact": {
+        "url": "https://github.com/paypal/paypal-rest-api-specifications/tree/main/openapi",
+        "kind": "openapi",
+        "version": "main: Transaction Search v1.9, Catalog Products v1.0, Disputes v1.11",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.paypal.com/api/rest/",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "PayPal's official REST API guide links its provider-maintained paypal-rest-api-specifications repository, which states that it contains PayPal REST API specification files; all three current raw artifacts were parsed without credentials.",
+      "counting_note": "Parsed the three provider-published OpenAPI artifacts that correspond to the connector's documented Transaction Search, balances, Catalog Products, and Disputes resources: reporting_transactions_v1.json (two GET reads), catalogs_products_v1.json (two GET reads, one POST create and one PATCH update), and customer_disputes_v1.json (two GET reads, one PATCH update, and twelve POST dispute-evidence/appeal/claim/offer/status/message actions). All dispute POST actions expressly alter a dispute lifecycle, evidence, offer, claim, message, or status; none are retrieval queries. The OAuth client-credentials token exchange is credential-minting support, not a counted business API operation. Inbound webhook event types are excluded.",
+      "processed_at": "2026-08-06T12:41:06Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "datascope",
+      "operations_total": 22,
+      "operations_read": 12,
+      "operations_write": 10,
+      "artifact": {
+        "url": "https://dscope.github.io/docs/",
+        "kind": "html_reference",
+        "version": "DataScope API Reference; current GitHub Pages reference; release version not supplied",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://app.mydatascope.com/api/external/docs/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url is the authenticated in-app mirror; DataScope's public reference identifies its own developer portal and Authorization API-key format",
+      "counting_note": "Enumerated DataScope's systematic provider-published external-API reference: 14 GET and 10 POST action blocks appear. Per the named unversioned connector surface and the counting policy, excluded the equivalent legacy /v2/answers and Beta /v5/answers variants; the retained /answers operation is the unversioned current surface. The remaining 12 GET actions are reads and all 10 POST actions change collected answers, locations, list metadata, task assignments, or tickets. The reference separately states that webhook configuration is UI-only, so its inbound event descriptions and UI route are excluded. The create/update Location actions are retained separately: the update block's request example uses an ID path even though its compact method line omits the placeholder.",
+      "processed_at": "2026-08-05T21:00:39Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "savvycal",
+      "operations_total": 22,
+      "operations_read": 12,
+      "operations_write": 10,
+      "artifact": {
+        "url": "https://developers.savvycal.com/category/rest-api",
+        "kind": "html_reference",
+        "version": "v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.savvycal.com/authentication",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "The active SavvyCal developer portal provides a complete REST API category index with an item count per group and a rendered method/path page for every action. Its Authentication guide documents public OAuth 2 authorization-code applications, including redirect URI, authorization-code exchange, and refresh tokens, plus optional personal access tokens for an account holder's own account. No SavvyCal credential or API request was used.",
+      "counting_note": "SavvyCal's provider-owned REST API category explicitly lists 29 documentation items: seven schemas and 22 callable actions. The rendered action references enumerate 12 GET reads, seven POST state-changing actions, one PATCH update, and two DELETE actions. POST cancellation, event creation, scheduling-link creation/duplication/toggle, and webhook creation are mutations; no semantic POST reads were documented. Inbound webhook delivery event types are excluded, while the four documented webhook-subscription configuration actions are retained.",
+      "processed_at": "2026-08-06T17:06:15Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    },
+    {
+      "connector": "smaily",
+      "operations_total": 22,
+      "operations_read": 13,
+      "operations_write": 9,
+      "artifact": {
+        "url": "https://smaily.com/help/api/",
+        "kind": "html_reference",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://smaily.com/help/api/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Smaily's active provider-owned API help index publishes systematic Organizations, Subscribers, Segments, Campaigns, A/B tests, Messages, Automations, and Templates action navigation. Each current article was retrieved read-only to confirm its documented request method and API resource. The provider's General guidance and API-user documentation establish account-scoped API-user authentication. No Smaily account, API user credential, API request, campaign, subscriber, segment, template, automation, organization user, email, or other provider data was accessed.",
+      "counting_note": "Smaily's current provider API index contains 26 linked articles: four General guidance pages and 22 named callable-action pages. The 13 list, get, statistics, and action-log pages document GET retrievals. The nine create/update, opt-in, forget, launch, unsubscribe, send-message, and trigger-workflow pages document POST mutations or outbound sends. The API deliberately reuses PHP resource routes with different documented query/body modes; separately named list-versus-statistics and create-versus-opt-in actions are retained as distinct documented REST actions rather than collapsed by bare route name. No current article is marked deprecated and no POST is a documented pure retrieval.",
+      "processed_at": "2026-08-06T18:55:59Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

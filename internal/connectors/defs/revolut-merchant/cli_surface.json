@@ -1,0 +1,1671 @@
+{
+  "tagline": "Run Revolut Merchant's declared streams and reverse-ETL actions.",
+  "usage": "pm revolut-merchant \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get 1-0 payouts",
+        "api get api customers",
+        "api get api customers customer-id",
+        "api get api customers customer-id payment-methods",
+        "api get api customers customer-id payment-methods payment-method-id",
+        "api get api disputes",
+        "api get api disputes dispute-id",
+        "api get api locations",
+        "api get api locations location-id",
+        "api get api orders",
+        "api get api orders order-id",
+        "api get api orders order-id payments",
+        "api get api payment-intents payment-intent-id",
+        "api get api payments payment-id",
+        "api get api payouts",
+        "api get api payouts payout-id",
+        "api get api report-runs report-run-id",
+        "api get api report-runs report-run-id file",
+        "api get api subscription-plans",
+        "api get api subscription-plans subscription-plan-id",
+        "api get api subscription-usages",
+        "api get api subscription-usages usage-id",
+        "api get api subscriptions",
+        "api get api subscriptions subscription-id",
+        "api get api subscriptions subscription-id cycles",
+        "api get api subscriptions subscription-id cycles cycle-id",
+        "api get api synchronous-webhooks",
+        "api get api terminals",
+        "api get api webhooks",
+        "api get api webhooks webhook-id",
+        "api webhook webhookevent-post",
+        "customers list",
+        "orders list",
+        "payment links list",
+        "settlements list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api customers customer-id",
+        "api delete api customers customer-id payment-methods payment-method-id",
+        "api delete api locations location-id",
+        "api delete api subscription-usages usage-id",
+        "api delete api synchronous-webhooks synchronous-webhook-id",
+        "api delete api webhooks webhook-id",
+        "api patch api customers customer-id",
+        "api patch api customers customer-id payment-methods payment-method-id",
+        "api patch api locations location-id",
+        "api patch api orders order-id",
+        "api patch api subscription-usages usage-id",
+        "api patch api subscriptions subscription-id",
+        "api patch api webhooks webhook-id",
+        "api post 1-0 customers",
+        "api post 1-0 orders",
+        "api post 1-0 orders order-id cancel",
+        "api post 1-0 orders order-id capture",
+        "api post 1-0 orders order-id refund",
+        "api post 1-0 webhooks",
+        "api post api apple-pay domains register",
+        "api post api apple-pay domains unregister",
+        "api post api customers",
+        "api post api disputes dispute-id accept",
+        "api post api disputes dispute-id challenge",
+        "api post api disputes dispute-id evidences",
+        "api post api locations",
+        "api post api orders",
+        "api post api orders order-id cancel",
+        "api post api orders order-id capture",
+        "api post api orders order-id increment-authorisation",
+        "api post api orders order-id payment-intents",
+        "api post api orders order-id payments",
+        "api post api orders order-id refund",
+        "api post api payment-intents payment-intent-id cancel",
+        "api post api report-runs",
+        "api post api subscription-plans",
+        "api post api subscription-usages",
+        "api post api subscriptions",
+        "api post api subscriptions subscription-id cancel",
+        "api post api subscriptions subscription-id change-plan",
+        "api post api subscriptions subscription-id change-renewal-date",
+        "api post api synchronous-webhooks",
+        "api post api webhooks",
+        "api post api webhooks webhook-id rotate-signing-secret"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api customers customer-id",
+      "summary": "Documented DELETE /api/customers/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/customers/{customer_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api customers customer-id payment-methods payment-method-id",
+      "summary": "Documented DELETE /api/customers/{customer_id}/payment-methods/{payment_method_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api customers customer-id payment-methods payment-method-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-customers-customer-id-payment-methods-payment-method-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api locations location-id",
+      "summary": "Documented DELETE /api/locations/{location_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api locations location-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/locations/{location_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-locations-location-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api subscription-usages usage-id",
+      "summary": "Documented DELETE /api/subscription-usages/{usage_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api subscription-usages usage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/subscription-usages/{usage_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-subscription-usages-usage-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api synchronous-webhooks synchronous-webhook-id",
+      "summary": "Documented DELETE /api/synchronous-webhooks/{synchronous_webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api synchronous-webhooks synchronous-webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/synchronous-webhooks/{synchronous_webhook_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-synchronous-webhooks-synchronous-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api webhooks webhook-id",
+      "summary": "Documented DELETE /api/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api delete api webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "revolut-merchant.delete.api-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get 1-0 payouts",
+      "summary": "Documented GET /1.0/payouts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get 1-0 payouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/payouts"
+        }
+      ],
+      "operation": "revolut-merchant.get.1-0-payouts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api customers",
+      "summary": "Documented GET /api/customers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api customers customer-id",
+      "summary": "Documented GET /api/customers/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers/{customer_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-customers-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api customers customer-id payment-methods",
+      "summary": "Documented GET /api/customers/{customer_id}/payment-methods (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api customers customer-id payment-methods --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers/{customer_id}/payment-methods"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-customers-customer-id-payment-methods",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api customers customer-id payment-methods payment-method-id",
+      "summary": "Documented GET /api/customers/{customer_id}/payment-methods/{payment_method_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api customers customer-id payment-methods payment-method-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-customers-customer-id-payment-methods-payment-method-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api disputes",
+      "summary": "Documented GET /api/disputes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api disputes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/disputes"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-disputes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api disputes dispute-id",
+      "summary": "Documented GET /api/disputes/{dispute_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api disputes dispute-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/disputes/{dispute_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-disputes-dispute-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api locations",
+      "summary": "Documented GET /api/locations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api locations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/locations"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-locations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api locations location-id",
+      "summary": "Documented GET /api/locations/{location_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api locations location-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/locations/{location_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-locations-location-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api orders",
+      "summary": "Documented GET /api/orders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/orders"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api orders order-id",
+      "summary": "Documented GET /api/orders/{order_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api orders order-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/orders/{order_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-orders-order-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api orders order-id payments",
+      "summary": "Documented GET /api/orders/{order_id}/payments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api orders order-id payments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/orders/{order_id}/payments"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-orders-order-id-payments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api payment-intents payment-intent-id",
+      "summary": "Documented GET /api/payment-intents/{payment_intent_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api payment-intents payment-intent-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/payment-intents/{payment_intent_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-payment-intents-payment-intent-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api payments payment-id",
+      "summary": "Documented GET /api/payments/{payment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api payments payment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/payments/{payment_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-payments-payment-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api payouts",
+      "summary": "Documented GET /api/payouts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api payouts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/payouts"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-payouts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api payouts payout-id",
+      "summary": "Documented GET /api/payouts/{payout_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api payouts payout-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/payouts/{payout_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-payouts-payout-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api report-runs report-run-id",
+      "summary": "Documented GET /api/report-runs/{report_run_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api report-runs report-run-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/report-runs/{report_run_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-report-runs-report-run-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api report-runs report-run-id file",
+      "summary": "Documented GET /api/report-runs/{report_run_id}/file (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api report-runs report-run-id file --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/report-runs/{report_run_id}/file"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-report-runs-report-run-id-file",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscription-plans",
+      "summary": "Documented GET /api/subscription-plans (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscription-plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscription-plans"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscription-plans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscription-plans subscription-plan-id",
+      "summary": "Documented GET /api/subscription-plans/{subscription_plan_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscription-plans subscription-plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscription-plans/{subscription_plan_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscription-plans-subscription-plan-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscription-usages",
+      "summary": "Documented GET /api/subscription-usages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscription-usages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscription-usages"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscription-usages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscription-usages usage-id",
+      "summary": "Documented GET /api/subscription-usages/{usage_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscription-usages usage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscription-usages/{usage_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscription-usages-usage-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscriptions",
+      "summary": "Documented GET /api/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscriptions"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscriptions subscription-id",
+      "summary": "Documented GET /api/subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscriptions-subscription-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscriptions subscription-id cycles",
+      "summary": "Documented GET /api/subscriptions/{subscription_id}/cycles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscriptions subscription-id cycles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscriptions/{subscription_id}/cycles"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscriptions-subscription-id-cycles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subscriptions subscription-id cycles cycle-id",
+      "summary": "Documented GET /api/subscriptions/{subscription_id}/cycles/{cycle_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api subscriptions subscription-id cycles cycle-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subscriptions/{subscription_id}/cycles/{cycle_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-subscriptions-subscription-id-cycles-cycle-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api synchronous-webhooks",
+      "summary": "Documented GET /api/synchronous-webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api synchronous-webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/synchronous-webhooks"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-synchronous-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api terminals",
+      "summary": "Documented GET /api/terminals (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api terminals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/terminals"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-terminals",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api webhooks",
+      "summary": "Documented GET /api/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webhooks"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api webhooks webhook-id",
+      "summary": "Documented GET /api/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api get api webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "revolut-merchant.get.api-webhooks-webhook-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api customers customer-id",
+      "summary": "Documented PATCH /api/customers/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/customers/{customer_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api customers customer-id payment-methods payment-method-id",
+      "summary": "Documented PATCH /api/customers/{customer_id}/payment-methods/{payment_method_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api customers customer-id payment-methods payment-method-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-customers-customer-id-payment-methods-payment-method-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api locations location-id",
+      "summary": "Documented PATCH /api/locations/{location_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api locations location-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/locations/{location_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-locations-location-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api orders order-id",
+      "summary": "Documented PATCH /api/orders/{order_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api orders order-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/orders/{order_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-orders-order-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api subscription-usages usage-id",
+      "summary": "Documented PATCH /api/subscription-usages/{usage_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api subscription-usages usage-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/subscription-usages/{usage_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-subscription-usages-usage-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api subscriptions subscription-id",
+      "summary": "Documented PATCH /api/subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api webhooks webhook-id",
+      "summary": "Documented PATCH /api/webhooks/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api patch api webhooks webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/webhooks/{webhook_id}"
+        }
+      ],
+      "operation": "revolut-merchant.patch.api-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 customers",
+      "summary": "Documented POST /1.0/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/customers"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 orders",
+      "summary": "Documented POST /1.0/orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/orders"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 orders order-id cancel",
+      "summary": "Documented POST /1.0/orders/{order_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 orders order-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/orders/{order_id}/cancel"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-orders-order-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 orders order-id capture",
+      "summary": "Documented POST /1.0/orders/{order_id}/capture (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 orders order-id capture --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/orders/{order_id}/capture"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-orders-order-id-capture",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 orders order-id refund",
+      "summary": "Documented POST /1.0/orders/{order_id}/refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 orders order-id refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/orders/{order_id}/refund"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-orders-order-id-refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 webhooks",
+      "summary": "Documented POST /1.0/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post 1-0 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/webhooks"
+        }
+      ],
+      "operation": "revolut-merchant.post.1-0-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post api apple-pay domains register",
+      "summary": "Documented POST /api/apple-pay/domains/register (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api apple-pay domains register --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/apple-pay/domains/register"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-apple-pay-domains-register",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api apple-pay domains unregister",
+      "summary": "Documented POST /api/apple-pay/domains/unregister (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api apple-pay domains unregister --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/apple-pay/domains/unregister"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-apple-pay-domains-unregister",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api customers",
+      "summary": "Documented POST /api/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/customers"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api disputes dispute-id accept",
+      "summary": "Documented POST /api/disputes/{dispute_id}/accept (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api disputes dispute-id accept --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/disputes/{dispute_id}/accept"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-disputes-dispute-id-accept",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api disputes dispute-id challenge",
+      "summary": "Documented POST /api/disputes/{dispute_id}/challenge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api disputes dispute-id challenge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/disputes/{dispute_id}/challenge"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-disputes-dispute-id-challenge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api disputes dispute-id evidences",
+      "summary": "Documented POST /api/disputes/{dispute_id}/evidences (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api disputes dispute-id evidences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/disputes/{dispute_id}/evidences"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-disputes-dispute-id-evidences",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api locations",
+      "summary": "Documented POST /api/locations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api locations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/locations"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-locations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders",
+      "summary": "Documented POST /api/orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id cancel",
+      "summary": "Documented POST /api/orders/{order_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/cancel"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id capture",
+      "summary": "Documented POST /api/orders/{order_id}/capture (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id capture --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/capture"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-capture",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id increment-authorisation",
+      "summary": "Documented POST /api/orders/{order_id}/increment-authorisation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id increment-authorisation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/increment-authorisation"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-increment-authorisation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id payment-intents",
+      "summary": "Documented POST /api/orders/{order_id}/payment-intents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id payment-intents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/payment-intents"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-payment-intents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id payments",
+      "summary": "Documented POST /api/orders/{order_id}/payments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id payments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/payments"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-payments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api orders order-id refund",
+      "summary": "Documented POST /api/orders/{order_id}/refund (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api orders order-id refund --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{order_id}/refund"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-orders-order-id-refund",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api payment-intents payment-intent-id cancel",
+      "summary": "Documented POST /api/payment-intents/{payment_intent_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api payment-intents payment-intent-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/payment-intents/{payment_intent_id}/cancel"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-payment-intents-payment-intent-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api report-runs",
+      "summary": "Documented POST /api/report-runs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api report-runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/report-runs"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-report-runs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscription-plans",
+      "summary": "Documented POST /api/subscription-plans (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscription-plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscription-plans"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscription-plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscription-usages",
+      "summary": "Documented POST /api/subscription-usages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscription-usages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscription-usages"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscription-usages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscriptions",
+      "summary": "Documented POST /api/subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscriptions"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscriptions subscription-id cancel",
+      "summary": "Documented POST /api/subscriptions/{subscription_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscriptions subscription-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscriptions/{subscription_id}/cancel"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscriptions-subscription-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscriptions subscription-id change-plan",
+      "summary": "Documented POST /api/subscriptions/{subscription_id}/change-plan (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscriptions subscription-id change-plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscriptions/{subscription_id}/change-plan"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscriptions-subscription-id-change-plan",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subscriptions subscription-id change-renewal-date",
+      "summary": "Documented POST /api/subscriptions/{subscription_id}/change-renewal-date (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api subscriptions subscription-id change-renewal-date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subscriptions/{subscription_id}/change-renewal-date"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-subscriptions-subscription-id-change-renewal-date",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api synchronous-webhooks",
+      "summary": "Documented POST /api/synchronous-webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api synchronous-webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/synchronous-webhooks"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-synchronous-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api webhooks",
+      "summary": "Documented POST /api/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/webhooks"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api webhooks webhook-id rotate-signing-secret",
+      "summary": "Documented POST /api/webhooks/{webhook_id}/rotate-signing-secret (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api post api webhooks webhook-id rotate-signing-secret --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/webhooks/{webhook_id}/rotate-signing-secret"
+        }
+      ],
+      "operation": "revolut-merchant.post.api-webhooks-webhook-id-rotate-signing-secret",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook webhookevent-post",
+      "summary": "Documented WEBHOOK webhookEvent#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant api webhook webhookevent-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "webhookEvent#POST"
+        }
+      ],
+      "operation": "revolut-merchant.webhook.webhookevent-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/customers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/orders"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "payment links list",
+      "summary": "Run the payment links ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_links",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant payment links list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/payment-links"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "settlements list",
+      "summary": "Run the settlements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "settlements",
+      "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "examples": [
+        "pm revolut-merchant settlements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/settlements"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

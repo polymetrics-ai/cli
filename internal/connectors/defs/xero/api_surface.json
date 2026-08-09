@@ -1,13 +1,32 @@
 {
-  "api": "xero_accounting_openapi",
+  "api": "xero_accounting_openapi; provider artifact version: master",
   "docs": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-  "reviewed_at": "2026-07-31",
-  "operation_ledger_version": 1,
-  "scope": "Complete official Xero Accounting API operation ledger from XeroAPI/Xero-OpenAPI xero_accounting.yaml only. Other Xero products (assets, bankfeeds, files, finance, payroll, projects, webhooks, identity, app-store) remain outside this connector count. Binary attachment and PDF downloads/uploads are bounded in operations.json but blocked on the shared binary/file executor rather than implemented with connector-local runtime code.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (235 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "xero-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/Accounts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts\"].get"
+      },
       "covered_by": {
         "stream": "accounts"
       }
@@ -15,6 +34,15 @@
     {
       "method": "PUT",
       "path": "/Accounts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts\"].put"
+      },
       "covered_by": {
         "write": "create_account"
       }
@@ -22,6 +50,15 @@
     {
       "method": "GET",
       "path": "/Accounts/{AccountID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}\"].get"
+      },
       "covered_by": {
         "stream": "account"
       }
@@ -29,6 +66,15 @@
     {
       "method": "POST",
       "path": "/Accounts/{AccountID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}\"].post"
+      },
       "covered_by": {
         "write": "update_account"
       }
@@ -36,6 +82,15 @@
     {
       "method": "DELETE",
       "path": "/Accounts/{AccountID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_account"
       }
@@ -43,6 +98,15 @@
     {
       "method": "GET",
       "path": "/Accounts/{AccountID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "account_attachments"
       }
@@ -50,128 +114,147 @@
     {
       "method": "GET",
       "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getAccountAttachmentById; summary=Retrieves a specific attachment from a specific account using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getAccountAttachmentByFileName; summary=Retrieves an attachment for a specific account by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateAccountAttachmentByFileName; summary=Updates attachment on a specific account by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/Accounts/{AccountID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Accounts/{AccountID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createAccountAttachmentByFileName; summary=Creates an attachment on a specific account; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
-      "path": "/BatchPayments",
-      "covered_by": {
-        "stream": "batch_payments"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/BatchPayments",
-      "covered_by": {
-        "write": "create_batch_payment"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/BatchPayments",
-      "covered_by": {
-        "write": "delete_batch_payment"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/BatchPayments/{BatchPaymentID}",
-      "covered_by": {
-        "stream": "batch_payment"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/BatchPayments/{BatchPaymentID}",
-      "covered_by": {
-        "write": "delete_batch_payment_by_url_param"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/BatchPayments/{BatchPaymentID}/History",
-      "covered_by": {
-        "stream": "batch_payment_history"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/BatchPayments/{BatchPaymentID}/History",
-      "covered_by": {
-        "write": "create_batch_payment_history_record"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/BankTransactions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions\"].get"
+      },
       "covered_by": {
         "stream": "bank_transactions"
       }
     },
     {
-      "method": "PUT",
-      "path": "/BankTransactions",
-      "covered_by": {
-        "write": "create_bank_transactions"
-      }
-    },
-    {
       "method": "POST",
       "path": "/BankTransactions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions\"].post"
+      },
       "covered_by": {
         "write": "upsert_bank_transactions"
       }
     },
     {
+      "method": "PUT",
+      "path": "/BankTransactions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions\"].put"
+      },
+      "covered_by": {
+        "write": "create_bank_transactions"
+      }
+    },
+    {
       "method": "GET",
       "path": "/BankTransactions/{BankTransactionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}\"].get"
+      },
       "covered_by": {
         "stream": "bank_transaction"
       }
@@ -179,6 +262,15 @@
     {
       "method": "POST",
       "path": "/BankTransactions/{BankTransactionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}\"].post"
+      },
       "covered_by": {
         "write": "update_bank_transaction"
       }
@@ -186,6 +278,15 @@
     {
       "method": "GET",
       "path": "/BankTransactions/{BankTransactionID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "bank_transaction_attachments"
       }
@@ -193,58 +294,99 @@
     {
       "method": "GET",
       "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getBankTransactionAttachmentById; summary=Retrieves specific attachments from a specific BankTransaction using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getBankTransactionAttachmentByFileName; summary=Retrieves a specific attachment from a specific bank transaction by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateBankTransactionAttachmentByFileName; summary=Updates a specific attachment from a specific bank transaction by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createBankTransactionAttachmentByFileName; summary=Creates an attachment for a specific bank transaction by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/BankTransactions/{BankTransactionID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/History\"].get"
+      },
       "covered_by": {
         "stream": "bank_transactions_history"
       }
@@ -252,6 +394,15 @@
     {
       "method": "PUT",
       "path": "/BankTransactions/{BankTransactionID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransactions/{BankTransactionID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_bank_transaction_history_record"
       }
@@ -259,27 +410,63 @@
     {
       "method": "GET",
       "path": "/BankTransfers",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers\"].get"
+      },
       "covered_by": {
         "stream": "bank_transfers"
       }
     },
     {
-      "method": "PUT",
-      "path": "/BankTransfers",
-      "covered_by": {
-        "write": "create_bank_transfer"
-      }
-    },
-    {
       "method": "POST",
       "path": "/BankTransfers",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers\"].post"
+      },
       "covered_by": {
         "write": "delete_bank_transfers"
       }
     },
     {
+      "method": "PUT",
+      "path": "/BankTransfers",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers\"].put"
+      },
+      "covered_by": {
+        "write": "create_bank_transfer"
+      }
+    },
+    {
       "method": "GET",
       "path": "/BankTransfers/{BankTransferID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}\"].get"
+      },
       "covered_by": {
         "stream": "bank_transfer"
       }
@@ -287,6 +474,15 @@
     {
       "method": "POST",
       "path": "/BankTransfers/{BankTransferID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}\"].post"
+      },
       "covered_by": {
         "write": "delete_bank_transfer"
       }
@@ -294,6 +490,15 @@
     {
       "method": "GET",
       "path": "/BankTransfers/{BankTransferID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "bank_transfer_attachments"
       }
@@ -301,58 +506,99 @@
     {
       "method": "GET",
       "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getBankTransferAttachmentById; summary=Retrieves a specific attachment from a specific bank transfer using a unique attachment ID; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getBankTransferAttachmentByFileName; summary=Retrieves a specific attachment on a specific bank transfer by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateBankTransferAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createBankTransferAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/BankTransfers/{BankTransferID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/History\"].get"
+      },
       "covered_by": {
         "stream": "bank_transfer_history"
       }
@@ -360,13 +606,143 @@
     {
       "method": "PUT",
       "path": "/BankTransfers/{BankTransferID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BankTransfers/{BankTransferID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_bank_transfer_history_record"
       }
     },
     {
       "method": "GET",
+      "path": "/BatchPayments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments\"].get"
+      },
+      "covered_by": {
+        "stream": "batch_payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/BatchPayments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments\"].post"
+      },
+      "covered_by": {
+        "write": "delete_batch_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/BatchPayments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments\"].put"
+      },
+      "covered_by": {
+        "write": "create_batch_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/BatchPayments/{BatchPaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments/{BatchPaymentID}\"].get"
+      },
+      "covered_by": {
+        "stream": "batch_payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/BatchPayments/{BatchPaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments/{BatchPaymentID}\"].post"
+      },
+      "covered_by": {
+        "write": "delete_batch_payment_by_url_param"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/BatchPayments/{BatchPaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments/{BatchPaymentID}/History\"].get"
+      },
+      "covered_by": {
+        "stream": "batch_payment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/BatchPayments/{BatchPaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BatchPayments/{BatchPaymentID}/History\"].put"
+      },
+      "covered_by": {
+        "write": "create_batch_payment_history_record"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/BrandingThemes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BrandingThemes\"].get"
+      },
       "covered_by": {
         "stream": "branding_themes"
       }
@@ -374,6 +750,15 @@
     {
       "method": "GET",
       "path": "/BrandingThemes/{BrandingThemeID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BrandingThemes/{BrandingThemeID}\"].get"
+      },
       "covered_by": {
         "stream": "branding_theme"
       }
@@ -381,6 +766,15 @@
     {
       "method": "GET",
       "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BrandingThemes/{BrandingThemeID}/PaymentServices\"].get"
+      },
       "covered_by": {
         "stream": "branding_theme_payment_services"
       }
@@ -388,6 +782,15 @@
     {
       "method": "POST",
       "path": "/BrandingThemes/{BrandingThemeID}/PaymentServices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/BrandingThemes/{BrandingThemeID}/PaymentServices\"].post"
+      },
       "covered_by": {
         "write": "create_branding_theme_payment_services"
       }
@@ -395,6 +798,15 @@
     {
       "method": "GET",
       "path": "/Budgets",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Budgets\"].get"
+      },
       "covered_by": {
         "stream": "budgets"
       }
@@ -402,135 +814,31 @@
     {
       "method": "GET",
       "path": "/Budgets/{BudgetID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Budgets/{BudgetID}\"].get"
+      },
       "covered_by": {
         "stream": "budget"
       }
     },
     {
       "method": "GET",
-      "path": "/Contacts",
-      "covered_by": {
-        "stream": "contacts"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Contacts",
-      "covered_by": {
-        "write": "create_contacts"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/Contacts",
-      "covered_by": {
-        "write": "upsert_contacts"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactNumber}",
-      "covered_by": {
-        "stream": "contact_by_contact_number"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}",
-      "covered_by": {
-        "stream": "contact"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/Contacts/{ContactID}",
-      "covered_by": {
-        "write": "update_contact"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}/Attachments",
-      "covered_by": {
-        "stream": "contact_attachments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getContactAttachmentById; summary=Retrieves a specific attachment from a specific contact using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getContactAttachmentByFileName; summary=Retrieves a specific attachment from a specific contact by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=updateContactAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=createContactAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}/CISSettings",
-      "covered_by": {
-        "stream": "contact_cis_settings"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Contacts/{ContactID}/History",
-      "covered_by": {
-        "stream": "contact_history"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Contacts/{ContactID}/History",
-      "covered_by": {
-        "write": "create_contact_history"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/ContactGroups",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups\"].get"
+      },
       "covered_by": {
         "stream": "contact_groups"
       }
@@ -538,6 +846,15 @@
     {
       "method": "PUT",
       "path": "/ContactGroups",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups\"].put"
+      },
       "covered_by": {
         "write": "create_contact_group"
       }
@@ -545,6 +862,15 @@
     {
       "method": "GET",
       "path": "/ContactGroups/{ContactGroupID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups/{ContactGroupID}\"].get"
+      },
       "covered_by": {
         "stream": "contact_group"
       }
@@ -552,6 +878,15 @@
     {
       "method": "POST",
       "path": "/ContactGroups/{ContactGroupID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups/{ContactGroupID}\"].post"
+      },
       "covered_by": {
         "write": "update_contact_group"
       }
@@ -559,6 +894,15 @@
     {
       "method": "PUT",
       "path": "/ContactGroups/{ContactGroupID}/Contacts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups/{ContactGroupID}/Contacts\"].put"
+      },
       "covered_by": {
         "write": "create_contact_group_contacts"
       }
@@ -566,6 +910,15 @@
     {
       "method": "DELETE",
       "path": "/ContactGroups/{ContactGroupID}/Contacts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups/{ContactGroupID}/Contacts\"].delete"
+      },
       "covered_by": {
         "write": "delete_contact_group_contacts"
       }
@@ -573,34 +926,323 @@
     {
       "method": "DELETE",
       "path": "/ContactGroups/{ContactGroupID}/Contacts/{ContactID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ContactGroups/{ContactGroupID}/Contacts/{ContactID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_contact_group_contact"
       }
     },
     {
       "method": "GET",
+      "path": "/Contacts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts\"].get"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Contacts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts\"].post"
+      },
+      "covered_by": {
+        "write": "upsert_contacts"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Contacts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts\"].put"
+      },
+      "covered_by": {
+        "write": "create_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}\"].get"
+      },
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Contacts/{ContactID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}\"].post"
+      },
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/Attachments\"].get"
+      },
+      "covered_by": {
+        "stream": "contact_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/Attachments/{AttachmentID}\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getContactAttachmentById; summary=Retrieves a specific attachment from a specific contact using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/Attachments/{FileName}\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getContactAttachmentByFileName; summary=Retrieves a specific attachment from a specific contact by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/Attachments/{FileName}\"].post"
+      },
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+        "notes": "official_lane=binary_file; operation_id=updateContactAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Contacts/{ContactID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/Attachments/{FileName}\"].put"
+      },
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+        "notes": "official_lane=binary_file; operation_id=createContactAttachmentByFileName; summary=; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}/CISSettings",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/CISSettings\"].get"
+      },
+      "covered_by": {
+        "stream": "contact_cis_settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/History\"].get"
+      },
+      "covered_by": {
+        "stream": "contact_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Contacts/{ContactID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactID}/History\"].put"
+      },
+      "covered_by": {
+        "write": "create_contact_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Contacts/{ContactNumber}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Contacts/{ContactNumber}\"].get"
+      },
+      "covered_by": {
+        "stream": "contact_by_contact_number"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/CreditNotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes\"].get"
+      },
       "covered_by": {
         "stream": "credit_notes"
       }
     },
     {
-      "method": "PUT",
-      "path": "/CreditNotes",
-      "covered_by": {
-        "write": "create_credit_notes"
-      }
-    },
-    {
       "method": "POST",
       "path": "/CreditNotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes\"].post"
+      },
       "covered_by": {
         "write": "upsert_credit_notes"
       }
     },
     {
+      "method": "PUT",
+      "path": "/CreditNotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes\"].put"
+      },
+      "covered_by": {
+        "write": "create_credit_notes"
+      }
+    },
+    {
       "method": "GET",
       "path": "/CreditNotes/{CreditNoteID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}\"].get"
+      },
       "covered_by": {
         "stream": "credit_note"
       }
@@ -608,85 +1250,31 @@
     {
       "method": "POST",
       "path": "/CreditNotes/{CreditNoteID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}\"].post"
+      },
       "covered_by": {
         "write": "update_credit_note"
       }
     },
     {
-      "method": "GET",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments",
-      "covered_by": {
-        "stream": "credit_note_attachments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getCreditNoteAttachmentById; summary=Retrieves a specific attachment from a specific credit note using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getCreditNoteAttachmentByFileName; summary=Retrieves a specific attachment on a specific credit note by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=updateCreditNoteAttachmentByFileName; summary=Updates attachments on a specific credit note by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=createCreditNoteAttachmentByFileName; summary=Creates an attachment for a specific credit note; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/CreditNotes/{CreditNoteID}/pdf",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getCreditNoteAsPdf; summary=Retrieves credit notes as PDF files; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/CreditNotes/{CreditNoteID}/Allocations",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Allocations\"].put"
+      },
       "covered_by": {
         "write": "create_credit_note_allocation"
       }
@@ -694,13 +1282,131 @@
     {
       "method": "DELETE",
       "path": "/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Allocations/{AllocationID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_credit_note_allocations"
       }
     },
     {
       "method": "GET",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Attachments\"].get"
+      },
+      "covered_by": {
+        "stream": "credit_note_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getCreditNoteAttachmentById; summary=Retrieves a specific attachment from a specific credit note using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Attachments/{FileName}\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getCreditNoteAttachmentByFileName; summary=Retrieves a specific attachment on a specific credit note by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Attachments/{FileName}\"].post"
+      },
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+        "notes": "official_lane=binary_file; operation_id=updateCreditNoteAttachmentByFileName; summary=Updates attachments on a specific credit note by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/Attachments/{FileName}\"].put"
+      },
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
+        "notes": "official_lane=binary_file; operation_id=createCreditNoteAttachmentByFileName; summary=Creates an attachment for a specific credit note; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/CreditNotes/{CreditNoteID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/History\"].get"
+      },
       "covered_by": {
         "stream": "credit_note_history"
       }
@@ -708,13 +1414,52 @@
     {
       "method": "PUT",
       "path": "/CreditNotes/{CreditNoteID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_credit_note_history"
       }
     },
     {
       "method": "GET",
+      "path": "/CreditNotes/{CreditNoteID}/pdf",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/CreditNotes/{CreditNoteID}/pdf\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getCreditNoteAsPdf; summary=Retrieves credit notes as PDF files; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/Currencies",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Currencies\"].get"
+      },
       "covered_by": {
         "stream": "currencies"
       }
@@ -722,6 +1467,15 @@
     {
       "method": "PUT",
       "path": "/Currencies",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Currencies\"].put"
+      },
       "covered_by": {
         "write": "create_currency"
       }
@@ -729,6 +1483,15 @@
     {
       "method": "GET",
       "path": "/ExpenseClaims",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims\"].get"
+      },
       "covered_by": {
         "stream": "expense_claims"
       }
@@ -736,6 +1499,15 @@
     {
       "method": "PUT",
       "path": "/ExpenseClaims",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims\"].put"
+      },
       "covered_by": {
         "write": "create_expense_claims"
       }
@@ -743,6 +1515,15 @@
     {
       "method": "GET",
       "path": "/ExpenseClaims/{ExpenseClaimID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims/{ExpenseClaimID}\"].get"
+      },
       "covered_by": {
         "stream": "expense_claim"
       }
@@ -750,6 +1531,15 @@
     {
       "method": "POST",
       "path": "/ExpenseClaims/{ExpenseClaimID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims/{ExpenseClaimID}\"].post"
+      },
       "covered_by": {
         "write": "update_expense_claim"
       }
@@ -757,6 +1547,15 @@
     {
       "method": "GET",
       "path": "/ExpenseClaims/{ExpenseClaimID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims/{ExpenseClaimID}/History\"].get"
+      },
       "covered_by": {
         "stream": "expense_claim_history"
       }
@@ -764,34 +1563,95 @@
     {
       "method": "PUT",
       "path": "/ExpenseClaims/{ExpenseClaimID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ExpenseClaims/{ExpenseClaimID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_expense_claim_history"
       }
     },
     {
       "method": "GET",
+      "path": "/InvoiceReminders/Settings",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/InvoiceReminders/Settings\"].get"
+      },
+      "covered_by": {
+        "stream": "invoice_reminders"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/Invoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices\"].get"
+      },
       "covered_by": {
         "stream": "invoices"
       }
     },
     {
-      "method": "PUT",
-      "path": "/Invoices",
-      "covered_by": {
-        "write": "create_invoices"
-      }
-    },
-    {
       "method": "POST",
       "path": "/Invoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices\"].post"
+      },
       "covered_by": {
         "write": "upsert_invoices"
       }
     },
     {
+      "method": "PUT",
+      "path": "/Invoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices\"].put"
+      },
+      "covered_by": {
+        "write": "create_invoices"
+      }
+    },
+    {
       "method": "GET",
       "path": "/Invoices/{InvoiceID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}\"].get"
+      },
       "covered_by": {
         "stream": "invoice"
       }
@@ -799,26 +1659,31 @@
     {
       "method": "POST",
       "path": "/Invoices/{InvoiceID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}\"].post"
+      },
       "covered_by": {
         "write": "update_invoice"
       }
     },
     {
       "method": "GET",
-      "path": "/Invoices/{InvoiceID}/pdf",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getInvoiceAsPdf; summary=Retrieves invoices or purchase bills as PDF files; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/Invoices/{InvoiceID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "invoice_attachments"
       }
@@ -826,65 +1691,99 @@
     {
       "method": "GET",
       "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getInvoiceAttachmentById; summary=Retrieves a specific attachment from a specific invoices or purchase bills by using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getInvoiceAttachmentByFileName; summary=Retrieves an attachment from a specific invoice or purchase bill by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateInvoiceAttachmentByFileName; summary=Updates an attachment from a specific invoices or purchase bill by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/Invoices/{InvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createInvoiceAttachmentByFileName; summary=Creates an attachment for a specific invoice or purchase bill by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Invoices/{InvoiceID}/OnlineInvoice",
-      "covered_by": {
-        "stream": "online_invoice"
       }
     },
     {
       "method": "POST",
       "path": "/Invoices/{InvoiceID}/Email",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/Email\"].post"
+      },
       "covered_by": {
         "write": "email_invoice"
       }
@@ -892,6 +1791,15 @@
     {
       "method": "GET",
       "path": "/Invoices/{InvoiceID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/History\"].get"
+      },
       "covered_by": {
         "stream": "invoice_history"
       }
@@ -899,41 +1807,116 @@
     {
       "method": "PUT",
       "path": "/Invoices/{InvoiceID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_invoice_history"
       }
     },
     {
       "method": "GET",
-      "path": "/InvoiceReminders/Settings",
+      "path": "/Invoices/{InvoiceID}/OnlineInvoice",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/OnlineInvoice\"].get"
+      },
       "covered_by": {
-        "stream": "invoice_reminders"
+        "stream": "online_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Invoices/{InvoiceID}/pdf",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Invoices/{InvoiceID}/pdf\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getInvoiceAsPdf; summary=Retrieves invoices or purchase bills as PDF files; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Items",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items\"].get"
+      },
       "covered_by": {
         "stream": "items"
       }
     },
     {
-      "method": "PUT",
-      "path": "/Items",
-      "covered_by": {
-        "write": "create_items"
-      }
-    },
-    {
       "method": "POST",
       "path": "/Items",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items\"].post"
+      },
       "covered_by": {
         "write": "upsert_items"
       }
     },
     {
+      "method": "PUT",
+      "path": "/Items",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items\"].put"
+      },
+      "covered_by": {
+        "write": "create_items"
+      }
+    },
+    {
       "method": "GET",
       "path": "/Items/{ItemID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items/{ItemID}\"].get"
+      },
       "covered_by": {
         "stream": "item"
       }
@@ -941,6 +1924,15 @@
     {
       "method": "POST",
       "path": "/Items/{ItemID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items/{ItemID}\"].post"
+      },
       "covered_by": {
         "write": "update_item"
       }
@@ -948,6 +1940,15 @@
     {
       "method": "DELETE",
       "path": "/Items/{ItemID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items/{ItemID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_item"
       }
@@ -955,6 +1956,15 @@
     {
       "method": "GET",
       "path": "/Items/{ItemID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items/{ItemID}/History\"].get"
+      },
       "covered_by": {
         "stream": "item_history"
       }
@@ -962,6 +1972,15 @@
     {
       "method": "PUT",
       "path": "/Items/{ItemID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Items/{ItemID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_item_history"
       }
@@ -969,6 +1988,15 @@
     {
       "method": "GET",
       "path": "/Journals",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Journals\"].get"
+      },
       "covered_by": {
         "stream": "journals"
       }
@@ -976,6 +2004,15 @@
     {
       "method": "GET",
       "path": "/Journals/{JournalID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Journals/{JournalID}\"].get"
+      },
       "covered_by": {
         "stream": "journal"
       }
@@ -983,6 +2020,15 @@
     {
       "method": "GET",
       "path": "/Journals/{JournalNumber}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Journals/{JournalNumber}\"].get"
+      },
       "covered_by": {
         "stream": "journal_by_number"
       }
@@ -990,6 +2036,15 @@
     {
       "method": "GET",
       "path": "/LinkedTransactions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/LinkedTransactions\"].get"
+      },
       "covered_by": {
         "stream": "linked_transactions"
       }
@@ -997,6 +2052,15 @@
     {
       "method": "PUT",
       "path": "/LinkedTransactions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/LinkedTransactions\"].put"
+      },
       "covered_by": {
         "write": "create_linked_transaction"
       }
@@ -1004,6 +2068,15 @@
     {
       "method": "GET",
       "path": "/LinkedTransactions/{LinkedTransactionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/LinkedTransactions/{LinkedTransactionID}\"].get"
+      },
       "covered_by": {
         "stream": "linked_transaction"
       }
@@ -1011,6 +2084,15 @@
     {
       "method": "POST",
       "path": "/LinkedTransactions/{LinkedTransactionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/LinkedTransactions/{LinkedTransactionID}\"].post"
+      },
       "covered_by": {
         "write": "update_linked_transaction"
       }
@@ -1018,6 +2100,15 @@
     {
       "method": "DELETE",
       "path": "/LinkedTransactions/{LinkedTransactionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/LinkedTransactions/{LinkedTransactionID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_linked_transaction"
       }
@@ -1025,27 +2116,63 @@
     {
       "method": "GET",
       "path": "/ManualJournals",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals\"].get"
+      },
       "covered_by": {
         "stream": "manual_journals"
       }
     },
     {
-      "method": "PUT",
-      "path": "/ManualJournals",
-      "covered_by": {
-        "write": "create_manual_journals"
-      }
-    },
-    {
       "method": "POST",
       "path": "/ManualJournals",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals\"].post"
+      },
       "covered_by": {
         "write": "upsert_manual_journals"
       }
     },
     {
+      "method": "PUT",
+      "path": "/ManualJournals",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals\"].put"
+      },
+      "covered_by": {
+        "write": "create_manual_journals"
+      }
+    },
+    {
       "method": "GET",
       "path": "/ManualJournals/{ManualJournalID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}\"].get"
+      },
       "covered_by": {
         "stream": "manual_journal"
       }
@@ -1053,6 +2180,15 @@
     {
       "method": "POST",
       "path": "/ManualJournals/{ManualJournalID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}\"].post"
+      },
       "covered_by": {
         "write": "update_manual_journal"
       }
@@ -1060,6 +2196,15 @@
     {
       "method": "GET",
       "path": "/ManualJournals/{ManualJournalID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "manual_journal_attachments"
       }
@@ -1067,58 +2212,99 @@
     {
       "method": "GET",
       "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getManualJournalAttachmentById; summary=Allows you to retrieve a specific attachment from a specific manual journal using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getManualJournalAttachmentByFileName; summary=Retrieves a specific attachment from a specific manual journal by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateManualJournalAttachmentByFileName; summary=Updates a specific attachment from a specific manual journal by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createManualJournalAttachmentByFileName; summary=Creates a specific attachment for a specific manual journal by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/ManualJournals/{ManualJournalID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/History\"].get"
+      },
       "covered_by": {
         "stream": "manual_journals_history"
       }
@@ -1126,6 +2312,15 @@
     {
       "method": "PUT",
       "path": "/ManualJournals/{ManualJournalID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/ManualJournals/{ManualJournalID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_manual_journal_history_record"
       }
@@ -1133,6 +2328,15 @@
     {
       "method": "GET",
       "path": "/Organisation",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Organisation\"].get"
+      },
       "covered_by": {
         "stream": "organisations"
       }
@@ -1140,6 +2344,15 @@
     {
       "method": "GET",
       "path": "/Organisation/Actions",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Organisation/Actions\"].get"
+      },
       "covered_by": {
         "stream": "organisation_actions"
       }
@@ -1147,6 +2360,15 @@
     {
       "method": "GET",
       "path": "/Organisation/{OrganisationID}/CISSettings",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Organisation/{OrganisationID}/CISSettings\"].get"
+      },
       "covered_by": {
         "stream": "organisation_cis_settings"
       }
@@ -1154,6 +2376,15 @@
     {
       "method": "GET",
       "path": "/Overpayments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments\"].get"
+      },
       "covered_by": {
         "stream": "overpayments"
       }
@@ -1161,6 +2392,15 @@
     {
       "method": "GET",
       "path": "/Overpayments/{OverpaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments/{OverpaymentID}\"].get"
+      },
       "covered_by": {
         "stream": "overpayment"
       }
@@ -1168,6 +2408,15 @@
     {
       "method": "PUT",
       "path": "/Overpayments/{OverpaymentID}/Allocations",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments/{OverpaymentID}/Allocations\"].put"
+      },
       "covered_by": {
         "write": "create_overpayment_allocations"
       }
@@ -1175,6 +2424,15 @@
     {
       "method": "DELETE",
       "path": "/Overpayments/{OverpaymentID}/Allocations/{AllocationID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments/{OverpaymentID}/Allocations/{AllocationID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_overpayment_allocations"
       }
@@ -1182,6 +2440,15 @@
     {
       "method": "GET",
       "path": "/Overpayments/{OverpaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments/{OverpaymentID}/History\"].get"
+      },
       "covered_by": {
         "stream": "overpayment_history"
       }
@@ -1189,62 +2456,31 @@
     {
       "method": "PUT",
       "path": "/Overpayments/{OverpaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Overpayments/{OverpaymentID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_overpayment_history"
       }
     },
     {
       "method": "GET",
-      "path": "/Payments",
-      "covered_by": {
-        "stream": "payments"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Payments",
-      "covered_by": {
-        "write": "create_payments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/Payments",
-      "covered_by": {
-        "write": "create_payment"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Payments/{PaymentID}",
-      "covered_by": {
-        "stream": "payment"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/Payments/{PaymentID}",
-      "covered_by": {
-        "write": "delete_payment"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Payments/{PaymentID}/History",
-      "covered_by": {
-        "stream": "payment_history"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Payments/{PaymentID}/History",
-      "covered_by": {
-        "write": "create_payment_history"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/PaymentServices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PaymentServices\"].get"
+      },
       "covered_by": {
         "stream": "payment_services"
       }
@@ -1252,13 +2488,143 @@
     {
       "method": "PUT",
       "path": "/PaymentServices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PaymentServices\"].put"
+      },
       "covered_by": {
         "write": "create_payment_service"
       }
     },
     {
       "method": "GET",
+      "path": "/Payments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments\"].get"
+      },
+      "covered_by": {
+        "stream": "payments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Payments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments\"].post"
+      },
+      "covered_by": {
+        "write": "create_payment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Payments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments\"].put"
+      },
+      "covered_by": {
+        "write": "create_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Payments/{PaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments/{PaymentID}\"].get"
+      },
+      "covered_by": {
+        "stream": "payment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/Payments/{PaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments/{PaymentID}\"].post"
+      },
+      "covered_by": {
+        "write": "delete_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Payments/{PaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments/{PaymentID}/History\"].get"
+      },
+      "covered_by": {
+        "stream": "payment_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Payments/{PaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Payments/{PaymentID}/History\"].put"
+      },
+      "covered_by": {
+        "write": "create_payment_history"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/Prepayments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments\"].get"
+      },
       "covered_by": {
         "stream": "prepayments"
       }
@@ -1266,6 +2632,15 @@
     {
       "method": "GET",
       "path": "/Prepayments/{PrepaymentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments/{PrepaymentID}\"].get"
+      },
       "covered_by": {
         "stream": "prepayment"
       }
@@ -1273,6 +2648,15 @@
     {
       "method": "PUT",
       "path": "/Prepayments/{PrepaymentID}/Allocations",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments/{PrepaymentID}/Allocations\"].put"
+      },
       "covered_by": {
         "write": "create_prepayment_allocations"
       }
@@ -1280,6 +2664,15 @@
     {
       "method": "DELETE",
       "path": "/Prepayments/{PrepaymentID}/Allocations/{AllocationID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments/{PrepaymentID}/Allocations/{AllocationID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_prepayment_allocations"
       }
@@ -1287,6 +2680,15 @@
     {
       "method": "GET",
       "path": "/Prepayments/{PrepaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments/{PrepaymentID}/History\"].get"
+      },
       "covered_by": {
         "stream": "prepayment_history"
       }
@@ -1294,6 +2696,15 @@
     {
       "method": "PUT",
       "path": "/Prepayments/{PrepaymentID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Prepayments/{PrepaymentID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_prepayment_history"
       }
@@ -1301,40 +2712,63 @@
     {
       "method": "GET",
       "path": "/PurchaseOrders",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders\"].get"
+      },
       "covered_by": {
         "stream": "purchase_orders"
       }
     },
     {
-      "method": "PUT",
-      "path": "/PurchaseOrders",
-      "covered_by": {
-        "write": "create_purchase_orders"
-      }
-    },
-    {
       "method": "POST",
       "path": "/PurchaseOrders",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders\"].post"
+      },
       "covered_by": {
         "write": "upsert_purchase_orders"
       }
     },
     {
-      "method": "GET",
-      "path": "/PurchaseOrders/{PurchaseOrderID}/pdf",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+      "method": "PUT",
+      "path": "/PurchaseOrders",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
         "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getPurchaseOrderAsPdf; summary=Retrieves specific purchase order as PDF files using a unique purchase order Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders\"].put"
+      },
+      "covered_by": {
+        "write": "create_purchase_orders"
       }
     },
     {
       "method": "GET",
       "path": "/PurchaseOrders/{PurchaseOrderID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}\"].get"
+      },
       "covered_by": {
         "stream": "purchase_order"
       }
@@ -1342,34 +2776,31 @@
     {
       "method": "POST",
       "path": "/PurchaseOrders/{PurchaseOrderID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}\"].post"
+      },
       "covered_by": {
         "write": "update_purchase_order"
       }
     },
     {
       "method": "GET",
-      "path": "/PurchaseOrders/{PurchaseOrderNumber}",
-      "covered_by": {
-        "stream": "purchase_order_by_number"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/PurchaseOrders/{PurchaseOrderID}/History",
-      "covered_by": {
-        "stream": "purchase_order_history"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/PurchaseOrders/{PurchaseOrderID}/History",
-      "covered_by": {
-        "write": "create_purchase_order_history"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "purchase_order_attachments"
       }
@@ -1377,79 +2808,216 @@
     {
       "method": "GET",
       "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getPurchaseOrderAttachmentById; summary=Retrieves specific attachment for a specific purchase order using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getPurchaseOrderAttachmentByFileName; summary=Retrieves a specific attachment for a specific purchase order by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updatePurchaseOrderAttachmentByFileName; summary=Updates a specific attachment for a specific purchase order by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createPurchaseOrderAttachmentByFileName; summary=Creates attachment for a specific purchase order; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
+      "path": "/PurchaseOrders/{PurchaseOrderID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/History\"].get"
+      },
+      "covered_by": {
+        "stream": "purchase_order_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/PurchaseOrders/{PurchaseOrderID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/History\"].put"
+      },
+      "covered_by": {
+        "write": "create_purchase_order_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/PurchaseOrders/{PurchaseOrderID}/pdf",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderID}/pdf\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getPurchaseOrderAsPdf; summary=Retrieves specific purchase order as PDF files using a unique purchase order Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/PurchaseOrders/{PurchaseOrderNumber}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/PurchaseOrders/{PurchaseOrderNumber}\"].get"
+      },
+      "covered_by": {
+        "stream": "purchase_order_by_number"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/Quotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes\"].get"
+      },
       "covered_by": {
         "stream": "quotes"
       }
     },
     {
-      "method": "PUT",
-      "path": "/Quotes",
-      "covered_by": {
-        "write": "create_quotes"
-      }
-    },
-    {
       "method": "POST",
       "path": "/Quotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes\"].post"
+      },
       "covered_by": {
         "write": "upsert_quotes"
       }
     },
     {
+      "method": "PUT",
+      "path": "/Quotes",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes\"].put"
+      },
+      "covered_by": {
+        "write": "create_quotes"
+      }
+    },
+    {
       "method": "GET",
       "path": "/Quotes/{QuoteID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}\"].get"
+      },
       "covered_by": {
         "stream": "quote"
       }
@@ -1457,40 +3025,31 @@
     {
       "method": "POST",
       "path": "/Quotes/{QuoteID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}\"].post"
+      },
       "covered_by": {
         "write": "update_quote"
       }
     },
     {
       "method": "GET",
-      "path": "/Quotes/{QuoteID}/History",
-      "covered_by": {
-        "stream": "quote_history"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/Quotes/{QuoteID}/History",
-      "covered_by": {
-        "write": "create_quote_history"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/Quotes/{QuoteID}/pdf",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-        "notes": "official_lane=binary_file; operation_id=getQuoteAsPdf; summary=Retrieves a specific quote as a PDF file using a unique quote Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/Quotes/{QuoteID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "quote_attachments"
       }
@@ -1498,58 +3057,152 @@
     {
       "method": "GET",
       "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getQuoteAttachmentById; summary=Retrieves a specific attachment from a specific quote using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getQuoteAttachmentByFileName; summary=Retrieves a specific attachment from a specific quote by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateQuoteAttachmentByFileName; summary=Updates a specific attachment from a specific quote by filename; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/Quotes/{QuoteID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createQuoteAttachmentByFileName; summary=Creates attachment for a specific quote; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
+      "path": "/Quotes/{QuoteID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/History\"].get"
+      },
+      "covered_by": {
+        "stream": "quote_history"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/Quotes/{QuoteID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/History\"].put"
+      },
+      "covered_by": {
+        "write": "create_quote_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Quotes/{QuoteID}/pdf",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Quotes/{QuoteID}/pdf\"].get"
+      },
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
+        "notes": "official_lane=binary_file; operation_id=getQuoteAsPdf; summary=Retrieves a specific quote as a PDF file using a unique quote Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/Receipts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts\"].get"
+      },
       "covered_by": {
         "stream": "receipts"
       }
@@ -1557,6 +3210,15 @@
     {
       "method": "PUT",
       "path": "/Receipts",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts\"].put"
+      },
       "covered_by": {
         "write": "create_receipt"
       }
@@ -1564,6 +3226,15 @@
     {
       "method": "GET",
       "path": "/Receipts/{ReceiptID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}\"].get"
+      },
       "covered_by": {
         "stream": "receipt"
       }
@@ -1571,6 +3242,15 @@
     {
       "method": "POST",
       "path": "/Receipts/{ReceiptID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}\"].post"
+      },
       "covered_by": {
         "write": "update_receipt"
       }
@@ -1578,6 +3258,15 @@
     {
       "method": "GET",
       "path": "/Receipts/{ReceiptID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "receipt_attachments"
       }
@@ -1585,58 +3274,99 @@
     {
       "method": "GET",
       "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getReceiptAttachmentById; summary=Retrieves a specific attachments from a specific expense claim receipts by using a unique attachment Id; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getReceiptAttachmentByFileName; summary=Retrieves a specific attachment from a specific expense claim receipts by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateReceiptAttachmentByFileName; summary=Updates a specific attachment on a specific expense claim receipts by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/Receipts/{ReceiptID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createReceiptAttachmentByFileName; summary=Creates an attachment on a specific expense claim receipts by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/Receipts/{ReceiptID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/History\"].get"
+      },
       "covered_by": {
         "stream": "receipt_history"
       }
@@ -1644,6 +3374,15 @@
     {
       "method": "PUT",
       "path": "/Receipts/{ReceiptID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Receipts/{ReceiptID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_receipt_history"
       }
@@ -1651,27 +3390,63 @@
     {
       "method": "GET",
       "path": "/RepeatingInvoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices\"].get"
+      },
       "covered_by": {
         "stream": "repeating_invoices"
       }
     },
     {
-      "method": "PUT",
-      "path": "/RepeatingInvoices",
-      "covered_by": {
-        "write": "create_repeating_invoices"
-      }
-    },
-    {
       "method": "POST",
       "path": "/RepeatingInvoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices\"].post"
+      },
       "covered_by": {
         "write": "upsert_repeating_invoices"
       }
     },
     {
+      "method": "PUT",
+      "path": "/RepeatingInvoices",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices\"].put"
+      },
+      "covered_by": {
+        "write": "create_repeating_invoices"
+      }
+    },
+    {
       "method": "GET",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}\"].get"
+      },
       "covered_by": {
         "stream": "repeating_invoice"
       }
@@ -1679,6 +3454,15 @@
     {
       "method": "POST",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}\"].post"
+      },
       "covered_by": {
         "write": "update_repeating_invoice"
       }
@@ -1686,6 +3470,15 @@
     {
       "method": "GET",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/Attachments\"].get"
+      },
       "covered_by": {
         "stream": "repeating_invoice_attachments"
       }
@@ -1693,58 +3486,99 @@
     {
       "method": "GET",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getRepeatingInvoiceAttachmentById; summary=Retrieves a specific attachment from a specific repeating invoice; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}\"].get"
+      },
       "operation": {
         "model": "binary_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "Xero binary/PDF download is in scope and bounded in operations.json, but execution is blocked until the shared binary download runner can stream approved files without adding connector-local runtime code.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=getRepeatingInvoiceAttachmentByFileName; summary=Retrieves a specific attachment from a specific repeating invoices by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "POST",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}\"].post"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=updateRepeatingInvoiceAttachmentByFileName; summary=Updates a specific attachment from a specific repeating invoices by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "PUT",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}\"].put"
+      },
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
         "reason": "Xero attachment upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner supports provider paths, approved payload digests, redaction, and plan-preview-approval-execute semantics.",
-        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
         "notes": "official_lane=binary_file; operation_id=createRepeatingInvoiceAttachmentByFileName; summary=Creates an attachment from a specific repeating invoices by file name; source=https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml; spec_version=16.1.0"
       }
     },
     {
       "method": "GET",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/History\"].get"
+      },
       "covered_by": {
         "stream": "repeating_invoice_history"
       }
@@ -1752,101 +3586,207 @@
     {
       "method": "PUT",
       "path": "/RepeatingInvoices/{RepeatingInvoiceID}/History",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/RepeatingInvoices/{RepeatingInvoiceID}/History\"].put"
+      },
       "covered_by": {
         "write": "create_repeating_invoice_history"
       }
     },
     {
       "method": "GET",
-      "path": "/Reports/TenNinetyNine",
+      "path": "/Reports",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports ten_ninety_nine",
-        "stream": "report_ten_ninety_nine"
+        "stream": "reports_list"
       }
     },
     {
       "method": "GET",
       "path": "/Reports/AgedPayablesByContact",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/AgedPayablesByContact\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports aged_payables_by_contact",
         "stream": "report_aged_payables_by_contact"
       }
     },
     {
       "method": "GET",
       "path": "/Reports/AgedReceivablesByContact",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/AgedReceivablesByContact\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports aged_receivables_by_contact",
         "stream": "report_aged_receivables_by_contact"
       }
     },
     {
       "method": "GET",
       "path": "/Reports/BalanceSheet",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/BalanceSheet\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports balance_sheet",
         "stream": "report_balance_sheet"
       }
     },
     {
       "method": "GET",
       "path": "/Reports/BankSummary",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/BankSummary\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports bank_summary",
         "stream": "report_bank_summary"
       }
     },
     {
       "method": "GET",
-      "path": "/Reports/{ReportID}",
-      "covered_by": {
-        "direct_read": "reports get",
-        "stream": "report_from_id"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/Reports/BudgetSummary",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/BudgetSummary\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports budget_summary",
         "stream": "report_budget_summary"
       }
     },
     {
       "method": "GET",
       "path": "/Reports/ExecutiveSummary",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/ExecutiveSummary\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports executive_summary",
         "stream": "report_executive_summary"
       }
     },
     {
       "method": "GET",
-      "path": "/Reports",
-      "covered_by": {
-        "direct_read": "reports list",
-        "stream": "reports_list"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/Reports/ProfitAndLoss",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/ProfitAndLoss\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports profit_and_loss",
         "stream": "report_profit_and_loss"
       }
     },
     {
       "method": "GET",
-      "path": "/Reports/TrialBalance",
+      "path": "/Reports/TenNinetyNine",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/TenNinetyNine\"].get"
+      },
       "covered_by": {
-        "direct_read": "reports trial_balance",
+        "stream": "report_ten_ninety_nine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Reports/TrialBalance",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/TrialBalance\"].get"
+      },
+      "covered_by": {
         "stream": "report_trial_balance"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/Reports/{ReportID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Reports/{ReportID}\"].get"
+      },
+      "covered_by": {
+        "stream": "report_from_id"
       }
     },
     {
       "method": "POST",
       "path": "/Setup",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Setup\"].post"
+      },
       "covered_by": {
         "write": "setup_organisation"
       }
@@ -1854,27 +3794,63 @@
     {
       "method": "GET",
       "path": "/TaxRates",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TaxRates\"].get"
+      },
       "covered_by": {
         "stream": "tax_rates"
       }
     },
     {
-      "method": "PUT",
-      "path": "/TaxRates",
-      "covered_by": {
-        "write": "create_tax_rates"
-      }
-    },
-    {
       "method": "POST",
       "path": "/TaxRates",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TaxRates\"].post"
+      },
       "covered_by": {
         "write": "update_tax_rate"
       }
     },
     {
+      "method": "PUT",
+      "path": "/TaxRates",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TaxRates\"].put"
+      },
+      "covered_by": {
+        "write": "create_tax_rates"
+      }
+    },
+    {
       "method": "GET",
       "path": "/TaxRates/{TaxType}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TaxRates/{TaxType}\"].get"
+      },
       "covered_by": {
         "stream": "tax_rate_by_tax_type"
       }
@@ -1882,6 +3858,15 @@
     {
       "method": "GET",
       "path": "/TrackingCategories",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories\"].get"
+      },
       "covered_by": {
         "stream": "tracking_categories"
       }
@@ -1889,6 +3874,15 @@
     {
       "method": "PUT",
       "path": "/TrackingCategories",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories\"].put"
+      },
       "covered_by": {
         "write": "create_tracking_category"
       }
@@ -1896,6 +3890,15 @@
     {
       "method": "GET",
       "path": "/TrackingCategories/{TrackingCategoryID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}\"].get"
+      },
       "covered_by": {
         "stream": "tracking_category"
       }
@@ -1903,6 +3906,15 @@
     {
       "method": "POST",
       "path": "/TrackingCategories/{TrackingCategoryID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}\"].post"
+      },
       "covered_by": {
         "write": "update_tracking_category"
       }
@@ -1910,6 +3922,15 @@
     {
       "method": "DELETE",
       "path": "/TrackingCategories/{TrackingCategoryID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_tracking_category"
       }
@@ -1917,6 +3938,15 @@
     {
       "method": "PUT",
       "path": "/TrackingCategories/{TrackingCategoryID}/Options",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}/Options\"].put"
+      },
       "covered_by": {
         "write": "create_tracking_options"
       }
@@ -1924,6 +3954,15 @@
     {
       "method": "POST",
       "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}\"].post"
+      },
       "covered_by": {
         "write": "update_tracking_options"
       }
@@ -1931,6 +3970,15 @@
     {
       "method": "DELETE",
       "path": "/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/TrackingCategories/{TrackingCategoryID}/Options/{TrackingOptionID}\"].delete"
+      },
       "covered_by": {
         "write": "delete_tracking_options"
       }
@@ -1938,6 +3986,15 @@
     {
       "method": "GET",
       "path": "/Users",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Users\"].get"
+      },
       "covered_by": {
         "stream": "users"
       }
@@ -1945,6 +4002,15 @@
     {
       "method": "GET",
       "path": "/Users/{UserID}",
+      "provenance": {
+        "artifact": "xero-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "dc231cafd8de7d93a1c0c8cc26944724a8af5f1e59cc54b684187ee22df36318",
+        "coordinate": "paths[\"/Users/{UserID}\"].get"
+      },
       "covered_by": {
         "stream": "user"
       }

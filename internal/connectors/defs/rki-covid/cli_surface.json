@@ -1,0 +1,1883 @@
+{
+  "tagline": "Run RKI COVID's declared streams and reverse-ETL actions.",
+  "usage": "pm rki-covid \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get districts ags",
+        "api get districts ags age-groups",
+        "api get districts ags history cases",
+        "api get districts ags history cases days",
+        "api get districts ags history deaths",
+        "api get districts ags history deaths days",
+        "api get districts ags history frozen-incidence",
+        "api get districts ags history frozen-incidence days",
+        "api get districts ags history incidence",
+        "api get districts ags history incidence days",
+        "api get districts ags history recovered",
+        "api get districts ags history recovered days",
+        "api get districts history",
+        "api get districts history cases days",
+        "api get districts history deaths days",
+        "api get districts history frozen-incidence days",
+        "api get districts history incidence days",
+        "api get districts history recovered days",
+        "api get germany history",
+        "api get germany history cases days",
+        "api get germany history deaths days",
+        "api get germany history frozen-incidence days",
+        "api get germany history hospitalization days",
+        "api get germany history incidence days",
+        "api get germany history recovered days",
+        "api get germany history rvalue days",
+        "api get map",
+        "api get map districts",
+        "api get map districts history date",
+        "api get map districts legend",
+        "api get map districts-legend",
+        "api get map districts-legend history date",
+        "api get map states",
+        "api get map states hospitalization",
+        "api get map states hospitalization history date",
+        "api get map states legend",
+        "api get map states-legend",
+        "api get map states-legend history date",
+        "api get map states-legend hospitalization",
+        "api get map states-legend hospitalization history date",
+        "api get states history",
+        "api get states history cases days",
+        "api get states history deaths days",
+        "api get states history frozen-incidence days",
+        "api get states history hospitalization days",
+        "api get states history incidence days",
+        "api get states history recovered days",
+        "api get states state",
+        "api get states state age-groups",
+        "api get states state history cases",
+        "api get states state history cases days",
+        "api get states state history deaths",
+        "api get states state history deaths days",
+        "api get states state history frozen-incidence",
+        "api get states state history frozen-incidence days",
+        "api get states state history hospitalization",
+        "api get states state history hospitalization days",
+        "api get states state history incidence",
+        "api get states state history incidence days",
+        "api get states state history recovered",
+        "api get states state history recovered days",
+        "api get testing history weeks",
+        "api get vaccinations germany",
+        "api get vaccinations history days",
+        "api get vaccinations states state",
+        "cases history list",
+        "deaths history list",
+        "districts age groups list",
+        "districts cases history list",
+        "districts deaths history list",
+        "districts frozen incidence history list",
+        "districts incidence history list",
+        "districts list",
+        "districts recovered history list",
+        "germany age groups list",
+        "germany frozen incidence history list",
+        "germany hospitalization history list",
+        "germany incidence history list",
+        "germany list",
+        "germany r value history list",
+        "germany recovered history list",
+        "states age groups list",
+        "states cases history list",
+        "states deaths history list",
+        "states frozen incidence history list",
+        "states hospitalization history list",
+        "states incidence history list",
+        "states list",
+        "states recovered history list",
+        "testing history list",
+        "vaccinations history list",
+        "vaccinations list",
+        "vaccinations states list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get districts ags",
+      "summary": "Documented GET /districts/{ags} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags age-groups",
+      "summary": "Documented GET /districts/{ags}/age-groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags age-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/age-groups"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-age-groups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history cases",
+      "summary": "Documented GET /districts/{ags}/history/cases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history cases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/cases"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-cases",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history cases days",
+      "summary": "Documented GET /districts/{ags}/history/cases/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history cases days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/cases/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-cases-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history deaths",
+      "summary": "Documented GET /districts/{ags}/history/deaths (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history deaths --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/deaths"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-deaths",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history deaths days",
+      "summary": "Documented GET /districts/{ags}/history/deaths/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history deaths days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/deaths/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-deaths-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history frozen-incidence",
+      "summary": "Documented GET /districts/{ags}/history/frozen-incidence (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history frozen-incidence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/frozen-incidence"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-frozen-incidence",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history frozen-incidence days",
+      "summary": "Documented GET /districts/{ags}/history/frozen-incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history frozen-incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/frozen-incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-frozen-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history incidence",
+      "summary": "Documented GET /districts/{ags}/history/incidence (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history incidence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/incidence"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-incidence",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history incidence days",
+      "summary": "Documented GET /districts/{ags}/history/incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history recovered",
+      "summary": "Documented GET /districts/{ags}/history/recovered (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history recovered --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/recovered"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-recovered",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts ags history recovered days",
+      "summary": "Documented GET /districts/{ags}/history/recovered/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts ags history recovered days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/{ags}/history/recovered/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-ags-history-recovered-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history",
+      "summary": "Documented GET /districts/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history cases days",
+      "summary": "Documented GET /districts/history/cases/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history cases days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/cases/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history-cases-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history deaths days",
+      "summary": "Documented GET /districts/history/deaths/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history deaths days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/deaths/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history-deaths-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history frozen-incidence days",
+      "summary": "Documented GET /districts/history/frozen-incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history frozen-incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/frozen-incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history-frozen-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history incidence days",
+      "summary": "Documented GET /districts/history/incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get districts history recovered days",
+      "summary": "Documented GET /districts/history/recovered/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get districts history recovered days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/recovered/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.districts-history-recovered-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history",
+      "summary": "Documented GET /germany/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history cases days",
+      "summary": "Documented GET /germany/history/cases/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history cases days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/cases/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-cases-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history deaths days",
+      "summary": "Documented GET /germany/history/deaths/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history deaths days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/deaths/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-deaths-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history frozen-incidence days",
+      "summary": "Documented GET /germany/history/frozen-incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history frozen-incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/frozen-incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-frozen-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history hospitalization days",
+      "summary": "Documented GET /germany/history/hospitalization/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history hospitalization days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/hospitalization/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-hospitalization-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history incidence days",
+      "summary": "Documented GET /germany/history/incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history recovered days",
+      "summary": "Documented GET /germany/history/recovered/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history recovered days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/recovered/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-recovered-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get germany history rvalue days",
+      "summary": "Documented GET /germany/history/rValue/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get germany history rvalue days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/rValue/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.germany-history-rvalue-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map",
+      "summary": "Documented GET /map (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map"
+        }
+      ],
+      "operation": "rki-covid.get.map",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map districts",
+      "summary": "Documented GET /map/districts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map districts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/districts"
+        }
+      ],
+      "operation": "rki-covid.get.map-districts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map districts history date",
+      "summary": "Documented GET /map/districts/history/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map districts history date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/districts/history/{date}"
+        }
+      ],
+      "operation": "rki-covid.get.map-districts-history-date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map districts legend",
+      "summary": "Documented GET /map/districts/legend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map districts legend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/districts/legend"
+        }
+      ],
+      "operation": "rki-covid.get.map-districts-legend-2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map districts-legend",
+      "summary": "Documented GET /map/districts-legend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map districts-legend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/districts-legend"
+        }
+      ],
+      "operation": "rki-covid.get.map-districts-legend",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map districts-legend history date",
+      "summary": "Documented GET /map/districts-legend/history/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map districts-legend history date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/districts-legend/history/{date}"
+        }
+      ],
+      "operation": "rki-covid.get.map-districts-legend-history-date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states",
+      "summary": "Documented GET /map/states (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states"
+        }
+      ],
+      "operation": "rki-covid.get.map-states",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states hospitalization",
+      "summary": "Documented GET /map/states/hospitalization (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states hospitalization --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states/hospitalization"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-hospitalization",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states hospitalization history date",
+      "summary": "Documented GET /map/states/hospitalization/history/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states hospitalization history date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states/hospitalization/history/{date}"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-hospitalization-history-date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states legend",
+      "summary": "Documented GET /map/states/legend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states legend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states/legend"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-legend-2",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states-legend",
+      "summary": "Documented GET /map/states-legend (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states-legend --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states-legend"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-legend",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states-legend history date",
+      "summary": "Documented GET /map/states-legend/history/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states-legend history date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states-legend/history/{date}"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-legend-history-date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states-legend hospitalization",
+      "summary": "Documented GET /map/states-legend/hospitalization (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states-legend hospitalization --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states-legend/hospitalization"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-legend-hospitalization",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get map states-legend hospitalization history date",
+      "summary": "Documented GET /map/states-legend/hospitalization/history/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get map states-legend hospitalization history date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/map/states-legend/hospitalization/history/{date}"
+        }
+      ],
+      "operation": "rki-covid.get.map-states-legend-hospitalization-history-date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history",
+      "summary": "Documented GET /states/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history"
+        }
+      ],
+      "operation": "rki-covid.get.states-history",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history cases days",
+      "summary": "Documented GET /states/history/cases/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history cases days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/cases/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-cases-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history deaths days",
+      "summary": "Documented GET /states/history/deaths/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history deaths days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/deaths/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-deaths-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history frozen-incidence days",
+      "summary": "Documented GET /states/history/frozen-incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history frozen-incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/frozen-incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-frozen-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history hospitalization days",
+      "summary": "Documented GET /states/history/hospitalization/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history hospitalization days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/hospitalization/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-hospitalization-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history incidence days",
+      "summary": "Documented GET /states/history/incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states history recovered days",
+      "summary": "Documented GET /states/history/recovered/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states history recovered days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/recovered/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-history-recovered-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state",
+      "summary": "Documented GET /states/{state} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state age-groups",
+      "summary": "Documented GET /states/{state}/age-groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state age-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/age-groups"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-age-groups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history cases",
+      "summary": "Documented GET /states/{state}/history/cases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history cases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/cases"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-cases",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history cases days",
+      "summary": "Documented GET /states/{state}/history/cases/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history cases days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/cases/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-cases-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history deaths",
+      "summary": "Documented GET /states/{state}/history/deaths (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history deaths --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/deaths"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-deaths",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history deaths days",
+      "summary": "Documented GET /states/{state}/history/deaths/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history deaths days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/deaths/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-deaths-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history frozen-incidence",
+      "summary": "Documented GET /states/{state}/history/frozen-incidence (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history frozen-incidence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/frozen-incidence"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-frozen-incidence",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history frozen-incidence days",
+      "summary": "Documented GET /states/{state}/history/frozen-incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history frozen-incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/frozen-incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-frozen-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history hospitalization",
+      "summary": "Documented GET /states/{state}/history/hospitalization (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history hospitalization --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/hospitalization"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-hospitalization",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history hospitalization days",
+      "summary": "Documented GET /states/{state}/history/hospitalization/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history hospitalization days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/hospitalization/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-hospitalization-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history incidence",
+      "summary": "Documented GET /states/{state}/history/incidence (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history incidence --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/incidence"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-incidence",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history incidence days",
+      "summary": "Documented GET /states/{state}/history/incidence/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history incidence days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/incidence/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-incidence-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history recovered",
+      "summary": "Documented GET /states/{state}/history/recovered (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history recovered --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/recovered"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-recovered",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get states state history recovered days",
+      "summary": "Documented GET /states/{state}/history/recovered/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get states state history recovered days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/{state}/history/recovered/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.states-state-history-recovered-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get testing history weeks",
+      "summary": "Documented GET /testing/history/{weeks} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get testing history weeks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/testing/history/{weeks}"
+        }
+      ],
+      "operation": "rki-covid.get.testing-history-weeks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vaccinations germany",
+      "summary": "Documented GET /vaccinations/germany (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get vaccinations germany --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations/germany"
+        }
+      ],
+      "operation": "rki-covid.get.vaccinations-germany",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vaccinations history days",
+      "summary": "Documented GET /vaccinations/history/{days} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get vaccinations history days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations/history/{days}"
+        }
+      ],
+      "operation": "rki-covid.get.vaccinations-history-days",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vaccinations states state",
+      "summary": "Documented GET /vaccinations/states/{state} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid api get vaccinations states state --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations/states/{state}"
+        }
+      ],
+      "operation": "rki-covid.get.vaccinations-states-state",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "cases history list",
+      "summary": "Run the cases history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cases_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid cases history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/cases"
+        }
+      ]
+    },
+    {
+      "path": "deaths history list",
+      "summary": "Run the deaths history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deaths_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid deaths history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/deaths"
+        }
+      ]
+    },
+    {
+      "path": "districts age groups list",
+      "summary": "Run the districts age groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_age_groups",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts age groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/age-groups"
+        }
+      ]
+    },
+    {
+      "path": "districts cases history list",
+      "summary": "Run the districts cases history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_cases_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts cases history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/cases"
+        }
+      ]
+    },
+    {
+      "path": "districts deaths history list",
+      "summary": "Run the districts deaths history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_deaths_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts deaths history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/deaths"
+        }
+      ]
+    },
+    {
+      "path": "districts frozen incidence history list",
+      "summary": "Run the districts frozen incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_frozen_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts frozen incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/frozen-incidence"
+        }
+      ]
+    },
+    {
+      "path": "districts incidence history list",
+      "summary": "Run the districts incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/incidence"
+        }
+      ]
+    },
+    {
+      "path": "districts list",
+      "summary": "Run the districts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts"
+        }
+      ]
+    },
+    {
+      "path": "districts recovered history list",
+      "summary": "Run the districts recovered history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "districts_recovered_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid districts recovered history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/districts/history/recovered"
+        }
+      ]
+    },
+    {
+      "path": "germany age groups list",
+      "summary": "Run the germany age groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_age_groups",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany age groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/age-groups"
+        }
+      ]
+    },
+    {
+      "path": "germany frozen incidence history list",
+      "summary": "Run the germany frozen incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_frozen_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany frozen incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/frozen-incidence"
+        }
+      ]
+    },
+    {
+      "path": "germany hospitalization history list",
+      "summary": "Run the germany hospitalization history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_hospitalization_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany hospitalization history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/hospitalization"
+        }
+      ]
+    },
+    {
+      "path": "germany incidence history list",
+      "summary": "Run the germany incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/incidence"
+        }
+      ]
+    },
+    {
+      "path": "germany list",
+      "summary": "Run the germany ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany"
+        }
+      ]
+    },
+    {
+      "path": "germany r value history list",
+      "summary": "Run the germany r value history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_r_value_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany r value history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/rValue"
+        }
+      ]
+    },
+    {
+      "path": "germany recovered history list",
+      "summary": "Run the germany recovered history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "germany_recovered_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid germany recovered history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/germany/history/recovered"
+        }
+      ]
+    },
+    {
+      "path": "states age groups list",
+      "summary": "Run the states age groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_age_groups",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states age groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/age-groups"
+        }
+      ]
+    },
+    {
+      "path": "states cases history list",
+      "summary": "Run the states cases history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_cases_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states cases history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/cases"
+        }
+      ]
+    },
+    {
+      "path": "states deaths history list",
+      "summary": "Run the states deaths history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_deaths_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states deaths history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/deaths"
+        }
+      ]
+    },
+    {
+      "path": "states frozen incidence history list",
+      "summary": "Run the states frozen incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_frozen_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states frozen incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/frozen-incidence"
+        }
+      ]
+    },
+    {
+      "path": "states hospitalization history list",
+      "summary": "Run the states hospitalization history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_hospitalization_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states hospitalization history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/hospitalization"
+        }
+      ]
+    },
+    {
+      "path": "states incidence history list",
+      "summary": "Run the states incidence history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_incidence_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states incidence history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/incidence"
+        }
+      ]
+    },
+    {
+      "path": "states list",
+      "summary": "Run the states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states"
+        }
+      ]
+    },
+    {
+      "path": "states recovered history list",
+      "summary": "Run the states recovered history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "states_recovered_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid states recovered history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/states/history/recovered"
+        }
+      ]
+    },
+    {
+      "path": "testing history list",
+      "summary": "Run the testing history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "testing_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid testing history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/testing/history"
+        }
+      ]
+    },
+    {
+      "path": "vaccinations history list",
+      "summary": "Run the vaccinations history ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vaccinations_history",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid vaccinations history list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations/history"
+        }
+      ]
+    },
+    {
+      "path": "vaccinations list",
+      "summary": "Run the vaccinations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vaccinations",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid vaccinations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations"
+        }
+      ]
+    },
+    {
+      "path": "vaccinations states list",
+      "summary": "Run the vaccinations states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vaccinations_states",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "examples": [
+        "pm rki-covid vaccinations states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vaccinations/states"
+        }
+      ]
+    }
+  ]
+}

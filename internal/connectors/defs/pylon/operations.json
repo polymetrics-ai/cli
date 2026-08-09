@@ -1,0 +1,84 @@
+{
+  "operations": [
+    {
+      "id": "pylon.post.accounts-id-files",
+      "kind": "rest_write",
+      "summary": "POST /accounts/{id}/files",
+      "description": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accounts/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pylon.post.attachments",
+      "kind": "rest_write",
+      "summary": "POST /attachments",
+      "description": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pylon.post.feature-requests-merge",
+      "kind": "rest_write",
+      "summary": "POST /feature-requests/merge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/feature-requests/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pylon.delete.macros-id",
+      "kind": "rest_write",
+      "summary": "DELETE /macros/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/macros/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pylon.post.training-data-upload",
+      "kind": "rest_write",
+      "summary": "POST /training-data/upload",
+      "description": "multipart/form-data file upload is not expressible by the declarative JSON/form write dialect",
+      "source_url": "https://static.usepylon.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/training-data/upload",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

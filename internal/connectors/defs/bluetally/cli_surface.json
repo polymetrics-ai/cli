@@ -1,0 +1,1877 @@
+{
+  "tagline": "Run BlueTally's declared streams and reverse-ETL actions.",
+  "usage": "pm bluetally \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accessories list",
+        "activity list",
+        "api get accessories id",
+        "api get assets id",
+        "api get audits id",
+        "api get categories id",
+        "api get components id",
+        "api get consumables id",
+        "api get departments id",
+        "api get depreciations id",
+        "api get employees id",
+        "api get licenses id",
+        "api get locations id",
+        "api get maintenances id",
+        "api get manufacturers id",
+        "api get products id",
+        "api get statuses id",
+        "api get suppliers id",
+        "assets list",
+        "audits list",
+        "categories list",
+        "components list",
+        "consumables list",
+        "departments list",
+        "depreciations list",
+        "employees list",
+        "licenses list",
+        "locations list",
+        "maintenances list",
+        "manufacturers list",
+        "products list",
+        "statuses list",
+        "suppliers list",
+        "tenants list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete accessories id",
+        "api delete assets id",
+        "api delete audits id",
+        "api delete categories id",
+        "api delete components id",
+        "api delete consumables id",
+        "api delete departments id",
+        "api delete depreciations id",
+        "api delete employees id",
+        "api delete licenses id",
+        "api delete locations id",
+        "api delete maintenances id",
+        "api delete manufacturers id",
+        "api delete products id",
+        "api delete statuses id",
+        "api delete suppliers id",
+        "api post accessories",
+        "api post assets",
+        "api post audits",
+        "api post categories",
+        "api post checkin accessory",
+        "api post checkin asset",
+        "api post checkin component",
+        "api post checkin license",
+        "api post checkout accessory",
+        "api post checkout asset",
+        "api post checkout component",
+        "api post checkout consumable",
+        "api post checkout license",
+        "api post components",
+        "api post consumables",
+        "api post departments",
+        "api post depreciations",
+        "api post employees",
+        "api post licenses",
+        "api post locations",
+        "api post maintenances",
+        "api post manufacturers",
+        "api post products",
+        "api post statuses",
+        "api post suppliers",
+        "api put accessories id",
+        "api put assets id",
+        "api put audits id",
+        "api put categories id",
+        "api put components id",
+        "api put consumables id",
+        "api put departments id",
+        "api put depreciations id",
+        "api put employees id",
+        "api put licenses id",
+        "api put locations id",
+        "api put maintenances id",
+        "api put manufacturers id",
+        "api put products id",
+        "api put statuses id",
+        "api put suppliers id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accessories list",
+      "summary": "Run the accessories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accessories",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally accessories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accessories"
+        }
+      ]
+    },
+    {
+      "path": "activity list",
+      "summary": "Run the activity ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally activity list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activity"
+        }
+      ]
+    },
+    {
+      "path": "api delete accessories id",
+      "summary": "Documented DELETE /accessories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete accessories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/accessories/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.accessories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete assets id",
+      "summary": "Documented DELETE /assets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/assets/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.assets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete audits id",
+      "summary": "Documented DELETE /audits/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete audits id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/audits/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.audits-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete categories id",
+      "summary": "Documented DELETE /categories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.categories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete components id",
+      "summary": "Documented DELETE /components/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/components/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.components-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete consumables id",
+      "summary": "Documented DELETE /consumables/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete consumables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/consumables/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.consumables-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete departments id",
+      "summary": "Documented DELETE /departments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete departments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/departments/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.departments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete depreciations id",
+      "summary": "Documented DELETE /depreciations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete depreciations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/depreciations/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.depreciations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete employees id",
+      "summary": "Documented DELETE /employees/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete employees id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/employees/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.employees-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete licenses id",
+      "summary": "Documented DELETE /licenses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete licenses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/licenses/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.licenses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete locations id",
+      "summary": "Documented DELETE /locations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete locations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/locations/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.locations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete maintenances id",
+      "summary": "Documented DELETE /maintenances/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete maintenances id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenances/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.maintenances-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete manufacturers id",
+      "summary": "Documented DELETE /manufacturers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete manufacturers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/manufacturers/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.manufacturers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products id",
+      "summary": "Documented DELETE /products/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.products-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete statuses id",
+      "summary": "Documented DELETE /statuses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/statuses/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.statuses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppliers id",
+      "summary": "Documented DELETE /suppliers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api delete suppliers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppliers/{id}"
+        }
+      ],
+      "operation": "bluetally.delete.suppliers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get accessories id",
+      "summary": "Documented GET /accessories/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get accessories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accessories/{id}"
+        }
+      ],
+      "operation": "bluetally.get.accessories-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get assets id",
+      "summary": "Documented GET /assets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/assets/{id}"
+        }
+      ],
+      "operation": "bluetally.get.assets-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get audits id",
+      "summary": "Documented GET /audits/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get audits id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audits/{id}"
+        }
+      ],
+      "operation": "bluetally.get.audits-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories id",
+      "summary": "Documented GET /categories/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "bluetally.get.categories-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get components id",
+      "summary": "Documented GET /components/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/components/{id}"
+        }
+      ],
+      "operation": "bluetally.get.components-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get consumables id",
+      "summary": "Documented GET /consumables/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get consumables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/consumables/{id}"
+        }
+      ],
+      "operation": "bluetally.get.consumables-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get departments id",
+      "summary": "Documented GET /departments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get departments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments/{id}"
+        }
+      ],
+      "operation": "bluetally.get.departments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get depreciations id",
+      "summary": "Documented GET /depreciations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get depreciations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/depreciations/{id}"
+        }
+      ],
+      "operation": "bluetally.get.depreciations-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get employees id",
+      "summary": "Documented GET /employees/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get employees id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/employees/{id}"
+        }
+      ],
+      "operation": "bluetally.get.employees-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses id",
+      "summary": "Documented GET /licenses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get licenses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/{id}"
+        }
+      ],
+      "operation": "bluetally.get.licenses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get locations id",
+      "summary": "Documented GET /locations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get locations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/locations/{id}"
+        }
+      ],
+      "operation": "bluetally.get.locations-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get maintenances id",
+      "summary": "Documented GET /maintenances/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get maintenances id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenances/{id}"
+        }
+      ],
+      "operation": "bluetally.get.maintenances-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get manufacturers id",
+      "summary": "Documented GET /manufacturers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get manufacturers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/manufacturers/{id}"
+        }
+      ],
+      "operation": "bluetally.get.manufacturers-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products id",
+      "summary": "Documented GET /products/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "bluetally.get.products-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statuses id",
+      "summary": "Documented GET /statuses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statuses/{id}"
+        }
+      ],
+      "operation": "bluetally.get.statuses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppliers id",
+      "summary": "Documented GET /suppliers/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api get suppliers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppliers/{id}"
+        }
+      ],
+      "operation": "bluetally.get.suppliers-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post accessories",
+      "summary": "Documented POST /accessories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post accessories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/accessories"
+        }
+      ],
+      "operation": "bluetally.post.accessories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post assets",
+      "summary": "Documented POST /assets (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post assets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/assets"
+        }
+      ],
+      "operation": "bluetally.post.assets",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post audits",
+      "summary": "Documented POST /audits (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post audits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/audits"
+        }
+      ],
+      "operation": "bluetally.post.audits",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post categories",
+      "summary": "Documented POST /categories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/categories"
+        }
+      ],
+      "operation": "bluetally.post.categories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkin accessory",
+      "summary": "Documented POST /checkin/accessory (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkin accessory --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkin/accessory"
+        }
+      ],
+      "operation": "bluetally.post.checkin-accessory",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkin asset",
+      "summary": "Documented POST /checkin/asset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkin asset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkin/asset"
+        }
+      ],
+      "operation": "bluetally.post.checkin-asset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkin component",
+      "summary": "Documented POST /checkin/component (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkin component --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkin/component"
+        }
+      ],
+      "operation": "bluetally.post.checkin-component",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkin license",
+      "summary": "Documented POST /checkin/license (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkin license --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkin/license"
+        }
+      ],
+      "operation": "bluetally.post.checkin-license",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout accessory",
+      "summary": "Documented POST /checkout/accessory (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkout accessory --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout/accessory"
+        }
+      ],
+      "operation": "bluetally.post.checkout-accessory",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout asset",
+      "summary": "Documented POST /checkout/asset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkout asset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout/asset"
+        }
+      ],
+      "operation": "bluetally.post.checkout-asset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout component",
+      "summary": "Documented POST /checkout/component (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkout component --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout/component"
+        }
+      ],
+      "operation": "bluetally.post.checkout-component",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout consumable",
+      "summary": "Documented POST /checkout/consumable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkout consumable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout/consumable"
+        }
+      ],
+      "operation": "bluetally.post.checkout-consumable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post checkout license",
+      "summary": "Documented POST /checkout/license (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post checkout license --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checkout/license"
+        }
+      ],
+      "operation": "bluetally.post.checkout-license",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post components",
+      "summary": "Documented POST /components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/components"
+        }
+      ],
+      "operation": "bluetally.post.components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post consumables",
+      "summary": "Documented POST /consumables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post consumables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/consumables"
+        }
+      ],
+      "operation": "bluetally.post.consumables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post departments",
+      "summary": "Documented POST /departments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post departments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/departments"
+        }
+      ],
+      "operation": "bluetally.post.departments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post depreciations",
+      "summary": "Documented POST /depreciations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post depreciations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/depreciations"
+        }
+      ],
+      "operation": "bluetally.post.depreciations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post employees",
+      "summary": "Documented POST /employees (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post employees --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/employees"
+        }
+      ],
+      "operation": "bluetally.post.employees",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post licenses",
+      "summary": "Documented POST /licenses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/licenses"
+        }
+      ],
+      "operation": "bluetally.post.licenses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post locations",
+      "summary": "Documented POST /locations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post locations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/locations"
+        }
+      ],
+      "operation": "bluetally.post.locations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post maintenances",
+      "summary": "Documented POST /maintenances (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post maintenances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/maintenances"
+        }
+      ],
+      "operation": "bluetally.post.maintenances",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post manufacturers",
+      "summary": "Documented POST /manufacturers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post manufacturers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/manufacturers"
+        }
+      ],
+      "operation": "bluetally.post.manufacturers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products",
+      "summary": "Documented POST /products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products"
+        }
+      ],
+      "operation": "bluetally.post.products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post statuses",
+      "summary": "Documented POST /statuses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/statuses"
+        }
+      ],
+      "operation": "bluetally.post.statuses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppliers",
+      "summary": "Documented POST /suppliers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api post suppliers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppliers"
+        }
+      ],
+      "operation": "bluetally.post.suppliers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put accessories id",
+      "summary": "Documented PUT /accessories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put accessories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/accessories/{id}"
+        }
+      ],
+      "operation": "bluetally.put.accessories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put assets id",
+      "summary": "Documented PUT /assets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put assets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/assets/{id}"
+        }
+      ],
+      "operation": "bluetally.put.assets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put audits id",
+      "summary": "Documented PUT /audits/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put audits id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/audits/{id}"
+        }
+      ],
+      "operation": "bluetally.put.audits-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put categories id",
+      "summary": "Documented PUT /categories/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put categories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/categories/{id}"
+        }
+      ],
+      "operation": "bluetally.put.categories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put components id",
+      "summary": "Documented PUT /components/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put components id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/components/{id}"
+        }
+      ],
+      "operation": "bluetally.put.components-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put consumables id",
+      "summary": "Documented PUT /consumables/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put consumables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/consumables/{id}"
+        }
+      ],
+      "operation": "bluetally.put.consumables-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put departments id",
+      "summary": "Documented PUT /departments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put departments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/departments/{id}"
+        }
+      ],
+      "operation": "bluetally.put.departments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put depreciations id",
+      "summary": "Documented PUT /depreciations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put depreciations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/depreciations/{id}"
+        }
+      ],
+      "operation": "bluetally.put.depreciations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put employees id",
+      "summary": "Documented PUT /employees/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put employees id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/employees/{id}"
+        }
+      ],
+      "operation": "bluetally.put.employees-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put licenses id",
+      "summary": "Documented PUT /licenses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put licenses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/licenses/{id}"
+        }
+      ],
+      "operation": "bluetally.put.licenses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put locations id",
+      "summary": "Documented PUT /locations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put locations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/locations/{id}"
+        }
+      ],
+      "operation": "bluetally.put.locations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put maintenances id",
+      "summary": "Documented PUT /maintenances/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put maintenances id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/maintenances/{id}"
+        }
+      ],
+      "operation": "bluetally.put.maintenances-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put manufacturers id",
+      "summary": "Documented PUT /manufacturers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put manufacturers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/manufacturers/{id}"
+        }
+      ],
+      "operation": "bluetally.put.manufacturers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products id",
+      "summary": "Documented PUT /products/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put products id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{id}"
+        }
+      ],
+      "operation": "bluetally.put.products-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put statuses id",
+      "summary": "Documented PUT /statuses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put statuses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/statuses/{id}"
+        }
+      ],
+      "operation": "bluetally.put.statuses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put suppliers id",
+      "summary": "Documented PUT /suppliers/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally api put suppliers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/suppliers/{id}"
+        }
+      ],
+      "operation": "bluetally.put.suppliers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "assets list",
+      "summary": "Run the assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "assets",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/assets"
+        }
+      ]
+    },
+    {
+      "path": "audits list",
+      "summary": "Run the audits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audits",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally audits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audits"
+        }
+      ]
+    },
+    {
+      "path": "categories list",
+      "summary": "Run the categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "categories",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories"
+        }
+      ]
+    },
+    {
+      "path": "components list",
+      "summary": "Run the components ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "components",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally components list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/components"
+        }
+      ]
+    },
+    {
+      "path": "consumables list",
+      "summary": "Run the consumables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "consumables",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally consumables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/consumables"
+        }
+      ]
+    },
+    {
+      "path": "departments list",
+      "summary": "Run the departments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "departments",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally departments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments"
+        }
+      ]
+    },
+    {
+      "path": "depreciations list",
+      "summary": "Run the depreciations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "depreciations",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally depreciations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/depreciations"
+        }
+      ]
+    },
+    {
+      "path": "employees list",
+      "summary": "Run the employees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "employees",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally employees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/employees"
+        }
+      ]
+    },
+    {
+      "path": "licenses list",
+      "summary": "Run the licenses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "licenses",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally licenses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses"
+        }
+      ]
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/locations"
+        }
+      ]
+    },
+    {
+      "path": "maintenances list",
+      "summary": "Run the maintenances ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "maintenances",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally maintenances list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenances"
+        }
+      ]
+    },
+    {
+      "path": "manufacturers list",
+      "summary": "Run the manufacturers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "manufacturers",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally manufacturers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/manufacturers"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "statuses list",
+      "summary": "Run the statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "statuses",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statuses"
+        }
+      ]
+    },
+    {
+      "path": "suppliers list",
+      "summary": "Run the suppliers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppliers",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally suppliers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppliers"
+        }
+      ]
+    },
+    {
+      "path": "tenants list",
+      "summary": "Run the tenants ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tenants",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "examples": [
+        "pm bluetally tenants list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tenants"
+        }
+      ]
+    }
+  ]
+}

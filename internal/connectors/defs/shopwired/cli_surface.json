@@ -1,0 +1,4727 @@
+{
+  "tagline": "Run ShopWired's declared streams and reverse-ETL actions.",
+  "usage": "pm shopwired \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get blog-categories count",
+        "api get blog-posts count",
+        "api get blog-tags count",
+        "api get brands count",
+        "api get categories count",
+        "api get collect-locations count",
+        "api get countries",
+        "api get countries id",
+        "api get custom-fields count",
+        "api get customers count",
+        "api get digital-files count",
+        "api get events count",
+        "api get filter-groups count",
+        "api get gift-vouchers count",
+        "api get incomplete-orders count",
+        "api get offers count",
+        "api get orders count",
+        "api get pages count",
+        "api get products count",
+        "api get redirects count",
+        "api get sales count",
+        "api get shipping-zones count",
+        "api get shopwired-payments disputes count",
+        "api get shopwired-payments payouts count",
+        "api get shopwired-payments transactions count",
+        "api get themes count",
+        "api get trade-customer-product-prices count",
+        "api get vouchers count",
+        "api get webhooks count",
+        "api get wishlists count",
+        "app list",
+        "blog categories list",
+        "blog category list",
+        "blog post list",
+        "blog posts list",
+        "blog tag list",
+        "blog tags list",
+        "brand list",
+        "brands list",
+        "bulk price list",
+        "bulk prices list",
+        "business list",
+        "categories list",
+        "category list",
+        "choice list",
+        "choice set list",
+        "choice sets list",
+        "choices list",
+        "collect location list",
+        "collect locations list",
+        "custom field list",
+        "custom fields list",
+        "customer list",
+        "customers list",
+        "customization fields list",
+        "data list",
+        "digital file list",
+        "digital files list",
+        "dispute list",
+        "disputes list",
+        "event list",
+        "events list",
+        "extras list",
+        "features list",
+        "filter group list",
+        "filter groups list",
+        "gift voucher list",
+        "gift vouchers list",
+        "images list",
+        "incomplete order list",
+        "incomplete orders list",
+        "newsletter subscriber list",
+        "newsletter subscribers list",
+        "nexuses list",
+        "offer list",
+        "offers list",
+        "option list",
+        "options list",
+        "order list",
+        "order statuses list",
+        "orders list",
+        "page list",
+        "pages list",
+        "payment methods list",
+        "payout list",
+        "payouts list",
+        "product list",
+        "products list",
+        "redirect list",
+        "redirects list",
+        "reviews list",
+        "sale list",
+        "sales list",
+        "search 2 list",
+        "search list",
+        "shipping rate list",
+        "shipping rates list",
+        "shipping zone list",
+        "shipping zones list",
+        "stock list",
+        "stock requests list",
+        "theme assets list",
+        "theme list",
+        "themes list",
+        "trade customer product price list",
+        "trade customer product prices list",
+        "trade group list",
+        "trade groups list",
+        "transaction list",
+        "transactions list",
+        "variation list",
+        "variations list",
+        "voucher list",
+        "vouchers list",
+        "webhook list",
+        "webhooks list",
+        "wishlist list",
+        "wishlists list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "assign product choice apply",
+        "bulk trade customer product prices apply",
+        "change business feature status apply",
+        "create a webhook apply",
+        "create a wishlist apply",
+        "create an order admin comment apply",
+        "create blog category apply",
+        "create blog post apply",
+        "create blog tag apply",
+        "create brand apply",
+        "create bulk price apply",
+        "create business nexus apply",
+        "create category apply",
+        "create choice set apply",
+        "create choice set value apply",
+        "create custom field apply",
+        "create customer apply",
+        "create digital file apply",
+        "create filter group apply",
+        "create gift card apply",
+        "create new app data apply",
+        "create offer apply",
+        "create or update theme asset apply",
+        "create order apply",
+        "create order status apply",
+        "create page apply",
+        "create product apply",
+        "create product customization field apply",
+        "create product extra apply",
+        "create product image apply",
+        "create product option apply",
+        "create product option value apply",
+        "create product review apply",
+        "create product variation apply",
+        "create redirect apply",
+        "create refund apply",
+        "create sale apply",
+        "create shipping rate apply",
+        "create shipping zone apply",
+        "create trade customer product price apply",
+        "create trade group apply",
+        "create voucher apply",
+        "delete a webhook apply",
+        "delete an order admin comment apply",
+        "delete blog category apply",
+        "delete blog post apply",
+        "delete blog tag apply",
+        "delete brand apply",
+        "delete bulk price apply",
+        "delete business nexus apply",
+        "delete category by id apply",
+        "delete choice set apply",
+        "delete choice set value apply",
+        "delete custom field apply",
+        "delete digital file apply",
+        "delete filter group apply",
+        "delete gift card apply",
+        "delete offer apply",
+        "delete order apply",
+        "delete order status apply",
+        "delete page apply",
+        "delete product apply",
+        "delete product choice apply",
+        "delete product customization field apply",
+        "delete product extra apply",
+        "delete product image apply",
+        "delete product option apply",
+        "delete product option value apply",
+        "delete product review apply",
+        "delete product variation apply",
+        "delete redirect apply",
+        "delete sale apply",
+        "delete shipping rate apply",
+        "delete shipping zone apply",
+        "delete theme asset apply",
+        "delete trade customer product price apply",
+        "delete trade group apply",
+        "delete voucher apply",
+        "deletes all app data apply",
+        "modify a wishlist apply",
+        "request a pre order be dispatched apply",
+        "return stock apply",
+        "update a webhook apply",
+        "update a wishlist apply",
+        "update an order s status apply",
+        "update blog category apply",
+        "update blog post apply",
+        "update blog tag apply",
+        "update brand apply",
+        "update bulk price apply",
+        "update business nexus apply",
+        "update category by id apply",
+        "update choice set apply",
+        "update choice set value apply",
+        "update custom field apply",
+        "update digital file apply",
+        "update filter group apply",
+        "update gift card apply",
+        "update offer apply",
+        "update page apply",
+        "update prices apply",
+        "update product apply",
+        "update product choice apply",
+        "update product customization field apply",
+        "update product extra apply",
+        "update product image apply",
+        "update product option apply",
+        "update product option value apply",
+        "update product review apply",
+        "update product variation apply",
+        "update sale apply",
+        "update shipping rate apply",
+        "update shipping zone apply",
+        "update stock apply",
+        "update theme apply",
+        "update trade customer product price apply",
+        "update trade group apply",
+        "update voucher apply",
+        "verify a webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get blog-categories count",
+      "summary": "Documented GET /blog-categories/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get blog-categories count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-categories/count"
+        }
+      ],
+      "operation": "shopwired.get.blog-categories-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get blog-posts count",
+      "summary": "Documented GET /blog-posts/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get blog-posts count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-posts/count"
+        }
+      ],
+      "operation": "shopwired.get.blog-posts-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get blog-tags count",
+      "summary": "Documented GET /blog-tags/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get blog-tags count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-tags/count"
+        }
+      ],
+      "operation": "shopwired.get.blog-tags-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get brands count",
+      "summary": "Documented GET /brands/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get brands count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/brands/count"
+        }
+      ],
+      "operation": "shopwired.get.brands-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories count",
+      "summary": "Documented GET /categories/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get categories count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/count"
+        }
+      ],
+      "operation": "shopwired.get.categories-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get collect-locations count",
+      "summary": "Documented GET /collect-locations/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get collect-locations count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collect-locations/count"
+        }
+      ],
+      "operation": "shopwired.get.collect-locations-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get countries",
+      "summary": "Documented GET /countries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get countries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/countries"
+        }
+      ],
+      "operation": "shopwired.get.countries",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get countries id",
+      "summary": "Documented GET /countries/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get countries id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/countries/{id}"
+        }
+      ],
+      "operation": "shopwired.get.countries-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get custom-fields count",
+      "summary": "Documented GET /custom-fields/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get custom-fields count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields/count"
+        }
+      ],
+      "operation": "shopwired.get.custom-fields-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers count",
+      "summary": "Documented GET /customers/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get customers count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/count"
+        }
+      ],
+      "operation": "shopwired.get.customers-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get digital-files count",
+      "summary": "Documented GET /digital-files/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get digital-files count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/digital-files/count"
+        }
+      ],
+      "operation": "shopwired.get.digital-files-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events count",
+      "summary": "Documented GET /events/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get events count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/count"
+        }
+      ],
+      "operation": "shopwired.get.events-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get filter-groups count",
+      "summary": "Documented GET /filter-groups/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get filter-groups count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filter-groups/count"
+        }
+      ],
+      "operation": "shopwired.get.filter-groups-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get gift-vouchers count",
+      "summary": "Documented GET /gift-vouchers/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get gift-vouchers count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gift-vouchers/count"
+        }
+      ],
+      "operation": "shopwired.get.gift-vouchers-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get incomplete-orders count",
+      "summary": "Documented GET /incomplete-orders/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get incomplete-orders count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/incomplete-orders/count"
+        }
+      ],
+      "operation": "shopwired.get.incomplete-orders-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get offers count",
+      "summary": "Documented GET /offers/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get offers count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/offers/count"
+        }
+      ],
+      "operation": "shopwired.get.offers-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders count",
+      "summary": "Documented GET /orders/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get orders count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/count"
+        }
+      ],
+      "operation": "shopwired.get.orders-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages count",
+      "summary": "Documented GET /pages/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get pages count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/count"
+        }
+      ],
+      "operation": "shopwired.get.pages-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products count",
+      "summary": "Documented GET /products/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get products count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/count"
+        }
+      ],
+      "operation": "shopwired.get.products-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get redirects count",
+      "summary": "Documented GET /redirects/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get redirects count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/redirects/count"
+        }
+      ],
+      "operation": "shopwired.get.redirects-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get sales count",
+      "summary": "Documented GET /sales/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get sales count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sales/count"
+        }
+      ],
+      "operation": "shopwired.get.sales-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shipping-zones count",
+      "summary": "Documented GET /shipping-zones/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get shipping-zones count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipping-zones/count"
+        }
+      ],
+      "operation": "shopwired.get.shipping-zones-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shopwired-payments disputes count",
+      "summary": "Documented GET /shopwired-payments/disputes/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get shopwired-payments disputes count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/disputes/count"
+        }
+      ],
+      "operation": "shopwired.get.shopwired-payments-disputes-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shopwired-payments payouts count",
+      "summary": "Documented GET /shopwired-payments/payouts/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get shopwired-payments payouts count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/payouts/count"
+        }
+      ],
+      "operation": "shopwired.get.shopwired-payments-payouts-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shopwired-payments transactions count",
+      "summary": "Documented GET /shopwired-payments/transactions/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get shopwired-payments transactions count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/transactions/count"
+        }
+      ],
+      "operation": "shopwired.get.shopwired-payments-transactions-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get themes count",
+      "summary": "Documented GET /themes/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get themes count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/themes/count"
+        }
+      ],
+      "operation": "shopwired.get.themes-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trade-customer-product-prices count",
+      "summary": "Documented GET /trade-customer-product-prices/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get trade-customer-product-prices count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trade-customer-product-prices/count"
+        }
+      ],
+      "operation": "shopwired.get.trade-customer-product-prices-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vouchers count",
+      "summary": "Documented GET /vouchers/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get vouchers count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vouchers/count"
+        }
+      ],
+      "operation": "shopwired.get.vouchers-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks count",
+      "summary": "Documented GET /webhooks/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get webhooks count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/count"
+        }
+      ],
+      "operation": "shopwired.get.webhooks-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get wishlists count",
+      "summary": "Documented GET /wishlists/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired api get wishlists count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wishlists/count"
+        }
+      ],
+      "operation": "shopwired.get.wishlists-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "app list",
+      "summary": "Run the app ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "app",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired app list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/app"
+        }
+      ]
+    },
+    {
+      "path": "assign product choice apply",
+      "summary": "Plan and execute the assign product choice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "assign_product_choice",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired assign product choice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/choices"
+        }
+      ],
+      "risk": "Assign a choice to a product in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "blog categories list",
+      "summary": "Run the blog categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_categories",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-categories"
+        }
+      ]
+    },
+    {
+      "path": "blog category list",
+      "summary": "Run the blog category ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog category list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-categories/{id}"
+        }
+      ]
+    },
+    {
+      "path": "blog post list",
+      "summary": "Run the blog post ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_post",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog post list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-posts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "blog posts list",
+      "summary": "Run the blog posts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_posts",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog posts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-posts"
+        }
+      ]
+    },
+    {
+      "path": "blog tag list",
+      "summary": "Run the blog tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_tag",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-tags/{id}"
+        }
+      ]
+    },
+    {
+      "path": "blog tags list",
+      "summary": "Run the blog tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blog_tags",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired blog tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/blog-tags"
+        }
+      ]
+    },
+    {
+      "path": "brand list",
+      "summary": "Run the brand ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "brand",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired brand list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/brands/{id}"
+        }
+      ]
+    },
+    {
+      "path": "brands list",
+      "summary": "Run the brands ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "brands",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired brands list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/brands"
+        }
+      ]
+    },
+    {
+      "path": "bulk price list",
+      "summary": "Run the bulk price ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bulk_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired bulk price list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/bulk-prices/{id}"
+        }
+      ]
+    },
+    {
+      "path": "bulk prices list",
+      "summary": "Run the bulk prices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bulk_prices",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired bulk prices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}/bulk-prices"
+        }
+      ]
+    },
+    {
+      "path": "bulk trade customer product prices apply",
+      "summary": "Plan and execute the bulk trade customer product prices reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_trade_customer_product_prices",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired bulk trade customer product prices apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/trade-customer-product-prices/bulk"
+        }
+      ],
+      "risk": "Bulk create or remove trade customer product prices in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "business list",
+      "summary": "Run the business ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "business",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired business list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business"
+        }
+      ]
+    },
+    {
+      "path": "categories list",
+      "summary": "Run the categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "categories",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories"
+        }
+      ]
+    },
+    {
+      "path": "category list",
+      "summary": "Run the category ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired category list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/{id}"
+        }
+      ]
+    },
+    {
+      "path": "change business feature status apply",
+      "summary": "Plan and execute the change business feature status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_business_feature_status",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired change business feature status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/business/features/change-status"
+        }
+      ],
+      "risk": "Change business feature status in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "choice list",
+      "summary": "Run the choice ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "choice",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired choice list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/choices/{id}"
+        }
+      ]
+    },
+    {
+      "path": "choice set list",
+      "summary": "Run the choice set ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "choice_set",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired choice set list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/choice-sets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "choice sets list",
+      "summary": "Run the choice sets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "choice_sets",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired choice sets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/choice-sets"
+        }
+      ]
+    },
+    {
+      "path": "choices list",
+      "summary": "Run the choices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "choices",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired choices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/choices"
+        }
+      ]
+    },
+    {
+      "path": "collect location list",
+      "summary": "Run the collect location ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collect_location",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired collect location list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collect-locations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "collect locations list",
+      "summary": "Run the collect locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collect_locations",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired collect locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/collect-locations"
+        }
+      ]
+    },
+    {
+      "path": "create a webhook apply",
+      "summary": "Plan and execute the create a webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_a_webhook",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create a webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks"
+        }
+      ],
+      "risk": "Create a webhook in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create a wishlist apply",
+      "summary": "Plan and execute the create a wishlist reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_a_wishlist",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create a wishlist apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/wishlists"
+        }
+      ],
+      "risk": "Create a wishlist in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create an order admin comment apply",
+      "summary": "Plan and execute the create an order admin comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_an_order_admin_comment",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create an order admin comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{id}/comments"
+        }
+      ],
+      "risk": "Create an order admin comment in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create blog category apply",
+      "summary": "Plan and execute the create blog category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_blog_category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create blog category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blog-categories"
+        }
+      ],
+      "risk": "Create a new blog category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create blog post apply",
+      "summary": "Plan and execute the create blog post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_blog_post",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create blog post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blog-posts"
+        }
+      ],
+      "risk": "Create a new blog post in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create blog tag apply",
+      "summary": "Plan and execute the create blog tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_blog_tag",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create blog tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/blog-tags"
+        }
+      ],
+      "risk": "Create a new blog tag in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create brand apply",
+      "summary": "Plan and execute the create brand reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_brand",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create brand apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/brands"
+        }
+      ],
+      "risk": "Create a new brand in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create bulk price apply",
+      "summary": "Plan and execute the create bulk price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_bulk_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create bulk price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{id}/bulk-prices"
+        }
+      ],
+      "risk": "Create a bulk price for a product in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create business nexus apply",
+      "summary": "Plan and execute the create business nexus reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_business_nexus",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create business nexus apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/nexuses"
+        }
+      ],
+      "risk": "Create a new business nexus item in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create category apply",
+      "summary": "Plan and execute the create category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/categories"
+        }
+      ],
+      "risk": "Create a new category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create choice set apply",
+      "summary": "Plan and execute the create choice set reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_choice_set",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create choice set apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/choice-sets"
+        }
+      ],
+      "risk": "Create a choice set in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create choice set value apply",
+      "summary": "Plan and execute the create choice set value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_choice_set_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create choice set value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/choice-set-values"
+        }
+      ],
+      "risk": "Create a choice set value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create custom field apply",
+      "summary": "Plan and execute the create custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_custom_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom-fields"
+        }
+      ],
+      "risk": "Create a custom field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create customer apply",
+      "summary": "Plan and execute the create customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_customer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "risk": "Create a new customer in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create digital file apply",
+      "summary": "Plan and execute the create digital file reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_digital_file",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create digital file apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/digital-files"
+        }
+      ],
+      "risk": "Create a new digital file in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create filter group apply",
+      "summary": "Plan and execute the create filter group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_filter_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create filter group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/filter-groups"
+        }
+      ],
+      "risk": "Create a new filter group in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create gift card apply",
+      "summary": "Plan and execute the create gift card reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_gift_card",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create gift card apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/gift-vouchers"
+        }
+      ],
+      "risk": "Create a gift card in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create new app data apply",
+      "summary": "Plan and execute the create new app data reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_new_app_data",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create new app data apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/app/data"
+        }
+      ],
+      "risk": "Create new app data in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create offer apply",
+      "summary": "Plan and execute the create offer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_offer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create offer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/offers"
+        }
+      ],
+      "risk": "Create a new offer in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create or update theme asset apply",
+      "summary": "Plan and execute the create or update theme asset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_or_update_theme_asset",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create or update theme asset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/theme-assets/{theme_id}"
+        }
+      ],
+      "risk": "Create or update a theme asset in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create order apply",
+      "summary": "Plan and execute the create order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_order",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders"
+        }
+      ],
+      "risk": "Create a new order in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create order status apply",
+      "summary": "Plan and execute the create order status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_order_status",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create order status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/order-statuses"
+        }
+      ],
+      "risk": "Create an order status in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create page apply",
+      "summary": "Plan and execute the create page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_page",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages"
+        }
+      ],
+      "risk": "Create a new page in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product apply",
+      "summary": "Plan and execute the create product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products"
+        }
+      ],
+      "risk": "Create a new product in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product customization field apply",
+      "summary": "Plan and execute the create product customization field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_customization_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product customization field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/customization-fields"
+        }
+      ],
+      "risk": "Create a product customisation field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product extra apply",
+      "summary": "Plan and execute the create product extra reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_extra",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product extra apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/extras"
+        }
+      ],
+      "risk": "Create a product extra in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product image apply",
+      "summary": "Plan and execute the create product image reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_image",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product image apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/images"
+        }
+      ],
+      "risk": "Create a product image in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product option apply",
+      "summary": "Plan and execute the create product option reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_option",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product option apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/options"
+        }
+      ],
+      "risk": "Create a product option in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product option value apply",
+      "summary": "Plan and execute the create product option value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_option_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product option value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/option-values"
+        }
+      ],
+      "risk": "Create a product option value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product review apply",
+      "summary": "Plan and execute the create product review reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_review",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product review apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/reviews"
+        }
+      ],
+      "risk": "Create a product review in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create product variation apply",
+      "summary": "Plan and execute the create product variation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_product_variation",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create product variation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/variations"
+        }
+      ],
+      "risk": "Create a new product variation in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create redirect apply",
+      "summary": "Plan and execute the create redirect reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_redirect",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create redirect apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/redirects"
+        }
+      ],
+      "risk": "Create a new 301 redirect in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create refund apply",
+      "summary": "Plan and execute the create refund reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_refund",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create refund apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{order_id}/refunds"
+        }
+      ],
+      "risk": "Create a refund for an order in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create sale apply",
+      "summary": "Plan and execute the create sale reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_sale",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create sale apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sales"
+        }
+      ],
+      "risk": "Create a sale in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create shipping rate apply",
+      "summary": "Plan and execute the create shipping rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_shipping_rate",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create shipping rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping-rates"
+        }
+      ],
+      "risk": "Create a new shipping rate in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create shipping zone apply",
+      "summary": "Plan and execute the create shipping zone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_shipping_zone",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create shipping zone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/shipping-zones"
+        }
+      ],
+      "risk": "Create a new shipping zone in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create trade customer product price apply",
+      "summary": "Plan and execute the create trade customer product price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_trade_customer_product_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create trade customer product price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/trade-customer-product-prices"
+        }
+      ],
+      "risk": "Create a new trade customer product price in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create trade group apply",
+      "summary": "Plan and execute the create trade group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_trade_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create trade group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/trade-groups"
+        }
+      ],
+      "risk": "Create a trade pricing band in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create voucher apply",
+      "summary": "Plan and execute the create voucher reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_voucher",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired create voucher apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/vouchers"
+        }
+      ],
+      "risk": "Create a new voucher in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "custom field list",
+      "summary": "Run the custom field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired custom field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields/{id}"
+        }
+      ]
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields"
+        }
+      ]
+    },
+    {
+      "path": "customer list",
+      "summary": "Run the customer ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired customer list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "customization fields list",
+      "summary": "Run the customization fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customization_fields",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired customization fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/customization-fields"
+        }
+      ]
+    },
+    {
+      "path": "data list",
+      "summary": "Run the data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "data",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/app/data"
+        }
+      ]
+    },
+    {
+      "path": "delete a webhook apply",
+      "summary": "Plan and execute the delete a webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_a_webhook",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete a webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "risk": "Delete a webhook in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete an order admin comment apply",
+      "summary": "Plan and execute the delete an order admin comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_an_order_admin_comment",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete an order admin comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/orders/{id}/comments/{comment_id}"
+        }
+      ],
+      "risk": "Delete an order admin comment in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete blog category apply",
+      "summary": "Plan and execute the delete blog category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_blog_category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete blog category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/blog-categories/{id}"
+        }
+      ],
+      "risk": "Delete a blog category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete blog post apply",
+      "summary": "Plan and execute the delete blog post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_blog_post",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete blog post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/blog-posts/{id}"
+        }
+      ],
+      "risk": "Delete a blog post in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete blog tag apply",
+      "summary": "Plan and execute the delete blog tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_blog_tag",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete blog tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/blog-tags/{id}"
+        }
+      ],
+      "risk": "Delete a blog tag in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete brand apply",
+      "summary": "Plan and execute the delete brand reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_brand",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete brand apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/brands/{id}"
+        }
+      ],
+      "risk": "Delete a brand in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete bulk price apply",
+      "summary": "Plan and execute the delete bulk price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_bulk_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete bulk price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/bulk-prices/{id}"
+        }
+      ],
+      "risk": "Delete a specific bulk price in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete business nexus apply",
+      "summary": "Plan and execute the delete business nexus reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_business_nexus",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete business nexus apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/nexuses/{id}"
+        }
+      ],
+      "risk": "Delete a business nexus item in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete category by id apply",
+      "summary": "Plan and execute the delete category by id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_category_by_id",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete category by id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/categories/{id}"
+        }
+      ],
+      "risk": "Delete a category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete choice set apply",
+      "summary": "Plan and execute the delete choice set reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_choice_set",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete choice set apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/choice-sets/{id}"
+        }
+      ],
+      "risk": "Delete a choice set in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete choice set value apply",
+      "summary": "Plan and execute the delete choice set value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_choice_set_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete choice set value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/choice-set-values/{id}"
+        }
+      ],
+      "risk": "Delete a choice set value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete custom field apply",
+      "summary": "Plan and execute the delete custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_custom_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom-fields/{id}"
+        }
+      ],
+      "risk": "Delete a custom field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete digital file apply",
+      "summary": "Plan and execute the delete digital file reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_digital_file",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete digital file apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/digital-files/{id}"
+        }
+      ],
+      "risk": "Delete a digital file in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete filter group apply",
+      "summary": "Plan and execute the delete filter group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_filter_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete filter group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/filter-groups/{id}"
+        }
+      ],
+      "risk": "Delete a filter group in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete gift card apply",
+      "summary": "Plan and execute the delete gift card reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_gift_card",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete gift card apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/gift-vouchers/{id}"
+        }
+      ],
+      "risk": "Delete a gift card in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete offer apply",
+      "summary": "Plan and execute the delete offer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_offer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete offer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/offers/{id}"
+        }
+      ],
+      "risk": "Delete an offer in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete order apply",
+      "summary": "Plan and execute the delete order reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_order",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete order apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/orders/{id}"
+        }
+      ],
+      "risk": "Delete an order in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete order status apply",
+      "summary": "Plan and execute the delete order status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_order_status",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete order status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/order-statuses/{id}"
+        }
+      ],
+      "risk": "Delete an order status in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete page apply",
+      "summary": "Plan and execute the delete page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_page",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{id}"
+        }
+      ],
+      "risk": "Delete a page in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product apply",
+      "summary": "Plan and execute the delete product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{id}"
+        }
+      ],
+      "risk": "Delete a product in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product choice apply",
+      "summary": "Plan and execute the delete product choice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_choice",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product choice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/choices/{id}"
+        }
+      ],
+      "risk": "Delete a product choice in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product customization field apply",
+      "summary": "Plan and execute the delete product customization field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_customization_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product customization field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/customization-fields/{id}"
+        }
+      ],
+      "risk": "Delete a product customisation field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product extra apply",
+      "summary": "Plan and execute the delete product extra reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_extra",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product extra apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/extras/{id}"
+        }
+      ],
+      "risk": "Delete a product extra in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product image apply",
+      "summary": "Plan and execute the delete product image reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_image",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product image apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/images/{id}"
+        }
+      ],
+      "risk": "Delete a product image in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product option apply",
+      "summary": "Plan and execute the delete product option reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_option",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product option apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/options/{id}"
+        }
+      ],
+      "risk": "Delete a product option in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product option value apply",
+      "summary": "Plan and execute the delete product option value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_option_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product option value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/option-values/{id}"
+        }
+      ],
+      "risk": "Delete a product option value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product review apply",
+      "summary": "Plan and execute the delete product review reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_review",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product review apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/reviews/{id}"
+        }
+      ],
+      "risk": "Delete a product review in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete product variation apply",
+      "summary": "Plan and execute the delete product variation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_product_variation",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete product variation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{product_id}/variations/{id}"
+        }
+      ],
+      "risk": "Delete a product variation in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete redirect apply",
+      "summary": "Plan and execute the delete redirect reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_redirect",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete redirect apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/redirects/{id}"
+        }
+      ],
+      "risk": "Delete a 301 redirect in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete sale apply",
+      "summary": "Plan and execute the delete sale reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_sale",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete sale apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/sales/{id}"
+        }
+      ],
+      "risk": "Delete a sale in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete shipping rate apply",
+      "summary": "Plan and execute the delete shipping rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_shipping_rate",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete shipping rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/shipping-rates/{id}"
+        }
+      ],
+      "risk": "Delete a shipping rate in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete shipping zone apply",
+      "summary": "Plan and execute the delete shipping zone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_shipping_zone",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete shipping zone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/shipping-zones/{country-id}"
+        }
+      ],
+      "risk": "Delete a shipping zone in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete theme asset apply",
+      "summary": "Plan and execute the delete theme asset reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_theme_asset",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete theme asset apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/theme-assets/{theme_id}"
+        }
+      ],
+      "risk": "Delete a theme asset in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete trade customer product price apply",
+      "summary": "Plan and execute the delete trade customer product price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_trade_customer_product_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete trade customer product price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/trade-customer-product-prices/{id}"
+        }
+      ],
+      "risk": "Delete a trade customer product price in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete trade group apply",
+      "summary": "Plan and execute the delete trade group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_trade_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete trade group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/trade-groups/{id}"
+        }
+      ],
+      "risk": "Delete a trade pricing band in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete voucher apply",
+      "summary": "Plan and execute the delete voucher reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_voucher",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired delete voucher apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/vouchers/{id}"
+        }
+      ],
+      "risk": "Delete a voucher in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "deletes all app data apply",
+      "summary": "Plan and execute the deletes all app data reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deletes_all_app_data",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired deletes all app data apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/app/data"
+        }
+      ],
+      "risk": "Deletes all app data in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "digital file list",
+      "summary": "Run the digital file ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "digital_file",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired digital file list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/digital-files/{id}"
+        }
+      ]
+    },
+    {
+      "path": "digital files list",
+      "summary": "Run the digital files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "digital_files",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired digital files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/digital-files"
+        }
+      ]
+    },
+    {
+      "path": "dispute list",
+      "summary": "Run the dispute ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dispute",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired dispute list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/disputes/{dispute_id}"
+        }
+      ]
+    },
+    {
+      "path": "disputes list",
+      "summary": "Run the disputes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "disputes",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired disputes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/disputes"
+        }
+      ]
+    },
+    {
+      "path": "event list",
+      "summary": "Run the event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{id}"
+        }
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ]
+    },
+    {
+      "path": "extras list",
+      "summary": "Run the extras ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "extras",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired extras list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/extras"
+        }
+      ]
+    },
+    {
+      "path": "features list",
+      "summary": "Run the features ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "features",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired features list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/business/features"
+        }
+      ]
+    },
+    {
+      "path": "filter group list",
+      "summary": "Run the filter group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filter_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired filter group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filter-groups/{id}"
+        }
+      ]
+    },
+    {
+      "path": "filter groups list",
+      "summary": "Run the filter groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filter_groups",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired filter groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filter-groups"
+        }
+      ]
+    },
+    {
+      "path": "gift voucher list",
+      "summary": "Run the gift voucher ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gift_voucher",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired gift voucher list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gift-vouchers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "gift vouchers list",
+      "summary": "Run the gift vouchers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gift_vouchers",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired gift vouchers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gift-vouchers"
+        }
+      ]
+    },
+    {
+      "path": "images list",
+      "summary": "Run the images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "images",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "incomplete order list",
+      "summary": "Run the incomplete order ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incomplete_order",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired incomplete order list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/incomplete-orders/{id}"
+        }
+      ]
+    },
+    {
+      "path": "incomplete orders list",
+      "summary": "Run the incomplete orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incomplete_orders",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired incomplete orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/incomplete-orders"
+        }
+      ]
+    },
+    {
+      "path": "modify a wishlist apply",
+      "summary": "Plan and execute the modify a wishlist reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "modify_a_wishlist",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired modify a wishlist apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/wishlists/{id}/modify"
+        }
+      ],
+      "risk": "Modify a wishlist in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "newsletter subscriber list",
+      "summary": "Run the newsletter subscriber ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "newsletter_subscriber",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired newsletter subscriber list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/newsletter-subscribers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "newsletter subscribers list",
+      "summary": "Run the newsletter subscribers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "newsletter_subscribers",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired newsletter subscribers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/newsletter-subscribers"
+        }
+      ]
+    },
+    {
+      "path": "nexuses list",
+      "summary": "Run the nexuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "nexuses",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired nexuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nexuses"
+        }
+      ]
+    },
+    {
+      "path": "offer list",
+      "summary": "Run the offer ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired offer list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/offers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "offers list",
+      "summary": "Run the offers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "offers",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired offers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/offers"
+        }
+      ]
+    },
+    {
+      "path": "option list",
+      "summary": "Run the option ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "option",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired option list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/options/{id}"
+        }
+      ]
+    },
+    {
+      "path": "options list",
+      "summary": "Run the options ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "options",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired options list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/options"
+        }
+      ]
+    },
+    {
+      "path": "order list",
+      "summary": "Run the order ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "order",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired order list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{id}"
+        }
+      ]
+    },
+    {
+      "path": "order statuses list",
+      "summary": "Run the order statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "order_statuses",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired order statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/order-statuses"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders"
+        }
+      ]
+    },
+    {
+      "path": "page list",
+      "summary": "Run the page ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired page list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{id}"
+        }
+      ]
+    },
+    {
+      "path": "pages list",
+      "summary": "Run the pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages"
+        }
+      ]
+    },
+    {
+      "path": "payment methods list",
+      "summary": "Run the payment methods ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_methods",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired payment methods list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payment-methods"
+        }
+      ]
+    },
+    {
+      "path": "payout list",
+      "summary": "Run the payout ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payout",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired payout list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/payouts/{payout_id}"
+        }
+      ]
+    },
+    {
+      "path": "payouts list",
+      "summary": "Run the payouts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payouts",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired payouts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/payouts"
+        }
+      ]
+    },
+    {
+      "path": "product list",
+      "summary": "Run the product ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired product list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{id}"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "redirect list",
+      "summary": "Run the redirect ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "redirect",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired redirect list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/redirects/{id}"
+        }
+      ]
+    },
+    {
+      "path": "redirects list",
+      "summary": "Run the redirects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "redirects",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired redirects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/redirects"
+        }
+      ]
+    },
+    {
+      "path": "request a pre order be dispatched apply",
+      "summary": "Plan and execute the request a pre order be dispatched reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "request_a_pre_order_be_dispatched",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired request a pre order be dispatched apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{id}/dispatch-pre-order"
+        }
+      ],
+      "risk": "Request a pre-order be dispatched in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "return stock apply",
+      "summary": "Plan and execute the return stock reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "return_stock",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired return stock apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/stock/return"
+        }
+      ],
+      "risk": "Return stock for cancelled orders in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "reviews list",
+      "summary": "Run the reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reviews",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/reviews"
+        }
+      ]
+    },
+    {
+      "path": "sale list",
+      "summary": "Run the sale ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sale",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired sale list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sales/{id}"
+        }
+      ]
+    },
+    {
+      "path": "sales list",
+      "summary": "Run the sales ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sales",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired sales list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sales"
+        }
+      ]
+    },
+    {
+      "path": "search 2 list",
+      "summary": "Run the search 2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_2",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired search 2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/search"
+        }
+      ]
+    },
+    {
+      "path": "search list",
+      "summary": "Run the search ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired search list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/search"
+        }
+      ]
+    },
+    {
+      "path": "shipping rate list",
+      "summary": "Run the shipping rate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipping_rate",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired shipping rate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipping-rates/{id}"
+        }
+      ]
+    },
+    {
+      "path": "shipping rates list",
+      "summary": "Run the shipping rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipping_rates",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired shipping rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipping-rates"
+        }
+      ]
+    },
+    {
+      "path": "shipping zone list",
+      "summary": "Run the shipping zone ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipping_zone",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired shipping zone list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipping-zones/{country-id}"
+        }
+      ]
+    },
+    {
+      "path": "shipping zones list",
+      "summary": "Run the shipping zones ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shipping_zones",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired shipping zones list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shipping-zones"
+        }
+      ]
+    },
+    {
+      "path": "stock list",
+      "summary": "Run the stock ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stock",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired stock list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stock"
+        }
+      ]
+    },
+    {
+      "path": "stock requests list",
+      "summary": "Run the stock requests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stock_requests",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired stock requests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stock-requests"
+        }
+      ]
+    },
+    {
+      "path": "theme assets list",
+      "summary": "Run the theme assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "theme_assets",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired theme assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/theme-assets/{theme_id}"
+        }
+      ]
+    },
+    {
+      "path": "theme list",
+      "summary": "Run the theme ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "theme",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired theme list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/themes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "themes list",
+      "summary": "Run the themes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "themes",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired themes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/themes"
+        }
+      ]
+    },
+    {
+      "path": "trade customer product price list",
+      "summary": "Run the trade customer product price ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trade_customer_product_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired trade customer product price list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trade-customer-product-prices/{id}"
+        }
+      ]
+    },
+    {
+      "path": "trade customer product prices list",
+      "summary": "Run the trade customer product prices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trade_customer_product_prices",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired trade customer product prices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trade-customer-product-prices"
+        }
+      ]
+    },
+    {
+      "path": "trade group list",
+      "summary": "Run the trade group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trade_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired trade group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trade-groups/{id}"
+        }
+      ]
+    },
+    {
+      "path": "trade groups list",
+      "summary": "Run the trade groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trade_groups",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired trade groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trade-groups"
+        }
+      ]
+    },
+    {
+      "path": "transaction list",
+      "summary": "Run the transaction ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transaction",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired transaction list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/transactions/{transaction_id}"
+        }
+      ]
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shopwired-payments/transactions"
+        }
+      ]
+    },
+    {
+      "path": "update a webhook apply",
+      "summary": "Plan and execute the update a webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_webhook",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update a webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhooks/{id}"
+        }
+      ],
+      "risk": "Update a webhook in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update a wishlist apply",
+      "summary": "Plan and execute the update a wishlist reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_a_wishlist",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update a wishlist apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/wishlists/{id}"
+        }
+      ],
+      "risk": "Update a wishlist in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update an order s status apply",
+      "summary": "Plan and execute the update an order s status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_order_s_status",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update an order s status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/orders/{id}/status"
+        }
+      ],
+      "risk": "Update an order's status in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update blog category apply",
+      "summary": "Plan and execute the update blog category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_blog_category",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update blog category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/blog-categories/{id}"
+        }
+      ],
+      "risk": "Update a blog category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update blog post apply",
+      "summary": "Plan and execute the update blog post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_blog_post",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update blog post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/blog-posts/{id}"
+        }
+      ],
+      "risk": "Update a blog post in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update blog tag apply",
+      "summary": "Plan and execute the update blog tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_blog_tag",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update blog tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/blog-tags/{id}"
+        }
+      ],
+      "risk": "Update a blog tag in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update brand apply",
+      "summary": "Plan and execute the update brand reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_brand",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update brand apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/brands/{id}"
+        }
+      ],
+      "risk": "Update a brand in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update bulk price apply",
+      "summary": "Plan and execute the update bulk price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_bulk_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update bulk price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/bulk-prices/{id}"
+        }
+      ],
+      "risk": "Update a specific bulk price in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update business nexus apply",
+      "summary": "Plan and execute the update business nexus reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_business_nexus",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update business nexus apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/nexuses/{id}"
+        }
+      ],
+      "risk": "Update a business nexus item in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update category by id apply",
+      "summary": "Plan and execute the update category by id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_category_by_id",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update category by id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/categories/{id}"
+        }
+      ],
+      "risk": "Update a category in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update choice set apply",
+      "summary": "Plan and execute the update choice set reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_choice_set",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update choice set apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/choice-sets/{id}"
+        }
+      ],
+      "risk": "Update a choice set in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update choice set value apply",
+      "summary": "Plan and execute the update choice set value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_choice_set_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update choice set value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/choice-set-values/{id}"
+        }
+      ],
+      "risk": "Update a choice set value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update custom field apply",
+      "summary": "Plan and execute the update custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_custom_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom-fields/{id}"
+        }
+      ],
+      "risk": "Update a custom field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update digital file apply",
+      "summary": "Plan and execute the update digital file reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_digital_file",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update digital file apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/digital-files/{id}"
+        }
+      ],
+      "risk": "Update a digital file in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update filter group apply",
+      "summary": "Plan and execute the update filter group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_filter_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update filter group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/filter-groups/{id}"
+        }
+      ],
+      "risk": "Update a filter group in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update gift card apply",
+      "summary": "Plan and execute the update gift card reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_gift_card",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update gift card apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/gift-vouchers/{id}"
+        }
+      ],
+      "risk": "Update a gift card in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update offer apply",
+      "summary": "Plan and execute the update offer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_offer",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update offer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/offers/{id}"
+        }
+      ],
+      "risk": "Update an offer in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update page apply",
+      "summary": "Plan and execute the update page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_page",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{id}"
+        }
+      ],
+      "risk": "Update a page in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update prices apply",
+      "summary": "Plan and execute the update prices reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_prices",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update prices apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/prices"
+        }
+      ],
+      "risk": "Update product prices in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update product apply",
+      "summary": "Plan and execute the update product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{id}"
+        }
+      ],
+      "risk": "Update a product in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product choice apply",
+      "summary": "Plan and execute the update product choice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_choice",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product choice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/choices/{id}"
+        }
+      ],
+      "risk": "Update a product choice in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product customization field apply",
+      "summary": "Plan and execute the update product customization field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_customization_field",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product customization field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/customization-fields/{id}"
+        }
+      ],
+      "risk": "Update a product customisation field in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product extra apply",
+      "summary": "Plan and execute the update product extra reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_extra",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product extra apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/extras/{id}"
+        }
+      ],
+      "risk": "Update a product extra in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product image apply",
+      "summary": "Plan and execute the update product image reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_image",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product image apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/images/{id}"
+        }
+      ],
+      "risk": "Update a product image in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product option apply",
+      "summary": "Plan and execute the update product option reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_option",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product option apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/options/{id}"
+        }
+      ],
+      "risk": "Update a product option in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product option value apply",
+      "summary": "Plan and execute the update product option value reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_option_value",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product option value apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/option-values/{id}"
+        }
+      ],
+      "risk": "Update a product option value in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product review apply",
+      "summary": "Plan and execute the update product review reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_review",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product review apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/reviews/{id}"
+        }
+      ],
+      "risk": "Update a product review in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update product variation apply",
+      "summary": "Plan and execute the update product variation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_product_variation",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update product variation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/variations/{id}"
+        }
+      ],
+      "risk": "Update a product variation in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update sale apply",
+      "summary": "Plan and execute the update sale reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_sale",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update sale apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/sales/{id}"
+        }
+      ],
+      "risk": "Update a sale in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update shipping rate apply",
+      "summary": "Plan and execute the update shipping rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_shipping_rate",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update shipping rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shipping-rates/{id}"
+        }
+      ],
+      "risk": "Update a shipping rate in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update shipping zone apply",
+      "summary": "Plan and execute the update shipping zone reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_shipping_zone",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update shipping zone apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/shipping-zones/{country-id}"
+        }
+      ],
+      "risk": "Update an existing shipping zone in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update stock apply",
+      "summary": "Plan and execute the update stock reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_stock",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update stock apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/stock"
+        }
+      ],
+      "risk": "Update stock quantity in ShopWired",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update theme apply",
+      "summary": "Plan and execute the update theme reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_theme",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update theme apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/themes/{id}"
+        }
+      ],
+      "risk": "Update a theme in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update trade customer product price apply",
+      "summary": "Plan and execute the update trade customer product price reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_trade_customer_product_price",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update trade customer product price apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/trade-customer-product-prices/{id}"
+        }
+      ],
+      "risk": "Update a trade customer product price in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update trade group apply",
+      "summary": "Plan and execute the update trade group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_trade_group",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update trade group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/trade-groups/{id}"
+        }
+      ],
+      "risk": "Update a trade pricing band in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update voucher apply",
+      "summary": "Plan and execute the update voucher reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_voucher",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired update voucher apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/vouchers/{id}"
+        }
+      ],
+      "risk": "Update a voucher in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "variation list",
+      "summary": "Run the variation ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "variation",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired variation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/variations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "variations list",
+      "summary": "Run the variations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "variations",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired variations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{product_id}/variations"
+        }
+      ]
+    },
+    {
+      "path": "verify a webhook apply",
+      "summary": "Plan and execute the verify a webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "verify_a_webhook",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired verify a webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/{id}/verify"
+        }
+      ],
+      "risk": "Verify a webhook in ShopWired",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "voucher list",
+      "summary": "Run the voucher ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voucher",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired voucher list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vouchers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "vouchers list",
+      "summary": "Run the vouchers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "vouchers",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired vouchers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vouchers"
+        }
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "wishlist list",
+      "summary": "Run the wishlist ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "wishlist",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired wishlist list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wishlists/{id}"
+        }
+      ]
+    },
+    {
+      "path": "wishlists list",
+      "summary": "Run the wishlists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "wishlists",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "examples": [
+        "pm shopwired wishlists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/wishlists"
+        }
+      ]
+    }
+  ]
+}

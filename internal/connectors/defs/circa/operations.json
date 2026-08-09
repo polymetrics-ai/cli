@@ -1,0 +1,605 @@
+{
+  "operations": [
+    {
+      "id": "circa.get.api-v1-companies",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/companies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.api-v1-companies",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/companies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-companies-company-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/companies/{company_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/companies/{company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.patch.api-v1-companies-company-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/companies/{company_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/companies/{company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.api-v1-companies-company-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/companies/{company_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/companies/{company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-companies-company-id-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/companies/{company_id}/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/companies/{company_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.api-v1-contacts",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/contacts/{contact_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.patch.api-v1-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/contacts/{contact_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.api-v1-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/contacts/{contact_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.api-v1-events",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.patch.api-v1-events-event-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/events/{event_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.api-v1-events-event-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/events/{event_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id-contacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.api-v1-events-event-id-contacts",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/events/{event_id}/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/events/{event_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.api-v1-events-event-id-contacts-exports",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/events/{event_id}/contacts/exports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/events/{event_id}/contacts/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id-contacts-exports-export-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}/contacts/exports/{export_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}/contacts/exports/{export_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.api-v1-events-event-id-contacts-exports-export-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/events/{event_id}/contacts/exports/{export_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/events/{event_id}/contacts/exports/{export_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}/contacts/{contact_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.patch.api-v1-events-event-id-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/events/{event_id}/contacts/{contact_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/events/{event_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.api-v1-events-event-id-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/events/{event_id}/contacts/{contact_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/events/{event_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id-expenses",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}/expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-events-event-id-staff",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}/staff",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}/staff",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-fields",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-fields-field-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/fields/{field_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/fields/{field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-teams",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.api-v1-teams-team-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/teams/{team_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.circa.co/api/collections/11435283/SztA8pFi?environment=11435283-e3e4861b-9d44-4058-b970-e8fbbcf010ae\u0026segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/teams/{team_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.companies-company-id",
+      "kind": "rest_read",
+      "summary": "GET /companies/{company_id}",
+      "description": "single-company detail; identical record shape to the companies list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{company_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{contact_id}",
+      "description": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}",
+      "description": "single-event detail; identical record shape to the events list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.post.events-event-id-contacts-exports",
+      "kind": "rest_write",
+      "summary": "POST /events/{event_id}/contacts/exports",
+      "description": "initiates an async event-contacts export job (returns 201 with a job id to poll); not a synchronous mutation this dialect's writes.json can express, and its output is a duplicate of the already-covered event_contacts read stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/events/{event_id}/contacts/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.events-event-id-contacts-exports-export-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/contacts/exports/{export_id}",
+      "description": "polls an async export job's status/download URL; this dialect has no declarative create-then-poll-then-download primitive for asynchronous job resources",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/contacts/exports/{export_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.delete.events-event-id-contacts-exports-export-id",
+      "kind": "rest_write",
+      "summary": "DELETE /events/{event_id}/contacts/exports/{export_id}",
+      "description": "deletes an async export job artifact; paired with the excluded create/show export endpoints above, not a standalone mutation of syncable object data",
+      "source_url": "https://docs.circa.co/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/events/{event_id}/contacts/exports/{export_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.events-event-id-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{event_id}/contacts/{contact_id}",
+      "description": "single-event-contact detail; identical record shape to the event_contacts stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{event_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.fields-field-id",
+      "kind": "rest_read",
+      "summary": "GET /fields/{field_id}",
+      "description": "single-custom-field detail; identical record shape to the fields list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fields/{field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "circa.get.teams-team-id",
+      "kind": "rest_read",
+      "summary": "GET /teams/{team_id}",
+      "description": "single-team detail; identical record shape to the teams list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.circa.co/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

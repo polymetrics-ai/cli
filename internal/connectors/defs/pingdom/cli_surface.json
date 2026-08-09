@@ -1,0 +1,1124 @@
+{
+  "tagline": "Run Pingdom's declared streams and reverse-ETL actions.",
+  "usage": "pm pingdom \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "actions list",
+        "alerting contacts list",
+        "alerting teams list",
+        "api get alerting contacts contactid",
+        "api get alerting teams teamid",
+        "api get analysis checkid",
+        "api get analysis checkid analysisid",
+        "api get checks checkid",
+        "api get maintenance id",
+        "api get maintenance-occurrences id",
+        "api get results checkid",
+        "api get single",
+        "api get summary-average checkid",
+        "api get summary-hoursofday checkid",
+        "api get summary-outage checkid",
+        "api get summary-performance checkid",
+        "api get summary-probes checkid",
+        "api get tms check check-id report performance",
+        "api get tms check check-id report status",
+        "api get tms check cid",
+        "api get tms check report status",
+        "api get traceroute",
+        "checks list",
+        "credits list",
+        "maintenance list",
+        "maintenance occurrences list",
+        "probes list",
+        "reference list",
+        "tms checks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete checks",
+        "api delete maintenance",
+        "api delete maintenance-occurrences",
+        "api delete maintenance-occurrences id",
+        "api delete tms check cid",
+        "api post tms check",
+        "api put checks",
+        "api put maintenance id",
+        "api put maintenance-occurrences id",
+        "api put tms check cid",
+        "create check apply",
+        "create contact apply",
+        "create maintenance apply",
+        "create team apply",
+        "delete check apply",
+        "delete contact apply",
+        "delete maintenance apply",
+        "delete team apply",
+        "update check apply",
+        "update contact apply",
+        "update team apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "actions list",
+      "summary": "Run the actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "actions",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/actions"
+        }
+      ]
+    },
+    {
+      "path": "alerting contacts list",
+      "summary": "Run the alerting contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerting_contacts",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom alerting contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/contacts"
+        }
+      ]
+    },
+    {
+      "path": "alerting teams list",
+      "summary": "Run the alerting teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alerting_teams",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom alerting teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/teams"
+        }
+      ]
+    },
+    {
+      "path": "api delete checks",
+      "summary": "Documented DELETE /checks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api delete checks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/checks"
+        }
+      ],
+      "operation": "pingdom.delete.checks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete maintenance",
+      "summary": "Documented DELETE /maintenance (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api delete maintenance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenance"
+        }
+      ],
+      "operation": "pingdom.delete.maintenance",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete maintenance-occurrences",
+      "summary": "Documented DELETE /maintenance.occurrences (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api delete maintenance-occurrences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenance.occurrences"
+        }
+      ],
+      "operation": "pingdom.delete.maintenance-occurrences",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete maintenance-occurrences id",
+      "summary": "Documented DELETE /maintenance.occurrences/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api delete maintenance-occurrences id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenance.occurrences/{id}"
+        }
+      ],
+      "operation": "pingdom.delete.maintenance-occurrences-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tms check cid",
+      "summary": "Documented DELETE /tms/check/{cid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api delete tms check cid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tms/check/{cid}"
+        }
+      ],
+      "operation": "pingdom.delete.tms-check-cid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get alerting contacts contactid",
+      "summary": "Documented GET /alerting/contacts/{contactid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get alerting contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/contacts/{contactid}"
+        }
+      ],
+      "operation": "pingdom.get.alerting-contacts-contactid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get alerting teams teamid",
+      "summary": "Documented GET /alerting/teams/{teamid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get alerting teams teamid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerting/teams/{teamid}"
+        }
+      ],
+      "operation": "pingdom.get.alerting-teams-teamid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analysis checkid",
+      "summary": "Documented GET /analysis/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get analysis checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analysis/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.analysis-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analysis checkid analysisid",
+      "summary": "Documented GET /analysis/{checkid}/{analysisid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get analysis checkid analysisid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analysis/{checkid}/{analysisid}"
+        }
+      ],
+      "operation": "pingdom.get.analysis-checkid-analysisid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checks checkid",
+      "summary": "Documented GET /checks/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get checks checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checks/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.checks-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get maintenance id",
+      "summary": "Documented GET /maintenance/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get maintenance id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance/{id}"
+        }
+      ],
+      "operation": "pingdom.get.maintenance-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get maintenance-occurrences id",
+      "summary": "Documented GET /maintenance.occurrences/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get maintenance-occurrences id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance.occurrences/{id}"
+        }
+      ],
+      "operation": "pingdom.get.maintenance-occurrences-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get results checkid",
+      "summary": "Documented GET /results/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get results checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/results/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.results-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get single",
+      "summary": "Documented GET /single (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get single --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/single"
+        }
+      ],
+      "operation": "pingdom.get.single",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get summary-average checkid",
+      "summary": "Documented GET /summary.average/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get summary-average checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/summary.average/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.summary-average-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get summary-hoursofday checkid",
+      "summary": "Documented GET /summary.hoursofday/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get summary-hoursofday checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/summary.hoursofday/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.summary-hoursofday-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get summary-outage checkid",
+      "summary": "Documented GET /summary.outage/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get summary-outage checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/summary.outage/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.summary-outage-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get summary-performance checkid",
+      "summary": "Documented GET /summary.performance/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get summary-performance checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/summary.performance/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.summary-performance-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get summary-probes checkid",
+      "summary": "Documented GET /summary.probes/{checkid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get summary-probes checkid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/summary.probes/{checkid}"
+        }
+      ],
+      "operation": "pingdom.get.summary-probes-checkid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tms check check-id report performance",
+      "summary": "Documented GET /tms/check/{check_id}/report/performance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get tms check check-id report performance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check/{check_id}/report/performance"
+        }
+      ],
+      "operation": "pingdom.get.tms-check-check-id-report-performance",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tms check check-id report status",
+      "summary": "Documented GET /tms/check/{check_id}/report/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get tms check check-id report status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check/{check_id}/report/status"
+        }
+      ],
+      "operation": "pingdom.get.tms-check-check-id-report-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tms check cid",
+      "summary": "Documented GET /tms/check/{cid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get tms check cid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check/{cid}"
+        }
+      ],
+      "operation": "pingdom.get.tms-check-cid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tms check report status",
+      "summary": "Documented GET /tms/check/report/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get tms check report status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check/report/status"
+        }
+      ],
+      "operation": "pingdom.get.tms-check-report-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get traceroute",
+      "summary": "Documented GET /traceroute (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api get traceroute --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/traceroute"
+        }
+      ],
+      "operation": "pingdom.get.traceroute",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post tms check",
+      "summary": "Documented POST /tms/check (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api post tms check --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tms/check"
+        }
+      ],
+      "operation": "pingdom.post.tms-check",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put checks",
+      "summary": "Documented PUT /checks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api put checks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/checks"
+        }
+      ],
+      "operation": "pingdom.put.checks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put maintenance id",
+      "summary": "Documented PUT /maintenance/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api put maintenance id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/maintenance/{id}"
+        }
+      ],
+      "operation": "pingdom.put.maintenance-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put maintenance-occurrences id",
+      "summary": "Documented PUT /maintenance.occurrences/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api put maintenance-occurrences id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/maintenance.occurrences/{id}"
+        }
+      ],
+      "operation": "pingdom.put.maintenance-occurrences-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tms check cid",
+      "summary": "Documented PUT /tms/check/{cid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom api put tms check cid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tms/check/{cid}"
+        }
+      ],
+      "operation": "pingdom.put.tms-check-cid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "checks list",
+      "summary": "Run the checks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "checks",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom checks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checks"
+        }
+      ]
+    },
+    {
+      "path": "create check apply",
+      "summary": "Plan and execute the create check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "host",
+          "type": "string",
+          "summary": "Required host record field.",
+          "maps_to": "record.host",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/checks"
+        }
+      ],
+      "risk": "creates a new Pingdom uptime check (this action models the common HTTP-type check shape; Pingdom's other 8 check types share the same name/host/type/paused/resolution/notification fields plus type-specific attributes not modeled here, see docs.md Known limits); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerting/contacts"
+        }
+      ],
+      "risk": "creates a new alerting contact with email/SMS notification targets; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create maintenance apply",
+      "summary": "Plan and execute the create maintenance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "from",
+          "type": "integer",
+          "summary": "Required from record field.",
+          "maps_to": "record.from",
+          "required": true
+        },
+        {
+          "name": "to",
+          "type": "integer",
+          "summary": "Required to record field.",
+          "maps_to": "record.to",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom create maintenance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/maintenance"
+        }
+      ],
+      "risk": "creates a new maintenance window that suppresses alerting for the assigned checks during the scheduled period; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerting/teams"
+        }
+      ],
+      "risk": "creates a new alerting team from a list of contact ids; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "credits list",
+      "summary": "Run the credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credits",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credits"
+        }
+      ]
+    },
+    {
+      "path": "delete check apply",
+      "summary": "Plan and execute the delete check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/checks/{checkid}"
+        }
+      ],
+      "risk": "permanently deletes an uptime check and its historical results; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/alerting/contacts/{contactid}"
+        }
+      ],
+      "risk": "permanently deletes an alerting contact and its notification targets; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete maintenance apply",
+      "summary": "Plan and execute the delete maintenance reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete maintenance apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/maintenance/{id}"
+        }
+      ],
+      "risk": "permanently deletes a maintenance window, immediately resuming alerting for its assigned checks; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete team apply",
+      "summary": "Plan and execute the delete team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom delete team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/alerting/teams/{teamid}"
+        }
+      ],
+      "risk": "permanently deletes an alerting team; destructive external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "maintenance list",
+      "summary": "Run the maintenance ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom maintenance list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance"
+        }
+      ]
+    },
+    {
+      "path": "maintenance occurrences list",
+      "summary": "Run the maintenance occurrences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "maintenance_occurrences",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom maintenance occurrences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/maintenance.occurrences"
+        }
+      ]
+    },
+    {
+      "path": "probes list",
+      "summary": "Run the probes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "probes",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom probes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/probes"
+        }
+      ]
+    },
+    {
+      "path": "reference list",
+      "summary": "Run the reference ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reference",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom reference list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reference"
+        }
+      ]
+    },
+    {
+      "path": "tms checks list",
+      "summary": "Run the tms checks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tms_checks",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom tms checks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tms/check"
+        }
+      ]
+    },
+    {
+      "path": "update check apply",
+      "summary": "Plan and execute the update check reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_check",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pingdom update check apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/checks/{checkid}"
+        }
+      ],
+      "risk": "updates an existing check's settings (name/host/paused/resolution/tags); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/alerting/contacts/{contactid}"
+        }
+      ],
+      "risk": "updates an existing alerting contact's name/paused state/notification targets (Pingdom's PUT is a full replacement, requiring name/paused/notification_targets together); external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update team apply",
+      "summary": "Plan and execute the update team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_team",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "examples": [
+        "pm pingdom update team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/alerting/teams/{teamid}"
+        }
+      ],
+      "risk": "updates an existing alerting team's name/member list; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    }
+  ]
+}

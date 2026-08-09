@@ -1,0 +1,3943 @@
+{
+  "tagline": "Run Invoiced's declared streams and reverse-ETL actions.",
+  "usage": "pm invoiced \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get coupons id",
+        "api get credit-balance-adjustments id",
+        "api get credit-notes id",
+        "api get credit-notes id attachments",
+        "api get customer id notes",
+        "api get customers customer-id contacts",
+        "api get customers customer-id contacts id",
+        "api get customers customer-id line-items",
+        "api get customers customer-id line-items id",
+        "api get customers customer-id payment-sources",
+        "api get customers id",
+        "api get customers id balance",
+        "api get estimates id",
+        "api get estimates id attachments",
+        "api get events id",
+        "api get files id",
+        "api get invoice id notes",
+        "api get invoices id",
+        "api get invoices id attachments",
+        "api get invoices id payment-plan",
+        "api get items id",
+        "api get payments id",
+        "api get plans id",
+        "api get subscriptions id",
+        "api get tasks id",
+        "api get tax-rates id",
+        "coupon list",
+        "coupons list",
+        "credit balance adjustment list",
+        "credit balance adjustments list",
+        "credit note attachments list",
+        "credit note list",
+        "credit notes list",
+        "customer balance list",
+        "customer contact list",
+        "customer contacts list",
+        "customer line item list",
+        "customer line items list",
+        "customer list",
+        "customer notes list",
+        "customer payment sources list",
+        "customers list",
+        "estimate attachments list",
+        "estimate list",
+        "estimates list",
+        "event list",
+        "events list",
+        "file list",
+        "invoice attachments list",
+        "invoice list",
+        "invoice notes list",
+        "invoice payment plan list",
+        "invoices list",
+        "item list",
+        "items list",
+        "notes list",
+        "payment list",
+        "payments list",
+        "plan list",
+        "plans list",
+        "subscription list",
+        "subscriptions list",
+        "task list",
+        "tasks list",
+        "tax rate list",
+        "tax rates list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete coupons id",
+        "api delete credit-balance-adjustments id",
+        "api delete credit-notes id",
+        "api delete customers customer-id bank-accounts id",
+        "api delete customers customer-id cards id",
+        "api delete customers customer-id contacts id",
+        "api delete customers customer-id line-items id",
+        "api delete customers id",
+        "api delete estimates id",
+        "api delete files id",
+        "api delete invoices id",
+        "api delete invoices id payment-plan",
+        "api delete items id",
+        "api delete notes id",
+        "api delete payments id",
+        "api delete plans id",
+        "api delete subscriptions id",
+        "api delete tasks id",
+        "api delete tax-rates id",
+        "api patch coupons id",
+        "api patch credit-balance-adjustments id",
+        "api patch credit-notes id",
+        "api patch customers customer-id contacts id",
+        "api patch customers customer-id line-items id",
+        "api patch customers id",
+        "api patch estimates id",
+        "api patch invoices id",
+        "api patch items id",
+        "api patch notes id",
+        "api patch payments id",
+        "api patch plans id",
+        "api patch subscriptions id",
+        "api patch tasks id",
+        "api patch tax-rates id",
+        "api post charges id refunds",
+        "api post credit-notes id emails",
+        "api post credit-notes id void",
+        "api post customers customer-id contacts",
+        "api post customers customer-id invoices",
+        "api post customers customer-id line-items",
+        "api post customers id consolidate-invoices",
+        "api post customers id emails",
+        "api post customers id letters",
+        "api post customers id payment-sources",
+        "api post customers id text-messages",
+        "api post estimates estimate-id invoice",
+        "api post estimates id emails",
+        "api post estimates id void",
+        "api post files",
+        "api post invoices id emails",
+        "api post invoices id letters",
+        "api post invoices id pay",
+        "api post invoices id text-messages",
+        "api post invoices id void",
+        "api post payments id emails",
+        "api put invoices id payment-plan",
+        "cancel payment plan apply",
+        "cancel subscription apply",
+        "convert estimate to invoice apply",
+        "create an estimate apply",
+        "create an invoice apply",
+        "create an item apply",
+        "create charge apply",
+        "create consolidated invoice apply",
+        "create contact apply",
+        "create coupon apply",
+        "create credit balance adjustment apply",
+        "create credit note apply",
+        "create customer apply",
+        "create customer invoice apply",
+        "create customer line item apply",
+        "create note apply",
+        "create payment apply",
+        "create payment plan apply",
+        "create payment source apply",
+        "create plan apply",
+        "create subscription apply",
+        "create task apply",
+        "create tax rate apply",
+        "delete an estimate apply",
+        "delete an invoice apply",
+        "delete an item apply",
+        "delete bank account payment source apply",
+        "delete card payment source apply",
+        "delete contact apply",
+        "delete coupon apply",
+        "delete credit balance adjustment apply",
+        "delete credit note apply",
+        "delete customer apply",
+        "delete customer line item apply",
+        "delete file apply",
+        "delete note apply",
+        "delete payment apply",
+        "delete plan apply",
+        "delete task apply",
+        "delete tax rate apply",
+        "pay invoice apply",
+        "preview subscription apply",
+        "refund charge apply",
+        "send a payment receipt email apply",
+        "send credit note email apply",
+        "send estimate email apply",
+        "send invoice email apply",
+        "send invoice letter apply",
+        "send invoice sms apply",
+        "send statement email apply",
+        "send statement letter apply",
+        "send statement sms apply",
+        "update an estimate apply",
+        "update an invoice apply",
+        "update an item apply",
+        "update contact apply",
+        "update coupon apply",
+        "update credit balance adjustment apply",
+        "update credit note apply",
+        "update customer apply",
+        "update customer line item apply",
+        "update note apply",
+        "update payment apply",
+        "update plan apply",
+        "update subscription apply",
+        "update task apply",
+        "update tax rate apply",
+        "void credit note apply",
+        "void estimate apply",
+        "void invoice apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete coupons id",
+      "summary": "Documented DELETE /coupons/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/coupons/:id"
+        }
+      ],
+      "operation": "invoiced.delete.coupons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete credit-balance-adjustments id",
+      "summary": "Documented DELETE /credit_balance_adjustments/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete credit-balance-adjustments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credit_balance_adjustments/:id"
+        }
+      ],
+      "operation": "invoiced.delete.credit-balance-adjustments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete credit-notes id",
+      "summary": "Documented DELETE /credit_notes/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete credit-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credit_notes/:id"
+        }
+      ],
+      "operation": "invoiced.delete.credit-notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id bank-accounts id",
+      "summary": "Documented DELETE /customers/:customer_id/bank_accounts/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete customers customer-id bank-accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/:customer_id/bank_accounts/:id"
+        }
+      ],
+      "operation": "invoiced.delete.customers-customer-id-bank-accounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id cards id",
+      "summary": "Documented DELETE /customers/:customer_id/cards/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete customers customer-id cards id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/:customer_id/cards/:id"
+        }
+      ],
+      "operation": "invoiced.delete.customers-customer-id-cards-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id contacts id",
+      "summary": "Documented DELETE /customers/:customer_id/contacts/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete customers customer-id contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/:customer_id/contacts/:id"
+        }
+      ],
+      "operation": "invoiced.delete.customers-customer-id-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id line-items id",
+      "summary": "Documented DELETE /customers/:customer_id/line_items/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete customers customer-id line-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/:customer_id/line_items/:id"
+        }
+      ],
+      "operation": "invoiced.delete.customers-customer-id-line-items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers id",
+      "summary": "Documented DELETE /customers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/:id"
+        }
+      ],
+      "operation": "invoiced.delete.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete estimates id",
+      "summary": "Documented DELETE /estimates/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/estimates/:id"
+        }
+      ],
+      "operation": "invoiced.delete.estimates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete files id",
+      "summary": "Documented DELETE /files/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/files/:id"
+        }
+      ],
+      "operation": "invoiced.delete.files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices id",
+      "summary": "Documented DELETE /invoices/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/:id"
+        }
+      ],
+      "operation": "invoiced.delete.invoices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices id payment-plan",
+      "summary": "Documented DELETE /invoices/:id/payment_plan (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete invoices id payment-plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/:id/payment_plan"
+        }
+      ],
+      "operation": "invoiced.delete.invoices-id-payment-plan",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete items id",
+      "summary": "Documented DELETE /items/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/items/:id"
+        }
+      ],
+      "operation": "invoiced.delete.items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete notes id",
+      "summary": "Documented DELETE /notes/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/:id"
+        }
+      ],
+      "operation": "invoiced.delete.notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete payments id",
+      "summary": "Documented DELETE /payments/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete payments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/payments/:id"
+        }
+      ],
+      "operation": "invoiced.delete.payments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete plans id",
+      "summary": "Documented DELETE /plans/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete plans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/plans/:id"
+        }
+      ],
+      "operation": "invoiced.delete.plans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete subscriptions id",
+      "summary": "Documented DELETE /subscriptions/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/subscriptions/:id"
+        }
+      ],
+      "operation": "invoiced.delete.subscriptions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tasks id",
+      "summary": "Documented DELETE /tasks/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/:id"
+        }
+      ],
+      "operation": "invoiced.delete.tasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tax-rates id",
+      "summary": "Documented DELETE /tax_rates/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api delete tax-rates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tax_rates/:id"
+        }
+      ],
+      "operation": "invoiced.delete.tax-rates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get coupons id",
+      "summary": "Documented GET /coupons/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/:id"
+        }
+      ],
+      "operation": "invoiced.get.coupons-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-balance-adjustments id",
+      "summary": "Documented GET /credit_balance_adjustments/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get credit-balance-adjustments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_balance_adjustments/:id"
+        }
+      ],
+      "operation": "invoiced.get.credit-balance-adjustments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-notes id",
+      "summary": "Documented GET /credit_notes/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get credit-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes/:id"
+        }
+      ],
+      "operation": "invoiced.get.credit-notes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-notes id attachments",
+      "summary": "Documented GET /credit_notes/:id/attachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get credit-notes id attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes/:id/attachments"
+        }
+      ],
+      "operation": "invoiced.get.credit-notes-id-attachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer id notes",
+      "summary": "Documented GET /customer/:id/notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customer id notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/:id/notes"
+        }
+      ],
+      "operation": "invoiced.get.customer-id-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id contacts",
+      "summary": "Documented GET /customers/:customer_id/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers customer-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:customer_id/contacts"
+        }
+      ],
+      "operation": "invoiced.get.customers-customer-id-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id contacts id",
+      "summary": "Documented GET /customers/:customer_id/contacts/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers customer-id contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:customer_id/contacts/:id"
+        }
+      ],
+      "operation": "invoiced.get.customers-customer-id-contacts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id line-items",
+      "summary": "Documented GET /customers/:customer_id/line_items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers customer-id line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:customer_id/line_items"
+        }
+      ],
+      "operation": "invoiced.get.customers-customer-id-line-items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id line-items id",
+      "summary": "Documented GET /customers/:customer_id/line_items/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers customer-id line-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:customer_id/line_items/:id"
+        }
+      ],
+      "operation": "invoiced.get.customers-customer-id-line-items-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id payment-sources",
+      "summary": "Documented GET /customers/:customer_id/payment_sources (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers customer-id payment-sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:customer_id/payment_sources"
+        }
+      ],
+      "operation": "invoiced.get.customers-customer-id-payment-sources",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id",
+      "summary": "Documented GET /customers/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:id"
+        }
+      ],
+      "operation": "invoiced.get.customers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers id balance",
+      "summary": "Documented GET /customers/:id/balance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get customers id balance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/:id/balance"
+        }
+      ],
+      "operation": "invoiced.get.customers-id-balance",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get estimates id",
+      "summary": "Documented GET /estimates/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates/:id"
+        }
+      ],
+      "operation": "invoiced.get.estimates-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get estimates id attachments",
+      "summary": "Documented GET /estimates/:id/attachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get estimates id attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates/:id/attachments"
+        }
+      ],
+      "operation": "invoiced.get.estimates-id-attachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events id",
+      "summary": "Documented GET /events/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get events id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/:id"
+        }
+      ],
+      "operation": "invoiced.get.events-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files id",
+      "summary": "Documented GET /files/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/:id"
+        }
+      ],
+      "operation": "invoiced.get.files-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoice id notes",
+      "summary": "Documented GET /invoice/:id/notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get invoice id notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoice/:id/notes"
+        }
+      ],
+      "operation": "invoiced.get.invoice-id-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices id",
+      "summary": "Documented GET /invoices/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/:id"
+        }
+      ],
+      "operation": "invoiced.get.invoices-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices id attachments",
+      "summary": "Documented GET /invoices/:id/attachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get invoices id attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/:id/attachments"
+        }
+      ],
+      "operation": "invoiced.get.invoices-id-attachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices id payment-plan",
+      "summary": "Documented GET /invoices/:id/payment_plan (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get invoices id payment-plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/:id/payment_plan"
+        }
+      ],
+      "operation": "invoiced.get.invoices-id-payment-plan",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get items id",
+      "summary": "Documented GET /items/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items/:id"
+        }
+      ],
+      "operation": "invoiced.get.items-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get payments id",
+      "summary": "Documented GET /payments/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get payments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments/:id"
+        }
+      ],
+      "operation": "invoiced.get.payments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans id",
+      "summary": "Documented GET /plans/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get plans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/:id"
+        }
+      ],
+      "operation": "invoiced.get.plans-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions id",
+      "summary": "Documented GET /subscriptions/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/:id"
+        }
+      ],
+      "operation": "invoiced.get.subscriptions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks id",
+      "summary": "Documented GET /tasks/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/:id"
+        }
+      ],
+      "operation": "invoiced.get.tasks-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tax-rates id",
+      "summary": "Documented GET /tax_rates/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api get tax-rates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_rates/:id"
+        }
+      ],
+      "operation": "invoiced.get.tax-rates-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch coupons id",
+      "summary": "Documented PATCH /coupons/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch coupons id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/coupons/:id"
+        }
+      ],
+      "operation": "invoiced.patch.coupons-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch credit-balance-adjustments id",
+      "summary": "Documented PATCH /credit_balance_adjustments/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch credit-balance-adjustments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/credit_balance_adjustments/:id"
+        }
+      ],
+      "operation": "invoiced.patch.credit-balance-adjustments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch credit-notes id",
+      "summary": "Documented PATCH /credit_notes/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch credit-notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/credit_notes/:id"
+        }
+      ],
+      "operation": "invoiced.patch.credit-notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers customer-id contacts id",
+      "summary": "Documented PATCH /customers/:customer_id/contacts/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch customers customer-id contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/:customer_id/contacts/:id"
+        }
+      ],
+      "operation": "invoiced.patch.customers-customer-id-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers customer-id line-items id",
+      "summary": "Documented PATCH /customers/:customer_id/line_items/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch customers customer-id line-items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/:customer_id/line_items/:id"
+        }
+      ],
+      "operation": "invoiced.patch.customers-customer-id-line-items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch customers id",
+      "summary": "Documented PATCH /customers/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch customers id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/:id"
+        }
+      ],
+      "operation": "invoiced.patch.customers-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch estimates id",
+      "summary": "Documented PATCH /estimates/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch estimates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/estimates/:id"
+        }
+      ],
+      "operation": "invoiced.patch.estimates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch invoices id",
+      "summary": "Documented PATCH /invoices/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch invoices id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/invoices/:id"
+        }
+      ],
+      "operation": "invoiced.patch.invoices-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch items id",
+      "summary": "Documented PATCH /items/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch items id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/items/:id"
+        }
+      ],
+      "operation": "invoiced.patch.items-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch notes id",
+      "summary": "Documented PATCH /notes/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch notes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/notes/:id"
+        }
+      ],
+      "operation": "invoiced.patch.notes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch payments id",
+      "summary": "Documented PATCH /payments/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch payments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/payments/:id"
+        }
+      ],
+      "operation": "invoiced.patch.payments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch plans id",
+      "summary": "Documented PATCH /plans/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch plans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/plans/:id"
+        }
+      ],
+      "operation": "invoiced.patch.plans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch subscriptions id",
+      "summary": "Documented PATCH /subscriptions/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch subscriptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/subscriptions/:id"
+        }
+      ],
+      "operation": "invoiced.patch.subscriptions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks id",
+      "summary": "Documented PATCH /tasks/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch tasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/:id"
+        }
+      ],
+      "operation": "invoiced.patch.tasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tax-rates id",
+      "summary": "Documented PATCH /tax_rates/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api patch tax-rates id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tax_rates/:id"
+        }
+      ],
+      "operation": "invoiced.patch.tax-rates-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post charges id refunds",
+      "summary": "Documented POST /charges/:id/refunds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post charges id refunds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/:id/refunds"
+        }
+      ],
+      "operation": "invoiced.post.charges-id-refunds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credit-notes id emails",
+      "summary": "Documented POST /credit_notes/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post credit-notes id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes/:id/emails"
+        }
+      ],
+      "operation": "invoiced.post.credit-notes-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credit-notes id void",
+      "summary": "Documented POST /credit_notes/:id/void (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post credit-notes id void --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes/:id/void"
+        }
+      ],
+      "operation": "invoiced.post.credit-notes-id-void",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id contacts",
+      "summary": "Documented POST /customers/:customer_id/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers customer-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:customer_id/contacts"
+        }
+      ],
+      "operation": "invoiced.post.customers-customer-id-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id invoices",
+      "summary": "Documented POST /customers/:customer_id/invoices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers customer-id invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:customer_id/invoices"
+        }
+      ],
+      "operation": "invoiced.post.customers-customer-id-invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id line-items",
+      "summary": "Documented POST /customers/:customer_id/line_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers customer-id line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:customer_id/line_items"
+        }
+      ],
+      "operation": "invoiced.post.customers-customer-id-line-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id consolidate-invoices",
+      "summary": "Documented POST /customers/:id/consolidate_invoices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers id consolidate-invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:id/consolidate_invoices"
+        }
+      ],
+      "operation": "invoiced.post.customers-id-consolidate-invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id emails",
+      "summary": "Documented POST /customers/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:id/emails"
+        }
+      ],
+      "operation": "invoiced.post.customers-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id letters",
+      "summary": "Documented POST /customers/:id/letters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers id letters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:id/letters"
+        }
+      ],
+      "operation": "invoiced.post.customers-id-letters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id payment-sources",
+      "summary": "Documented POST /customers/:id/payment_sources (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers id payment-sources --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:id/payment_sources"
+        }
+      ],
+      "operation": "invoiced.post.customers-id-payment-sources",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers id text-messages",
+      "summary": "Documented POST /customers/:id/text_messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post customers id text-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/:id/text_messages"
+        }
+      ],
+      "operation": "invoiced.post.customers-id-text-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates estimate-id invoice",
+      "summary": "Documented POST /estimates/:estimate_id/invoice (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post estimates estimate-id invoice --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/:estimate_id/invoice"
+        }
+      ],
+      "operation": "invoiced.post.estimates-estimate-id-invoice",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id emails",
+      "summary": "Documented POST /estimates/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post estimates id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/:id/emails"
+        }
+      ],
+      "operation": "invoiced.post.estimates-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post estimates id void",
+      "summary": "Documented POST /estimates/:id/void (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post estimates id void --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/:id/void"
+        }
+      ],
+      "operation": "invoiced.post.estimates-id-void",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post files",
+      "summary": "Documented POST /files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/files"
+        }
+      ],
+      "operation": "invoiced.post.files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id emails",
+      "summary": "Documented POST /invoices/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post invoices id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/:id/emails"
+        }
+      ],
+      "operation": "invoiced.post.invoices-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id letters",
+      "summary": "Documented POST /invoices/:id/letters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post invoices id letters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/:id/letters"
+        }
+      ],
+      "operation": "invoiced.post.invoices-id-letters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id pay",
+      "summary": "Documented POST /invoices/:id/pay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post invoices id pay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/:id/pay"
+        }
+      ],
+      "operation": "invoiced.post.invoices-id-pay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id text-messages",
+      "summary": "Documented POST /invoices/:id/text_messages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post invoices id text-messages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/:id/text_messages"
+        }
+      ],
+      "operation": "invoiced.post.invoices-id-text-messages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices id void",
+      "summary": "Documented POST /invoices/:id/void (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post invoices id void --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/:id/void"
+        }
+      ],
+      "operation": "invoiced.post.invoices-id-void",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post payments id emails",
+      "summary": "Documented POST /payments/:id/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api post payments id emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments/:id/emails"
+        }
+      ],
+      "operation": "invoiced.post.payments-id-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put invoices id payment-plan",
+      "summary": "Documented PUT /invoices/:id/payment_plan (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced api put invoices id payment-plan --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/invoices/:id/payment_plan"
+        }
+      ],
+      "operation": "invoiced.put.invoices-id-payment-plan",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "cancel payment plan apply",
+      "summary": "Plan and execute the cancel payment plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_payment_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced cancel payment plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{id}/payment_plan"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Cancel a payment plan.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "cancel subscription apply",
+      "summary": "Plan and execute the cancel subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "cancel_subscription",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced cancel subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Cancel a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "convert estimate to invoice apply",
+      "summary": "Plan and execute the convert estimate to invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "convert_estimate_to_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced convert estimate to invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{estimate_id}/invoice"
+        }
+      ],
+      "risk": "Invoiced mutation: Convert an estimate to an invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "coupon list",
+      "summary": "Run the coupon ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupon",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced coupon list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "coupons list",
+      "summary": "Run the coupons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "coupons",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced coupons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons"
+        }
+      ]
+    },
+    {
+      "path": "create an estimate apply",
+      "summary": "Plan and execute the create an estimate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_an_estimate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create an estimate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates"
+        }
+      ],
+      "risk": "Invoiced mutation: Create an estimate.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create an invoice apply",
+      "summary": "Plan and execute the create an invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_an_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create an invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices"
+        }
+      ],
+      "risk": "Invoiced mutation: Create an invoice.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create an item apply",
+      "summary": "Plan and execute the create an item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_an_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create an item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/items"
+        }
+      ],
+      "risk": "Invoiced mutation: Create an item.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create charge apply",
+      "summary": "Plan and execute the create charge reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_charge",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create charge apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges"
+        }
+      ],
+      "risk": "High-impact Invoiced mutation: Create a charge.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create consolidated invoice apply",
+      "summary": "Plan and execute the create consolidated invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_consolidated_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create consolidated invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/consolidate_invoices"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a consolidated invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/contacts"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a contact.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create coupon apply",
+      "summary": "Plan and execute the create coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_coupon",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a coupon.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create credit balance adjustment apply",
+      "summary": "Plan and execute the create credit balance adjustment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_balance_adjustment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create credit balance adjustment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_balance_adjustments"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a credit balance adjustment.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create credit note apply",
+      "summary": "Plan and execute the create credit note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_credit_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create credit note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a credit note.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create customer apply",
+      "summary": "Plan and execute the create customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a customer.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create customer invoice apply",
+      "summary": "Plan and execute the create customer invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_customer_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create customer invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/invoices"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a metered invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create customer line item apply",
+      "summary": "Plan and execute the create customer line item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_customer_line_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create customer line item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/line_items"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a metered line item.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create note apply",
+      "summary": "Plan and execute the create note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a note.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create payment apply",
+      "summary": "Plan and execute the create payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a payment.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create payment plan apply",
+      "summary": "Plan and execute the create payment plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_payment_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create payment plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/invoices/{id}/payment_plan"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a payment plan.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create payment source apply",
+      "summary": "Plan and execute the create payment source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_payment_source",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create payment source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/payment_sources"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a payment source.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create plan apply",
+      "summary": "Plan and execute the create plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a plan.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create subscription apply",
+      "summary": "Plan and execute the create subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_subscription",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a subscription.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task apply",
+      "summary": "Plan and execute the create task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a task.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tax rate apply",
+      "summary": "Plan and execute the create tax rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tax_rate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced create tax rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tax_rates"
+        }
+      ],
+      "risk": "Invoiced mutation: Create a tax rate.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "credit balance adjustment list",
+      "summary": "Run the credit balance adjustment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_balance_adjustment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced credit balance adjustment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_balance_adjustments/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "credit balance adjustments list",
+      "summary": "Run the credit balance adjustments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_balance_adjustments",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced credit balance adjustments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_balance_adjustments"
+        }
+      ]
+    },
+    {
+      "path": "credit note attachments list",
+      "summary": "Run the credit note attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_note_attachments",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced credit note attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes/{id}/attachments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "credit note list",
+      "summary": "Run the credit note ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced credit note list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "credit notes list",
+      "summary": "Run the credit notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_notes",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced credit notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes"
+        }
+      ]
+    },
+    {
+      "path": "customer balance list",
+      "summary": "Run the customer balance ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_balance",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer balance list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}/balance"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer contact list",
+      "summary": "Run the customer contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_contact",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/contacts/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer contacts list",
+      "summary": "Run the customer contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_contacts",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/contacts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer line item list",
+      "summary": "Run the customer line item ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_line_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer line item list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/line_items/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer line items list",
+      "summary": "Run the customer line items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_line_items",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer line items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/line_items"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer list",
+      "summary": "Run the customer ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer notes list",
+      "summary": "Run the customer notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_notes",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{id}/notes"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customer payment sources list",
+      "summary": "Run the customer payment sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_payment_sources",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customer payment sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/payment_sources"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "delete an estimate apply",
+      "summary": "Plan and execute the delete an estimate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_an_estimate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete an estimate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete an estimate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete an invoice apply",
+      "summary": "Plan and execute the delete an invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_an_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete an invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete an invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete an item apply",
+      "summary": "Plan and execute the delete an item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_an_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete an item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/items/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete an item.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete bank account payment source apply",
+      "summary": "Plan and execute the delete bank account payment source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_bank_account_payment_source",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete bank account payment source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/bank_accounts/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete bank account payment source.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete card payment source apply",
+      "summary": "Plan and execute the delete card payment source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_card_payment_source",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete card payment source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/cards/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete card payment source.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/contacts/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a contact.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete coupon apply",
+      "summary": "Plan and execute the delete coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_coupon",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a coupon.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete credit balance adjustment apply",
+      "summary": "Plan and execute the delete credit balance adjustment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_credit_balance_adjustment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete credit balance adjustment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credit_balance_adjustments/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a credit balance adjustment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete credit note apply",
+      "summary": "Plan and execute the delete credit note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_credit_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete credit note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credit_notes/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a credit note.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete customer apply",
+      "summary": "Plan and execute the delete customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_customer",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a customer.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete customer line item apply",
+      "summary": "Plan and execute the delete customer line item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_customer_line_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete customer line item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/line_items/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a metered line item.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete file apply",
+      "summary": "Plan and execute the delete file reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_file",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete file apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/files/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a file.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete note apply",
+      "summary": "Plan and execute the delete note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a note.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete payment apply",
+      "summary": "Plan and execute the delete payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_payment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/payments/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete plan apply",
+      "summary": "Plan and execute the delete plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/plans/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a plan.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the delete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_task",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a task.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete tax rate apply",
+      "summary": "Plan and execute the delete tax rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_tax_rate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced delete tax rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tax_rates/{id}"
+        }
+      ],
+      "risk": "Deletes or cancels Invoiced data: Delete a tax rate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "estimate attachments list",
+      "summary": "Run the estimate attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "estimate_attachments",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced estimate attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates/{id}/attachments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "estimate list",
+      "summary": "Run the estimate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "estimate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced estimate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "estimates list",
+      "summary": "Run the estimates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "estimates",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced estimates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/estimates"
+        }
+      ]
+    },
+    {
+      "path": "event list",
+      "summary": "Run the event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ]
+    },
+    {
+      "path": "file list",
+      "summary": "Run the file ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "file",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced file list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoice attachments list",
+      "summary": "Run the invoice attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoice_attachments",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced invoice attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}/attachments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoice list",
+      "summary": "Run the invoice ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced invoice list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoice notes list",
+      "summary": "Run the invoice notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoice_notes",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced invoice notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoice/{id}/notes"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoice payment plan list",
+      "summary": "Run the invoice payment plan ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoice_payment_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced invoice payment plan list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{id}/payment_plan"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ]
+    },
+    {
+      "path": "item list",
+      "summary": "Run the item ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced item list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "items list",
+      "summary": "Run the items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items"
+        }
+      ]
+    },
+    {
+      "path": "notes list",
+      "summary": "Run the notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "path": "pay invoice apply",
+      "summary": "Plan and execute the pay invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "pay_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced pay invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/pay"
+        }
+      ],
+      "risk": "High-impact Invoiced mutation: Pay an invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "payment list",
+      "summary": "Run the payment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced payment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "payments list",
+      "summary": "Run the payments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced payments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payments"
+        }
+      ]
+    },
+    {
+      "path": "plan list",
+      "summary": "Run the plan ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced plan list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "plans list",
+      "summary": "Run the plans ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced plans list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans"
+        }
+      ]
+    },
+    {
+      "path": "preview subscription apply",
+      "summary": "Plan and execute the preview subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "preview_subscription",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced preview subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/preview"
+        }
+      ],
+      "risk": "Invoiced mutation: Preview a subscription.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "refund charge apply",
+      "summary": "Plan and execute the refund charge reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "refund_charge",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced refund charge apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/charges/{id}/refunds"
+        }
+      ],
+      "risk": "High-impact Invoiced mutation: Refund a charge.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send a payment receipt email apply",
+      "summary": "Plan and execute the send a payment receipt email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_a_payment_receipt_email",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send a payment receipt email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/payments/{id}/emails"
+        }
+      ],
+      "risk": "Invoiced mutation: Send a payment receipt email.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send credit note email apply",
+      "summary": "Plan and execute the send credit note email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_credit_note_email",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send credit note email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes/{id}/emails"
+        }
+      ],
+      "risk": "Invoiced mutation: Send a credit note email.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send estimate email apply",
+      "summary": "Plan and execute the send estimate email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_estimate_email",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send estimate email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/emails"
+        }
+      ],
+      "risk": "Invoiced mutation: Send an estimate email.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send invoice email apply",
+      "summary": "Plan and execute the send invoice email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_invoice_email",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send invoice email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/emails"
+        }
+      ],
+      "risk": "Invoiced mutation: Send an invoice email.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send invoice letter apply",
+      "summary": "Plan and execute the send invoice letter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_invoice_letter",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send invoice letter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/letters"
+        }
+      ],
+      "risk": "Invoiced mutation: Send an invoice letter.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send invoice sms apply",
+      "summary": "Plan and execute the send invoice sms reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_invoice_sms",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send invoice sms apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/text_messages"
+        }
+      ],
+      "risk": "Invoiced mutation: Send an invoice SMS.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send statement email apply",
+      "summary": "Plan and execute the send statement email reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_statement_email",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send statement email apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/emails"
+        }
+      ],
+      "risk": "Invoiced mutation: Send a statement email.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send statement letter apply",
+      "summary": "Plan and execute the send statement letter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_statement_letter",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send statement letter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/letters"
+        }
+      ],
+      "risk": "Invoiced mutation: Send a statement letter.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "send statement sms apply",
+      "summary": "Plan and execute the send statement sms reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_statement_sms",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced send statement sms apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{id}/text_messages"
+        }
+      ],
+      "risk": "Invoiced mutation: Send a statement SMS.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "subscription list",
+      "summary": "Run the subscription ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced subscription list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "task list",
+      "summary": "Run the task ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced task list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    },
+    {
+      "path": "tax rate list",
+      "summary": "Run the tax rate ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_rate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced tax rate list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_rates/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tax rates list",
+      "summary": "Run the tax rates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tax_rates",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced tax rates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tax_rates"
+        }
+      ]
+    },
+    {
+      "path": "update an estimate apply",
+      "summary": "Plan and execute the update an estimate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_estimate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update an estimate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/estimates/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update an estimate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update an invoice apply",
+      "summary": "Plan and execute the update an invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update an invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/invoices/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update an invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update an item apply",
+      "summary": "Plan and execute the update an item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_an_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update an item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/items/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update an item.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{customer_id}/contacts/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a contact.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update coupon apply",
+      "summary": "Plan and execute the update coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_coupon",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/coupons/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a coupon.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update credit balance adjustment apply",
+      "summary": "Plan and execute the update credit balance adjustment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_credit_balance_adjustment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update credit balance adjustment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/credit_balance_adjustments/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a credit balance adjustment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update credit note apply",
+      "summary": "Plan and execute the update credit note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_credit_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update credit note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/credit_notes/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a credit note.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update customer apply",
+      "summary": "Plan and execute the update customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_customer",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a customer.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update customer line item apply",
+      "summary": "Plan and execute the update customer line item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_customer_line_item",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update customer line item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/customers/{customer_id}/line_items/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a metered line item.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update note apply",
+      "summary": "Plan and execute the update note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/notes/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a note.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update payment apply",
+      "summary": "Plan and execute the update payment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_payment",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update payment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/payments/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a payment.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update plan apply",
+      "summary": "Plan and execute the update plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_plan",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/plans/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a plan.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update subscription apply",
+      "summary": "Plan and execute the update subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_subscription",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/subscriptions/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a subscription.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the update task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_task",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a task.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update tax rate apply",
+      "summary": "Plan and execute the update tax rate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_tax_rate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced update tax rate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tax_rates/{id}"
+        }
+      ],
+      "risk": "Invoiced mutation: Update a tax rate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "void credit note apply",
+      "summary": "Plan and execute the void credit note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "void_credit_note",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced void credit note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes/{id}/void"
+        }
+      ],
+      "risk": "Destructive Invoiced mutation: Void a credit note.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "void estimate apply",
+      "summary": "Plan and execute the void estimate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "void_estimate",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced void estimate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/estimates/{id}/void"
+        }
+      ],
+      "risk": "Destructive Invoiced mutation: Void an estimate.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "void invoice apply",
+      "summary": "Plan and execute the void invoice reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "void_invoice",
+      "source_url": "https://developer.invoiced.com/api",
+      "examples": [
+        "pm invoiced void invoice apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{id}/void"
+        }
+      ],
+      "risk": "Destructive Invoiced mutation: Void an invoice.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    }
+  ]
+}

@@ -1,0 +1,969 @@
+{
+  "operations": [
+    {
+      "id": "illumina-basespace.get.applications",
+      "kind": "rest_read",
+      "summary": "GET /applications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.applications-id",
+      "kind": "rest_read",
+      "summary": "GET /applications/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.applications-id-qcthresholds",
+      "kind": "rest_read",
+      "summary": "GET /applications/{id}/qcthresholds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications/{id}/qcthresholds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.put.applications-id-qcthresholds",
+      "kind": "rest_write",
+      "summary": "PUT /applications/{id}/qcthresholds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/applications/{id}/qcthresholds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.applications-id-settings",
+      "kind": "rest_read",
+      "summary": "GET /applications/{id}/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications/{id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.applications-id-workflowdependencies",
+      "kind": "rest_read",
+      "summary": "GET /applications/{id}/workflowdependencies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/applications/{id}/workflowdependencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.put.applications-id-workflowdependencies",
+      "kind": "rest_write",
+      "summary": "PUT /applications/{id}/workflowdependencies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/applications/{id}/workflowdependencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.applications-id-workflows",
+      "kind": "rest_write",
+      "summary": "POST /applications/{id}/workflows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/applications/{id}/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions",
+      "kind": "rest_read",
+      "summary": "GET /appsessions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.appsessions-id",
+      "kind": "rest_write",
+      "summary": "POST /appsessions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/appsessions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.delete.appsessions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /appsessions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/appsessions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id-logfiles",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}/logfiles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}/logfiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id-properties",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}/properties",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}/properties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.appsessions-id-properties",
+      "kind": "rest_write",
+      "summary": "POST /appsessions/{id}/properties",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/appsessions/{id}/properties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id-properties-name",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}/properties/{name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}/properties/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.delete.appsessions-id-properties-name",
+      "kind": "rest_write",
+      "summary": "DELETE /appsessions/{id}/properties/{name}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/appsessions/{id}/properties/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.appsessions-id-properties-name-items",
+      "kind": "rest_read",
+      "summary": "GET /appsessions/{id}/properties/{name}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/appsessions/{id}/properties/{name}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.appsessions-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /appsessions/{id}/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/appsessions/{id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.biosamples",
+      "kind": "rest_read",
+      "summary": "GET /biosamples",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/biosamples",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.biosamples-bulkupdate",
+      "kind": "rest_write",
+      "summary": "POST /biosamples/bulkupdate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/biosamples/bulkupdate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.biosamples-biosampleid-labrequeues",
+      "kind": "rest_read",
+      "summary": "GET /biosamples/{biosampleid}/labrequeues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/biosamples/{biosampleid}/labrequeues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.biosamples-id",
+      "kind": "rest_read",
+      "summary": "GET /biosamples/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/biosamples/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.biosamples-id",
+      "kind": "rest_write",
+      "summary": "POST /biosamples/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/biosamples/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.biosamples-id-libraries",
+      "kind": "rest_read",
+      "summary": "GET /biosamples/{id}/libraries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/biosamples/{id}/libraries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.biosamples-id-runlanesummaries",
+      "kind": "rest_read",
+      "summary": "GET /biosamples/{id}/runlanesummaries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/biosamples/{id}/runlanesummaries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.datasets",
+      "kind": "rest_read",
+      "summary": "GET /datasets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datasets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.datasets-id",
+      "kind": "rest_read",
+      "summary": "GET /datasets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datasets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.datasets-id",
+      "kind": "rest_write",
+      "summary": "POST /datasets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/datasets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.datasets-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /datasets/{id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datasets/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.datasets-id-files",
+      "kind": "rest_read",
+      "summary": "GET /datasets/{id}/files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datasets/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.datasettypes-id",
+      "kind": "rest_read",
+      "summary": "GET /datasettypes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datasettypes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.instrumentstatistics",
+      "kind": "rest_read",
+      "summary": "GET /instrumentstatistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/instrumentstatistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.labrequeues",
+      "kind": "rest_read",
+      "summary": "GET /labrequeues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/labrequeues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.labrequeues-id",
+      "kind": "rest_read",
+      "summary": "GET /labrequeues/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/labrequeues/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.laneqcthresholds",
+      "kind": "rest_read",
+      "summary": "GET /laneqcthresholds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/laneqcthresholds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.put.laneqcthresholds",
+      "kind": "rest_write",
+      "summary": "PUT /laneqcthresholds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/laneqcthresholds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.lanes-id",
+      "kind": "rest_read",
+      "summary": "GET /lanes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lanes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.lanes-id",
+      "kind": "rest_write",
+      "summary": "POST /lanes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lanes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.lanes-id-comments",
+      "kind": "rest_read",
+      "summary": "GET /lanes/{id}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lanes/{id}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.libraries",
+      "kind": "rest_read",
+      "summary": "GET /libraries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/libraries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.libraries-libraryid-labrequeues",
+      "kind": "rest_write",
+      "summary": "POST /libraries/{libraryid}/labrequeues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/libraries/{libraryid}/labrequeues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.librarypools-id",
+      "kind": "rest_write",
+      "summary": "POST /librarypools/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/librarypools/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.librarypools-id-libraries",
+      "kind": "rest_read",
+      "summary": "GET /librarypools/{id}/libraries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/librarypools/{id}/libraries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.librarypools-poolid-labrequeues",
+      "kind": "rest_write",
+      "summary": "POST /librarypools/{poolid}/labrequeues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/librarypools/{poolid}/labrequeues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.preprequests-preprequestid-labrequeues",
+      "kind": "rest_write",
+      "summary": "POST /preprequests/{preprequestid}/labrequeues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/preprequests/{preprequestid}/labrequeues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.projects-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.projects-id-datasets",
+      "kind": "rest_read",
+      "summary": "GET /projects/{id}/datasets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{id}/datasets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.runs-id-files",
+      "kind": "rest_read",
+      "summary": "GET /runs/{id}/files",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/runs/{id}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.trash",
+      "kind": "rest_read",
+      "summary": "GET /trash",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trash",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.delete.trash",
+      "kind": "rest_write",
+      "summary": "DELETE /trash",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/trash",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.trash-id",
+      "kind": "rest_read",
+      "summary": "GET /trash/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/trash/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.trash-id-restorefromtrash",
+      "kind": "rest_write",
+      "summary": "POST /trash/{id}/restorefromtrash",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/trash/{id}/restorefromtrash",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-current",
+      "kind": "rest_read",
+      "summary": "GET /users/current",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-current-subscription",
+      "kind": "rest_read",
+      "summary": "GET /users/current/subscription",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/current/subscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-current-usage",
+      "kind": "rest_read",
+      "summary": "GET /users/current/usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/current/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-current-workgroups",
+      "kind": "rest_read",
+      "summary": "GET /users/current/workgroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/current/workgroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.users-id-settings",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.post.users-id-settings",
+      "kind": "rest_write",
+      "summary": "POST /users/{id}/settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.v2-trash",
+      "kind": "rest_read",
+      "summary": "GET /v2/trash",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/trash",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "illumina-basespace.get.workgroups-id",
+      "kind": "rest_read",
+      "summary": "GET /workgroups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workgroups/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

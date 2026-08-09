@@ -1,0 +1,3959 @@
+{
+  "operations": [
+    {
+      "id": "outreach.get.accountnotes",
+      "kind": "rest_read",
+      "summary": "GET /accountNotes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accountNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.accountnotes",
+      "kind": "rest_write",
+      "summary": "POST /accountNotes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accountNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.accountnotes-id",
+      "kind": "rest_read",
+      "summary": "GET /accountNotes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accountNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.accountnotes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /accountNotes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/accountNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.accountnotes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /accountNotes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/accountNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.accounts",
+      "kind": "rest_read",
+      "summary": "GET /accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.accounts",
+      "kind": "rest_write",
+      "summary": "POST /accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.accounts-id",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.accounts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /accounts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.accounts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /accounts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.auditlogs",
+      "kind": "rest_read",
+      "summary": "GET /auditLogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/auditLogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.batchitems",
+      "kind": "rest_read",
+      "summary": "GET /batchItems",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batchItems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.batchitems-id",
+      "kind": "rest_read",
+      "summary": "GET /batchItems/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batchItems/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.batches",
+      "kind": "rest_read",
+      "summary": "GET /batches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountaddtags",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountAddTags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountAddTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsaddassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsAddAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsAddAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsassignowner",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsAssignOwner",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsAssignOwner",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsbulkmodify",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsBulkModify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsBulkModify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsdestroyall",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsDestroyAll",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsDestroyAll",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsremoveallassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsRemoveAllAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsRemoveAllAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsremoveassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsRemoveAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsRemoveAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-accountsremovetags",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/accountsRemoveTags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/accountsRemoveTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-customobjectbulkdelete",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/customObjectBulkDelete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/customObjectBulkDelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-customobjectbulkmodify",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/customObjectBulkModify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/customObjectBulkModify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsaddassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAddAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAddAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsaddtags",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAddTags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAddTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsaddtosequence",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAddToSequence",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAddToSequence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsassignaccount",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAssignAccount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAssignAccount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsassignopportunity",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAssignOpportunity",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAssignOpportunity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsassignowner",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsAssignOwner",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsAssignOwner",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsbulkmodify",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsBulkModify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsBulkModify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsdestroyall",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsDestroyAll",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsDestroyAll",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsfinishall",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsFinishAll",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsFinishAll",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectspauseall",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsPauseAll",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsPauseAll",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsremoveallassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsRemoveAllAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsRemoveAllAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsremoveassignments",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsRemoveAssignments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsRemoveAssignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-actions-prospectsremovetags",
+      "kind": "rest_write",
+      "summary": "POST /batches/actions/prospectsRemoveTags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/actions/prospectsRemoveTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.batches-id",
+      "kind": "rest_read",
+      "summary": "GET /batches/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/batches/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-id-actions-cancel",
+      "kind": "rest_write",
+      "summary": "POST /batches/{id}/actions/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/{id}/actions/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.batches-id-actions-confirm",
+      "kind": "rest_write",
+      "summary": "POST /batches/{id}/actions/confirm",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/batches/{id}/actions/confirm",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.calldispositions",
+      "kind": "rest_read",
+      "summary": "GET /callDispositions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callDispositions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.calldispositions",
+      "kind": "rest_write",
+      "summary": "POST /callDispositions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/callDispositions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.calldispositions-id",
+      "kind": "rest_read",
+      "summary": "GET /callDispositions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.calldispositions-id",
+      "kind": "rest_write",
+      "summary": "PATCH /callDispositions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/callDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.calldispositions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /callDispositions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/callDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.callpurposes",
+      "kind": "rest_read",
+      "summary": "GET /callPurposes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callPurposes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.callpurposes",
+      "kind": "rest_write",
+      "summary": "POST /callPurposes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/callPurposes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.callpurposes-id",
+      "kind": "rest_read",
+      "summary": "GET /callPurposes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/callPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.callpurposes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /callPurposes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/callPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.callpurposes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /callPurposes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/callPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.calls",
+      "kind": "rest_read",
+      "summary": "GET /calls",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/calls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.calls",
+      "kind": "rest_write",
+      "summary": "POST /calls",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/calls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.calls-id",
+      "kind": "rest_read",
+      "summary": "GET /calls/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/calls/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.calls-id",
+      "kind": "rest_write",
+      "summary": "DELETE /calls/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/calls/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.compliancerequests",
+      "kind": "rest_read",
+      "summary": "GET /complianceRequests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/complianceRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.compliancerequests",
+      "kind": "rest_write",
+      "summary": "POST /complianceRequests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/complianceRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.compliancerequests-id",
+      "kind": "rest_read",
+      "summary": "GET /complianceRequests/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/complianceRequests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.contentcategories",
+      "kind": "rest_read",
+      "summary": "GET /contentCategories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contentCategories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.contentcategories",
+      "kind": "rest_write",
+      "summary": "POST /contentCategories",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contentCategories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.contentcategories-id",
+      "kind": "rest_read",
+      "summary": "GET /contentCategories/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contentCategories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.contentcategories-id",
+      "kind": "rest_write",
+      "summary": "PATCH /contentCategories/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/contentCategories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.contentcategories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contentCategories/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contentCategories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.contentcategorymemberships",
+      "kind": "rest_read",
+      "summary": "GET /contentCategoryMemberships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contentCategoryMemberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.contentcategorymemberships",
+      "kind": "rest_write",
+      "summary": "POST /contentCategoryMemberships",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contentCategoryMemberships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.contentcategorymemberships-id",
+      "kind": "rest_read",
+      "summary": "GET /contentCategoryMemberships/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contentCategoryMemberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.contentcategorymemberships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contentCategoryMemberships/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contentCategoryMemberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.contentcategoryownerships",
+      "kind": "rest_read",
+      "summary": "GET /contentCategoryOwnerships",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contentCategoryOwnerships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.contentcategoryownerships",
+      "kind": "rest_write",
+      "summary": "POST /contentCategoryOwnerships",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contentCategoryOwnerships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.contentcategoryownerships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contentCategoryOwnerships/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contentCategoryOwnerships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.customduties",
+      "kind": "rest_write",
+      "summary": "POST /customDuties",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customDuties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.duties",
+      "kind": "rest_read",
+      "summary": "GET /duties",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/duties",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.emailaddresses",
+      "kind": "rest_read",
+      "summary": "GET /emailAddresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emailAddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.emailaddresses",
+      "kind": "rest_write",
+      "summary": "POST /emailAddresses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/emailAddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.emailaddresses-id",
+      "kind": "rest_read",
+      "summary": "GET /emailAddresses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emailAddresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.emailaddresses-id",
+      "kind": "rest_write",
+      "summary": "PATCH /emailAddresses/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/emailAddresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.emailaddresses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /emailAddresses/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/emailAddresses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.events-id",
+      "kind": "rest_read",
+      "summary": "GET /events/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.favorites",
+      "kind": "rest_read",
+      "summary": "GET /favorites",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/favorites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.favorites",
+      "kind": "rest_write",
+      "summary": "POST /favorites",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/favorites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.favorites-id",
+      "kind": "rest_read",
+      "summary": "GET /favorites/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/favorites/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.favorites-id",
+      "kind": "rest_write",
+      "summary": "DELETE /favorites/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/favorites/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-accountsimport",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/accountsImport",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/accountsImport",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-bulkupsert",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/bulkUpsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/bulkUpsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-customobjectbulkupsert",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/customObjectBulkUpsert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/customObjectBulkUpsert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-generateuploadlink",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/generateUploadLink",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/generateUploadLink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-prospectsimport",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/prospectsImport",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/prospectsImport",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.imports-actions-validateupload",
+      "kind": "rest_write",
+      "summary": "POST /imports/actions/validateUpload",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imports/actions/validateUpload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.imports-id",
+      "kind": "rest_read",
+      "summary": "GET /imports/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/imports/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.kaiarecordings",
+      "kind": "rest_read",
+      "summary": "GET /kaiaRecordings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kaiaRecordings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.kaiarecordings-id",
+      "kind": "rest_read",
+      "summary": "GET /kaiaRecordings/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kaiaRecordings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.kaiavoiceimports",
+      "kind": "rest_write",
+      "summary": "POST /kaiaVoiceImports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/kaiaVoiceImports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailaliases",
+      "kind": "rest_read",
+      "summary": "GET /mailAliases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailAliases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailaliases-id",
+      "kind": "rest_read",
+      "summary": "GET /mailAliases/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailAliases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailboxes",
+      "kind": "rest_read",
+      "summary": "GET /mailboxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailboxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailboxes",
+      "kind": "rest_write",
+      "summary": "POST /mailboxes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailboxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailboxes-id",
+      "kind": "rest_read",
+      "summary": "GET /mailboxes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailboxes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.mailboxes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /mailboxes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/mailboxes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.mailboxes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /mailboxes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/mailboxes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailboxes-id-actions-linkewsmasteraccount",
+      "kind": "rest_write",
+      "summary": "POST /mailboxes/{id}/actions/linkEwsMasterAccount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailboxes/{id}/actions/linkEwsMasterAccount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailboxes-id-actions-testsend",
+      "kind": "rest_write",
+      "summary": "POST /mailboxes/{id}/actions/testSend",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailboxes/{id}/actions/testSend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailboxes-id-actions-testsync",
+      "kind": "rest_write",
+      "summary": "POST /mailboxes/{id}/actions/testSync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailboxes/{id}/actions/testSync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailboxes-id-actions-unlinkewsmasteraccount",
+      "kind": "rest_write",
+      "summary": "POST /mailboxes/{id}/actions/unlinkEwsMasterAccount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailboxes/{id}/actions/unlinkEwsMasterAccount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailings",
+      "kind": "rest_read",
+      "summary": "GET /mailings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.mailings",
+      "kind": "rest_write",
+      "summary": "POST /mailings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mailings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.mailings-id",
+      "kind": "rest_read",
+      "summary": "GET /mailings/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mailings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunities",
+      "kind": "rest_read",
+      "summary": "GET /opportunities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.opportunities",
+      "kind": "rest_write",
+      "summary": "POST /opportunities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunities-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.opportunities-id",
+      "kind": "rest_write",
+      "summary": "PATCH /opportunities/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/opportunities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.opportunities-id",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunities/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunityprospectroles",
+      "kind": "rest_read",
+      "summary": "GET /opportunityProspectRoles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunityProspectRoles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.opportunityprospectroles",
+      "kind": "rest_write",
+      "summary": "POST /opportunityProspectRoles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunityProspectRoles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunityprospectroles-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunityProspectRoles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunityProspectRoles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.opportunityprospectroles-id",
+      "kind": "rest_write",
+      "summary": "PATCH /opportunityProspectRoles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/opportunityProspectRoles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.opportunityprospectroles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunityProspectRoles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunityProspectRoles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunitystages",
+      "kind": "rest_read",
+      "summary": "GET /opportunityStages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunityStages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.opportunitystages",
+      "kind": "rest_write",
+      "summary": "POST /opportunityStages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunityStages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.opportunitystages-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunityStages/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunityStages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.opportunitystages-id",
+      "kind": "rest_write",
+      "summary": "PATCH /opportunityStages/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/opportunityStages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.opportunitystages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunityStages/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunityStages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.orgsettings-id",
+      "kind": "rest_read",
+      "summary": "GET /orgSettings/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orgSettings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.orgsettings-id",
+      "kind": "rest_write",
+      "summary": "PATCH /orgSettings/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgSettings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.personas",
+      "kind": "rest_read",
+      "summary": "GET /personas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/personas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.personas",
+      "kind": "rest_write",
+      "summary": "POST /personas",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/personas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.personas-id",
+      "kind": "rest_read",
+      "summary": "GET /personas/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/personas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.personas-id",
+      "kind": "rest_write",
+      "summary": "PATCH /personas/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/personas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.personas-id",
+      "kind": "rest_write",
+      "summary": "DELETE /personas/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/personas/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.phonenumbers",
+      "kind": "rest_read",
+      "summary": "GET /phoneNumbers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phoneNumbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.phonenumbers",
+      "kind": "rest_write",
+      "summary": "POST /phoneNumbers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/phoneNumbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.phonenumbers-id",
+      "kind": "rest_read",
+      "summary": "GET /phoneNumbers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phoneNumbers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.phonenumbers-id",
+      "kind": "rest_write",
+      "summary": "PATCH /phoneNumbers/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/phoneNumbers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.phonenumbers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /phoneNumbers/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/phoneNumbers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.products",
+      "kind": "rest_read",
+      "summary": "GET /products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.products",
+      "kind": "rest_write",
+      "summary": "POST /products",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.products-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.products-id",
+      "kind": "rest_write",
+      "summary": "PATCH /products/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.products-id",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.profiles",
+      "kind": "rest_read",
+      "summary": "GET /profiles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.profiles",
+      "kind": "rest_write",
+      "summary": "POST /profiles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.profiles-id",
+      "kind": "rest_read",
+      "summary": "GET /profiles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.profiles-id",
+      "kind": "rest_write",
+      "summary": "PATCH /profiles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.profiles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /profiles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/profiles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.prospectnotes",
+      "kind": "rest_read",
+      "summary": "GET /prospectNotes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prospectNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.prospectnotes",
+      "kind": "rest_write",
+      "summary": "POST /prospectNotes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prospectNotes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.prospectnotes-id",
+      "kind": "rest_read",
+      "summary": "GET /prospectNotes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prospectNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.prospectnotes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /prospectNotes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/prospectNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.prospectnotes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /prospectNotes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/prospectNotes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.prospects",
+      "kind": "rest_read",
+      "summary": "GET /prospects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prospects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.prospects",
+      "kind": "rest_write",
+      "summary": "POST /prospects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/prospects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.prospects-id",
+      "kind": "rest_read",
+      "summary": "GET /prospects/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/prospects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.prospects-id",
+      "kind": "rest_write",
+      "summary": "PATCH /prospects/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/prospects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.prospects-id",
+      "kind": "rest_write",
+      "summary": "DELETE /prospects/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/prospects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.purchases",
+      "kind": "rest_read",
+      "summary": "GET /purchases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/purchases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.purchases",
+      "kind": "rest_write",
+      "summary": "POST /purchases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/purchases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.purchases-id",
+      "kind": "rest_read",
+      "summary": "GET /purchases/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/purchases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.purchases-id",
+      "kind": "rest_write",
+      "summary": "PATCH /purchases/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/purchases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.purchases-id",
+      "kind": "rest_write",
+      "summary": "DELETE /purchases/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/purchases/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.recipients",
+      "kind": "rest_read",
+      "summary": "GET /recipients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recipients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.recipients",
+      "kind": "rest_write",
+      "summary": "POST /recipients",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/recipients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.recipients-id",
+      "kind": "rest_read",
+      "summary": "GET /recipients/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recipients/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.recipients-id",
+      "kind": "rest_write",
+      "summary": "PATCH /recipients/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/recipients/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.recipients-id",
+      "kind": "rest_write",
+      "summary": "DELETE /recipients/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/recipients/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.roles",
+      "kind": "rest_read",
+      "summary": "GET /roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.roles",
+      "kind": "rest_write",
+      "summary": "POST /roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.roles-id",
+      "kind": "rest_read",
+      "summary": "GET /roles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.roles-id",
+      "kind": "rest_write",
+      "summary": "PATCH /roles/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.roles-id",
+      "kind": "rest_write",
+      "summary": "DELETE /roles/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/roles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.rulesets",
+      "kind": "rest_read",
+      "summary": "GET /rulesets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rulesets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.rulesets",
+      "kind": "rest_write",
+      "summary": "POST /rulesets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rulesets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.rulesets-id",
+      "kind": "rest_read",
+      "summary": "GET /rulesets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rulesets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.rulesets-id",
+      "kind": "rest_write",
+      "summary": "PATCH /rulesets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/rulesets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.rulesets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /rulesets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rulesets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencestates",
+      "kind": "rest_read",
+      "summary": "GET /sequenceStates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceStates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencestates",
+      "kind": "rest_write",
+      "summary": "POST /sequenceStates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceStates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencestates-id",
+      "kind": "rest_read",
+      "summary": "GET /sequenceStates/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceStates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.sequencestates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sequenceStates/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequenceStates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencestates-id-actions-finish",
+      "kind": "rest_write",
+      "summary": "POST /sequenceStates/{id}/actions/finish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceStates/{id}/actions/finish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencestates-id-actions-pause",
+      "kind": "rest_write",
+      "summary": "POST /sequenceStates/{id}/actions/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceStates/{id}/actions/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencestates-id-actions-resume",
+      "kind": "rest_write",
+      "summary": "POST /sequenceStates/{id}/actions/resume",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceStates/{id}/actions/resume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencesteps",
+      "kind": "rest_read",
+      "summary": "GET /sequenceSteps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceSteps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencesteps",
+      "kind": "rest_write",
+      "summary": "POST /sequenceSteps",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceSteps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencesteps-id",
+      "kind": "rest_read",
+      "summary": "GET /sequenceSteps/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceSteps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.sequencesteps-id",
+      "kind": "rest_write",
+      "summary": "PATCH /sequenceSteps/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/sequenceSteps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencetemplates",
+      "kind": "rest_read",
+      "summary": "GET /sequenceTemplates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceTemplates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencetemplates",
+      "kind": "rest_write",
+      "summary": "POST /sequenceTemplates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceTemplates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequencetemplates-id",
+      "kind": "rest_read",
+      "summary": "GET /sequenceTemplates/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequenceTemplates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.sequencetemplates-id",
+      "kind": "rest_write",
+      "summary": "PATCH /sequenceTemplates/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/sequenceTemplates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.sequencetemplates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sequenceTemplates/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequenceTemplates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencetemplates-id-actions-activate",
+      "kind": "rest_write",
+      "summary": "POST /sequenceTemplates/{id}/actions/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceTemplates/{id}/actions/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequencetemplates-id-actions-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /sequenceTemplates/{id}/actions/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequenceTemplates/{id}/actions/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequences",
+      "kind": "rest_read",
+      "summary": "GET /sequences",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequences",
+      "kind": "rest_write",
+      "summary": "POST /sequences",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.sequences-id",
+      "kind": "rest_read",
+      "summary": "GET /sequences/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.sequences-id",
+      "kind": "rest_write",
+      "summary": "PATCH /sequences/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/sequences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.sequences-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sequences/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequences-id-actions-activate",
+      "kind": "rest_write",
+      "summary": "POST /sequences/{id}/actions/activate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences/{id}/actions/activate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.sequences-id-actions-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /sequences/{id}/actions/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences/{id}/actions/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.snippets",
+      "kind": "rest_read",
+      "summary": "GET /snippets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/snippets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.snippets",
+      "kind": "rest_write",
+      "summary": "POST /snippets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/snippets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.snippets-id",
+      "kind": "rest_read",
+      "summary": "GET /snippets/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/snippets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.snippets-id",
+      "kind": "rest_write",
+      "summary": "PATCH /snippets/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/snippets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.snippets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /snippets/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/snippets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.stages",
+      "kind": "rest_read",
+      "summary": "GET /stages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.stages",
+      "kind": "rest_write",
+      "summary": "POST /stages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.stages-id",
+      "kind": "rest_read",
+      "summary": "GET /stages/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.stages-id",
+      "kind": "rest_write",
+      "summary": "PATCH /stages/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.stages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /stages/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskdispositions",
+      "kind": "rest_read",
+      "summary": "GET /taskDispositions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskDispositions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.taskdispositions",
+      "kind": "rest_write",
+      "summary": "POST /taskDispositions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/taskDispositions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskdispositions-id",
+      "kind": "rest_read",
+      "summary": "GET /taskDispositions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.taskdispositions-id",
+      "kind": "rest_write",
+      "summary": "PATCH /taskDispositions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/taskDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.taskdispositions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /taskDispositions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/taskDispositions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskpriorities",
+      "kind": "rest_read",
+      "summary": "GET /taskPriorities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskPriorities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskpriorities-id",
+      "kind": "rest_read",
+      "summary": "GET /taskPriorities/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskPriorities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskpurposes",
+      "kind": "rest_read",
+      "summary": "GET /taskPurposes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskPurposes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.taskpurposes",
+      "kind": "rest_write",
+      "summary": "POST /taskPurposes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/taskPurposes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.taskpurposes-id",
+      "kind": "rest_read",
+      "summary": "GET /taskPurposes/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/taskPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.taskpurposes-id",
+      "kind": "rest_write",
+      "summary": "PATCH /taskPurposes/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/taskPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.taskpurposes-id",
+      "kind": "rest_write",
+      "summary": "DELETE /taskPurposes/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/taskPurposes/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.tasks",
+      "kind": "rest_read",
+      "summary": "GET /tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.tasks-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.tasks-id",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.tasks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-advance",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/advance",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/advance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-deliver",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/deliver",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/deliver",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-logmeetinperson",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/logMeetInPerson",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/logMeetInPerson",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-markcomplete",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/markComplete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/markComplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-reassignowner",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/reassignOwner",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/reassignOwner",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-reschedule",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/reschedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/reschedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-snooze",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/snooze",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/snooze",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-updatenote",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/updateNote",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/updateNote",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.tasks-id-actions-updateopportunityassociation",
+      "kind": "rest_write",
+      "summary": "POST /tasks/{id}/actions/updateOpportunityAssociation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/{id}/actions/updateOpportunityAssociation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.teams",
+      "kind": "rest_read",
+      "summary": "GET /teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.teams",
+      "kind": "rest_write",
+      "summary": "POST /teams",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.teams-id",
+      "kind": "rest_read",
+      "summary": "GET /teams/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.teams-id",
+      "kind": "rest_write",
+      "summary": "PATCH /teams/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.teams-id",
+      "kind": "rest_write",
+      "summary": "DELETE /teams/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.templates",
+      "kind": "rest_read",
+      "summary": "GET /templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.templates",
+      "kind": "rest_write",
+      "summary": "POST /templates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.templates-id",
+      "kind": "rest_read",
+      "summary": "GET /templates/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/templates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.templates-id",
+      "kind": "rest_write",
+      "summary": "PATCH /templates/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/templates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.templates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /templates/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/templates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.users-id",
+      "kind": "rest_write",
+      "summary": "PATCH /users/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.patch.webhooks-id",
+      "kind": "rest_write",
+      "summary": "PATCH /webhooks/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "outreach.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

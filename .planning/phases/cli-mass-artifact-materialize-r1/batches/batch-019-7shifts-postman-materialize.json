@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-019-7shifts-postman-manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "7shifts",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 128 operation(s), below the ledger's 147; official reference fallback \"https://developers.7shifts.com/reference/postman-collection.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    }
+  ]
+}

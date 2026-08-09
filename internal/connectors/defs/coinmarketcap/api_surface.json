@@ -1,73 +1,2353 @@
 {
-  "api": "CoinMarketCap Pro API v1/v2/v3 (https://pro-api.coinmarketcap.com)",
+  "api": "CoinMarketCap Pro API v1/v2/v3 (https://pro-api.coinmarketcap.com); provider artifact version: CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
   "docs": "https://coinmarketcap.com/api/documentation/v1/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion. CoinMarketCap organizes its documented Pro API surface into Cryptocurrency (19 endpoints), Exchange (7), Global Metrics (6), Content (4), Community (2), CMC Index (4), Tools (4), Derivatives (3), Crypto Others (1), DEX Data (16+ across Token/Platform/Holder/OHLCV/Others), and a Deprecated bucket (21). Every list endpoint whose real wire pagination is CoinMarketCap's documented 1-based `start`/`limit` convention (start advances by page size each page: 1, 1+pageSize, 2*pageSize+1, ...) is excluded as an ENGINE_GAP -- neither `page_number` (advances the page value by +1, never by page size) nor `offset_limit` (Start() is hardcoded to offset 0 with no start-offset override field) can express this shape; unchanged finding from the original quarantine, re-verified against every S3/S4 dialect addition (fan_out, keyed_object, extra_params, start_page:0, typed computed_fields) -- see docs.md Known limits. Every non-paginated id/slug/symbol-keyed detail lookup and every parameterless/optionally-filtered single-object endpoint that IS dialect-expressible is implemented as a stream (9 streams total, up from 1). Sibling id-keyed detail endpoints in the same families as the newly covered streams (ohlcv, quotes/historical, price-performance-stats, exchange info/quotes, category/airdrop singular lookups) are marked out_of_scope with the specific reason they were not implemented THIS pass rather than covered -- narrowing scope honestly instead of silently omitting them from the surface manifest. DEX Data, Derivatives, CMC Index, Content/Community, and the Deprecated bucket are out of scope for this pass as distinct, separately-scoped API surfaces (on-chain data, index/derivatives products, retired partnerships) unrelated to this connector's core fiat-market-data streams.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (107 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "coinmarketcap-artifact-2026-08-09",
+      "url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+      "kind": "openapi",
+      "version": "3.1.1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/global-metrics/quotes/latest", "covered_by": { "stream": "global_metrics" } },
-    { "method": "GET", "path": "/v1/global-metrics/quotes/historical", "covered_by": { "stream": "global_metrics_quotes_historical" } },
-    { "method": "GET", "path": "/v2/cryptocurrency/info", "covered_by": { "stream": "cryptocurrency_info" } },
-    { "method": "GET", "path": "/v3/cryptocurrency/quotes/latest", "covered_by": { "stream": "cryptocurrency_quotes_latest" } },
-    { "method": "GET", "path": "/v2/tools/price-conversion", "covered_by": { "stream": "price_conversion" } },
-    { "method": "GET", "path": "/v3/fear-and-greed/latest", "covered_by": { "stream": "fear_and_greed_latest" } },
-    { "method": "GET", "path": "/v1/altcoin-season-index/latest", "covered_by": { "stream": "altcoin_season_index_latest" } },
-    { "method": "GET", "path": "/v1/altcoin-season-index/historical", "covered_by": { "stream": "altcoin_season_index_historical" } },
-    { "method": "GET", "path": "/v1/key/info", "covered_by": { "stream": "key_info" } },
-
-    { "method": "GET", "path": "/v1/cryptocurrency/map", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: 1-based start/limit pagination where start advances by pageSize each page (1, 1+pageSize, 1+2*pageSize, ...); neither dialect pagination type expresses this. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v3/cryptocurrency/listings/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/listings/new", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/listings/historical", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v3/cryptocurrency/quotes/historical", "excluded": { "category": "out_of_scope", "reason": "id/symbol-keyed historical time-series lookup (its own count/interval/time_start/time_end shape, distinct from quotes/latest); this pass covers the _latest sibling only, not this historical variant." } },
-    { "method": "GET", "path": "/v2/cryptocurrency/ohlcv/latest", "excluded": { "category": "out_of_scope", "reason": "id/symbol-keyed OHLCV snapshot; this pass's cryptocurrency coverage is the quotes/info detail family, not the separate OHLCV product line." } },
-    { "method": "GET", "path": "/v2/cryptocurrency/ohlcv/historical", "excluded": { "category": "out_of_scope", "reason": "id/symbol-keyed OHLCV historical series; same OHLCV-product-line narrowing as ohlcv/latest." } },
-    { "method": "GET", "path": "/v2/cryptocurrency/market-pairs/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v2/cryptocurrency/price-performance-stats/latest", "excluded": { "category": "out_of_scope", "reason": "id/slug/symbol-keyed stats lookup outside this pass's covered quotes/info detail family; a distinct response shape (period-bucketed high/low stats) not modeled this pass." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/trending/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/trending/gainers-losers", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/trending/most-visited", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/simple/price", "excluded": { "category": "duplicate_of", "reason": "ids-required lightweight price lookup; a narrower subset of cryptocurrency_quotes_latest's already-covered id-keyed quote data (same id/convert params, fewer response fields)." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/categories", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/category", "excluded": { "category": "out_of_scope", "reason": "id/slug-keyed single-category detail lookup; the paginated categories list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/airdrops", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/cryptocurrency/airdrop", "excluded": { "category": "out_of_scope", "reason": "id-keyed single-airdrop detail lookup; the paginated airdrops list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too." } },
-
-    { "method": "GET", "path": "/v1/exchange/map", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/exchange/listings/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/exchange/quotes/latest", "excluded": { "category": "out_of_scope", "reason": "id/slug-keyed exchange quote lookup; the paginated exchange/map and exchange/listings/latest streams this depends on for id discovery are themselves excluded (ENGINE_GAP), leaving no dialect-clean id source to drive it without inventing an ungrounded config-list workaround." } },
-    { "method": "GET", "path": "/v1/exchange/quotes/historical", "excluded": { "category": "out_of_scope", "reason": "id/slug-keyed exchange historical quote lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest." } },
-    { "method": "GET", "path": "/v1/exchange/market-pairs/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/exchange/assets", "excluded": { "category": "out_of_scope", "reason": "id-keyed exchange on-chain proof-of-reserves assets lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest." } },
-    { "method": "GET", "path": "/v1/exchange/info", "excluded": { "category": "out_of_scope", "reason": "id/slug-keyed exchange metadata lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest." } },
-
-    { "method": "GET", "path": "/v3/fear-and-greed/historical", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map." } },
-
-    { "method": "GET", "path": "/v1/fiat/map", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map; used only as the check request in this bundle. See docs.md Known limits." } },
-    { "method": "GET", "path": "/v1/tools/postman", "excluded": { "category": "non_data_endpoint", "reason": "returns a generated Postman collection specification document, not connector-relevant record data." } },
-
-    { "method": "GET", "path": "/v1/content/latest", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size (default limit 100, max 200), same shape as /v1/cryptocurrency/map." } },
-    { "method": "GET", "path": "/v1/content/posts/comments", "excluded": { "category": "out_of_scope", "reason": "post_id-keyed community comments lookup; Content/Community is a distinct social-data surface not covered by this connector's market-data streams this pass." } },
-    { "method": "GET", "path": "/v1/content/posts/latest", "excluded": { "category": "out_of_scope", "reason": "last_score cursor-paginated community posts feed -- a distinct pagination shape (cursor advancing by a returned score value, not start/limit) requiring its own dialect review separate from the start/limit ENGINE_GAP; not modeled this pass." } },
-    { "method": "GET", "path": "/v1/content/posts/top", "excluded": { "category": "out_of_scope", "reason": "last_score cursor-paginated community posts feed; same distinct-pagination-shape narrowing as content/posts/latest." } },
-
-    { "method": "GET", "path": "/v1/cmc-index/latest", "excluded": { "category": "out_of_scope", "reason": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass." } },
-    { "method": "GET", "path": "/v1/cmc-index/historical", "excluded": { "category": "out_of_scope", "reason": "CMC Index historical series; same product-surface narrowing as cmc-index/latest." } },
-    { "method": "GET", "path": "/v1/cmc10-index/latest", "excluded": { "category": "out_of_scope", "reason": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass." } },
-    { "method": "GET", "path": "/v1/cmc10-index/historical", "excluded": { "category": "out_of_scope", "reason": "CMC Index historical series; same product-surface narrowing as cmc10-index/latest." } },
-
-    { "method": "GET", "path": "/v3/index/cmc100-latest", "excluded": { "category": "out_of_scope", "reason": "CMC 100 composite index, same distinct index-product-surface narrowing as the CMC Index category." } },
-    { "method": "GET", "path": "/v1/derivatives/exchanges", "excluded": { "category": "out_of_scope", "reason": "Derivatives is a distinct futures/perpetuals-market product surface, not part of this connector's spot-market-oriented streams; not modeled this pass." } },
-    { "method": "GET", "path": "/v1/derivatives/positions", "excluded": { "category": "out_of_scope", "reason": "Derivatives positions data; same product-surface narrowing as derivatives/exchanges." } },
-
-    { "method": "GET", "path": "/v4/dex/networks/list", "excluded": { "category": "out_of_scope", "reason": "DEX Data is a distinct on-chain/decentralized-exchange product surface with its own network/pool/token id model, unrelated to this connector's centralized fiat-market-data streams; not modeled this pass." } },
-    { "method": "GET", "path": "/v4/dex/spot-pairs/latest", "excluded": { "category": "out_of_scope", "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list." } },
-    { "method": "GET", "path": "/v4/dex/pairs/quotes/latest", "excluded": { "category": "out_of_scope", "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list." } },
-    { "method": "GET", "path": "/v4/dex/pairs/ohlcv/latest", "excluded": { "category": "out_of_scope", "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list." } },
-    { "method": "GET", "path": "/v4/dex/pairs/trade/latest", "excluded": { "category": "out_of_scope", "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list." } },
-    { "method": "GET", "path": "/v4/dex/listings/quotes", "excluded": { "category": "out_of_scope", "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list." } },
-
-    { "method": "GET", "path": "/v1/partners/flipside-crypto/fcas/listings/latest", "excluded": { "category": "deprecated", "reason": "documented in CoinMarketCap's Deprecated endpoint bucket (Flipside Crypto FCAS partnership retired); excluded as deprecated, not a coverage gap." } },
-    { "method": "GET", "path": "/v1/partners/flipside-crypto/fcas/quotes/latest", "excluded": { "category": "deprecated", "reason": "documented in CoinMarketCap's Deprecated endpoint bucket, same retired FCAS partnership as fcas/listings/latest." } },
-    { "method": "GET", "path": "/v1/blockchain/statistics/latest", "excluded": { "category": "deprecated", "reason": "documented in CoinMarketCap's Deprecated endpoint bucket." } }
+    {
+      "method": "GET",
+      "path": "/v1/altcoin-season-index/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/altcoin-season-index/historical\"].get"
+      },
+      "covered_by": {
+        "stream": "altcoin_season_index_historical"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/altcoin-season-index/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/altcoin-season-index/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "altcoin_season_index_latest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blockchain/statistics/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/blockchain/statistics/latest\"].get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "documented in CoinMarketCap's Deprecated endpoint bucket.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cmc-index/historical",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/cmc-index/historical]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "CMC Index historical series; same product-surface narrowing as cmc-index/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cmc-index/latest",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/cmc-index/latest]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cmc10-index/historical",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/cmc10-index/historical]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "CMC Index historical series; same product-surface narrowing as cmc10-index/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cmc10-index/latest",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/cmc10-index/latest]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "CMC Index is a distinct composite-index product surface, not part of this connector's core cryptocurrency/exchange/global-metrics market-data streams; not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/community/trending/token",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/community/trending/token\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/community/trending/topic",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/community/trending/topic\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/content/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/content/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size (default limit 100, max 200), same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/content/posts/comments",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/content/posts/comments\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "post_id-keyed community comments lookup; Content/Community is a distinct social-data surface not covered by this connector's market-data streams this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/content/posts/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/content/posts/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "last_score cursor-paginated community posts feed -- a distinct pagination shape (cursor advancing by a returned score value, not start/limit) requiring its own dialect review separate from the start/limit ENGINE_GAP; not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/content/posts/top",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/content/posts/top\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "last_score cursor-paginated community posts feed; same distinct-pagination-shape narrowing as content/posts/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/airdrop",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/airdrop\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id-keyed single-airdrop detail lookup; the paginated airdrops list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/airdrops",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/airdrops\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/categories",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/categories\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/category",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/category\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/slug-keyed single-category detail lookup; the paginated categories list this detail endpoint complements is itself excluded (ENGINE_GAP), so its singular counterpart is left uncovered this pass too.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/listings/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/listings/historical\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/listings/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/listings/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/listings/new",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/listings/new\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/map",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/map\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: 1-based start/limit pagination where start advances by pageSize each page (1, 1+pageSize, 1+2*pageSize, ...); neither dialect pagination type expresses this. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/market-pairs/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/market-pairs/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/multiplier",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/multiplier\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/ohlcv/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/ohlcv/historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/ohlcv/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/ohlcv/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/price-performance-stats/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/price-performance-stats/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/quotes/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/quotes/historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/trending/gainers-losers",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/trending/gainers-losers\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/trending/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/trending/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/cryptocurrency/trending/most-visited",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/cryptocurrency/trending/most-visited\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/derivatives/exchanges",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/derivatives/exchanges]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Derivatives is a distinct futures/perpetuals-market product surface, not part of this connector's spot-market-oriented streams; not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/derivatives/positions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "existing-surface[GET /v1/derivatives/positions]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Derivatives positions data; same product-surface narrowing as derivatives/exchanges.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/gainer-loser/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/gainer-loser/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/holders/count",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/holders/count\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/holders/detail",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/holders/detail\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/holders/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/holders/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/holders/tag_count",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/holders/tag_count\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/holders/trend/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/holders/trend/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/liquidity-change/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/liquidity-change/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/meme/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/meme/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/new/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/new/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/platform/detail",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/platform/detail\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/platform/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/platform/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/search",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/security/detail",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/security/detail\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/token",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/token\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/token-liquidity/query",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/token-liquidity/query\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/token/pools",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/token/pools\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/token/price",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/token/price\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/token/price/batch",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/token/price/batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/tokens/batch-query",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/tokens/batch-query\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/dex/tokens/transactions",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/tokens/transactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/dex/tokens/trending/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/dex/tokens/trending/list\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/assets",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/assets\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id-keyed exchange on-chain proof-of-reserves assets lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/info\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/slug-keyed exchange metadata lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/listings/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/listings/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/map",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/map\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/market-pairs/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/market-pairs/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/quotes/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/quotes/historical\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/slug-keyed exchange historical quote lookup; same id-source dependency on the excluded exchange/map as exchange/quotes/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/exchange/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/exchange/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/slug-keyed exchange quote lookup; the paginated exchange/map and exchange/listings/latest streams this depends on for id discovery are themselves excluded (ENGINE_GAP), leaving no dialect-clean id source to drive it without inventing an ungrounded config-list workaround.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fiat/map",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/fiat/map\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map; used only as the check request in this bundle. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-metrics/quotes/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/global-metrics/quotes/historical\"].get"
+      },
+      "covered_by": {
+        "stream": "global_metrics_quotes_historical"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/global-metrics/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/global-metrics/quotes/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "global_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/k-line/candles",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/k-line/candles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/k-line/points",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/k-line/points\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/key/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/key/info\"].get"
+      },
+      "covered_by": {
+        "stream": "key_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/partners/flipside-crypto/fcas/listings/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/partners/flipside-crypto/fcas/listings/latest\"].get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "documented in CoinMarketCap's Deprecated endpoint bucket (Flipside Crypto FCAS partnership retired); excluded as deprecated, not a coverage gap.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/partners/flipside-crypto/fcas/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/partners/flipside-crypto/fcas/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "documented in CoinMarketCap's Deprecated endpoint bucket, same retired FCAS partnership as fcas/listings/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/simple/price",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/simple/price\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ids-required lightweight price lookup; a narrower subset of cryptocurrency_quotes_latest's already-covered id-keyed quote data (same id/convert params, fewer response fields).",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tools/postman",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/tools/postman\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a generated Postman collection specification document, not connector-relevant record data.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tools/price-conversion",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v1/tools/price-conversion\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/info\"].get"
+      },
+      "covered_by": {
+        "stream": "cryptocurrency_info"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/market-pairs/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/market-pairs/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/ohlcv/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/ohlcv/historical\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/symbol-keyed OHLCV historical series; same OHLCV-product-line narrowing as ohlcv/latest.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/ohlcv/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/ohlcv/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/symbol-keyed OHLCV snapshot; this pass's cryptocurrency coverage is the quotes/info detail family, not the separate OHLCV product line.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/price-performance-stats/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/price-performance-stats/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/slug/symbol-keyed stats lookup outside this pass's covered quotes/info detail family; a distinct response shape (period-bucketed high/low stats) not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/quotes/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/quotes/historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cryptocurrency/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/cryptocurrency/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/dex/multiplier",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/dex/multiplier\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/simple/price",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/simple/price\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/tools/price-conversion",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v2/tools/price-conversion\"].get"
+      },
+      "covered_by": {
+        "stream": "price_conversion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/cryptocurrency/listings/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/cryptocurrency/listings/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: same start/limit-advances-by-pageSize pagination shape as /v1/cryptocurrency/map. See docs.md Known limits.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/cryptocurrency/quotes/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/cryptocurrency/quotes/historical\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "id/symbol-keyed historical time-series lookup (its own count/interval/time_start/time_end shape, distinct from quotes/latest); this pass covers the _latest sibling only, not this historical variant.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/cryptocurrency/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/cryptocurrency/quotes/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "cryptocurrency_quotes_latest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/fear-and-greed/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/fear-and-greed/historical\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: documented start/limit pagination advancing by page size, same shape as /v1/cryptocurrency/map.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/fear-and-greed/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/fear-and-greed/latest\"].get"
+      },
+      "covered_by": {
+        "stream": "fear_and_greed_latest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/index/cmc100-historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/index/cmc100-historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/index/cmc100-latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/index/cmc100-latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "CMC 100 composite index, same distinct index-product-surface narrowing as the CMC Index category.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/index/cmc20-historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/index/cmc20-historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/index/cmc20-latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v3/index/cmc20-latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/listings/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/listings/info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/listings/quotes",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/listings/quotes\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/networks/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/networks/list\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data is a distinct on-chain/decentralized-exchange product surface with its own network/pool/token id model, unrelated to this connector's centralized fiat-market-data streams; not modeled this pass.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/pairs/ohlcv/historical",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/pairs/ohlcv/historical\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/pairs/ohlcv/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/pairs/ohlcv/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/pairs/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/pairs/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/pairs/trade/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/pairs/trade/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v4/dex/spot-pairs/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v4/dex/spot-pairs/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "DEX Data on-chain product surface; same narrowing as dex/networks/list.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/cryptocurrency/derivatives/market-pairs/list/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/cryptocurrency/derivatives/market-pairs/list/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/derivatives/liquidations/cryptocurrency/list/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/derivatives/liquidations/cryptocurrency/list/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/derivatives/liquidations/exchange/list/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/derivatives/liquidations/exchange/list/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/derivatives/liquidations/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/derivatives/liquidations/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/exchange/derivatives/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/exchange/derivatives/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/exchange/derivatives/market-pairs/list/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/exchange/derivatives/market-pairs/list/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/assets/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/assets/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/info",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/info\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/issuers",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/issuers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/issuers/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/issuers/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/map",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/map\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/market-pairs/list",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/market-pairs/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/real-world-assets/quotes/latest",
+      "provenance": {
+        "artifact": "coinmarketcap-artifact-2026-08-09",
+        "source_url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7",
+        "coordinate": "paths[\"/v5/real-world-assets/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

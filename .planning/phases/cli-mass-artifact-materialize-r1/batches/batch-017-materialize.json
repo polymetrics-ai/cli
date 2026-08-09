@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-017-alternative-machine-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "whisky-hunter",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://whiskyhunter.net/api/?format=openapi",
+        "version": "Swagger 2.0; Whisky Hunter API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f8b931f72f0424d36fd14f51163fe3bb9ea33cf267f0f20f700b81e1c40f9525"
+      },
+      "artifact_operations": 5,
+      "declared_operations": 12,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 5,
+        "excluded": 0
+      },
+      "cli_commands": 12,
+      "implemented_commands": 7,
+      "named_dependency_commands": 5,
+      "flagged_discrepancies": 7,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 5
+    },
+    {
+      "connector": "circa",
+      "artifact": {
+        "kind": "postman",
+        "url": "https://docs.circa.co/",
+        "version": "Postman collection 8.12.3; published 2020-10-31",
+        "retrieved_at": "2026-08-09",
+        "sha256": "83d05693f6848ec1be24382fcc70b3846e18e80df3c4b480554d6d17c2f3ae22"
+      },
+      "artifact_operations": 30,
+      "declared_operations": 60,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 21,
+        "excluded": 18
+      },
+      "cli_commands": 60,
+      "implemented_commands": 21,
+      "named_dependency_commands": 39,
+      "flagged_discrepancies": 30,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 39
+    },
+    {
+      "connector": "squarespace",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "version": "Commerce API OpenAPI 3.1.1, info.version 2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc"
+      },
+      "artifact_operations": 53,
+      "declared_operations": 53,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 4,
+        "excluded": 39
+      },
+      "cli_commands": 53,
+      "implemented_commands": 10,
+      "named_dependency_commands": 43,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 43
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "qualaroo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mailtrap",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "eventzilla",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "paypal-transaction",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "uppromote",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://aff-api.uppromote.com/docs/v2/api-overview-1615961m0\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "glassfrog",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "printify",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 40 operation(s), below the ledger's 44; official reference fallback \"https://developers.printify.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "k6-cloud",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "productboard",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "jobnimbus",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "mendeley",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/favicon.png\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "timely",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 30: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "gologin",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official reference \"https://api.gologin.com/docs/swagger-ui-init.js\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "bigmailer",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.bigmailer.io/docs/getting-started-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mixmax",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "activecampaign",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "bluetally",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.bluetally.com/reference/getting-started-with-your-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "rollbar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "todoist",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 14: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "lob",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token"
+    },
+    {
+      "connector": "brex",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "rocketlane",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "insightful",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112"
+    },
+    {
+      "connector": "statuspage",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 23: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "dixa",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "teamtailor",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 127 operation(s), below the ledger's 129; official reference fallback \"https://docs.teamtailor.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "secoda",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "7shifts",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode Postman collection: invalid character '\u003c' looking for beginning of value), and official reference fallback \"https://www.freshbooks.com/api/postman-collection\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official reference \"https://data.castoredc.com/swagger-ui/swagger-ui.css\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    },
+    {
+      "connector": "clockify",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "recurly",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "kisi",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    }
+  ]
+}

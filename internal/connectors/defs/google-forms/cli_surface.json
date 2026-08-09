@@ -1,0 +1,242 @@
+{
+  "tagline": "Run Google Forms's declared streams and reverse-ETL actions.",
+  "usage": "pm google-forms \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get forms formid responses responseid",
+        "api get forms formid watches",
+        "form items list",
+        "forms list",
+        "responses list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete forms formid watches watchid",
+        "api post forms",
+        "api post forms formid batchupdate",
+        "api post forms formid watches",
+        "api post v1 forms formid setpublishsettings",
+        "api post v1 forms formid watches watchid renew"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete forms formid watches watchid",
+      "summary": "Documented DELETE /forms/{formId}/watches/{watchId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api delete forms formid watches watchid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/forms/{formId}/watches/{watchId}"
+        }
+      ],
+      "operation": "google-forms.delete.forms-formid-watches-watchid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get forms formid responses responseid",
+      "summary": "Documented GET /forms/{formId}/responses/{responseId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api get forms formid responses responseid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/responses/{responseId}"
+        }
+      ],
+      "operation": "google-forms.get.forms-formid-responses-responseid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get forms formid watches",
+      "summary": "Documented GET /forms/{formId}/watches (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api get forms formid watches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/watches"
+        }
+      ],
+      "operation": "google-forms.get.forms-formid-watches",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post forms",
+      "summary": "Documented POST /forms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api post forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/forms"
+        }
+      ],
+      "operation": "google-forms.post.forms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post forms formid batchupdate",
+      "summary": "Documented POST /forms/{formId}:batchUpdate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api post forms formid batchupdate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/forms/{formId}:batchUpdate"
+        }
+      ],
+      "operation": "google-forms.post.forms-formid-batchupdate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post forms formid watches",
+      "summary": "Documented POST /forms/{formId}/watches (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api post forms formid watches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/forms/{formId}/watches"
+        }
+      ],
+      "operation": "google-forms.post.forms-formid-watches",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 forms formid setpublishsettings",
+      "summary": "Documented POST /v1/forms/{formId}:setPublishSettings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api post v1 forms formid setpublishsettings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/forms/{formId}:setPublishSettings"
+        }
+      ],
+      "operation": "google-forms.post.v1-forms-formid-setpublishsettings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 forms formid watches watchid renew",
+      "summary": "Documented POST /v1/forms/{formId}/watches/{watchId}:renew (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms api post v1 forms formid watches watchid renew --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/forms/{formId}/watches/{watchId}:renew"
+        }
+      ],
+      "operation": "google-forms.post.v1-forms-formid-watches-watchid-renew",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "form items list",
+      "summary": "Run the form items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "form_items",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms form items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}"
+        }
+      ]
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}"
+        }
+      ]
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+      "examples": [
+        "pm google-forms responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/forms/{formId}/responses"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "results": [
+    {
+      "connector": "7shifts",
+      "status": "fetched",
+      "bytes": 18060
+    },
+    {
+      "connector": "activecampaign",
+      "status": "fetched",
+      "bytes": 24742
+    },
+    {
+      "connector": "bigmailer",
+      "status": "fetched",
+      "bytes": 12054
+    },
+    {
+      "connector": "bluetally",
+      "status": "fetched",
+      "bytes": 13355
+    },
+    {
+      "connector": "box",
+      "status": "fetched",
+      "bytes": 220121
+    },
+    {
+      "connector": "box-data-extract",
+      "status": "fetched",
+      "bytes": 220121
+    },
+    {
+      "connector": "brex",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "castor-edc",
+      "status": "fetched",
+      "bytes": 335118
+    },
+    {
+      "connector": "circa",
+      "status": "fetched",
+      "bytes": 50343
+    },
+    {
+      "connector": "clockify",
+      "status": "fetched",
+      "bytes": 4006201
+    },
+    {
+      "connector": "confluence",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "dixa",
+      "status": "fetched",
+      "bytes": 478736
+    },
+    {
+      "connector": "eventzilla",
+      "status": "fetched",
+      "bytes": 631276
+    },
+    {
+      "connector": "fastly",
+      "status": "fetched",
+      "bytes": 2340172
+    },
+    {
+      "connector": "finnhub",
+      "status": "fetched",
+      "bytes": 588805
+    },
+    {
+      "connector": "finnworlds",
+      "status": "fetched",
+      "bytes": 1338766
+    },
+    {
+      "connector": "flowlu",
+      "status": "fetched",
+      "bytes": 1267557
+    },
+    {
+      "connector": "freshbooks",
+      "status": "fetched",
+      "bytes": 55384
+    },
+    {
+      "connector": "front",
+      "status": "fetched",
+      "bytes": 239231
+    },
+    {
+      "connector": "genesys",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "gitlab",
+      "status": "fetched",
+      "bytes": 2439314
+    },
+    {
+      "connector": "glassfrog",
+      "status": "fetched",
+      "bytes": 40875
+    },
+    {
+      "connector": "gologin",
+      "status": "fetched",
+      "bytes": 191251
+    },
+    {
+      "connector": "google-analytics-data-api",
+      "status": "fetched",
+      "bytes": 117897
+    },
+    {
+      "connector": "guru",
+      "status": "fetched",
+      "bytes": 414384
+    },
+    {
+      "connector": "hubplanner",
+      "status": "fetched",
+      "bytes": 285712
+    },
+    {
+      "connector": "insightful",
+      "status": "fetched",
+      "bytes": 3752660
+    },
+    {
+      "connector": "intercom",
+      "status": "fetched",
+      "bytes": 1362253
+    },
+    {
+      "connector": "invoiceninja",
+      "status": "fetched",
+      "bytes": 11973228
+    },
+    {
+      "connector": "jobnimbus",
+      "status": "fetched",
+      "bytes": 52189
+    },
+    {
+      "connector": "judge-me-reviews",
+      "status": "fetched",
+      "bytes": 67965
+    },
+    {
+      "connector": "k6-cloud",
+      "status": "fetched",
+      "bytes": 157983
+    },
+    {
+      "connector": "kisi",
+      "status": "fetched",
+      "bytes": 1877406
+    },
+    {
+      "connector": "lob",
+      "status": "fetched",
+      "bytes": 5026062
+    },
+    {
+      "connector": "lokalise",
+      "status": "fetched",
+      "bytes": 546267
+    },
+    {
+      "connector": "luma",
+      "status": "fetched",
+      "bytes": 322686
+    },
+    {
+      "connector": "mailchimp",
+      "status": "fetched",
+      "bytes": 73813
+    },
+    {
+      "connector": "recurly",
+      "status": "failed",
+      "bytes": 0
+    },
+    {
+      "connector": "twilio",
+      "status": "fetched",
+      "bytes": 1869905
+    },
+    {
+      "connector": "youtube-analytics",
+      "status": "fetched",
+      "bytes": 35631
+    }
+  ]
+}

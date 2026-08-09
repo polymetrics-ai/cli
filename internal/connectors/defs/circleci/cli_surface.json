@@ -1,0 +1,2379 @@
+{
+  "tagline": "Run CircleCI's declared streams and reverse-ETL actions.",
+  "usage": "pm circleci \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get context context-id",
+        "api get context context-id environment-variable",
+        "api get context context-id restrictions",
+        "api get deploy components",
+        "api get deploy components component-id",
+        "api get deploy components component-id versions",
+        "api get deploy environments",
+        "api get deploy environments environment-id",
+        "api get insights org-slug summary",
+        "api get insights pages project-slug summary",
+        "api get insights project-slug branches",
+        "api get insights project-slug flaky-tests",
+        "api get insights project-slug workflows workflow-name",
+        "api get insights project-slug workflows workflow-name jobs",
+        "api get insights project-slug workflows workflow-name summary",
+        "api get insights project-slug workflows workflow-name test-metrics",
+        "api get insights time-series project-slug workflows workflow-name jobs",
+        "api get jobs job-id",
+        "api get me",
+        "api get me collaborations",
+        "api get org orgid oidc-custom-claims",
+        "api get org orgid project projectid oidc-custom-claims",
+        "api get organization org-slug-or-id",
+        "api get organization org-slug-or-id url-orb-allow-list",
+        "api get organizations org-id groups",
+        "api get organizations org-id groups group-id",
+        "api get organizations org-id usage-export-job usage-export-job-id",
+        "api get otel exporters",
+        "api get owner ownerid context context decision",
+        "api get owner ownerid context context decision decisionid",
+        "api get owner ownerid context context decision decisionid policy-bundle",
+        "api get owner ownerid context context decision settings",
+        "api get owner ownerid context context policy-bundle",
+        "api get owner ownerid context context policy-bundle policyname",
+        "api get pipeline",
+        "api get pipeline pipeline-id",
+        "api get pipeline pipeline-id config",
+        "api get pipeline pipeline-id values",
+        "api get project project-slug checkout-key fingerprint",
+        "api get project project-slug envvar name",
+        "api get project project-slug pipeline mine",
+        "api get project project-slug pipeline pipeline-number",
+        "api get project provider organization project settings",
+        "api get projects project-id pipeline-definitions",
+        "api get projects project-id pipeline-definitions pipeline-definition-id",
+        "api get projects project-id pipeline-definitions pipeline-definition-id triggers",
+        "api get projects project-id triggers trigger-id",
+        "api get schedule schedule-id",
+        "api get user id",
+        "api get webhook",
+        "api get webhook webhook-id",
+        "api get workflow id",
+        "checkout keys list",
+        "contexts list",
+        "environment variables list",
+        "insights workflow summary list",
+        "jobs list",
+        "pipelines list",
+        "projects list",
+        "schedules list",
+        "workflows list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete context context-id",
+        "api delete context context-id environment-variable env-var-name",
+        "api delete context context-id restrictions restriction-id",
+        "api delete org orgid oidc-custom-claims",
+        "api delete org orgid project projectid oidc-custom-claims",
+        "api delete organization org-slug-or-id",
+        "api delete organization org-slug-or-id url-orb-allow-list allow-list-entry-id",
+        "api delete organizations org-id groups group-id",
+        "api delete otel exporters otel-exporter-id",
+        "api delete project project-slug",
+        "api delete projects project-id pipeline-definitions pipeline-definition-id",
+        "api delete projects project-id triggers trigger-id",
+        "api delete webhook webhook-id",
+        "api patch org orgid oidc-custom-claims",
+        "api patch org orgid project projectid oidc-custom-claims",
+        "api patch owner ownerid context context decision settings",
+        "api patch project provider organization project settings",
+        "api patch projects project-id pipeline-definitions pipeline-definition-id",
+        "api patch projects project-id triggers trigger-id",
+        "api post context",
+        "api post context context-id restrictions",
+        "api post jobs job-id cancel",
+        "api post organization",
+        "api post organization org-slug-or-id project",
+        "api post organization org-slug-or-id url-orb-allow-list",
+        "api post organizations org-id groups",
+        "api post organizations org-id usage-export-job",
+        "api post otel exporters",
+        "api post owner ownerid context context decision",
+        "api post owner ownerid context context policy-bundle",
+        "api post pipeline continue",
+        "api post project project-slug job job-number cancel",
+        "api post project project-slug pipeline",
+        "api post project provider organization project pipeline run",
+        "api post projects project-id pipeline-definitions",
+        "api post projects project-id pipeline-definitions pipeline-definition-id triggers",
+        "api post projects project-id rollback",
+        "api post webhook",
+        "api post workflow id approve approval-request-id",
+        "api post workflow id cancel",
+        "api post workflow id rerun",
+        "api put context context-id environment-variable env-var-name",
+        "api put webhook webhook-id",
+        "create checkout key apply",
+        "create environment variable apply",
+        "create schedule apply",
+        "delete checkout key apply",
+        "delete environment variable apply",
+        "delete schedule apply",
+        "update schedule apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete context context-id",
+      "summary": "Documented DELETE /context/{context_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete context context-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}"
+        }
+      ],
+      "operation": "circleci.delete.context-context-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete context context-id environment-variable env-var-name",
+      "summary": "Documented DELETE /context/{context_id}/environment-variable/{env_var_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete context context-id environment-variable env-var-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}/environment-variable/{env_var_name}"
+        }
+      ],
+      "operation": "circleci.delete.context-context-id-environment-variable-env-var-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete context context-id restrictions restriction-id",
+      "summary": "Documented DELETE /context/{context_id}/restrictions/{restriction_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete context context-id restrictions restriction-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}/restrictions/{restriction_id}"
+        }
+      ],
+      "operation": "circleci.delete.context-context-id-restrictions-restriction-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete org orgid oidc-custom-claims",
+      "summary": "Documented DELETE /org/{orgID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete org orgid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/org/{orgID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.delete.org-orgid-oidc-custom-claims",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete org orgid project projectid oidc-custom-claims",
+      "summary": "Documented DELETE /org/{orgID}/project/{projectID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete org orgid project projectid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.delete.org-orgid-project-projectid-oidc-custom-claims",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organization org-slug-or-id",
+      "summary": "Documented DELETE /organization/{org-slug-or-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete organization org-slug-or-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organization/{org-slug-or-id}"
+        }
+      ],
+      "operation": "circleci.delete.organization-org-slug-or-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organization org-slug-or-id url-orb-allow-list allow-list-entry-id",
+      "summary": "Documented DELETE /organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete organization org-slug-or-id url-orb-allow-list allow-list-entry-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}"
+        }
+      ],
+      "operation": "circleci.delete.organization-org-slug-or-id-url-orb-allow-list-allow-list-entry-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations org-id groups group-id",
+      "summary": "Documented DELETE /organizations/{org_id}/groups/{group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete organizations org-id groups group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{org_id}/groups/{group_id}"
+        }
+      ],
+      "operation": "circleci.delete.organizations-org-id-groups-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete otel exporters otel-exporter-id",
+      "summary": "Documented DELETE /otel/exporters/{otel_exporter_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete otel exporters otel-exporter-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/otel/exporters/{otel_exporter_id}"
+        }
+      ],
+      "operation": "circleci.delete.otel-exporters-otel-exporter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete project project-slug",
+      "summary": "Documented DELETE /project/{project-slug} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete project project-slug --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}"
+        }
+      ],
+      "operation": "circleci.delete.project-project-slug",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects project-id pipeline-definitions pipeline-definition-id",
+      "summary": "Documented DELETE /projects/{project_id}/pipeline-definitions/{pipeline_definition_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete projects project-id pipeline-definitions pipeline-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
+        }
+      ],
+      "operation": "circleci.delete.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects project-id triggers trigger-id",
+      "summary": "Documented DELETE /projects/{project_id}/triggers/{trigger_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete projects project-id triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/triggers/{trigger_id}"
+        }
+      ],
+      "operation": "circleci.delete.projects-project-id-triggers-trigger-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhook webhook-id",
+      "summary": "Documented DELETE /webhook/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api delete webhook webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhook/{webhook_id}"
+        }
+      ],
+      "operation": "circleci.delete.webhook-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api get context context-id",
+      "summary": "Documented GET /context/{context_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get context context-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/context/{context_id}"
+        }
+      ],
+      "operation": "circleci.get.context-context-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get context context-id environment-variable",
+      "summary": "Documented GET /context/{context_id}/environment-variable (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get context context-id environment-variable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/context/{context_id}/environment-variable"
+        }
+      ],
+      "operation": "circleci.get.context-context-id-environment-variable",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get context context-id restrictions",
+      "summary": "Documented GET /context/{context_id}/restrictions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get context context-id restrictions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/context/{context_id}/restrictions"
+        }
+      ],
+      "operation": "circleci.get.context-context-id-restrictions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deploy components",
+      "summary": "Documented GET /deploy/components (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get deploy components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deploy/components"
+        }
+      ],
+      "operation": "circleci.get.deploy-components",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deploy components component-id",
+      "summary": "Documented GET /deploy/components/{component_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get deploy components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deploy/components/{component_id}"
+        }
+      ],
+      "operation": "circleci.get.deploy-components-component-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deploy components component-id versions",
+      "summary": "Documented GET /deploy/components/{component_id}/versions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get deploy components component-id versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deploy/components/{component_id}/versions"
+        }
+      ],
+      "operation": "circleci.get.deploy-components-component-id-versions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deploy environments",
+      "summary": "Documented GET /deploy/environments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get deploy environments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deploy/environments"
+        }
+      ],
+      "operation": "circleci.get.deploy-environments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deploy environments environment-id",
+      "summary": "Documented GET /deploy/environments/{environment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get deploy environments environment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deploy/environments/{environment_id}"
+        }
+      ],
+      "operation": "circleci.get.deploy-environments-environment-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights org-slug summary",
+      "summary": "Documented GET /insights/{org-slug}/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights org-slug summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{org-slug}/summary"
+        }
+      ],
+      "operation": "circleci.get.insights-org-slug-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights pages project-slug summary",
+      "summary": "Documented GET /insights/pages/{project-slug}/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights pages project-slug summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/pages/{project-slug}/summary"
+        }
+      ],
+      "operation": "circleci.get.insights-pages-project-slug-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug branches",
+      "summary": "Documented GET /insights/{project-slug}/branches (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug branches --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/branches"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-branches",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug flaky-tests",
+      "summary": "Documented GET /insights/{project-slug}/flaky-tests (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug flaky-tests --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/flaky-tests"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-flaky-tests",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug workflows workflow-name",
+      "summary": "Documented GET /insights/{project-slug}/workflows/{workflow-name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug workflows workflow-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows/{workflow-name}"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-workflows-workflow-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug workflows workflow-name jobs",
+      "summary": "Documented GET /insights/{project-slug}/workflows/{workflow-name}/jobs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug workflows workflow-name jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows/{workflow-name}/jobs"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-workflows-workflow-name-jobs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug workflows workflow-name summary",
+      "summary": "Documented GET /insights/{project-slug}/workflows/{workflow-name}/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug workflows workflow-name summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows/{workflow-name}/summary"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-workflows-workflow-name-summary",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights project-slug workflows workflow-name test-metrics",
+      "summary": "Documented GET /insights/{project-slug}/workflows/{workflow-name}/test-metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights project-slug workflows workflow-name test-metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows/{workflow-name}/test-metrics"
+        }
+      ],
+      "operation": "circleci.get.insights-project-slug-workflows-workflow-name-test-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights time-series project-slug workflows workflow-name jobs",
+      "summary": "Documented GET /insights/time-series/{project-slug}/workflows/{workflow-name}/jobs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get insights time-series project-slug workflows workflow-name jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/time-series/{project-slug}/workflows/{workflow-name}/jobs"
+        }
+      ],
+      "operation": "circleci.get.insights-time-series-project-slug-workflows-workflow-name-jobs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get jobs job-id",
+      "summary": "Documented GET /jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs/{job_id}"
+        }
+      ],
+      "operation": "circleci.get.jobs-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me",
+      "summary": "Documented GET /me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ],
+      "operation": "circleci.get.me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get me collaborations",
+      "summary": "Documented GET /me/collaborations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get me collaborations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me/collaborations"
+        }
+      ],
+      "operation": "circleci.get.me-collaborations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get org orgid oidc-custom-claims",
+      "summary": "Documented GET /org/{orgID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get org orgid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/org/{orgID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.get.org-orgid-oidc-custom-claims",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get org orgid project projectid oidc-custom-claims",
+      "summary": "Documented GET /org/{orgID}/project/{projectID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get org orgid project projectid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.get.org-orgid-project-projectid-oidc-custom-claims",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organization org-slug-or-id",
+      "summary": "Documented GET /organization/{org-slug-or-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get organization org-slug-or-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organization/{org-slug-or-id}"
+        }
+      ],
+      "operation": "circleci.get.organization-org-slug-or-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organization org-slug-or-id url-orb-allow-list",
+      "summary": "Documented GET /organization/{org-slug-or-id}/url-orb-allow-list (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get organization org-slug-or-id url-orb-allow-list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organization/{org-slug-or-id}/url-orb-allow-list"
+        }
+      ],
+      "operation": "circleci.get.organization-org-slug-or-id-url-orb-allow-list",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations org-id groups",
+      "summary": "Documented GET /organizations/{org_id}/groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get organizations org-id groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{org_id}/groups"
+        }
+      ],
+      "operation": "circleci.get.organizations-org-id-groups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations org-id groups group-id",
+      "summary": "Documented GET /organizations/{org_id}/groups/{group_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get organizations org-id groups group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{org_id}/groups/{group_id}"
+        }
+      ],
+      "operation": "circleci.get.organizations-org-id-groups-group-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations org-id usage-export-job usage-export-job-id",
+      "summary": "Documented GET /organizations/{org_id}/usage_export_job/{usage_export_job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get organizations org-id usage-export-job usage-export-job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{org_id}/usage_export_job/{usage_export_job_id}"
+        }
+      ],
+      "operation": "circleci.get.organizations-org-id-usage-export-job-usage-export-job-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get otel exporters",
+      "summary": "Documented GET /otel/exporters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get otel exporters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/otel/exporters"
+        }
+      ],
+      "operation": "circleci.get.otel-exporters",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context decision",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/decision (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context decision --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/decision"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-decision",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context decision decisionid",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/decision/{decisionID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context decision decisionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-decision-decisionid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context decision decisionid policy-bundle",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context decision decisionid policy-bundle --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/decision/{decisionID}/policy-bundle"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-decision-decisionid-policy-bundle",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context decision settings",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/decision/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context decision settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/decision/settings"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-decision-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context policy-bundle",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/policy-bundle (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context policy-bundle --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/policy-bundle"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-policy-bundle",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get owner ownerid context context policy-bundle policyname",
+      "summary": "Documented GET /owner/{ownerID}/context/{context}/policy-bundle/{policyName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get owner ownerid context context policy-bundle policyname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/owner/{ownerID}/context/{context}/policy-bundle/{policyName}"
+        }
+      ],
+      "operation": "circleci.get.owner-ownerid-context-context-policy-bundle-policyname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline",
+      "summary": "Documented GET /pipeline (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get pipeline --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline"
+        }
+      ],
+      "operation": "circleci.get.pipeline",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline pipeline-id",
+      "summary": "Documented GET /pipeline/{pipeline-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get pipeline pipeline-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/{pipeline-id}"
+        }
+      ],
+      "operation": "circleci.get.pipeline-pipeline-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline pipeline-id config",
+      "summary": "Documented GET /pipeline/{pipeline-id}/config (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get pipeline pipeline-id config --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/{pipeline-id}/config"
+        }
+      ],
+      "operation": "circleci.get.pipeline-pipeline-id-config",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipeline pipeline-id values",
+      "summary": "Documented GET /pipeline/{pipeline_id}/values (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get pipeline pipeline-id values --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/{pipeline_id}/values"
+        }
+      ],
+      "operation": "circleci.get.pipeline-pipeline-id-values",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project project-slug checkout-key fingerprint",
+      "summary": "Documented GET /project/{project-slug}/checkout-key/{fingerprint} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get project project-slug checkout-key fingerprint --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/checkout-key/{fingerprint}"
+        }
+      ],
+      "operation": "circleci.get.project-project-slug-checkout-key-fingerprint",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project project-slug envvar name",
+      "summary": "Documented GET /project/{project-slug}/envvar/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get project project-slug envvar name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/envvar/{name}"
+        }
+      ],
+      "operation": "circleci.get.project-project-slug-envvar-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project project-slug pipeline mine",
+      "summary": "Documented GET /project/{project-slug}/pipeline/mine (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get project project-slug pipeline mine --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/pipeline/mine"
+        }
+      ],
+      "operation": "circleci.get.project-project-slug-pipeline-mine",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project project-slug pipeline pipeline-number",
+      "summary": "Documented GET /project/{project-slug}/pipeline/{pipeline-number} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get project project-slug pipeline pipeline-number --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/pipeline/{pipeline-number}"
+        }
+      ],
+      "operation": "circleci.get.project-project-slug-pipeline-pipeline-number",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project provider organization project settings",
+      "summary": "Documented GET /project/{provider}/{organization}/{project}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get project provider organization project settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{provider}/{organization}/{project}/settings"
+        }
+      ],
+      "operation": "circleci.get.project-provider-organization-project-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id pipeline-definitions",
+      "summary": "Documented GET /projects/{project_id}/pipeline-definitions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get projects project-id pipeline-definitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/pipeline-definitions"
+        }
+      ],
+      "operation": "circleci.get.projects-project-id-pipeline-definitions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id pipeline-definitions pipeline-definition-id",
+      "summary": "Documented GET /projects/{project_id}/pipeline-definitions/{pipeline_definition_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get projects project-id pipeline-definitions pipeline-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
+        }
+      ],
+      "operation": "circleci.get.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id pipeline-definitions pipeline-definition-id triggers",
+      "summary": "Documented GET /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get projects project-id pipeline-definitions pipeline-definition-id triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers"
+        }
+      ],
+      "operation": "circleci.get.projects-project-id-pipeline-definitions-pipeline-definition-id-triggers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id triggers trigger-id",
+      "summary": "Documented GET /projects/{project_id}/triggers/{trigger_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get projects project-id triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/triggers/{trigger_id}"
+        }
+      ],
+      "operation": "circleci.get.projects-project-id-triggers-trigger-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get schedule schedule-id",
+      "summary": "Documented GET /schedule/{schedule-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get schedule schedule-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "operation": "circleci.get.schedule-schedule-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user id",
+      "summary": "Documented GET /user/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get user id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/{id}"
+        }
+      ],
+      "operation": "circleci.get.user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhook",
+      "summary": "Documented GET /webhook (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get webhook --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhook"
+        }
+      ],
+      "operation": "circleci.get.webhook",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhook webhook-id",
+      "summary": "Documented GET /webhook/{webhook_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get webhook webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhook/{webhook_id}"
+        }
+      ],
+      "operation": "circleci.get.webhook-webhook-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflow id",
+      "summary": "Documented GET /workflow/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api get workflow id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflow/{id}"
+        }
+      ],
+      "operation": "circleci.get.workflow-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch org orgid oidc-custom-claims",
+      "summary": "Documented PATCH /org/{orgID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch org orgid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/org/{orgID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.patch.org-orgid-oidc-custom-claims",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch org orgid project projectid oidc-custom-claims",
+      "summary": "Documented PATCH /org/{orgID}/project/{projectID}/oidc-custom-claims (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch org orgid project projectid oidc-custom-claims --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims"
+        }
+      ],
+      "operation": "circleci.patch.org-orgid-project-projectid-oidc-custom-claims",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch owner ownerid context context decision settings",
+      "summary": "Documented PATCH /owner/{ownerID}/context/{context}/decision/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch owner ownerid context context decision settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/owner/{ownerID}/context/{context}/decision/settings"
+        }
+      ],
+      "operation": "circleci.patch.owner-ownerid-context-context-decision-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch project provider organization project settings",
+      "summary": "Documented PATCH /project/{provider}/{organization}/{project}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch project provider organization project settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/project/{provider}/{organization}/{project}/settings"
+        }
+      ],
+      "operation": "circleci.patch.project-provider-organization-project-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch projects project-id pipeline-definitions pipeline-definition-id",
+      "summary": "Documented PATCH /projects/{project_id}/pipeline-definitions/{pipeline_definition_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch projects project-id pipeline-definitions pipeline-definition-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
+        }
+      ],
+      "operation": "circleci.patch.projects-project-id-pipeline-definitions-pipeline-definition-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch projects project-id triggers trigger-id",
+      "summary": "Documented PATCH /projects/{project_id}/triggers/{trigger_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api patch projects project-id triggers trigger-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{project_id}/triggers/{trigger_id}"
+        }
+      ],
+      "operation": "circleci.patch.projects-project-id-triggers-trigger-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post context",
+      "summary": "Documented POST /context (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post context --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/context"
+        }
+      ],
+      "operation": "circleci.post.context",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post context context-id restrictions",
+      "summary": "Documented POST /context/{context_id}/restrictions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post context context-id restrictions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/context/{context_id}/restrictions"
+        }
+      ],
+      "operation": "circleci.post.context-context-id-restrictions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post jobs job-id cancel",
+      "summary": "Documented POST /jobs/{job-id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post jobs job-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/jobs/{job-id}/cancel"
+        }
+      ],
+      "operation": "circleci.post.jobs-job-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organization",
+      "summary": "Documented POST /organization (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post organization --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organization"
+        }
+      ],
+      "operation": "circleci.post.organization",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organization org-slug-or-id project",
+      "summary": "Documented POST /organization/{org-slug-or-id}/project (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post organization org-slug-or-id project --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organization/{org-slug-or-id}/project"
+        }
+      ],
+      "operation": "circleci.post.organization-org-slug-or-id-project",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organization org-slug-or-id url-orb-allow-list",
+      "summary": "Documented POST /organization/{org-slug-or-id}/url-orb-allow-list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post organization org-slug-or-id url-orb-allow-list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organization/{org-slug-or-id}/url-orb-allow-list"
+        }
+      ],
+      "operation": "circleci.post.organization-org-slug-or-id-url-orb-allow-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations org-id groups",
+      "summary": "Documented POST /organizations/{org_id}/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post organizations org-id groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{org_id}/groups"
+        }
+      ],
+      "operation": "circleci.post.organizations-org-id-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations org-id usage-export-job",
+      "summary": "Documented POST /organizations/{org_id}/usage_export_job (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post organizations org-id usage-export-job --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{org_id}/usage_export_job"
+        }
+      ],
+      "operation": "circleci.post.organizations-org-id-usage-export-job",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post otel exporters",
+      "summary": "Documented POST /otel/exporters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post otel exporters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/otel/exporters"
+        }
+      ],
+      "operation": "circleci.post.otel-exporters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post owner ownerid context context decision",
+      "summary": "Documented POST /owner/{ownerID}/context/{context}/decision (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post owner ownerid context context decision --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/owner/{ownerID}/context/{context}/decision"
+        }
+      ],
+      "operation": "circleci.post.owner-ownerid-context-context-decision",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post owner ownerid context context policy-bundle",
+      "summary": "Documented POST /owner/{ownerID}/context/{context}/policy-bundle (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post owner ownerid context context policy-bundle --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/owner/{ownerID}/context/{context}/policy-bundle"
+        }
+      ],
+      "operation": "circleci.post.owner-ownerid-context-context-policy-bundle",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pipeline continue",
+      "summary": "Documented POST /pipeline/continue (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post pipeline continue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pipeline/continue"
+        }
+      ],
+      "operation": "circleci.post.pipeline-continue",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project project-slug job job-number cancel",
+      "summary": "Documented POST /project/{project-slug}/job/{job-number}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post project project-slug job job-number cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/job/{job-number}/cancel"
+        }
+      ],
+      "operation": "circleci.post.project-project-slug-job-job-number-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project project-slug pipeline",
+      "summary": "Documented POST /project/{project-slug}/pipeline (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post project project-slug pipeline --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/pipeline"
+        }
+      ],
+      "operation": "circleci.post.project-project-slug-pipeline",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project provider organization project pipeline run",
+      "summary": "Documented POST /project/{provider}/{organization}/{project}/pipeline/run (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post project provider organization project pipeline run --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{provider}/{organization}/{project}/pipeline/run"
+        }
+      ],
+      "operation": "circleci.post.project-provider-organization-project-pipeline-run",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects project-id pipeline-definitions",
+      "summary": "Documented POST /projects/{project_id}/pipeline-definitions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post projects project-id pipeline-definitions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/pipeline-definitions"
+        }
+      ],
+      "operation": "circleci.post.projects-project-id-pipeline-definitions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects project-id pipeline-definitions pipeline-definition-id triggers",
+      "summary": "Documented POST /projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post projects project-id pipeline-definitions pipeline-definition-id triggers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}/triggers"
+        }
+      ],
+      "operation": "circleci.post.projects-project-id-pipeline-definitions-pipeline-definition-id-triggers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects project-id rollback",
+      "summary": "Documented POST /projects/{project_id}/rollback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post projects project-id rollback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/rollback"
+        }
+      ],
+      "operation": "circleci.post.projects-project-id-rollback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhook",
+      "summary": "Documented POST /webhook (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post webhook --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhook"
+        }
+      ],
+      "operation": "circleci.post.webhook",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post workflow id approve approval-request-id",
+      "summary": "Documented POST /workflow/{id}/approve/{approval_request_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post workflow id approve approval-request-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflow/{id}/approve/{approval_request_id}"
+        }
+      ],
+      "operation": "circleci.post.workflow-id-approve-approval-request-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflow id cancel",
+      "summary": "Documented POST /workflow/{id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post workflow id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflow/{id}/cancel"
+        }
+      ],
+      "operation": "circleci.post.workflow-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflow id rerun",
+      "summary": "Documented POST /workflow/{id}/rerun (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api post workflow id rerun --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflow/{id}/rerun"
+        }
+      ],
+      "operation": "circleci.post.workflow-id-rerun",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put context context-id environment-variable env-var-name",
+      "summary": "Documented PUT /context/{context_id}/environment-variable/{env_var_name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api put context context-id environment-variable env-var-name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/context/{context_id}/environment-variable/{env_var_name}"
+        }
+      ],
+      "operation": "circleci.put.context-context-id-environment-variable-env-var-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put webhook webhook-id",
+      "summary": "Documented PUT /webhook/{webhook_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci api put webhook webhook-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhook/{webhook_id}"
+        }
+      ],
+      "operation": "circleci.put.webhook-webhook-id",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "checkout keys list",
+      "summary": "Run the checkout keys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "checkout_keys",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci checkout keys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/checkout-key"
+        }
+      ]
+    },
+    {
+      "path": "contexts list",
+      "summary": "Run the contexts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contexts",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci contexts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/context"
+        }
+      ]
+    },
+    {
+      "path": "create checkout key apply",
+      "summary": "Plan and execute the create checkout key reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_checkout_key",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create checkout key apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/checkout-key"
+        }
+      ],
+      "risk": "external mutation; creates a new deploy/checkout SSH key with repository access",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create environment variable apply",
+      "summary": "Plan and execute the create environment variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_environment_variable",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create environment variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/envvar"
+        }
+      ],
+      "risk": "external mutation; creates or overwrites a project environment variable used by every future CI run",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create schedule apply",
+      "summary": "Plan and execute the create schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci create schedule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ],
+      "risk": "external mutation; creates a new scheduled-pipeline trigger for this project",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete checkout key apply",
+      "summary": "Plan and execute the delete checkout key reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_checkout_key",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "fingerprint",
+          "type": "string",
+          "summary": "Required fingerprint record field.",
+          "maps_to": "record.fingerprint",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete checkout key apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/checkout-key/{fingerprint}"
+        }
+      ],
+      "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete environment variable apply",
+      "summary": "Plan and execute the delete environment variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_environment_variable",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete environment variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/envvar/{name}"
+        }
+      ],
+      "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete schedule apply",
+      "summary": "Plan and execute the delete schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete schedule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "environment variables list",
+      "summary": "Run the environment variables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "environment_variables",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci environment variables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/envvar"
+        }
+      ]
+    },
+    {
+      "path": "insights workflow summary list",
+      "summary": "Run the insights workflow summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "insights_workflow_summary",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci insights workflow summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows"
+        }
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "Run the jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflow/{id}/job"
+        }
+      ]
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/pipeline"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}"
+        }
+      ]
+    },
+    {
+      "path": "schedules list",
+      "summary": "Run the schedules ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schedules",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci schedules list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ]
+    },
+    {
+      "path": "update schedule apply",
+      "summary": "Plan and execute the update schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci update schedule apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing scheduled-pipeline trigger's timetable or parameters",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "workflows list",
+      "summary": "Run the workflows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci workflows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/{pipeline-id}/workflow"
+        }
+      ]
+    }
+  ]
+}

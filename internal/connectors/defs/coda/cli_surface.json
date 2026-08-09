@@ -1,0 +1,2670 @@
+{
+  "tagline": "Run Coda's declared streams and reverse-ETL actions.",
+  "usage": "pm coda \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get analytics docs",
+        "api get analytics docs docid pages",
+        "api get analytics docs summary",
+        "api get analytics packs",
+        "api get analytics packs packid formulas",
+        "api get analytics packs summary",
+        "api get analytics updated",
+        "api get categories",
+        "api get docs docid",
+        "api get docs docid acl metadata",
+        "api get docs docid acl permissions",
+        "api get docs docid acl principals search",
+        "api get docs docid acl settings",
+        "api get docs docid controls controlidorname",
+        "api get docs docid formulas formulaidorname",
+        "api get docs docid pages pageidorname",
+        "api get docs docid pages pageidorname content",
+        "api get docs docid pages pageidorname export requestid",
+        "api get docs docid tables tableidorname",
+        "api get docs docid tables tableidorname columns columnidorname",
+        "api get docs docid tables tableidorname rows rowidorname",
+        "api get docs operation docid domains",
+        "api get domains provider customdocdomain",
+        "api get folders",
+        "api get folders folderid",
+        "api get go tenants tenantid agentinstances agentinstanceid agentsessionids",
+        "api get go tenants tenantid agentinstances agentinstanceid logs",
+        "api get go tenants tenantid agentinstances agentinstanceid logs logid",
+        "api get mutationstatus requestid",
+        "api get packs",
+        "api get packs invitations",
+        "api get packs listings",
+        "api get packs packid",
+        "api get packs packid categories",
+        "api get packs packid configurations schema",
+        "api get packs packid docs docid groupedlogs",
+        "api get packs packid docs docid logs",
+        "api get packs packid featureddocs",
+        "api get packs packid invitations",
+        "api get packs packid listing",
+        "api get packs packid listingdraft",
+        "api get packs packid makers",
+        "api get packs packid oauthconfig",
+        "api get packs packid permissions",
+        "api get packs packid releases",
+        "api get packs packid reviews",
+        "api get packs packid systemconnection",
+        "api get packs packid tenantid tenantid rootingestionid rootingestionid groupedlogs",
+        "api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions",
+        "api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions ingestionexecutionid parentitems",
+        "api get packs packid tenantid tenantid rootingestionid rootingestionid logs",
+        "api get packs packid tenantid tenantid rootingestionid rootingestionid logs logid",
+        "api get packs packid versions",
+        "api get packs packid versions basepackversion diff targetpackversion",
+        "api get packs packid versions packversion sourcecode",
+        "api get resolvebrowserlink",
+        "api get whoami",
+        "api get workspaces workspaceid roles",
+        "api get workspaces workspaceid users",
+        "columns list",
+        "controls list",
+        "docs list",
+        "formulas list",
+        "pages list",
+        "rows list",
+        "tables list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete docs docid",
+        "api delete docs docid acl permissions permissionid",
+        "api delete docs docid domains customdocdomain",
+        "api delete docs docid pages pageidorname content",
+        "api delete docs docid publish",
+        "api delete folders folderid",
+        "api delete packs packid",
+        "api delete packs packid category categoryname",
+        "api delete packs packid invitations invitationid",
+        "api delete packs packid listingdraft",
+        "api delete packs packid maker loginid",
+        "api delete packs packid permissions",
+        "api delete packs packid permissions permissionid",
+        "api patch docs docid",
+        "api patch docs docid acl settings",
+        "api patch docs docid domains customdocdomain",
+        "api patch folders folderid",
+        "api patch packs packid",
+        "api patch packs packid systemconnection",
+        "api post docs",
+        "api post docs docid acl permissions",
+        "api post docs docid hooks automation ruleid",
+        "api post docs docid pages pageidorname export",
+        "api post docs operation docid domains",
+        "api post folders",
+        "api post organizations organizationid golinks",
+        "api post packs",
+        "api post packs invitations invitationid reply",
+        "api post packs packid assets packassetid assettype packassettype uploadcomplete",
+        "api post packs packid category",
+        "api post packs packid invitations",
+        "api post packs packid maker",
+        "api post packs packid nextversion",
+        "api post packs packid permissions",
+        "api post packs packid releases",
+        "api post packs packid reviews",
+        "api post packs packid reviews pending cancel",
+        "api post packs packid uploadasset",
+        "api post packs packid uploadsourcecode",
+        "api post packs packid versions packversion register",
+        "api post packs packid versions packversion sourcecode uploadcomplete",
+        "api post packs packid versions packversion uploadcomplete",
+        "api post workspaces workspaceid users role",
+        "api put docs docid publish",
+        "api put packs packid featureddocs",
+        "api put packs packid invitations invitationid",
+        "api put packs packid listingdraft",
+        "api put packs packid oauthconfig",
+        "api put packs packid releases packreleaseid",
+        "api put packs packid systemconnection",
+        "create page apply",
+        "delete page apply",
+        "delete row apply",
+        "delete rows apply",
+        "push button apply",
+        "update page apply",
+        "update row apply",
+        "upsert rows apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete docs docid",
+      "summary": "Documented DELETE /docs/{docId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete docs docid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}"
+        }
+      ],
+      "operation": "coda.delete.docs-docid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete docs docid acl permissions permissionid",
+      "summary": "Documented DELETE /docs/{docId}/acl/permissions/{permissionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete docs docid acl permissions permissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/acl/permissions/{permissionId}"
+        }
+      ],
+      "operation": "coda.delete.docs-docid-acl-permissions-permissionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete docs docid domains customdocdomain",
+      "summary": "Documented DELETE /docs/{docId}/domains/{customDocDomain} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete docs docid domains customdocdomain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/domains/{customDocDomain}"
+        }
+      ],
+      "operation": "coda.delete.docs-docid-domains-customdocdomain",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete docs docid pages pageidorname content",
+      "summary": "Documented DELETE /docs/{docId}/pages/{pageIdOrName}/content (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete docs docid pages pageidorname content --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/content"
+        }
+      ],
+      "operation": "coda.delete.docs-docid-pages-pageidorname-content",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete docs docid publish",
+      "summary": "Documented DELETE /docs/{docId}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete docs docid publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/publish"
+        }
+      ],
+      "operation": "coda.delete.docs-docid-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete folders folderid",
+      "summary": "Documented DELETE /folders/{folderId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/folders/{folderId}"
+        }
+      ],
+      "operation": "coda.delete.folders-folderid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid",
+      "summary": "Documented DELETE /packs/{packId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}"
+        }
+      ],
+      "operation": "coda.delete.packs-packid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid category categoryname",
+      "summary": "Documented DELETE /packs/{packId}/category/{categoryName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid category categoryname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/category/{categoryName}"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-category-categoryname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid invitations invitationid",
+      "summary": "Documented DELETE /packs/{packId}/invitations/{invitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid invitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/invitations/{invitationId}"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-invitations-invitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid listingdraft",
+      "summary": "Documented DELETE /packs/{packId}/listingDraft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid listingdraft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/listingDraft"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-listingdraft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid maker loginid",
+      "summary": "Documented DELETE /packs/{packId}/maker/{loginId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid maker loginid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/maker/{loginId}"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-maker-loginid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid permissions",
+      "summary": "Documented DELETE /packs/{packId}/permissions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/permissions"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-permissions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete packs packid permissions permissionid",
+      "summary": "Documented DELETE /packs/{packId}/permissions/{permissionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api delete packs packid permissions permissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/packs/{packId}/permissions/{permissionId}"
+        }
+      ],
+      "operation": "coda.delete.packs-packid-permissions-permissionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get analytics docs",
+      "summary": "Documented GET /analytics/docs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics docs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/docs"
+        }
+      ],
+      "operation": "coda.get.analytics-docs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics docs docid pages",
+      "summary": "Documented GET /analytics/docs/{docId}/pages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics docs docid pages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/docs/{docId}/pages"
+        }
+      ],
+      "operation": "coda.get.analytics-docs-docid-pages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics docs summary",
+      "summary": "Documented GET /analytics/docs/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics docs summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/docs/summary"
+        }
+      ],
+      "operation": "coda.get.analytics-docs-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics packs",
+      "summary": "Documented GET /analytics/packs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics packs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/packs"
+        }
+      ],
+      "operation": "coda.get.analytics-packs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics packs packid formulas",
+      "summary": "Documented GET /analytics/packs/{packId}/formulas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics packs packid formulas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/packs/{packId}/formulas"
+        }
+      ],
+      "operation": "coda.get.analytics-packs-packid-formulas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics packs summary",
+      "summary": "Documented GET /analytics/packs/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics packs summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/packs/summary"
+        }
+      ],
+      "operation": "coda.get.analytics-packs-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get analytics updated",
+      "summary": "Documented GET /analytics/updated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get analytics updated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/analytics/updated"
+        }
+      ],
+      "operation": "coda.get.analytics-updated",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories",
+      "summary": "Documented GET /categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories"
+        }
+      ],
+      "operation": "coda.get.categories",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid",
+      "summary": "Documented GET /docs/{docId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}"
+        }
+      ],
+      "operation": "coda.get.docs-docid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid acl metadata",
+      "summary": "Documented GET /docs/{docId}/acl/metadata (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid acl metadata --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/metadata"
+        }
+      ],
+      "operation": "coda.get.docs-docid-acl-metadata",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid acl permissions",
+      "summary": "Documented GET /docs/{docId}/acl/permissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid acl permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/permissions"
+        }
+      ],
+      "operation": "coda.get.docs-docid-acl-permissions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid acl principals search",
+      "summary": "Documented GET /docs/{docId}/acl/principals/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid acl principals search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/principals/search"
+        }
+      ],
+      "operation": "coda.get.docs-docid-acl-principals-search",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid acl settings",
+      "summary": "Documented GET /docs/{docId}/acl/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid acl settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/acl/settings"
+        }
+      ],
+      "operation": "coda.get.docs-docid-acl-settings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid controls controlidorname",
+      "summary": "Documented GET /docs/{docId}/controls/{controlIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid controls controlidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/controls/{controlIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-controls-controlidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid formulas formulaidorname",
+      "summary": "Documented GET /docs/{docId}/formulas/{formulaIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid formulas formulaidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas/{formulaIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-formulas-formulaidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid pages pageidorname",
+      "summary": "Documented GET /docs/{docId}/pages/{pageIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid pages pageidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-pages-pageidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid pages pageidorname content",
+      "summary": "Documented GET /docs/{docId}/pages/{pageIdOrName}/content (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid pages pageidorname content --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/content"
+        }
+      ],
+      "operation": "coda.get.docs-docid-pages-pageidorname-content",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid pages pageidorname export requestid",
+      "summary": "Documented GET /docs/{docId}/pages/{pageIdOrName}/export/{requestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid pages pageidorname export requestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-pages-pageidorname-export-requestid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid tables tableidorname",
+      "summary": "Documented GET /docs/{docId}/tables/{tableIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid tables tableidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-tables-tableidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid tables tableidorname columns columnidorname",
+      "summary": "Documented GET /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid tables tableidorname columns columnidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-tables-tableidorname-columns-columnidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs docid tables tableidorname rows rowidorname",
+      "summary": "Documented GET /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs docid tables tableidorname rows rowidorname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}"
+        }
+      ],
+      "operation": "coda.get.docs-docid-tables-tableidorname-rows-rowidorname",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get docs operation docid domains",
+      "summary": "Documented GET /docs/${docId}/domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get docs operation docid domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/${docId}/domains"
+        }
+      ],
+      "operation": "coda.get.docs-docid-domains",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains provider customdocdomain",
+      "summary": "Documented GET /domains/provider/{customDocDomain} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get domains provider customdocdomain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/provider/{customDocDomain}"
+        }
+      ],
+      "operation": "coda.get.domains-provider-customdocdomain",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get folders",
+      "summary": "Documented GET /folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders"
+        }
+      ],
+      "operation": "coda.get.folders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get folders folderid",
+      "summary": "Documented GET /folders/{folderId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/folders/{folderId}"
+        }
+      ],
+      "operation": "coda.get.folders-folderid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get go tenants tenantid agentinstances agentinstanceid agentsessionids",
+      "summary": "Documented GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get go tenants tenantid agentinstances agentinstanceid agentsessionids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds"
+        }
+      ],
+      "operation": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-agentsessionids",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get go tenants tenantid agentinstances agentinstanceid logs",
+      "summary": "Documented GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get go tenants tenantid agentinstances agentinstanceid logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs"
+        }
+      ],
+      "operation": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-logs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get go tenants tenantid agentinstances agentinstanceid logs logid",
+      "summary": "Documented GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get go tenants tenantid agentinstances agentinstanceid logs logid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}"
+        }
+      ],
+      "operation": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-logs-logid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mutationstatus requestid",
+      "summary": "Documented GET /mutationStatus/{requestId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get mutationstatus requestid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mutationStatus/{requestId}"
+        }
+      ],
+      "operation": "coda.get.mutationstatus-requestid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs",
+      "summary": "Documented GET /packs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs"
+        }
+      ],
+      "operation": "coda.get.packs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs invitations",
+      "summary": "Documented GET /packs/invitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/invitations"
+        }
+      ],
+      "operation": "coda.get.packs-invitations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs listings",
+      "summary": "Documented GET /packs/listings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs listings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/listings"
+        }
+      ],
+      "operation": "coda.get.packs-listings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid",
+      "summary": "Documented GET /packs/{packId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}"
+        }
+      ],
+      "operation": "coda.get.packs-packid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid categories",
+      "summary": "Documented GET /packs/{packId}/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/categories"
+        }
+      ],
+      "operation": "coda.get.packs-packid-categories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid configurations schema",
+      "summary": "Documented GET /packs/{packId}/configurations/schema (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid configurations schema --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/configurations/schema"
+        }
+      ],
+      "operation": "coda.get.packs-packid-configurations-schema",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid docs docid groupedlogs",
+      "summary": "Documented GET /packs/{packId}/docs/{docId}/groupedLogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid docs docid groupedlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/docs/{docId}/groupedLogs"
+        }
+      ],
+      "operation": "coda.get.packs-packid-docs-docid-groupedlogs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid docs docid logs",
+      "summary": "Documented GET /packs/{packId}/docs/{docId}/logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid docs docid logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/docs/{docId}/logs"
+        }
+      ],
+      "operation": "coda.get.packs-packid-docs-docid-logs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid featureddocs",
+      "summary": "Documented GET /packs/{packId}/featuredDocs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid featureddocs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/featuredDocs"
+        }
+      ],
+      "operation": "coda.get.packs-packid-featureddocs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid invitations",
+      "summary": "Documented GET /packs/{packId}/invitations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/invitations"
+        }
+      ],
+      "operation": "coda.get.packs-packid-invitations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid listing",
+      "summary": "Documented GET /packs/{packId}/listing (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid listing --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/listing"
+        }
+      ],
+      "operation": "coda.get.packs-packid-listing",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid listingdraft",
+      "summary": "Documented GET /packs/{packId}/listingDraft (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid listingdraft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/listingDraft"
+        }
+      ],
+      "operation": "coda.get.packs-packid-listingdraft",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid makers",
+      "summary": "Documented GET /packs/{packId}/makers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid makers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/makers"
+        }
+      ],
+      "operation": "coda.get.packs-packid-makers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid oauthconfig",
+      "summary": "Documented GET /packs/{packId}/oauthConfig (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid oauthconfig --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/oauthConfig"
+        }
+      ],
+      "operation": "coda.get.packs-packid-oauthconfig",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid permissions",
+      "summary": "Documented GET /packs/{packId}/permissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/permissions"
+        }
+      ],
+      "operation": "coda.get.packs-packid-permissions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid releases",
+      "summary": "Documented GET /packs/{packId}/releases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid releases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/releases"
+        }
+      ],
+      "operation": "coda.get.packs-packid-releases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid reviews",
+      "summary": "Documented GET /packs/{packId}/reviews (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid reviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/reviews"
+        }
+      ],
+      "operation": "coda.get.packs-packid-reviews",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid systemconnection",
+      "summary": "Documented GET /packs/{packId}/systemConnection (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid systemconnection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/systemConnection"
+        }
+      ],
+      "operation": "coda.get.packs-packid-systemconnection",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid tenantid tenantid rootingestionid rootingestionid groupedlogs",
+      "summary": "Documented GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid tenantid tenantid rootingestionid rootingestionid groupedlogs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs"
+        }
+      ],
+      "operation": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-groupedlogs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions",
+      "summary": "Documented GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions"
+        }
+      ],
+      "operation": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-ingestionbatchexecutions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions ingestionexecutionid parentitems",
+      "summary": "Documented GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid tenantid tenantid rootingestionid rootingestionid ingestionbatchexecutions ingestionexecutionid parentitems --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems"
+        }
+      ],
+      "operation": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-ingestionbatchexecutions-ingestionexecutionid-parentitems",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid tenantid tenantid rootingestionid rootingestionid logs",
+      "summary": "Documented GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid tenantid tenantid rootingestionid rootingestionid logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs"
+        }
+      ],
+      "operation": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-logs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid tenantid tenantid rootingestionid rootingestionid logs logid",
+      "summary": "Documented GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid tenantid tenantid rootingestionid rootingestionid logs logid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}"
+        }
+      ],
+      "operation": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-logs-logid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid versions",
+      "summary": "Documented GET /packs/{packId}/versions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/versions"
+        }
+      ],
+      "operation": "coda.get.packs-packid-versions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid versions basepackversion diff targetpackversion",
+      "summary": "Documented GET /packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid versions basepackversion diff targetpackversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}"
+        }
+      ],
+      "operation": "coda.get.packs-packid-versions-basepackversion-diff-targetpackversion",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get packs packid versions packversion sourcecode",
+      "summary": "Documented GET /packs/{packId}/versions/{packVersion}/sourceCode (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get packs packid versions packversion sourcecode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/packs/{packId}/versions/{packVersion}/sourceCode"
+        }
+      ],
+      "operation": "coda.get.packs-packid-versions-packversion-sourcecode",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get resolvebrowserlink",
+      "summary": "Documented GET /resolveBrowserLink (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get resolvebrowserlink --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/resolveBrowserLink"
+        }
+      ],
+      "operation": "coda.get.resolvebrowserlink",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get whoami",
+      "summary": "Documented GET /whoami (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get whoami --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/whoami"
+        }
+      ],
+      "operation": "coda.get.whoami",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workspaces workspaceid roles",
+      "summary": "Documented GET /workspaces/{workspaceId}/roles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get workspaces workspaceid roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/roles"
+        }
+      ],
+      "operation": "coda.get.workspaces-workspaceid-roles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workspaces workspaceid users",
+      "summary": "Documented GET /workspaces/{workspaceId}/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api get workspaces workspaceid users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspaceId}/users"
+        }
+      ],
+      "operation": "coda.get.workspaces-workspaceid-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch docs docid",
+      "summary": "Documented PATCH /docs/{docId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch docs docid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/docs/{docId}"
+        }
+      ],
+      "operation": "coda.patch.docs-docid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch docs docid acl settings",
+      "summary": "Documented PATCH /docs/{docId}/acl/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch docs docid acl settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/docs/{docId}/acl/settings"
+        }
+      ],
+      "operation": "coda.patch.docs-docid-acl-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch docs docid domains customdocdomain",
+      "summary": "Documented PATCH /docs/{docId}/domains/{customDocDomain} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch docs docid domains customdocdomain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/docs/{docId}/domains/{customDocDomain}"
+        }
+      ],
+      "operation": "coda.patch.docs-docid-domains-customdocdomain",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch folders folderid",
+      "summary": "Documented PATCH /folders/{folderId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/folders/{folderId}"
+        }
+      ],
+      "operation": "coda.patch.folders-folderid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch packs packid",
+      "summary": "Documented PATCH /packs/{packId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch packs packid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/packs/{packId}"
+        }
+      ],
+      "operation": "coda.patch.packs-packid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch packs packid systemconnection",
+      "summary": "Documented PATCH /packs/{packId}/systemConnection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api patch packs packid systemconnection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/packs/{packId}/systemConnection"
+        }
+      ],
+      "operation": "coda.patch.packs-packid-systemconnection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post docs",
+      "summary": "Documented POST /docs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post docs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs"
+        }
+      ],
+      "operation": "coda.post.docs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post docs docid acl permissions",
+      "summary": "Documented POST /docs/{docId}/acl/permissions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post docs docid acl permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/acl/permissions"
+        }
+      ],
+      "operation": "coda.post.docs-docid-acl-permissions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post docs docid hooks automation ruleid",
+      "summary": "Documented POST /docs/{docId}/hooks/automation/{ruleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post docs docid hooks automation ruleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/hooks/automation/{ruleId}"
+        }
+      ],
+      "operation": "coda.post.docs-docid-hooks-automation-ruleid",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post docs docid pages pageidorname export",
+      "summary": "Documented POST /docs/{docId}/pages/{pageIdOrName}/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post docs docid pages pageidorname export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/pages/{pageIdOrName}/export"
+        }
+      ],
+      "operation": "coda.post.docs-docid-pages-pageidorname-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post docs operation docid domains",
+      "summary": "Documented POST /docs/${docId}/domains (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post docs operation docid domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/${docId}/domains"
+        }
+      ],
+      "operation": "coda.post.docs-docid-domains",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post folders",
+      "summary": "Documented POST /folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/folders"
+        }
+      ],
+      "operation": "coda.post.folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid golinks",
+      "summary": "Documented POST /organizations/{organizationId}/goLinks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post organizations organizationid golinks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/goLinks"
+        }
+      ],
+      "operation": "coda.post.organizations-organizationid-golinks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs",
+      "summary": "Documented POST /packs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs"
+        }
+      ],
+      "operation": "coda.post.packs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs invitations invitationid reply",
+      "summary": "Documented POST /packs/invitations/{invitationId}/reply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs invitations invitationid reply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/invitations/{invitationId}/reply"
+        }
+      ],
+      "operation": "coda.post.packs-invitations-invitationid-reply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid assets packassetid assettype packassettype uploadcomplete",
+      "summary": "Documented POST /packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid assets packassetid assettype packassettype uploadcomplete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete"
+        }
+      ],
+      "operation": "coda.post.packs-packid-assets-packassetid-assettype-packassettype-uploadcomplete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid category",
+      "summary": "Documented POST /packs/{packId}/category (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid category --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/category"
+        }
+      ],
+      "operation": "coda.post.packs-packid-category",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid invitations",
+      "summary": "Documented POST /packs/{packId}/invitations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/invitations"
+        }
+      ],
+      "operation": "coda.post.packs-packid-invitations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid maker",
+      "summary": "Documented POST /packs/{packId}/maker (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid maker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/maker"
+        }
+      ],
+      "operation": "coda.post.packs-packid-maker",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid nextversion",
+      "summary": "Documented POST /packs/{packId}/nextVersion (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid nextversion --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/nextVersion"
+        }
+      ],
+      "operation": "coda.post.packs-packid-nextversion",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid permissions",
+      "summary": "Documented POST /packs/{packId}/permissions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid permissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/permissions"
+        }
+      ],
+      "operation": "coda.post.packs-packid-permissions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid releases",
+      "summary": "Documented POST /packs/{packId}/releases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid releases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/releases"
+        }
+      ],
+      "operation": "coda.post.packs-packid-releases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid reviews",
+      "summary": "Documented POST /packs/{packId}/reviews (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid reviews --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/reviews"
+        }
+      ],
+      "operation": "coda.post.packs-packid-reviews",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid reviews pending cancel",
+      "summary": "Documented POST /packs/{packId}/reviews/pending/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid reviews pending cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/reviews/pending/cancel"
+        }
+      ],
+      "operation": "coda.post.packs-packid-reviews-pending-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid uploadasset",
+      "summary": "Documented POST /packs/{packId}/uploadAsset (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid uploadasset --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/uploadAsset"
+        }
+      ],
+      "operation": "coda.post.packs-packid-uploadasset",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid uploadsourcecode",
+      "summary": "Documented POST /packs/{packId}/uploadSourceCode (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid uploadsourcecode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/uploadSourceCode"
+        }
+      ],
+      "operation": "coda.post.packs-packid-uploadsourcecode",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid versions packversion register",
+      "summary": "Documented POST /packs/{packId}/versions/{packVersion}/register (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid versions packversion register --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/register"
+        }
+      ],
+      "operation": "coda.post.packs-packid-versions-packversion-register",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid versions packversion sourcecode uploadcomplete",
+      "summary": "Documented POST /packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid versions packversion sourcecode uploadcomplete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete"
+        }
+      ],
+      "operation": "coda.post.packs-packid-versions-packversion-sourcecode-uploadcomplete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post packs packid versions packversion uploadcomplete",
+      "summary": "Documented POST /packs/{packId}/versions/{packVersion}/uploadComplete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post packs packid versions packversion uploadcomplete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/packs/{packId}/versions/{packVersion}/uploadComplete"
+        }
+      ],
+      "operation": "coda.post.packs-packid-versions-packversion-uploadcomplete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workspaces workspaceid users role",
+      "summary": "Documented POST /workspaces/{workspaceId}/users/role (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api post workspaces workspaceid users role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspaceId}/users/role"
+        }
+      ],
+      "operation": "coda.post.workspaces-workspaceid-users-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put docs docid publish",
+      "summary": "Documented PUT /docs/{docId}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put docs docid publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/docs/{docId}/publish"
+        }
+      ],
+      "operation": "coda.put.docs-docid-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid featureddocs",
+      "summary": "Documented PUT /packs/{packId}/featuredDocs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid featureddocs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/featuredDocs"
+        }
+      ],
+      "operation": "coda.put.packs-packid-featureddocs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid invitations invitationid",
+      "summary": "Documented PUT /packs/{packId}/invitations/{invitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid invitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/invitations/{invitationId}"
+        }
+      ],
+      "operation": "coda.put.packs-packid-invitations-invitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid listingdraft",
+      "summary": "Documented PUT /packs/{packId}/listingDraft (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid listingdraft --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/listingDraft"
+        }
+      ],
+      "operation": "coda.put.packs-packid-listingdraft",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid oauthconfig",
+      "summary": "Documented PUT /packs/{packId}/oauthConfig (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid oauthconfig --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/oauthConfig"
+        }
+      ],
+      "operation": "coda.put.packs-packid-oauthconfig",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid releases packreleaseid",
+      "summary": "Documented PUT /packs/{packId}/releases/{packReleaseId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid releases packreleaseid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/releases/{packReleaseId}"
+        }
+      ],
+      "operation": "coda.put.packs-packid-releases-packreleaseid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put packs packid systemconnection",
+      "summary": "Documented PUT /packs/{packId}/systemConnection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda api put packs packid systemconnection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/packs/{packId}/systemConnection"
+        }
+      ],
+      "operation": "coda.put.packs-packid-systemconnection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "columns list",
+      "summary": "Run the columns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "columns",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda columns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/columns"
+        }
+      ]
+    },
+    {
+      "path": "controls list",
+      "summary": "Run the controls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "controls",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda controls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/controls"
+        }
+      ]
+    },
+    {
+      "path": "create page apply",
+      "summary": "Plan and execute the create page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_page",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda create page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/pages"
+        }
+      ],
+      "risk": "creates a new page in the configured doc; requires Doc Maker access in the workspace, queued for async processing (202)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete page apply",
+      "summary": "Plan and execute the delete page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_page",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "page_id",
+          "type": "string",
+          "summary": "Required page id record field.",
+          "maps_to": "record.page_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coda delete page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/pages/{pageIdOrName}"
+        }
+      ],
+      "risk": "permanently removes a page (and its subpages/content) from the doc; irreversible, queued for async processing (202)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete row apply",
+      "summary": "Plan and execute the delete row reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_row",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "row_id",
+          "type": "string",
+          "summary": "Required row id record field.",
+          "maps_to": "record.row_id",
+          "required": true
+        },
+        {
+          "name": "table_id",
+          "type": "string",
+          "summary": "Required table id record field.",
+          "maps_to": "record.table_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coda delete row apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}"
+        }
+      ],
+      "risk": "permanently removes a row from a Coda table; irreversible, queued for async processing (202)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete rows apply",
+      "summary": "Plan and execute the delete rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_rows",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "rowIds",
+          "type": "string_array",
+          "summary": "Required rowIds record field.",
+          "maps_to": "record.rowIds",
+          "required": true
+        },
+        {
+          "name": "table_id",
+          "type": "string",
+          "summary": "Required table id record field.",
+          "maps_to": "record.table_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coda delete rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows"
+        }
+      ],
+      "risk": "permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "docs list",
+      "summary": "Run the docs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "docs",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda docs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs"
+        }
+      ]
+    },
+    {
+      "path": "formulas list",
+      "summary": "Run the formulas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "formulas",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda formulas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/formulas"
+        }
+      ]
+    },
+    {
+      "path": "pages list",
+      "summary": "Run the pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/pages"
+        }
+      ]
+    },
+    {
+      "path": "push button apply",
+      "summary": "Plan and execute the push button reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "push_button",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "column_id",
+          "type": "string",
+          "summary": "Required column id record field.",
+          "maps_to": "record.column_id",
+          "required": true
+        },
+        {
+          "name": "row_id",
+          "type": "string",
+          "summary": "Required row id record field.",
+          "maps_to": "record.row_id",
+          "required": true
+        },
+        {
+          "name": "table_id",
+          "type": "string",
+          "summary": "Required table id record field.",
+          "maps_to": "record.table_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coda push button apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}"
+        }
+      ],
+      "risk": "pushes a button on a row; the underlying button can perform ANY action the doc's formulas define, including writes to other tables and Pack actions outside this connector's declared surface — high blast-radius, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "rows list",
+      "summary": "Run the rows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rows",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda rows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows"
+        }
+      ]
+    },
+    {
+      "path": "tables list",
+      "summary": "Run the tables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tables",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda tables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/docs/{docId}/tables"
+        }
+      ]
+    },
+    {
+      "path": "update page apply",
+      "summary": "Plan and execute the update page reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_page",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "flags": [
+        {
+          "name": "page_id",
+          "type": "string",
+          "summary": "Required page id record field.",
+          "maps_to": "record.page_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coda update page apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/docs/{docId}/pages/{pageIdOrName}"
+        }
+      ],
+      "risk": "renames, hides, or restyles an existing page; renaming/re-iconing requires Doc Maker access in the workspace, queued for async processing (202)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update row apply",
+      "summary": "Plan and execute the update row reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_row",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda update row apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}"
+        }
+      ],
+      "risk": "overwrites cell values on an existing row; queued for async processing (202) and generally applied within seconds",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "upsert rows apply",
+      "summary": "Plan and execute the upsert rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "upsert_rows",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "examples": [
+        "pm coda upsert rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/docs/{docId}/tables/{tableIdOrName}/rows"
+        }
+      ],
+      "risk": "inserts new rows, or upserts existing ones when keyColumns is set, into a Coda table; queued for async processing (202) and generally applied within seconds",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    }
+  ]
+}

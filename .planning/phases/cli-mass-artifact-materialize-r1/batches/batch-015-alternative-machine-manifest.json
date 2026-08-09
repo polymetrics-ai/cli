@@ -1,0 +1,777 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 40,
+    "min_operations": 0,
+    "max_operations": 5000,
+    "criteria": "explicit 40-connector official-source retry cohort; existing cited manifest evidence retained; primary drops enter alternative source routes"
+  },
+  "connectors": [
+    {
+      "connector": "gitlab",
+      "operations_total": 1745,
+      "operations_read": 770,
+      "operations_write": 975,
+      "artifact": {
+        "url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+        "kind": "openapi",
+        "version": "master",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.gitlab.com/api/rest/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official current OpenAPI; GET/HEAD are reads. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "intercom",
+      "operations_total": 324,
+      "operations_read": 138,
+      "operations_write": 186,
+      "artifact": {
+        "url": "https://developers.intercom.com/_bundle/docs/references/@2.16/rest-api/api.intercom.io.yaml",
+        "kind": "openapi",
+        "version": "2.16",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official REST API 2.16 bundle operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "mailchimp",
+      "operations_total": 298,
+      "operations_read": 149,
+      "operations_write": 149,
+      "artifact": {
+        "url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
+        "kind": "swagger",
+        "version": "3.0.91",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://mailchimp.com/developer/marketing/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Resolved and counted distributed Swagger 3.0.91 path items. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "front",
+      "operations_total": 255,
+      "operations_read": 123,
+      "operations_write": 132,
+      "artifact": {
+        "url": "https://github.com/frontapp/front-api-specs",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://dev.frontapp.com/reference/introduction",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official core-api.json plus channel-api.json operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "recurly",
+      "operations_total": 197,
+      "operations_read": 97,
+      "operations_write": 100,
+      "artifact": {
+        "url": "https://github.com/recurly/recurly-client-go/blob/main/openapi/api.yaml",
+        "kind": "openapi",
+        "version": "v2021-02-25",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.recurly.com/api/v2021-02-25/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official v2021-02-25 OpenAPI operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "google-analytics-data-api",
+      "operations_total": 24,
+      "operations_read": 20,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
+        "kind": "openapi",
+        "version": "v1beta and v1alpha",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Union of official v1beta (11) and v1alpha (15) Discovery methods, de-duplicated by semantic operation ID. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry: union provider-published Google Discovery v1beta and v1alpha documents"
+    },
+    {
+      "connector": "youtube-analytics",
+      "operations_total": 16,
+      "operations_read": 9,
+      "operations_write": 7,
+      "artifact": {
+        "url": "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2",
+        "kind": "openapi",
+        "version": "v2 plus Reporting v1",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://youtubereporting.googleapis.com/$discovery/rest?version=v1",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "YouTube Analytics v2 plus Reporting v1 Discovery methods. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry: union provider-published YouTube Analytics v2 and Reporting v1 Discovery documents"
+    },
+    {
+      "connector": "twilio",
+      "operations_total": 197,
+      "operations_read": 103,
+      "operations_write": 94,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+        "kind": "openapi",
+        "version": "v2010",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.twilio.com/docs/usage/api",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official API v2010 OpenAPI operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "hubplanner",
+      "operations_total": 98,
+      "operations_read": 35,
+      "operations_write": 63,
+      "artifact": {
+        "url": "https://github.com/hubplanner/API",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://github.com/hubplanner/API/tree/master/Sections",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Unique normalized callable method/path declarations in official docs repo. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "7shifts",
+      "operations_total": 147,
+      "operations_read": 66,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://developers.7shifts.com/llms.txt",
+        "kind": "openapi_fragments",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.7shifts.com/reference",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "provider-published https://developers.7shifts.com/llms.txt and linked /reference/*.md OpenAPI fragments",
+      "counting_note": "Provider-published llms API Reference index yielded 147 current endpoint pages after excluding Authentication, Postman Collection, two non-callable webhook guide pages, and six explicitly deprecated duplicate pages. Each remaining page embedded one OpenAPI 3.0.2 operation; GET/HEAD counted as reads and POST/PUT/PATCH/DELETE as writes. All 147 fragments fetched and parsed successfully.",
+      "processed_at": "2026-08-05T16:16:49Z",
+      "selection_reason": "alternative official-source retry: provider-published llms reference index traversed as OpenAPI fragments"
+    },
+    {
+      "connector": "activecampaign",
+      "operations_total": 87,
+      "operations_read": 40,
+      "operations_write": 47,
+      "artifact": {
+        "url": "https://developers.activecampaign.com/llms.txt",
+        "kind": "openapi_fragments",
+        "version": "v3",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.activecampaign.com/reference/overview",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "provider-published https://developers.activecampaign.com/llms.txt and linked /reference/*.md OpenAPI fragments",
+      "counting_note": "Provider-published llms API Reference index contained 147 reference links. Parsed embedded OpenAPI fragments, retained only fragments whose provider server URL contains /api/3 (the connector's named v3 REST scope), then de-duplicated exact (HTTP method, path) pairs. 103 v3 reference pages yielded 87 callable operations; GET/HEAD are reads and POST/PUT/PATCH/DELETE writes. No fetch or parse failure.",
+      "processed_at": "2026-08-05T16:20:26Z",
+      "selection_reason": "alternative official-source retry: provider-published llms reference index traversed as OpenAPI fragments"
+    },
+    {
+      "connector": "bigmailer",
+      "operations_total": 80,
+      "operations_read": 35,
+      "operations_write": 45,
+      "artifact": {
+        "url": "https://docs.bigmailer.io/llms.txt",
+        "kind": "openapi_fragments",
+        "version": "v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.bigmailer.io/docs/getting-started-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published BigMailer llms API-reference index and all linked OpenAPI fragments",
+      "counting_note": "The provider-published llms index lists exactly 80 API-reference pages, each containing one embedded OpenAPI 3.0.0 action. Exhaustively fetched the linked pages and counted 35 GET reads, 36 POST writes, and nine DELETE writes. No POST action is a query: each creates, updates/upserts, uploads, verifies, pauses/unpauses, or sends an email; inbound webhook events are outside the API Reference and excluded.",
+      "processed_at": "2026-08-05T17:42:01Z",
+      "selection_reason": "alternative official-source retry: provider-published llms reference index traversed as OpenAPI fragments"
+    },
+    {
+      "connector": "bluetally",
+      "operations_total": 91,
+      "operations_read": 34,
+      "operations_write": 57,
+      "artifact": {
+        "url": "https://developer.bluetally.com/llms.txt",
+        "kind": "openapi_fragments",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.bluetally.com/reference/getting-started-with-your-api",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published BlueTally llms API-reference index and linked OpenAPI fragments",
+      "counting_note": "The provider-published llms API-reference index has one introductory page and 91 linked callable reference pages, each containing one OpenAPI 3.1 action. Exhaustively fetched the linked fragments: 34 GET reads; 25 POST, 16 PUT, and 16 DELETE writes. Create/update/delete and all asset check-in/check-out POST operations are state-changing; webhooks are documented separately and excluded.",
+      "processed_at": "2026-08-05T17:46:58Z",
+      "selection_reason": "alternative official-source retry: provider-published llms reference index traversed as OpenAPI fragments"
+    },
+    {
+      "connector": "box",
+      "operations_total": 338,
+      "operations_read": 158,
+      "operations_write": 180,
+      "artifact": {
+        "url": "https://github.com/box/box-openapi/tree/main/openapi",
+        "kind": "openapi",
+        "version": "pre-versioning 2024.0 plus 2025.0 and 2026.0 additions; main ab2802e50f99dd85e7f71253f465d3c47343fbc7",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.box.com/reference/",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned box/box-openapi README and current OpenAPI JSON files",
+      "counting_note": "Box's provider-maintained repository defines the current surface as the pre-versioning 2024.0 base plus files for APIs introduced in 2025.0 and 2026.0. Combined all three OAS 3.0.2 path/method sets and de-duplicated by method/path: 149 GET, two OPTIONS long-poll/preflight actions, 50 DELETE, 48 PUT, 3 PATCH, and 86 POST operations. Seven POST calls are semantic reads (metadata query, four AI answer/text/extraction calls, item query, and query insights); the OPTIONS calls retrieve event/upload-preflight information. Remaining operations are writes.",
+      "processed_at": "2026-08-05T17:50:28Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "box-data-extract",
+      "operations_total": 338,
+      "operations_read": 158,
+      "operations_write": 180,
+      "artifact": {
+        "url": "https://github.com/box/box-openapi/tree/main/openapi",
+        "kind": "openapi",
+        "version": "pre-versioning 2024.0 plus 2025.0 and 2026.0 additions; main ab2802e50f99dd85e7f71253f465d3c47343fbc7",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.box.com/reference/",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned box/box-openapi README and current OpenAPI JSON files",
+      "counting_note": "This connector targets the same current Box Platform REST API. The provider-maintained repository defines that surface as the pre-versioning 2024.0 base plus 2025.0 and 2026.0 additions. Combined all OAS 3.0.2 method/path sets and de-duplicated by method/path: 149 GET, two OPTIONS read operations, 50 DELETE, 48 PUT, 3 PATCH, and 86 POST. Metadata query, four AI answer/text/extraction calls, item query, and query insights are semantic reads; all other non-GET actions are writes.",
+      "processed_at": "2026-08-05T17:51:02Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "brex",
+      "operations_total": 108,
+      "operations_read": 59,
+      "operations_write": 49,
+      "artifact": {
+        "url": "https://developer.brex.com/openapi/",
+        "kind": "openapi",
+        "version": "OpenAPI 3.0.1; product API info versions 0.1–1.0.0-alpha/beta",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.brex.com/openapi/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Brex per-product OpenAPI bundles linked by the OpenAPI directory",
+      "counting_note": "Brex's provider-published OpenAPI directory links ten product bundles: transactions, expenses, team, payments, webhooks, budgets, accounting, fields, onboarding, and travel. Counted every method/path across these non-overlapping artifacts: 59 GET reads, 34 POST, 10 PUT, and five DELETE writes. No POST action is a semantic query; each creates, updates, lifecycle-transitions, sends, or reports server-side state.",
+      "processed_at": "2026-08-05T18:00:18Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "castor-edc",
+      "operations_total": 172,
+      "operations_read": 128,
+      "operations_write": 44,
+      "artifact": {
+        "url": "https://data.castoredc.com/api/swagger?format=json",
+        "kind": "swagger",
+        "version": "OpenAPI/Swagger 2.0; Castor EDC API Documentation 2026.1.4.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://data.castoredc.com/api",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Castor EDC API Swagger 2.0 JSON and rendered API reference",
+      "counting_note": "Counted each documented method/path in Castor's provider-published Swagger 2.0 definition: 127 GET actions plus 31 POST, seven PATCH, one PUT, and six DELETE actions. POST /study/{study_id}/compliance explicitly retrieves participant survey compliance and is therefore a semantic read; every remaining non-GET action creates, updates, randomizes, sends, uploads, locks/unlocks, or deletes clinical-study state. OAuth token acquisition is authentication support and is not a data operation.",
+      "processed_at": "2026-08-06T00:10:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "circa",
+      "operations_total": 30,
+      "operations_read": 17,
+      "operations_write": 13,
+      "artifact": {
+        "url": "https://docs.circa.co/",
+        "kind": "postman",
+        "version": "Postman collection 8.12.3; published 2020-10-31",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Circa Postman Documenter page and public collection JSON endpoint",
+      "counting_note": "Circa's provider-published Postman collection contains 30 unique direct REST actions: 16 GET, five POST, four PATCH, and five DELETE. POST /events/:event_id/contacts/exports initiates an asynchronous export that is retrieved through the paired GET export resource, so it is classified as a semantic read; the four remaining POST actions create contacts, events, companies, or event-contact registrations. All PATCH and DELETE actions mutate state. The collection's push-notification section describes Circa sending POST events to the customer's notification URL, which is excluded as an inbound webhook delivery.",
+      "processed_at": "2026-08-06T02:00:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "clockify",
+      "operations_total": 175,
+      "operations_read": 65,
+      "operations_write": 110,
+      "artifact": {
+        "url": "https://docs.clockify.me/",
+        "kind": "openapi",
+        "version": "Clockify REST API v1; embedded OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.clockify.me/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Clockify provider reference embeds the complete OpenAPI artifact in its rendered Redoc state",
+      "counting_note": "Counted every HTTP operation in Clockify's provider-published embedded OpenAPI 3.0.1 artifact: 52 GET reads, 53 POST, 29 PUT, 16 PATCH, and 25 DELETE. Thirteen POST operations are documented semantic reads: invoice and user filters; scheduled-assignment and user-capacity totals; batch time-entry retrieval; time-off request retrieval; webhook logs; five report generations; and the audit-log report. The other 40 POST operations plus all PUT/PATCH/DELETE actions upload, create, copy, submit, change, or delete state. Webhook delivery event types are excluded while webhook-subscription CRUD is retained.",
+      "processed_at": "2026-08-06T03:30:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "confluence",
+      "operations_total": 218,
+      "operations_read": 137,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.73",
+        "kind": "openapi",
+        "version": "Confluence Cloud REST API v2; OpenAPI 3.0.3; info.version 2.0.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Atlassian's Confluence REST API v2 reference page directly links this static OpenAPI definition and declares it downloadable",
+      "counting_note": "Counted every HTTP operation object in Atlassian's provider-published Confluence Cloud REST API v2 OpenAPI artifact: 134 GET reads, 36 POST, 24 PUT, and 24 DELETE. Three POST actions are documented semantic reads: content-ID-to-type conversion, bulk user lookup, and checking site access by email. The other 33 POST actions plus PUT and DELETE actions enable or revoke admin/key access, create, redact, reset, modify, assign, invite, upload, or remove Confluence state. Inbound webhook delivery event types are excluded; callable webhook-related management actions would remain included.",
+      "processed_at": "2026-08-05T20:37:25Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "dixa",
+      "operations_total": 125,
+      "operations_read": 62,
+      "operations_write": 63,
+      "artifact": {
+        "url": "https://docs.dixa.io/page-data/shared/oas-openapi/dixa-api/@v1/v1.yaml.json",
+        "kind": "openapi",
+        "version": "Dixa API v1; Exports API 1.0.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://docs.dixa.io/openapi/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Dixa's provider-published OpenAPI overview/sidebar identifies the default v1 and Exports API artifacts",
+      "counting_note": "Counted every HTTP operation object in Dixa's provider-published current default v1 OpenAPI artifact (123 operations: 57 GET, 26 POST, 12 PUT, 17 PATCH, 11 DELETE) and its separately listed provider-published Exports API definition (two GET operations). GET actions are reads. Three v1 POST data retrievals are semantic reads: Get Metric Data, Get Metric Records Data, and Search conversations with filters; all other non-GET actions create, update, delete, publish, anonymize, import, or otherwise change provider state. The sidebar identifies v1 as the default and beta as non-default, so beta was not double counted. Webhook-subscription management is counted; inbound webhook event delivery is excluded.",
+      "processed_at": "2026-08-05T21:21:39Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "eventzilla",
+      "operations_total": 20,
+      "operations_read": 11,
+      "operations_write": 9,
+      "artifact": {
+        "url": "https://developer.eventzilla.net/docs/",
+        "kind": "openapi",
+        "version": "Eventzilla API v2; OpenAPI 3.0.0 embedded in provider reference",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.eventzilla.net/docs/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Eventzilla provider-published v2 Redoc reference and its embedded OpenAPI 3.0.0 state; Authentication and Webhooks sections",
+      "counting_note": "Eventzilla's current provider v2 reference embeds a complete OpenAPI 3.0.0 contract. Parsed all 20 unique operation objects: 11 GET reads, eight POST, and one PATCH. Every non-GET action toggles sales, cancels/confirms an order, creates/updates a ticket type, checks in/out an attendee, or creates/fills/confirms a checkout order, so is a write; no POST is a semantic query. The separate Webhooks page is inbound event documentation, not callable REST operations, and is excluded.",
+      "processed_at": "2026-08-05T22:27:33Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "fastly",
+      "operations_total": 716,
+      "operations_read": 339,
+      "operations_write": 377,
+      "artifact": {
+        "url": "https://www.fastly.com/documentation/downloads/fastly.collection.json",
+        "kind": "postman",
+        "version": "current provider collection; Postman Collection schema v2.1.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.fastly.com/documentation/reference/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Fastly's provider-published API Reference linking this downloadable Postman collection, plus direct parse of its request inventory",
+      "counting_note": "Parsed Fastly's provider-linked downloadable Postman collection. Its 740 request items normalize to 732 unique method/path operations; eight exact duplicate method/path pairs were collapsed. Sixteen direct credential-support actions are excluded consistently with r1: 13 automation/user-token actions, password update/reset, and sudo re-authentication. Of the 716 remaining data operations, 336 GET actions are reads, as are three explicit stateless/validation POSTs (one WAF request simulation and two VCL lint validations). The other 119 POST, 86 PUT, 50 PATCH, and 122 DELETE operations create, alter, publish, purge, notify, or remove provider state and are writes. The POST alert test sends a notification and is therefore a write. No inbound webhook-delivery schema is included in this collection; configuration resources are retained.",
+      "processed_at": "2026-08-06T00:35:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "finnhub",
+      "operations_total": 116,
+      "operations_read": 116,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://finnhub.io/static/swagger.json",
+        "kind": "swagger",
+        "version": "Finnhub API v1.0.0; Swagger 2.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://finnhub.io/docs/api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Finnhub provider documentation Introduction linking its downloadable Swagger schema; direct parse of the schema and its three POST descriptions",
+      "counting_note": "Parsed all 116 operation objects across 116 paths in Finnhub's provider-linked Swagger 2.0 definition: 113 GET and three POST. The three POST actions—AI Copilot, Global Filings Search, and Search In Filing—are documented searches/question answering that return results/excerpts without changing provider state, so they are semantic reads. No write operation is present. WebSocket subscription documentation is separate from this REST Swagger artifact and is not counted.",
+      "processed_at": "2026-08-06T01:05:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "finnworlds",
+      "operations_total": 45,
+      "operations_read": 45,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://finnworlds.com/documentation/",
+        "kind": "openapi",
+        "version": "27 provider-published OpenAPI 3.0.3 YAML artifacts: versions 1.0/1.0.0 dated Jul–Aug 2025, plus two retained 2023 definitions",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://finnworlds.com/documentation/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider documentation page and its 27 loaded OpenAPI YAML resources, directly fetched and parsed in-browser",
+      "counting_note": "Parsed the 27 OpenAPI YAML artifacts loaded by Finnworlds' provider documentation: 49 GET operation objects. Deduplicated four exact method/path repetitions across retained and current files—GET /identifiers, GET /information, GET /macrolist, and GET /bondslist—leaving 45 distinct documented callable REST operations. All are GET reads; no write method is present.",
+      "processed_at": "2026-08-06T01:10:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "flowlu",
+      "operations_total": 608,
+      "operations_read": 248,
+      "operations_write": 360,
+      "artifact": {
+        "url": "https://www.flowlu.com/api/json/openapien.json?ver=1785972282755",
+        "kind": "openapi",
+        "version": "Flowlu Rest API Documentation 1.0 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.flowlu.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Flowlu's provider Redoc reference and its loaded `openapien.json` definition; direct parse of paths and documented action segments",
+      "counting_note": "Parsed all 608 operation objects in Flowlu's provider-loaded OpenAPI JSON: 368 GET and 240 POST. This is an RPC-style API rather than ordinary REST: its own Common structure declares action segments `create`, `get`, `list`, `delete`, and `update`. The 240 POST paths are exactly 120 create and 120 update actions; 120 GET paths are explicitly `/delete/{id}` actions. Those 360 documented mutations are writes, leaving 248 GET get/list actions as reads.",
+      "processed_at": "2026-08-06T01:40:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "freshbooks",
+      "operations_total": 149,
+      "operations_read": 74,
+      "operations_write": 75,
+      "artifact": {
+        "url": "https://documenter.getpostman.com/view/3322108/S1ERwwza",
+        "kind": "postman",
+        "version": "FreshBooks API public Postman collection, latest tag; Collection schema v2.0.0; published 2023-03-21",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.freshbooks.com/api/postman-collection",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; FreshBooks provider documentation's Postman Collection page linking this public collection; direct parse of the provider-linked latest collection JSON and authentication text",
+      "counting_note": "Parsed FreshBooks' provider-linked public Postman collection (213 request items). Normalizing its published variables/sample account and object IDs, stripping query examples, and de-duplicating repeat request variants gives 150 unique HTTP method/path operations: 74 GET, 43 POST, 25 PUT, and eight DELETE. POST `/auth/oauth/revoke` is bearer/refresh-token credential infrastructure and is excluded consistently with r1, leaving 149 data operations. All 74 remaining GET calls are reads; every included POST/PUT/DELETE creates, changes, tokenizes, uploads, configures, or removes provider state, so is a write. Webhook callback management is retained; inbound callback deliveries are not collection requests and are excluded.",
+      "processed_at": "2026-08-06T02:00:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "genesys",
+      "operations_total": 3228,
+      "operations_read": 1735,
+      "operations_write": 1493,
+      "artifact": {
+        "url": "https://api.mypurecloud.com/api/v2/docs/swagger",
+        "kind": "swagger",
+        "version": "Swagger 2.0; Genesys Cloud Platform API v2 (live API Explorer definition)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.genesys.cloud/devapps/api-explorer",
+      "auth_model": "unknown",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Genesys Cloud API Explorer's live network-loaded provider Swagger 2.0 definition and its declared operation summaries, paths, and permissions",
+      "counting_note": "Parsed the complete live provider Swagger definition loaded by Genesys Cloud API Explorer: 1,497 GET, 853 POST, 275 PUT, 251 PATCH, 350 DELETE, and two HEAD operations (3,228 total). GET/HEAD give 1,499 reads. Classified 236 POST operations as semantic reads only when the provider's own operation summary starts with a retrieval/query verb (query/search/get/retrieve/fetch/validate/test/simulate/score/estimate/count/match), its documented path is a query/search action, or every declared provider permission is view/read/search; this covers provider-described data queries, validations, previews, bulk fetches, reports, downloads, and view-only export/history jobs. The remaining 617 POST plus PUT/PATCH/DELETE operations are writes. No inbound webhook event deliveries were counted.",
+      "processed_at": "2026-08-06T02:40:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "glassfrog",
+      "operations_total": 38,
+      "operations_read": 19,
+      "operations_write": 19,
+      "artifact": {
+        "url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY",
+        "kind": "postman",
+        "version": "GlassFrog API v3 stable; Postman Collection schema v2.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; public GlassFrog API v3 Postman Documenter collection, whose overview identifies v3 as stable and v2 as deprecated",
+      "counting_note": "Parsed the provider-published public Postman collection behind the live Documenter reference. Its 55 request examples normalize to 38 unique method/path operations after removing base/query/example values and normalizing Postman variables and path parameters: 19 GET, six POST, seven PATCH, and six DELETE. Filter/include variants, field-specific update examples, and the invalid elected-role-assignment example share their underlying method/path and are not separate callable operations. All GET operations are reads; every POST/PATCH/DELETE operation creates, invites, updates, archives, assigns, or removes provider state. No inbound webhook delivery is a collection request.",
+      "processed_at": "2026-08-06T03:05:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "gologin",
+      "operations_total": 71,
+      "operations_read": 28,
+      "operations_write": 43,
+      "artifact": {
+        "url": "https://api.gologin.com/docs/swagger-ui-init.js",
+        "kind": "openapi",
+        "version": "OpenAPI 3.0.0; GoLogin 1.0 (provider Swagger UI embedded document)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api.gologin.com/docs",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live provider Swagger UI and its provider-served swagger-ui-init.js OpenAPI document",
+      "counting_note": "Parsed the provider-embedded OpenAPI document used by the live Swagger UI: 72 raw operation objects (26 GET, 23 POST, two PUT, 10 PATCH, 11 DELETE). Excluded POST /user/dev (Create dev token) as credential infrastructure under the r1 token-flow convention, leaving 71 callable data operations. The 26 GET operations are reads; POST Find cookies of profiles and POST Export profiles to CSV are provider-described retrieval/export actions and are semantic reads. The remaining 20 POST plus all PUT/PATCH/DELETE operations create, import, run, share, transfer, update, restore, or remove provider state. No inbound webhook delivery is present in the OAS.",
+      "processed_at": "2026-08-06T03:25:00Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "guru",
+      "operations_total": 251,
+      "operations_read": 130,
+      "operations_write": 121,
+      "artifact": {
+        "url": "https://developer.getguru.com/getguru/api-next/v2/branches/1.0/reference/postv1searchkeyworddocumentsearch?reduce=false",
+        "kind": "openapi",
+        "version": "Guru API v1; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.getguru.com/reference",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; public Guru ReadMe reference and its provider API response containing the complete OpenAPI document",
+      "counting_note": "Parsed the complete provider-published OpenAPI 3.1.0 document embedded in the public Guru reference response: 119 GET, 59 POST, 40 PUT, and 33 DELETE operations across 175 paths. GET methods are reads. Eleven POST operations are explicitly semantic reads: announcement-user export; three AI answer requests (including streaming); synchronous chat ask; draft search; knowledge-agent test prompt; quality-run simulation; and three card/source/document searches. The other 48 POST operations plus every PUT/DELETE create, alter, send, administer, upload, restore, migrate, or remove state and are writes. The public sidebar exposes only 124 endpoint pages, so the complete OAS—not a partial sidebar count—is the counted artifact.",
+      "processed_at": "2026-08-06T00:49:20Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "insightful",
+      "operations_total": 112,
+      "operations_read": 62,
+      "operations_write": 50,
+      "artifact": {
+        "url": "https://developers.insightful.io/api/collections/10755095/Szzq4Eoa?environment=10754747-cee77158-1d26-446e-a4ab-fe597277f032&segregateAuth=true&versionTag=latest",
+        "kind": "postman",
+        "version": "Insightful Developer Portal | Insightful API Postman collection Szzq4Eoa (latest)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.insightful.io/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Insightful Developer Portal and its live provider-published Postman collection endpoint",
+      "counting_note": "The provider portal states that its Postman collection is the documentation source of truth. Recursively enumerating its 22 folders yields 112 documented request items: GET 62, POST 16, PUT 21, DELETE 13. Each POST is a named creation, import, merge, or other persistent action; no POST is a query-style read. The sole exact method/raw-URL duplicate is two explicitly named GET app-category actions (one organization-label lookup and one category list); they are retained as distinct provider-named action blocks under the counting policy.",
+      "processed_at": "2026-08-06T01:31:58Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "invoiceninja",
+      "operations_total": 356,
+      "operations_read": 191,
+      "operations_write": 165,
+      "artifact": {
+        "url": "https://api-docs.invoicing.co/",
+        "kind": "openapi",
+        "version": "Invoice Ninja API v5.12.55; OpenAPI 3.0.1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api-docs.invoicing.co/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Invoice Ninja API Reference page and its embedded OpenAPI document",
+      "counting_note": "The provider's live Redoc reference embeds its complete OpenAPI 3.0.1 document (the UI's Download link is generated as a same-page blob). The OAS has 271 paths and 365 HTTP operations: GET 151, POST 149, PUT 32, DELETE 33. Five deprecated GET custom-action operations are excluded. Four documented inbound third-party delivery handlers (Yodlee refresh, two Apple purchase/event webhook handlers, and Postmark webhook) are excluded under the webhook policy. Of the remaining 356 actions, 45 POSTs are provider-described retrieval/query actions (entity activity, incremental refresh, bank account/transaction retrieval, charts, current company, export/pre-import checks, PDF/report/template previews and reports, version check, search, and client-statement PDF); these are reads with the 146 active GETs. The remaining POSTs plus PUT/DELETE are writes.",
+      "processed_at": "2026-08-06T01:55:31Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "jobnimbus",
+      "operations_total": 66,
+      "operations_read": 26,
+      "operations_write": 40,
+      "artifact": {
+        "url": "https://documenter.getpostman.com/view/3919598/S11PpG4x",
+        "kind": "postman",
+        "version": "JobNimbus Public API Postman collection v8.12.3 (latest; Collection v2.0.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://documenter.getpostman.com/view/3919598/S11PpG4x",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned JobNimbus Public API Postman Documenter collection (latest)",
+      "counting_note": "The provider's Documenter source-of-truth Postman collection (latest) recursively contains 68 named request blocks: GET 26, POST 25, PUT 17. Two file POST blocks are explicitly titled 'Create a File (Deprecated)' and 'Create a File from URL (Deprecated)' and are excluded, leaving 66 active operations. All GETs are reads; all remaining POST/PUT blocks create, upload, complete or abort uploads, update, or delete and are writes. Eight raw method/URL pairs appear twice, but each pair has provider-distinct named action blocks (seven update/delete pairs or two multipart-upload stages), so all are retained under the Postman policy.",
+      "processed_at": "2026-08-06T02:07:14Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "operations_total": 34,
+      "operations_read": 21,
+      "operations_write": 13,
+      "artifact": {
+        "url": "https://judge.me/api/docs.yaml",
+        "kind": "openapi",
+        "version": "Judge.me API v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://judge.me/api/docs",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Judge.me Redoc page and its directly referenced /api/docs.yaml OpenAPI artifact",
+      "counting_note": "The provider's Redoc page directly initializes this OpenAPI YAML artifact. Its paths contain 34 non-deprecated operations: GET 21, POST 7, PUT 4, DELETE 2; no operation has deprecated: true. All GET operations are reads. The POST/PUT/DELETE operations create, update, request data for, or delete reviews, reviewers, shop configuration, replies, and webhook subscriptions, so they are writes. Webhook paths are subscription-management calls, not inbound event types. The YAML also contains valid PUT /reviews and POST /shops operations without tags, which the rendered navigation omits; both are counted from the published source artifact.",
+      "processed_at": "2026-08-06T02:12:56Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "k6-cloud",
+      "operations_total": 57,
+      "operations_read": 31,
+      "operations_write": 26,
+      "artifact": {
+        "url": "https://api.k6.io/cloud/v6/openapi",
+        "kind": "openapi",
+        "version": "Grafana Cloud k6 OpenAPI 3.1.0, API version 1.15.2",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Grafana Cloud k6 REST API reference, linked OpenAPI artifact, and Metrics REST API reference",
+      "counting_note": "The provider-linked current v6 OpenAPI artifact contains 52 HTTP method objects: GET 22, POST 13, PATCH 5, DELETE 6, PUT 5, and one OPTIONS preflight. Two POST test-run save/unsave objects are explicitly deprecated and the OPTIONS preflight is not a callable action, leaving 49 current v6 actions. POST /cloud/v6/validate_options is an explicitly non-persistent validation lookup and is classified as a semantic read, so v6 contributes 23 reads and 26 writes. The same current reference separately documents eight distinct v5 Metrics REST GET endpoint paths (parameter variants for the same path are not double-counted), adding eight reads. The separate provider page titled Deprecated REST API is excluded.",
+      "processed_at": "2026-08-06T02:26:39Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "kisi",
+      "operations_total": 209,
+      "operations_read": 86,
+      "operations_write": 123,
+      "artifact": {
+        "url": "https://api.kisi.io/docs",
+        "kind": "openapi",
+        "version": "Kisi API v1.0.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api.kisi.io/docs",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Kisi API Stoplight reference with embedded complete OpenAPI document",
+      "counting_note": "The provider's Stoplight reference embeds its complete OpenAPI 3.1.0 document in the rendered page. It contains 230 HTTP operation objects: GET 87, POST 83, PATCH 25, DELETE 33, PUT 2. Twenty-one objects are explicitly deprecated (GET 5, POST 11, PATCH 3, DELETE 2), leaving 209 current actions: GET 82, POST 72, PATCH 22, DELETE 31, PUT 2. Four current POST endpoints are semantic reads: show the current login offline certificate, retrieve a report download URL, fetch the user's 2FA OTP secret, and fetch 2FA backup codes. POST organizations/find sends an email and is therefore a write despite its name; signed-upload URL creation and all other non-GET operations are writes. The OAS webhooks object is empty, so no inbound event types are counted.",
+      "processed_at": "2026-08-06T02:34:33Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "lob",
+      "operations_total": 105,
+      "operations_read": 52,
+      "operations_write": 53,
+      "artifact": {
+        "url": "https://docs.lob.com/",
+        "kind": "openapi",
+        "version": "1.22.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.lob.com/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Lob's provider-hosted Redoc API documentation. Its hydrated `__redoc_state` contains the Lob OpenAPI 3.0.3 `spec.data` document, whose info.version is 1.22.0 and whose paths were enumerated directly.",
+      "counting_note": "The provider's Redoc documentation embeds the complete OpenAPI 3.0.3 document directly in its rendered state. It contains 105 non-deprecated operations: 44 GET, 38 POST, 7 PATCH, and 16 DELETE. Eight POST validation/lookup actions are semantic reads (US and international single/bulk address verification, identity validation, autocomplete, reverse geocoding, and ZIP lookup); all other non-GET methods are writes. Callable beta Campaigns API operations in the same full published spec are included; inbound webhook event types are excluded.",
+      "processed_at": "2026-08-06T03:12:24Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "lokalise",
+      "operations_total": 166,
+      "operations_read": 78,
+      "operations_write": 88,
+      "artifact": {
+        "url": "https://developers.lokalise.com/reference/lokalise-rest-api",
+        "kind": "openapi",
+        "version": "1.0.0 (current OpenAPI schemas; updated 2026-07-30)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.lokalise.com/reference/lokalise-rest-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Lokalise's provider-hosted REST API reference and its public ReadMe content API. The reference page loads the current schema sources `/branches/1.0/apis/lokalise-api-without-branches.yml`, `lokalise-api-with-branches.yml`, `ota-2.json`, and `lokalise-public-api.yml`; each is returned as an OpenAPI schema wrapper and was enumerated directly.",
+      "counting_note": "The provider's ReadMe reference exposes four machine-readable OpenAPI 3.0.3 schemas: Default projects (109 operations), Projects with branches (46), OTA (15), and Public API audit logs (1). Five identical default/branch project method+path pairs are de-duplicated, yielding 166 current operations (74 GET, 34 POST, 29 PUT, 27 DELETE, 2 PATCH). Four POST download-file actions (synchronous and asynchronous default/branch variants) are semantic reads; all other non-GET operations, including token creation, are writes. Inbound webhook event definitions are excluded.",
+      "processed_at": "2026-08-06T03:15:17Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    },
+    {
+      "connector": "luma",
+      "operations_total": 66,
+      "operations_read": 22,
+      "operations_write": 44,
+      "artifact": {
+        "url": "https://public-api.luma.com/openapi.json",
+        "kind": "openapi",
+        "version": "1.0.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.luma.com/reference/getting-started-with-your-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url; the provider-published `https://public-api.luma.com/openapi.json` OpenAPI 3.1.0 document, whose info.version is 1.0.0 and whose paths were enumerated directly.",
+      "counting_note": "The provider's complete OpenAPI 3.1.0 document has 66 non-deprecated path-method operations: 22 GET and 44 POST. All POST actions create, update, invite, tag, cancel, transfer, upload, or otherwise mutate platform state; presigned image-upload URL and cancellation-token creation remain writes under the token/action counting convention. Inbound webhook event types are excluded; webhook endpoint-management operations are callable writes and included.",
+      "processed_at": "2026-08-06T03:23:33Z",
+      "selection_reason": "alternative official-source retry using the prior cited provider artifact and reference route"
+    }
+  ]
+}

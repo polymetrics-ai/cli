@@ -1,0 +1,949 @@
+{
+  "operations": [
+    {
+      "id": "recreation.get.activities-activityid",
+      "kind": "rest_read",
+      "summary": "GET /activities/{activityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{activityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.campsites-campsiteid",
+      "kind": "rest_read",
+      "summary": "GET /campsites/{campsiteId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campsites/{campsiteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.campsites-campsiteid-attributes",
+      "kind": "rest_read",
+      "summary": "GET /campsites/{campsiteId}/attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campsites/{campsiteId}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.events",
+      "kind": "rest_read",
+      "summary": "GET /events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.events-eventid",
+      "kind": "rest_read",
+      "summary": "GET /events/{eventId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{eventId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-activities",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/activities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-activities-activityid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/activities/{activityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/activities/{activityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-campsites",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/campsites",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/campsites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-campsites-campsiteid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/campsites/{campsiteId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/campsites/{campsiteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-events",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-events-eventid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/events/{eventId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/events/{eventId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-facilityaddresses",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/facilityaddresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/facilityaddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-facilityaddresses-facilityaddressid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/facilityaddresses/{facilityAddressId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/facilityaddresses/{facilityAddressId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-links",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-links-linkid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/links/{linkId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/links/{linkId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-media",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-media-mediaid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/media/{mediaId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/media/{mediaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-permitentrances",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/permitentrances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/permitentrances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-permitentrances-permitentranceid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/permitentrances/{permitEntranceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/permitentrances/{permitEntranceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-tours",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/tours",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/tours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-facilityid-tours-tourid",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{facilityId}/tours/{tourId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{facilityId}/tours/{tourId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-id",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{id}",
+      "description": "Legacy connector never implemented single-facility detail lookups",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-id-campsites",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{id}/campsites",
+      "description": "Legacy connector never implemented facility-scoped sub-resource fan-out",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{id}/campsites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-id-events",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{id}/events",
+      "description": "Events not modeled by legacy",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilities-id-media",
+      "kind": "rest_read",
+      "summary": "GET /facilities/{id}/media",
+      "description": "Media not modeled by legacy",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilities/{id}/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilityaddresses",
+      "kind": "rest_read",
+      "summary": "GET /facilityaddresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilityaddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.facilityaddresses-facilityaddressid",
+      "kind": "rest_read",
+      "summary": "GET /facilityaddresses/{facilityAddressId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/facilityaddresses/{facilityAddressId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.linkinfo",
+      "kind": "rest_read",
+      "summary": "GET /linkinfo",
+      "description": "reference lookup table (link relationship types), not a syncable object stream",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/linkinfo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.links",
+      "kind": "rest_read",
+      "summary": "GET /links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.links-linkid",
+      "kind": "rest_read",
+      "summary": "GET /links/{linkId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/links/{linkId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.media",
+      "kind": "rest_read",
+      "summary": "GET /media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.media-mediaid",
+      "kind": "rest_read",
+      "summary": "GET /media/{mediaId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/media/{mediaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.organizations-orgid",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{orgId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{orgId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.organizations-orgid-facilities",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{orgId}/facilities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{orgId}/facilities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.organizations-orgid-facilities-facilityid",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{orgId}/facilities/{facilityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{orgId}/facilities/{facilityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.organizations-orgid-recareas",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{orgId}/recareas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{orgId}/recareas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.organizations-orgid-recareas-recareaid",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{orgId}/recareas/{recAreaId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{orgId}/recareas/{recAreaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.permitentrances",
+      "kind": "rest_read",
+      "summary": "GET /permitentrances",
+      "description": "Permit entrances not modeled by legacy",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permitentrances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.permitentrances-permitentranceid-attributes",
+      "kind": "rest_read",
+      "summary": "GET /permitentrances/{permitEntranceId}/attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permitentrances/{permitEntranceId}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.permitentrances-permitentranceid-zones",
+      "kind": "rest_read",
+      "summary": "GET /permitentrances/{permitEntranceId}/zones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permitentrances/{permitEntranceId}/zones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.permitentrances-permitentranceid-zones-zoneid",
+      "kind": "rest_read",
+      "summary": "GET /permitentrances/{permitEntranceId}/zones/{zoneId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permitentrances/{permitEntranceId}/zones/{zoneId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.permitentrances-permitentranceid",
+      "kind": "rest_read",
+      "summary": "GET /permitentrances/{permitentranceId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/permitentrances/{permitentranceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareaaddresses",
+      "kind": "rest_read",
+      "summary": "GET /recareaaddresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareaaddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareaaddresses-recareaaddressid",
+      "kind": "rest_read",
+      "summary": "GET /recareaaddresses/{recAreaAddressId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareaaddresses/{recAreaAddressId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-id-activities",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{id}/activities",
+      "description": "Recarea-scoped sub-resource fan-out not modeled by legacy",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-activities",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/activities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-activities-activityid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/activities/{activityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/activities/{activityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-events",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-events-eventid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/events/{eventId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/events/{eventId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-facilities",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/facilities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/facilities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-facilities-facilityid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/facilities/{facilityId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/facilities/{facilityId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-links",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/links",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-links-linkid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/links/{linkId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/links/{linkId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-media",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-media-mediaid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/media/{mediaId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/media/{mediaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-recareaaddresses",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/recareaaddresses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/recareaaddresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.recareas-recareaid-recareaaddresses-recareaaddressid",
+      "kind": "rest_read",
+      "summary": "GET /recareas/{recAreaId}/recareaaddresses/{recAreaAddressId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recareas/{recAreaId}/recareaaddresses/{recAreaAddressId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.reservations",
+      "kind": "rest_read",
+      "summary": "GET /reservations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reservations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.tours",
+      "kind": "rest_read",
+      "summary": "GET /tours",
+      "description": "Tours not modeled by legacy",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.tours-tourid",
+      "kind": "rest_read",
+      "summary": "GET /tours/{tourId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tours/{tourId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "recreation.get.tours-tourid-attributes",
+      "kind": "rest_read",
+      "summary": "GET /tours/{tourId}/attributes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tours/{tourId}/attributes",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

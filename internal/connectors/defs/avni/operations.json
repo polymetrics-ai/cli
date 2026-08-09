@@ -1,0 +1,382 @@
+{
+  "operations": [
+    {
+      "id": "avni.post.api-encounter",
+      "kind": "rest_write",
+      "summary": "POST /api/encounter",
+      "description": "creates a new subject encounter; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/encounter",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-encounter-id",
+      "kind": "rest_read",
+      "summary": "GET /api/encounter/{ID}",
+      "description": "single-subject-encounter detail lookup; identical record shape to the encounters list stream, already covered",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/encounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.put.api-encounter-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/encounter/{ID}",
+      "description": "full-replace update of a subject encounter; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/encounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.patch.api-encounter-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/encounter/{ID}",
+      "description": "partial update of a subject encounter; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/encounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.delete.api-encounter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/encounter/{ID}",
+      "description": "voids a subject encounter; destructive mutation, out of scope",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/encounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-location-id",
+      "kind": "rest_read",
+      "summary": "GET /api/location/{ID}",
+      "description": "single-location detail lookup; identical record shape to the locations list stream, already covered",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/location/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-programencounter",
+      "kind": "rest_write",
+      "summary": "POST /api/programEncounter",
+      "description": "creates a new program encounter; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/programEncounter",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-programencounter-id",
+      "kind": "rest_read",
+      "summary": "GET /api/programEncounter/{ID}",
+      "description": "single-program-encounter detail lookup; identical record shape to the program_encounters list stream, already covered",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/programEncounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.put.api-programencounter-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/programEncounter/{ID}",
+      "description": "updates an existing program encounter; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/programEncounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.delete.api-programencounter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/programEncounter/{ID}",
+      "description": "voids a program encounter; destructive mutation, out of scope",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/programEncounter/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-programenrolment",
+      "kind": "rest_write",
+      "summary": "POST /api/programEnrolment",
+      "description": "creates a new program enrolment; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/programEnrolment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-programenrolment-id",
+      "kind": "rest_read",
+      "summary": "GET /api/programEnrolment/{ID}",
+      "description": "single-program-enrolment detail lookup; identical record shape to the program_enrolments list stream, already covered",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/programEnrolment/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.put.api-programenrolment-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/programEnrolment/{ID}",
+      "description": "updates an existing program enrolment; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/programEnrolment/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.delete.api-programenrolment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/programEnrolment/{ID}",
+      "description": "voids a program enrolment and its descendants; destructive mutation, out of scope",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/programEnrolment/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-subject",
+      "kind": "rest_write",
+      "summary": "POST /api/subject",
+      "description": "creates a new subject; Avni is modeled as a read-only source connector in this repo (capabilities.write: false), matching legacy exactly",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subject",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-subject-id",
+      "kind": "rest_read",
+      "summary": "GET /api/subject/{ID}",
+      "description": "single-subject detail lookup by ID/External ID; identical record shape to the subjects list stream's per-item object, already covered by that stream",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subject/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.put.api-subject-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/subject/{ID}",
+      "description": "full-replace update of a subject; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/subject/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.patch.api-subject-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/subject/{ID}",
+      "description": "partial update of a subject; read-only connector, matching legacy",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/subject/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.delete.api-subject-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/subject/{ID}",
+      "description": "voids (soft-deletes) a subject and its descendant data; a destructive mutation, not a syncable read, and out of scope for a read-only connector",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/subject/{ID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-subjectmigration-bulk",
+      "kind": "rest_write",
+      "summary": "POST /api/subjectMigration/bulk",
+      "description": "bulk-migrates subjects and all descendant data between locations/sync-concepts as an async batch job; a destructive bulk mutation, not a syncable read",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/subjectMigration/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.get.api-subjectmigration-bulk-status-jobid",
+      "kind": "rest_read",
+      "summary": "GET /api/subjectMigration/bulk/status/{jobId}",
+      "description": "polls the status of a single bulk-migration job by ID; operational job-status metadata, not a syncable object collection",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/subjectMigration/bulk/status/{jobId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.delete.api-subjecttree",
+      "kind": "rest_write",
+      "summary": "DELETE /api/subjectTree",
+      "description": "bulk-voids subjects and all descendants matching a location criteria; a destructive mutation, not a syncable read",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/subjectTree",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-task",
+      "kind": "rest_write",
+      "summary": "POST /api/task",
+      "description": "creates a workflow task assigned to an Avni user; an action/workflow write, not a syncable read, and out of scope for a read-only connector",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/task",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "avni.post.api-user-enable",
+      "kind": "rest_write",
+      "summary": "POST /api/user/enable",
+      "description": "enables an Avni user account; an account-administration mutation requiring elevated admin privileges, not a syncable data read",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/user/enable",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

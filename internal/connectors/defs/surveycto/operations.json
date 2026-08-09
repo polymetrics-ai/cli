@@ -1,0 +1,349 @@
+{
+  "operations": [
+    {
+      "id": "surveycto.get.api-v2-datasets-data-csv-datasetid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/datasets/data/csv/{datasetID:.+}",
+      "description": "legacy CSV-export variant of dataset data (a differently-shaped export, not the standard cursor-paginated records list); out of scope for this pass",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/datasets/data/csv/{datasetID:.+}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-datasets-datasetid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/datasets/{datasetId}",
+      "description": "single-dataset detail; identical record shape to the datasets list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/datasets/{datasetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-datasets-datasetid-purge",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/datasets/{datasetId}/purge",
+      "description": "irreversibly wipes ALL records from a dataset while keeping the dataset definition itself; a bulk-erasure admin action, never a reverse-ETL-safe mutation",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/datasets/{datasetId}/purge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-datasets-datasetid-record",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/datasets/{datasetId}/record",
+      "description": "ENGINE_GAP: getRecord's recordId is a QUERY parameter (\"passed as a query parameter to support special characters\", per the API's own docs), not a path segment; engine.WriteAction has no query field at all (write.go's ExecuteWrite always calls Requester.Do/DoForm with a nil query), so a single-record-by-id lookup keyed by a query-param id cannot be expressed as either a read stream path or (see below) a write action in this dialect",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/datasets/{datasetId}/record",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.put.api-v2-datasets-datasetid-record",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/datasets/{datasetId}/record",
+      "description": "ENGINE_GAP: updateRecord's recordId is a query parameter (see getRecord above); engine.WriteAction has no mechanism to templatize a query parameter on a write request, only path_fields (path segments) and the body -- this is a genuine dialect gap, not a scope-narrowing choice",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/datasets/{datasetId}/record",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.patch.api-v2-datasets-datasetid-record",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v2/datasets/{datasetId}/record",
+      "description": "ENGINE_GAP: upsertRecord's recordId is a query parameter; same gap as updateRecord above",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v2/datasets/{datasetId}/record",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.delete.api-v2-datasets-datasetid-record",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/datasets/{datasetId}/record",
+      "description": "ENGINE_GAP: deleteRecord's recordId is a query parameter; same gap as updateRecord above",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/datasets/{datasetId}/record",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-datasets-datasetid-records-search",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/datasets/{datasetId}/records/search",
+      "description": "POST variant of the same records listing GET /records already covers, accepting a JSON body of filters/field-selection instead of query parameters; not a distinct resource",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/datasets/{datasetId}/records/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-datasets-datasetid-records-upload",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/datasets/{datasetId}/records/upload",
+      "description": "bulk CSV/file upload of many records in one multipart request; a materially different shape from this dialect's single-record JSON write-body model (create_dataset_record already covers single-record creation)",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/datasets/{datasetId}/records/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-forms-data-wide-json-formid",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/forms/data/wide/json/{formID:.+}",
+      "description": "legacy wide-format JSON export variant of form submission data (a differently-shaped export, not the standard cursor-paginated submissions list); out of scope for this pass",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/forms/data/wide/json/{formID:.+}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-forms-ids",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/forms/ids",
+      "description": "ENGINE_GAP: response is a bare JSON array of scalar strings (e.g. [\"my_survey\", \"registration_form\"]), not objects; connsdk.RecordsAt only extracts array elements that decode as a JSON object, so every element of a scalar-only array is silently dropped -- there is no dialect mechanism (no 'array of scalars, not objects' extraction mode) to model this as a stream or as a fan_out ids_from.request source. See the deviation note in api_surface.json's scope field and docs.md Known limits.",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/forms/ids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-forms-formid-submissions",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/forms/{formID:.+}/submissions",
+      "description": "multipart/form-data variant for ENCRYPTED forms only (accepts an RSA private_key PEM file part to decrypt submission payloads); handling a private key file upload is a materially different shape from this dialect's JSON/form write-body model and is security-sensitive (a private key is credential-shaped data); the plain GET /submissions (non-encrypted forms) is what the submissions stream reads",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/forms/{formID:.+}/submissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-forms-formid-submissions-search",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/forms/{formID:.+}/submissions/search",
+      "description": "POST variant of the same submissions listing GET /submissions already covers, accepting a JSON body of filters/field-selection instead of query parameters; not a distinct resource",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/forms/{formID:.+}/submissions/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-forms-formid-submissions-instanceid-attachments-filename",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/forms/{formID:.+}/submissions/{instanceID:.+}/attachments/{filename:.+}",
+      "description": "downloads a single binary media attachment (photo/audio/video) for one submission by filename; not a JSON record read",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/forms/{formID:.+}/submissions/{instanceID:.+}/attachments/{filename:.+}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-roles-roleid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/roles/{roleId}",
+      "description": "returns a role's detailed PERMISSION structure (optionally scoped to a group), a distinct nested-object shape from the roles list stream's per-item summary, not a syncable object list of its own",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/roles/{roleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-teams-ids",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/teams/ids",
+      "description": "ENGINE_GAP: response is a bare JSON array of scalar strings (e.g. [\"team-1\", \"team-2\"]), the identical shape/gap as GET /forms/ids above -- connsdk.RecordsAt drops every element of a scalar-only array",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/teams/ids",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.delete.api-v2-users-bulk",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/users/bulk",
+      "description": "irreversibly bulk-deletes many users identified by a filter/list in one request; a bulk-erasure admin action distinct from the per-user delete_user action, never a reverse-ETL-safe mutation",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/users/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-users-bulk-file",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/users/bulk/file",
+      "description": "same bulk multi-user CSV/file upload shape as the PUT variant above",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/users/bulk/file",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.put.api-v2-users-bulk-file",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/users/bulk/file",
+      "description": "bulk multi-user CSV/file upload in one multipart request; a materially different shape from this dialect's single-record JSON write-body model (create_user/update_user already cover single-user create/update)",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/users/bulk/file",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.post.api-v2-users-bulk-json",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/users/bulk/json",
+      "description": "bulk multi-user JSON array creation in one request; a materially different shape from this dialect's single-record write-body model",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/users/bulk/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.put.api-v2-users-bulk-json",
+      "kind": "rest_write",
+      "summary": "PUT /api/v2/users/bulk/json",
+      "description": "bulk multi-user JSON array update in one request; a materially different shape from this dialect's single-record write-body model",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/users/bulk/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "surveycto.get.api-v2-users-username",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/users/{username}",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.surveycto.com/specs/api-v2.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/users/{username}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

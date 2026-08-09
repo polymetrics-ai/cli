@@ -1,0 +1,944 @@
+{
+  "tagline": "Run Perigon's declared streams and reverse-ETL actions.",
+  "usage": "pm perigon \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 api contactpoints",
+        "api get v1 api contactpoints uuid",
+        "api get v1 api monitors",
+        "api get v1 api monitors uuid",
+        "api get v1 api monitors uuid events",
+        "api get v1 api monitors uuid newsletters",
+        "api get v1 api monitors uuid summary",
+        "api get v1 api sourcegroups",
+        "api get v1 api sourcegroups id",
+        "api get v1 api sourcegroups resolve",
+        "api get v1 api watchlists",
+        "api get v1 api watchlists id",
+        "api get v1 api watchlists resolve",
+        "api get v1 articles refresh jobs id",
+        "api get v1 journalists id",
+        "api get v1 limits",
+        "api get v1 stories history",
+        "api get v1 stories stats",
+        "api get v1 wikipedia all",
+        "articles list",
+        "companies list",
+        "journalists list",
+        "people list",
+        "sources list",
+        "stories list",
+        "topics list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 api contactpoints uuid",
+        "api delete v1 api monitors uuid",
+        "api delete v1 api sourcegroups id",
+        "api delete v1 api watchlists id",
+        "api patch v1 api contactpoints uuid",
+        "api patch v1 api monitors uuid",
+        "api patch v1 api sourcegroups id",
+        "api patch v1 api watchlists id",
+        "api post v1 api contactpoints",
+        "api post v1 api monitors",
+        "api post v1 api monitors uuid activate",
+        "api post v1 api monitors uuid pause",
+        "api post v1 api sourcegroups",
+        "api post v1 api watchlists",
+        "api post v1 articles refresh jobs",
+        "api post v1 articles refresh peek",
+        "api post v1 summarize",
+        "api post v1 vector news all",
+        "api post v1 vector wikipedia all"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 api contactpoints uuid",
+      "summary": "Documented DELETE /v1/api/contactPoints/{uuid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api delete v1 api contactpoints uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/api/contactPoints/{uuid}"
+        }
+      ],
+      "operation": "perigon.delete.v1-api-contactpoints-uuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 api monitors uuid",
+      "summary": "Documented DELETE /v1/api/monitors/{uuid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api delete v1 api monitors uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/api/monitors/{uuid}"
+        }
+      ],
+      "operation": "perigon.delete.v1-api-monitors-uuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 api sourcegroups id",
+      "summary": "Documented DELETE /v1/api/sourceGroups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api delete v1 api sourcegroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/api/sourceGroups/{id}"
+        }
+      ],
+      "operation": "perigon.delete.v1-api-sourcegroups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 api watchlists id",
+      "summary": "Documented DELETE /v1/api/watchlists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api delete v1 api watchlists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/api/watchlists/{id}"
+        }
+      ],
+      "operation": "perigon.delete.v1-api-watchlists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 api contactpoints",
+      "summary": "Documented GET /v1/api/contactPoints (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api contactpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/contactPoints"
+        }
+      ],
+      "operation": "perigon.get.v1-api-contactpoints",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api contactpoints uuid",
+      "summary": "Documented GET /v1/api/contactPoints/{uuid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api contactpoints uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/contactPoints/{uuid}"
+        }
+      ],
+      "operation": "perigon.get.v1-api-contactpoints-uuid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api monitors",
+      "summary": "Documented GET /v1/api/monitors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api monitors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/monitors"
+        }
+      ],
+      "operation": "perigon.get.v1-api-monitors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api monitors uuid",
+      "summary": "Documented GET /v1/api/monitors/{uuid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api monitors uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/monitors/{uuid}"
+        }
+      ],
+      "operation": "perigon.get.v1-api-monitors-uuid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api monitors uuid events",
+      "summary": "Documented GET /v1/api/monitors/{uuid}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api monitors uuid events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/monitors/{uuid}/events"
+        }
+      ],
+      "operation": "perigon.get.v1-api-monitors-uuid-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api monitors uuid newsletters",
+      "summary": "Documented GET /v1/api/monitors/{uuid}/newsletters (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api monitors uuid newsletters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/monitors/{uuid}/newsletters"
+        }
+      ],
+      "operation": "perigon.get.v1-api-monitors-uuid-newsletters",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api monitors uuid summary",
+      "summary": "Documented GET /v1/api/monitors/{uuid}/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api monitors uuid summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/monitors/{uuid}/summary"
+        }
+      ],
+      "operation": "perigon.get.v1-api-monitors-uuid-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api sourcegroups",
+      "summary": "Documented GET /v1/api/sourceGroups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api sourcegroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/sourceGroups"
+        }
+      ],
+      "operation": "perigon.get.v1-api-sourcegroups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api sourcegroups id",
+      "summary": "Documented GET /v1/api/sourceGroups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api sourcegroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/sourceGroups/{id}"
+        }
+      ],
+      "operation": "perigon.get.v1-api-sourcegroups-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api sourcegroups resolve",
+      "summary": "Documented GET /v1/api/sourceGroups/resolve (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api sourcegroups resolve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/sourceGroups/resolve"
+        }
+      ],
+      "operation": "perigon.get.v1-api-sourcegroups-resolve",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api watchlists",
+      "summary": "Documented GET /v1/api/watchlists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api watchlists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/watchlists"
+        }
+      ],
+      "operation": "perigon.get.v1-api-watchlists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api watchlists id",
+      "summary": "Documented GET /v1/api/watchlists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api watchlists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/watchlists/{id}"
+        }
+      ],
+      "operation": "perigon.get.v1-api-watchlists-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 api watchlists resolve",
+      "summary": "Documented GET /v1/api/watchlists/resolve (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 api watchlists resolve --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/api/watchlists/resolve"
+        }
+      ],
+      "operation": "perigon.get.v1-api-watchlists-resolve",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 articles refresh jobs id",
+      "summary": "Documented GET /v1/articles/refresh/jobs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 articles refresh jobs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/articles/refresh/jobs/{id}"
+        }
+      ],
+      "operation": "perigon.get.v1-articles-refresh-jobs-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 journalists id",
+      "summary": "Documented GET /v1/journalists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 journalists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/journalists/{id}"
+        }
+      ],
+      "operation": "perigon.get.v1-journalists-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 limits",
+      "summary": "Documented GET /v1/limits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 limits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/limits"
+        }
+      ],
+      "operation": "perigon.get.v1-limits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 stories history",
+      "summary": "Documented GET /v1/stories/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 stories history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stories/history"
+        }
+      ],
+      "operation": "perigon.get.v1-stories-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 stories stats",
+      "summary": "Documented GET /v1/stories/stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 stories stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stories/stats"
+        }
+      ],
+      "operation": "perigon.get.v1-stories-stats",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 wikipedia all",
+      "summary": "Documented GET /v1/wikipedia/all (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api get v1 wikipedia all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/wikipedia/all"
+        }
+      ],
+      "operation": "perigon.get.v1-wikipedia-all",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 api contactpoints uuid",
+      "summary": "Documented PATCH /v1/api/contactPoints/{uuid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api patch v1 api contactpoints uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/api/contactPoints/{uuid}"
+        }
+      ],
+      "operation": "perigon.patch.v1-api-contactpoints-uuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 api monitors uuid",
+      "summary": "Documented PATCH /v1/api/monitors/{uuid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api patch v1 api monitors uuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/api/monitors/{uuid}"
+        }
+      ],
+      "operation": "perigon.patch.v1-api-monitors-uuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 api sourcegroups id",
+      "summary": "Documented PATCH /v1/api/sourceGroups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api patch v1 api sourcegroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/api/sourceGroups/{id}"
+        }
+      ],
+      "operation": "perigon.patch.v1-api-sourcegroups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 api watchlists id",
+      "summary": "Documented PATCH /v1/api/watchlists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api patch v1 api watchlists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/api/watchlists/{id}"
+        }
+      ],
+      "operation": "perigon.patch.v1-api-watchlists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api contactpoints",
+      "summary": "Documented POST /v1/api/contactPoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api contactpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/contactPoints"
+        }
+      ],
+      "operation": "perigon.post.v1-api-contactpoints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api monitors",
+      "summary": "Documented POST /v1/api/monitors (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api monitors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/monitors"
+        }
+      ],
+      "operation": "perigon.post.v1-api-monitors",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api monitors uuid activate",
+      "summary": "Documented POST /v1/api/monitors/{uuid}/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api monitors uuid activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/monitors/{uuid}/activate"
+        }
+      ],
+      "operation": "perigon.post.v1-api-monitors-uuid-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api monitors uuid pause",
+      "summary": "Documented POST /v1/api/monitors/{uuid}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api monitors uuid pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/monitors/{uuid}/pause"
+        }
+      ],
+      "operation": "perigon.post.v1-api-monitors-uuid-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api sourcegroups",
+      "summary": "Documented POST /v1/api/sourceGroups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api sourcegroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/sourceGroups"
+        }
+      ],
+      "operation": "perigon.post.v1-api-sourcegroups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 api watchlists",
+      "summary": "Documented POST /v1/api/watchlists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 api watchlists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/api/watchlists"
+        }
+      ],
+      "operation": "perigon.post.v1-api-watchlists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 articles refresh jobs",
+      "summary": "Documented POST /v1/articles/refresh/jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 articles refresh jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/articles/refresh/jobs"
+        }
+      ],
+      "operation": "perigon.post.v1-articles-refresh-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 articles refresh peek",
+      "summary": "Documented POST /v1/articles/refresh/peek (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 articles refresh peek --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/articles/refresh/peek"
+        }
+      ],
+      "operation": "perigon.post.v1-articles-refresh-peek",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 summarize",
+      "summary": "Documented POST /v1/summarize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 summarize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/summarize"
+        }
+      ],
+      "operation": "perigon.post.v1-summarize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 vector news all",
+      "summary": "Documented POST /v1/vector/news/all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 vector news all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/vector/news/all"
+        }
+      ],
+      "operation": "perigon.post.v1-vector-news-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 vector wikipedia all",
+      "summary": "Documented POST /v1/vector/wikipedia/all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon api post v1 vector wikipedia all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/vector/wikipedia/all"
+        }
+      ],
+      "operation": "perigon.post.v1-vector-wikipedia-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "articles list",
+      "summary": "Run the articles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "articles",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon articles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/articles/all"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/all"
+        }
+      ]
+    },
+    {
+      "path": "journalists list",
+      "summary": "Run the journalists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "journalists",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon journalists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/journalists/all"
+        }
+      ]
+    },
+    {
+      "path": "people list",
+      "summary": "Run the people ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon people list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/people/all"
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/sources/all"
+        }
+      ]
+    },
+    {
+      "path": "stories list",
+      "summary": "Run the stories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stories",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon stories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/stories/all"
+        }
+      ]
+    },
+    {
+      "path": "topics list",
+      "summary": "Run the topics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "topics",
+      "source_url": "https://api.perigon.io/v1/openapi/public",
+      "examples": [
+        "pm perigon topics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/topics/all"
+        }
+      ]
+    }
+  ]
+}

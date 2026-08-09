@@ -1,0 +1,1689 @@
+{
+  "operations": [
+    {
+      "id": "coda.get.analytics-docs",
+      "kind": "rest_read",
+      "summary": "GET /analytics/docs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/docs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-docs-summary",
+      "kind": "rest_read",
+      "summary": "GET /analytics/docs/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/docs/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-docs-docid-pages",
+      "kind": "rest_read",
+      "summary": "GET /analytics/docs/{docId}/pages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/docs/{docId}/pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-packs",
+      "kind": "rest_read",
+      "summary": "GET /analytics/packs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/packs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-packs-summary",
+      "kind": "rest_read",
+      "summary": "GET /analytics/packs/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/packs/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-packs-packid-formulas",
+      "kind": "rest_read",
+      "summary": "GET /analytics/packs/{packId}/formulas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/packs/{packId}/formulas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.analytics-updated",
+      "kind": "rest_read",
+      "summary": "GET /analytics/updated",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/updated",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.categories",
+      "kind": "rest_read",
+      "summary": "GET /categories",
+      "description": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.docs",
+      "kind": "rest_write",
+      "summary": "POST /docs",
+      "description": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/docs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-domains",
+      "kind": "rest_read",
+      "summary": "GET /docs/${docId}/domains",
+      "description": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/${docId}/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.docs-docid-domains",
+      "kind": "rest_write",
+      "summary": "POST /docs/${docId}/domains",
+      "description": "binds a custom domain to the doc; domain-administration mutation, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/docs/${docId}/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}",
+      "description": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.docs-docid",
+      "kind": "rest_write",
+      "summary": "PATCH /docs/{docId}",
+      "description": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/docs/{docId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.docs-docid",
+      "kind": "rest_write",
+      "summary": "DELETE /docs/{docId}",
+      "description": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/docs/{docId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-acl-metadata",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/acl/metadata",
+      "description": "sharing/ACL metadata is workspace-permission surface, not doc content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-acl-permissions",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/acl/permissions",
+      "description": "lists who has access to the doc; permission/sharing management is out of scope for a content connector",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.docs-docid-acl-permissions",
+      "kind": "rest_write",
+      "summary": "POST /docs/{docId}/acl/permissions",
+      "description": "grants doc access to a principal; access-control mutation, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/docs/{docId}/acl/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.docs-docid-acl-permissions-permissionid",
+      "kind": "rest_write",
+      "summary": "DELETE /docs/{docId}/acl/permissions/{permissionId}",
+      "description": "revokes doc access; access-control mutation, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/acl/permissions/{permissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-acl-principals-search",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/acl/principals/search",
+      "description": "searches workspace principals for sharing purposes; identity/directory surface, not doc content",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/principals/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-acl-settings",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/acl/settings",
+      "description": "doc-level sharing default settings; access-control configuration, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/acl/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.docs-docid-acl-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /docs/{docId}/acl/settings",
+      "description": "mutates doc-level sharing defaults; access-control configuration, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/docs/{docId}/acl/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-controls-controlidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/controls/{controlIdOrName}",
+      "description": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/controls/{controlIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.docs-docid-domains-customdocdomain",
+      "kind": "rest_write",
+      "summary": "PATCH /docs/{docId}/domains/{customDocDomain}",
+      "description": "updates a custom domain binding; domain-administration mutation, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.docs-docid-domains-customdocdomain",
+      "kind": "rest_write",
+      "summary": "DELETE /docs/{docId}/domains/{customDocDomain}",
+      "description": "unbinds a custom domain; domain-administration mutation, not content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/domains/{customDocDomain}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-formulas-formulaidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/formulas/{formulaIdOrName}",
+      "description": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.docs-docid-hooks-automation-ruleid",
+      "kind": "rest_write",
+      "summary": "POST /docs/{docId}/hooks/automation/{ruleId}",
+      "description": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/docs/{docId}/hooks/automation/{ruleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-pages-pageidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/pages/{pageIdOrName}",
+      "description": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-pages-pageidorname-content",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/pages/{pageIdOrName}/content",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.docs-docid-pages-pageidorname-content",
+      "kind": "rest_write",
+      "summary": "DELETE /docs/{docId}/pages/{pageIdOrName}/content",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.docs-docid-pages-pageidorname-export",
+      "kind": "rest_write",
+      "summary": "POST /docs/{docId}/pages/{pageIdOrName}/export",
+      "description": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-pages-pageidorname-export-requestid",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+      "description": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.docs-docid-publish",
+      "kind": "rest_write",
+      "summary": "PUT /docs/{docId}/publish",
+      "description": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/docs/{docId}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.docs-docid-publish",
+      "kind": "rest_write",
+      "summary": "DELETE /docs/{docId}/publish",
+      "description": "unpublishes the doc; a workspace-publishing action, not per-record content data",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/docs/{docId}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-tables-tableidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/tables/{tableIdOrName}",
+      "description": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-tables-tableidorname-columns-columnidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "description": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.docs-docid-tables-tableidorname-rows-rowidorname",
+      "kind": "rest_read",
+      "summary": "GET /docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "description": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.domains-provider-customdocdomain",
+      "kind": "rest_read",
+      "summary": "GET /domains/provider/{customDocDomain}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/provider/{customDocDomain}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.folders",
+      "kind": "rest_read",
+      "summary": "GET /folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.folders",
+      "kind": "rest_write",
+      "summary": "POST /folders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.folders-folderid",
+      "kind": "rest_read",
+      "summary": "GET /folders/{folderId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.folders-folderid",
+      "kind": "rest_write",
+      "summary": "PATCH /folders/{folderId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.folders-folderid",
+      "kind": "rest_write",
+      "summary": "DELETE /folders/{folderId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-agentsessionids",
+      "kind": "rest_read",
+      "summary": "GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-logs",
+      "kind": "rest_read",
+      "summary": "GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.go-tenants-tenantid-agentinstances-agentinstanceid-logs-logid",
+      "kind": "rest_read",
+      "summary": "GET /go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.mutationstatus-requestid",
+      "kind": "rest_read",
+      "summary": "GET /mutationStatus/{requestId}",
+      "description": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mutationStatus/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.organizations-organizationid-golinks",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/goLinks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/goLinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs",
+      "kind": "rest_read",
+      "summary": "GET /packs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs",
+      "kind": "rest_write",
+      "summary": "POST /packs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-invitations",
+      "kind": "rest_read",
+      "summary": "GET /packs/invitations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-invitations-invitationid-reply",
+      "kind": "rest_write",
+      "summary": "POST /packs/invitations/{invitationId}/reply",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/invitations/{invitationId}/reply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-listings",
+      "kind": "rest_read",
+      "summary": "GET /packs/listings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/listings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.packs-packid",
+      "kind": "rest_write",
+      "summary": "PATCH /packs/{packId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/packs/{packId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-assets-packassetid-assettype-packassettype-uploadcomplete",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-categories",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-category",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/category",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/category",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-category-categoryname",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/category/{categoryName}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/category/{categoryName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-configurations-schema",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/configurations/schema",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/configurations/schema",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-docs-docid-groupedlogs",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/docs/{docId}/groupedLogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/docs/{docId}/groupedLogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-docs-docid-logs",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/docs/{docId}/logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/docs/{docId}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-featureddocs",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/featuredDocs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/featuredDocs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-featureddocs",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/featuredDocs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/featuredDocs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-invitations",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/invitations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-invitations",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/invitations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-invitations-invitationid",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/invitations/{invitationId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/invitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-invitations-invitationid",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/invitations/{invitationId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/invitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-listing",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/listing",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-listingdraft",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/listingDraft",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/listingDraft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-listingdraft",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/listingDraft",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/listingDraft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-listingdraft",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/listingDraft",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/listingDraft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-maker",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/maker",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/maker",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-maker-loginid",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/maker/{loginId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/maker/{loginId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-makers",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/makers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/makers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-nextversion",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/nextVersion",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/nextVersion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-oauthconfig",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/oauthConfig",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/oauthConfig",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-oauthconfig",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/oauthConfig",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/oauthConfig",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-permissions",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/permissions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-permissions",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/permissions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-permissions",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/permissions",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/permissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.delete.packs-packid-permissions-permissionid",
+      "kind": "rest_write",
+      "summary": "DELETE /packs/{packId}/permissions/{permissionId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/packs/{packId}/permissions/{permissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-releases",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/releases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-releases",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/releases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-releases-packreleaseid",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/releases/{packReleaseId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/releases/{packReleaseId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-reviews",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/reviews",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-reviews",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/reviews",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-reviews-pending-cancel",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/reviews/pending/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/reviews/pending/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-systemconnection",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/systemConnection",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/systemConnection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.put.packs-packid-systemconnection",
+      "kind": "rest_write",
+      "summary": "PUT /packs/{packId}/systemConnection",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/packs/{packId}/systemConnection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.patch.packs-packid-systemconnection",
+      "kind": "rest_write",
+      "summary": "PATCH /packs/{packId}/systemConnection",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/packs/{packId}/systemConnection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-groupedlogs",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-ingestionbatchexecutions",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-ingestionbatchexecutions-ingestionexecutionid-parentitems",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-logs",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-tenantid-tenantid-rootingestionid-rootingestionid-logs-logid",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-uploadasset",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/uploadAsset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/uploadAsset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-uploadsourcecode",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/uploadSourceCode",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/uploadSourceCode",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-versions",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/versions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-versions-basepackversion-diff-targetpackversion",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-versions-packversion-register",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/versions/{packVersion}/register",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/versions/{packVersion}/register",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.packs-packid-versions-packversion-sourcecode",
+      "kind": "rest_read",
+      "summary": "GET /packs/{packId}/versions/{packVersion}/sourceCode",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/packs/{packId}/versions/{packVersion}/sourceCode",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-versions-packversion-sourcecode-uploadcomplete",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.packs-packid-versions-packversion-uploadcomplete",
+      "kind": "rest_write",
+      "summary": "POST /packs/{packId}/versions/{packVersion}/uploadComplete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/packs/{packId}/versions/{packVersion}/uploadComplete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.resolvebrowserlink",
+      "kind": "rest_read",
+      "summary": "GET /resolveBrowserLink",
+      "description": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/resolveBrowserLink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.whoami",
+      "kind": "rest_read",
+      "summary": "GET /whoami",
+      "description": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/whoami",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.workspaces-workspaceid-roles",
+      "kind": "rest_read",
+      "summary": "GET /workspaces/{workspaceId}/roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspaceId}/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.get.workspaces-workspaceid-users",
+      "kind": "rest_read",
+      "summary": "GET /workspaces/{workspaceId}/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspaceId}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coda.post.workspaces-workspaceid-users-role",
+      "kind": "rest_write",
+      "summary": "POST /workspaces/{workspaceId}/users/role",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://coda.io/apis/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspaceId}/users/role",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

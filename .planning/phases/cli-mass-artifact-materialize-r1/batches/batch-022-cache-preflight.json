@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-machine-plus-root-manifest.json",
+  "candidates": 40,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "smartwaiver",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no smartwaiver.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no tvmaze-schedule.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "formbricks",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no formbricks.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "intruder",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no intruder.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "convertkit",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no convertkit.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "emailoctopus",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no emailoctopus.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "sharetribe",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no sharetribe.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "strava",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no strava.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "imagga",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no imagga.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "mention",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no mention.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "chargedesk",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no chargedesk.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "openaq",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no openaq.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "drift",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no drift.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "appfollow",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no appfollow.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "missive",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no missive.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "feishu",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no feishu.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "polygon-stock-api",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no polygon-stock-api.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "shipstation",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no shipstation.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "appfigures",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no appfigures.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "beamer",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no beamer.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "onesignal",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no onesignal.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "scryfall",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no scryfall.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "stigg",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no stigg.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "typeform",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no typeform.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "canny",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no canny.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "jotform",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no jotform.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "insightful",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no insightful.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "statuspage",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no statuspage.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "finnhub",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no finnhub.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "dixa",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no dixa.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "teamtailor",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no teamtailor.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "secoda",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no secoda.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "7shifts",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no 7shifts.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no freshbooks.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no lokalise.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no castor-edc.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "clockify",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no clockify.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "recurly",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "kisi",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no kisi.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    }
+  ]
+}

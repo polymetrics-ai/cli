@@ -1,12 +1,77 @@
 {
-  "api": "Wikimedia Pageviews REST API (https://wikimedia.org/api/rest_v1)",
+  "api": "Wikimedia Pageviews REST API (https://wikimedia.org/api/rest_v1); provider artifact version: Swagger 2.0; Wikimedia Page Analytics v1",
   "docs": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams (per-article pageviews, top-per-country articles) only; the broader Pageviews API surface (per-project totals, top-per-project, mediarequests, mediacounts) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited swagger artifact (8 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "wikipedia-pageviews-artifact-2026-08-09",
+      "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "kind": "swagger",
+      "version": "2.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "Swagger 2.0; Wikimedia Page Analytics v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "existing-surface[GET /api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "Swagger 2.0; Wikimedia Page Analytics v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "existing-surface[GET /api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{article}/daily/{start}/{end}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "Swagger 2.0; Wikimedia Page Analytics v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "existing-surface[GET /api/rest_v1/metrics/pageviews/per-article/{project}/{access}/{agent}/{article}/daily/{start}/{end}]"
+      },
       "covered_by": {
         "stream": "pageviews"
       }
@@ -14,32 +79,208 @@
     {
       "method": "GET",
       "path": "/api/rest_v1/metrics/pageviews/top-per-country/{project}/{country}/{access}/{year}/{month}/{day}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "Swagger 2.0; Wikimedia Page Analytics v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "existing-surface[GET /api/rest_v1/metrics/pageviews/top-per-country/{project}/{country}/{access}/{year}/{month}/{day}]"
+      },
       "covered_by": {
         "stream": "top_articles"
       }
     },
     {
       "method": "GET",
-      "path": "/api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/api/rest_v1/metrics/pageviews/top/{project}/{access}/{year}/{month}/{day}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "Swagger 2.0; Wikimedia Page Analytics v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "existing-surface[GET /api/rest_v1/metrics/pageviews/top/{project}/{access}/{year}/{month}/{day}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle"
+      "path": "/legacy/pagecounts/aggregate/{project}/{access-site}/{granularity}/{start}/{end}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/legacy/pagecounts/aggregate/{project}/{access-site}/{granularity}/{start}/{end}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/top-by-country/{project}/{access}/{year}/{month}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/top-by-country/{project}/{access}/{year}/{month}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/top-per-country/{country}/{access}/{year}/{month}/{day}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/top-per-country/{country}/{access}/{year}/{month}/{day}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/top/{project}/{access}/{year}/{month}/{day}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/top/{project}/{access}/{year}/{month}/{day}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/v3/per_editor/{user_central_id}/{granularity}/{start}/{end}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/v3/per_editor/{user_central_id}/{granularity}/{start}/{end}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pageviews/v3/top_pages_per_editor/{user_central_id}/{granularity}/{start}/{end}",
+      "provenance": {
+        "artifact": "wikipedia-pageviews-artifact-2026-08-09",
+        "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3d7c9cb348d52376461250959a59fe490b05f9528e668cf88bc6458c57e78e87",
+        "coordinate": "paths[\"/pageviews/v3/top_pages_per_editor/{user_central_id}/{granularity}/{start}/{end}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

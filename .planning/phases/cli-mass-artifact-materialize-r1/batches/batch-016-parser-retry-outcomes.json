@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "batch": "batch-016-parser-retry",
+  "manifest": "batches/batch-015-alternative-machine-manifest.json",
+  "outcomes": [
+    {
+      "connector": "twilio",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-016-parser-retry-materialize.json"
+    },
+    {
+      "connector": "finnhub",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-016-parser-retry-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"highUsage\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "batch": "batch-023",
+  "results": [
+    {
+      "connector": "shortio",
+      "status": "fetched",
+      "detail": "11824"
+    },
+    {
+      "connector": "twilio-taskrouter",
+      "status": "fetched",
+      "detail": "192198"
+    },
+    {
+      "connector": "fullstory",
+      "status": "fetched",
+      "detail": "33567"
+    },
+    {
+      "connector": "sendowl",
+      "status": "fetched",
+      "detail": "29497"
+    },
+    {
+      "connector": "coassemble",
+      "status": "fetched",
+      "detail": "15278"
+    },
+    {
+      "connector": "breezy-hr",
+      "status": "fetched",
+      "detail": "183255"
+    },
+    {
+      "connector": "fastbill",
+      "status": "fetched",
+      "detail": "20593"
+    },
+    {
+      "connector": "callrail",
+      "status": "fetched",
+      "detail": "891328"
+    },
+    {
+      "connector": "merge",
+      "status": "fetched",
+      "detail": "1953423"
+    },
+    {
+      "connector": "systeme",
+      "status": "fetched",
+      "detail": "211887"
+    },
+    {
+      "connector": "100ms",
+      "status": "fetched",
+      "detail": "98095"
+    },
+    {
+      "connector": "split-io",
+      "status": "fetched",
+      "detail": "243009"
+    },
+    {
+      "connector": "tremendous",
+      "status": "fetched",
+      "detail": "219806"
+    },
+    {
+      "connector": "rd-station-marketing",
+      "status": "fetched",
+      "detail": "903778"
+    },
+    {
+      "connector": "finage",
+      "status": "fetched",
+      "detail": "143591"
+    },
+    {
+      "connector": "flexport",
+      "status": "fetched",
+      "detail": "10940"
+    },
+    {
+      "connector": "tickettailor",
+      "status": "fetched",
+      "detail": "52925"
+    },
+    {
+      "connector": "apple-search-ads",
+      "status": "fetched",
+      "detail": "15016"
+    },
+    {
+      "connector": "getgist",
+      "status": "fetched",
+      "detail": "646440"
+    },
+    {
+      "connector": "agilecrm",
+      "status": "fetched",
+      "detail": "269553"
+    },
+    {
+      "connector": "omnisend",
+      "status": "fetched",
+      "detail": "387378"
+    },
+    {
+      "connector": "less-annoying-crm",
+      "status": "fetched",
+      "detail": "72067"
+    },
+    {
+      "connector": "aircall",
+      "status": "fetched",
+      "detail": "875367"
+    },
+    {
+      "connector": "postmarkapp",
+      "status": "fetched",
+      "detail": "83289"
+    },
+    {
+      "connector": "nexiopay",
+      "status": "fetched",
+      "detail": "440366"
+    },
+    {
+      "connector": "mailerlite",
+      "status": "fetched",
+      "detail": "86200"
+    },
+    {
+      "connector": "nocrm",
+      "status": "fetched",
+      "detail": "1351299"
+    },
+    {
+      "connector": "appcues",
+      "status": "fetched",
+      "detail": "551555"
+    },
+    {
+      "connector": "justcall",
+      "status": "fetched",
+      "detail": "231519"
+    },
+    {
+      "connector": "everhour",
+      "status": "fetched",
+      "detail": "568983"
+    },
+    {
+      "connector": "survey-sparrow",
+      "status": "fetched",
+      "detail": "76596"
+    },
+    {
+      "connector": "eventbrite",
+      "status": "fetched",
+      "detail": "394417"
+    },
+    {
+      "connector": "chameleon",
+      "status": "fetched",
+      "detail": "12214"
+    },
+    {
+      "connector": "instatus",
+      "status": "fetched",
+      "detail": "96581"
+    },
+    {
+      "connector": "rki-covid",
+      "status": "fetched",
+      "detail": "56238"
+    },
+    {
+      "connector": "chartmogul",
+      "status": "fetched",
+      "detail": "55952"
+    },
+    {
+      "connector": "northpass-lms",
+      "status": "fetched",
+      "detail": "552272"
+    },
+    {
+      "connector": "campaign-monitor",
+      "status": "fetched",
+      "detail": "139882"
+    },
+    {
+      "connector": "nutshell",
+      "status": "fetched",
+      "detail": "428092"
+    },
+    {
+      "connector": "easypost",
+      "status": "fetched",
+      "detail": "26371"
+    }
+  ]
+}

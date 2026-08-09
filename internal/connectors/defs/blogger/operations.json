@@ -1,0 +1,624 @@
+{
+  "operations": [
+    {
+      "id": "blogger.get.blogs-byurl",
+      "kind": "rest_read",
+      "summary": "GET /blogs/byurl",
+      "description": "lookup by URL requires a separate blog URL input, but this bundle's spec is keyed by the configured blog_id and adding a second identity mode would widen the accepted config contract",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blogs/byurl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.blogs-blogid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /blogs/{blogId}/comments/{commentId}",
+      "description": "single-comment fetch is a narrower case of the comments stream already covered",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blogs/{blogId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.blogs-blogid-comments-commentid-moderate-true",
+      "kind": "rest_write",
+      "summary": "POST /blogs/{blogId}/comments/{commentId}?moderate=true",
+      "description": "comment moderation requires elevated blog-admin scope; out of scope, not read by legacy",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/blogs/{blogId}/comments/{commentId}?moderate=true",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.blogs-blogid-posts",
+      "kind": "rest_write",
+      "summary": "POST /blogs/{blogId}/posts",
+      "description": "post creation requires Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/blogs/{blogId}/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.blogs-blogid-posts-postid",
+      "kind": "rest_read",
+      "summary": "GET /blogs/{blogId}/posts/{postId}",
+      "description": "single-post fetch is a narrower case of the posts stream already covered",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.put.blogs-blogid-posts-postid",
+      "kind": "rest_write",
+      "summary": "PUT /blogs/{blogId}/posts/{postId}",
+      "description": "post updates require Blogger write OAuth scopes; this connector's credential contract is read-only and legacy Write returns ErrUnsupportedOperation",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.delete.blogs-blogid-posts-postid",
+      "kind": "rest_write",
+      "summary": "DELETE /blogs/{blogId}/posts/{postId}",
+      "description": "post deletion is destructive and requires Blogger write/admin OAuth scope; legacy exposes no delete write action",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-byurl",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/byurl",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/byurl",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-comments",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-pages",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/pages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-pages",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/pages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/pages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-pages-pageid",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/pages/{pageId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.put.v3-blogs-blogid-pages-pageid",
+      "kind": "rest_write",
+      "summary": "PUT /v3/blogs/{blogId}/pages/{pageId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.patch.v3-blogs-blogid-pages-pageid",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/blogs/{blogId}/pages/{pageId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.delete.v3-blogs-blogid-pages-pageid",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/blogs/{blogId}/pages/{pageId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-pages-pageid-publish",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/pages/{pageId}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-pages-pageid-revert",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/pages/{pageId}/revert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/pages/{pageId}/revert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-pageviews",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/pageviews",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/pageviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts-bypath",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts/bypath",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts/bypath",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts-search",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts/search",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts-postid",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts/{postId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.put.v3-blogs-blogid-posts-postid",
+      "kind": "rest_write",
+      "summary": "PUT /v3/blogs/{blogId}/posts/{postId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.patch.v3-blogs-blogid-posts-postid",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/blogs/{blogId}/posts/{postId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.delete.v3-blogs-blogid-posts-postid",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/blogs/{blogId}/posts/{postId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts-postid-comments",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts/{postId}/comments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-blogs-blogid-posts-postid-comments-commentid",
+      "kind": "rest_read",
+      "summary": "GET /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.delete.v3-blogs-blogid-posts-postid-comments-commentid",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-approve",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-removecontent",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/removecontent",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/removecontent",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts-postid-comments-commentid-spam",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/spam",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/comments/{commentId}/spam",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts-postid-publish",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts/{postId}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.post.v3-blogs-blogid-posts-postid-revert",
+      "kind": "rest_write",
+      "summary": "POST /v3/blogs/{blogId}/posts/{postId}/revert",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/blogs/{blogId}/posts/{postId}/revert",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-users-userid",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-users-userid-blogs",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{userId}/blogs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{userId}/blogs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-users-userid-blogs-blogid",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{userId}/blogs/{blogId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{userId}/blogs/{blogId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-users-userid-blogs-blogid-posts",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{userId}/blogs/{blogId}/posts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{userId}/blogs/{blogId}/posts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "blogger.get.v3-users-userid-blogs-blogid-posts-postid",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{userId}/blogs/{blogId}/posts/{postId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/blogger/v3/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{userId}/blogs/{blogId}/posts/{postId}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

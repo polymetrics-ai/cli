@@ -1,0 +1,3033 @@
+{
+  "tagline": "Run Shortcut's declared streams and reverse-ETL actions.",
+  "usage": "pm shortcut \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v3 categories",
+        "api get api v3 categories category-public-id",
+        "api get api v3 categories category-public-id milestones",
+        "api get api v3 categories category-public-id objectives",
+        "api get api v3 custom-fields",
+        "api get api v3 custom-fields custom-field-public-id",
+        "api get api v3 documents",
+        "api get api v3 documents doc-public-id",
+        "api get api v3 documents doc-public-id epics",
+        "api get api v3 entity-templates",
+        "api get api v3 entity-templates entity-template-public-id",
+        "api get api v3 epic-workflow",
+        "api get api v3 epics epic-public-id",
+        "api get api v3 epics epic-public-id comments",
+        "api get api v3 epics epic-public-id comments comment-public-id",
+        "api get api v3 epics epic-public-id documents",
+        "api get api v3 epics epic-public-id health",
+        "api get api v3 epics epic-public-id health-history",
+        "api get api v3 epics epic-public-id stories",
+        "api get api v3 epics paginated",
+        "api get api v3 external-link stories",
+        "api get api v3 files",
+        "api get api v3 files file-public-id",
+        "api get api v3 groups",
+        "api get api v3 groups group-public-id",
+        "api get api v3 groups group-public-id stories",
+        "api get api v3 integrations webhook integration-public-id",
+        "api get api v3 iterations iteration-public-id",
+        "api get api v3 iterations iteration-public-id stories",
+        "api get api v3 key-results key-result-public-id",
+        "api get api v3 labels",
+        "api get api v3 labels label-public-id",
+        "api get api v3 labels label-public-id epics",
+        "api get api v3 labels label-public-id stories",
+        "api get api v3 linked-files",
+        "api get api v3 linked-files linked-file-public-id",
+        "api get api v3 member",
+        "api get api v3 members",
+        "api get api v3 members member-public-id",
+        "api get api v3 milestones",
+        "api get api v3 milestones milestone-public-id",
+        "api get api v3 milestones milestone-public-id epics",
+        "api get api v3 objectives",
+        "api get api v3 objectives objective-public-id",
+        "api get api v3 objectives objective-public-id epics",
+        "api get api v3 objectives objective-public-id health",
+        "api get api v3 objectives objective-public-id health-history",
+        "api get api v3 projects project-public-id",
+        "api get api v3 projects project-public-id stories",
+        "api get api v3 repositories",
+        "api get api v3 repositories repo-public-id",
+        "api get api v3 search",
+        "api get api v3 search documents",
+        "api get api v3 search epics",
+        "api get api v3 search iterations",
+        "api get api v3 search milestones",
+        "api get api v3 search objectives",
+        "api get api v3 search stories",
+        "api get api v3 stories story-public-id",
+        "api get api v3 stories story-public-id comments",
+        "api get api v3 stories story-public-id comments comment-public-id",
+        "api get api v3 stories story-public-id history",
+        "api get api v3 stories story-public-id sub-tasks",
+        "api get api v3 stories story-public-id tasks task-public-id",
+        "api get api v3 story-links story-link-public-id",
+        "api get api v3 workflows",
+        "api get api v3 workflows workflow-public-id",
+        "epics list",
+        "iterations list",
+        "projects list",
+        "stories list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api v3 categories category-public-id",
+        "api delete api v3 custom-fields custom-field-public-id",
+        "api delete api v3 documents doc-public-id",
+        "api delete api v3 documents doc-public-id epics epic-public-id",
+        "api delete api v3 entity-templates entity-template-public-id",
+        "api delete api v3 epics epic-public-id",
+        "api delete api v3 epics epic-public-id comments comment-public-id",
+        "api delete api v3 files file-public-id",
+        "api delete api v3 integrations webhook integration-public-id",
+        "api delete api v3 iterations iteration-public-id",
+        "api delete api v3 labels label-public-id",
+        "api delete api v3 linked-files linked-file-public-id",
+        "api delete api v3 milestones milestone-public-id",
+        "api delete api v3 objectives objective-public-id",
+        "api delete api v3 projects project-public-id",
+        "api delete api v3 stories bulk",
+        "api delete api v3 stories story-public-id",
+        "api delete api v3 stories story-public-id comments comment-public-id",
+        "api delete api v3 stories story-public-id comments comment-public-id reactions",
+        "api delete api v3 stories story-public-id tasks task-public-id",
+        "api delete api v3 story-links story-link-public-id",
+        "api post api v3 categories",
+        "api post api v3 documents",
+        "api post api v3 entity-templates",
+        "api post api v3 epics",
+        "api post api v3 epics epic-public-id comments",
+        "api post api v3 epics epic-public-id comments comment-public-id",
+        "api post api v3 epics epic-public-id health",
+        "api post api v3 files",
+        "api post api v3 groups",
+        "api post api v3 integrations webhook",
+        "api post api v3 iterations",
+        "api post api v3 labels",
+        "api post api v3 linked-files",
+        "api post api v3 milestones",
+        "api post api v3 objectives",
+        "api post api v3 objectives objective-public-id health",
+        "api post api v3 projects",
+        "api post api v3 stories",
+        "api post api v3 stories bulk",
+        "api post api v3 stories from-template",
+        "api post api v3 stories search",
+        "api post api v3 stories story-public-id comments",
+        "api post api v3 stories story-public-id comments comment-public-id reactions",
+        "api post api v3 stories story-public-id comments comment-public-id unlink-from-slack",
+        "api post api v3 stories story-public-id tasks",
+        "api post api v3 story-links",
+        "api put api v3 categories category-public-id",
+        "api put api v3 custom-fields custom-field-public-id",
+        "api put api v3 documents doc-public-id",
+        "api put api v3 documents doc-public-id epics epic-public-id",
+        "api put api v3 entity-templates disable",
+        "api put api v3 entity-templates enable",
+        "api put api v3 entity-templates entity-template-public-id",
+        "api put api v3 epics epic-public-id",
+        "api put api v3 epics epic-public-id comments comment-public-id",
+        "api put api v3 files file-public-id",
+        "api put api v3 groups group-public-id",
+        "api put api v3 health health-public-id",
+        "api put api v3 iterations disable",
+        "api put api v3 iterations enable",
+        "api put api v3 iterations iteration-public-id",
+        "api put api v3 key-results key-result-public-id",
+        "api put api v3 labels label-public-id",
+        "api put api v3 linked-files linked-file-public-id",
+        "api put api v3 milestones milestone-public-id",
+        "api put api v3 objectives objective-public-id",
+        "api put api v3 projects project-public-id",
+        "api put api v3 stories bulk",
+        "api put api v3 stories story-public-id",
+        "api put api v3 stories story-public-id comments comment-public-id",
+        "api put api v3 stories story-public-id tasks task-public-id",
+        "api put api v3 story-links story-link-public-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api v3 categories category-public-id",
+      "summary": "Documented DELETE /api/v3/categories/{category-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 categories category-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/categories/{category-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-categories-category-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 custom-fields custom-field-public-id",
+      "summary": "Documented DELETE /api/v3/custom-fields/{custom-field-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 custom-fields custom-field-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/custom-fields/{custom-field-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-custom-fields-custom-field-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 documents doc-public-id",
+      "summary": "Documented DELETE /api/v3/documents/{doc-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 documents doc-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/documents/{doc-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-documents-doc-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 documents doc-public-id epics epic-public-id",
+      "summary": "Documented DELETE /api/v3/documents/{doc-public-id}/epics/{epic-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 documents doc-public-id epics epic-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-documents-doc-public-id-epics-epic-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 entity-templates entity-template-public-id",
+      "summary": "Documented DELETE /api/v3/entity-templates/{entity-template-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 entity-templates entity-template-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/entity-templates/{entity-template-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-entity-templates-entity-template-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 epics epic-public-id",
+      "summary": "Documented DELETE /api/v3/epics/{epic-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 epics epic-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/epics/{epic-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-epics-epic-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 epics epic-public-id comments comment-public-id",
+      "summary": "Documented DELETE /api/v3/epics/{epic-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 epics epic-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 files file-public-id",
+      "summary": "Documented DELETE /api/v3/files/{file-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 files file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/files/{file-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-files-file-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 integrations webhook integration-public-id",
+      "summary": "Documented DELETE /api/v3/integrations/webhook/{integration-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 integrations webhook integration-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/integrations/webhook/{integration-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-integrations-webhook-integration-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 iterations iteration-public-id",
+      "summary": "Documented DELETE /api/v3/iterations/{iteration-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 iterations iteration-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/iterations/{iteration-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-iterations-iteration-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 labels label-public-id",
+      "summary": "Documented DELETE /api/v3/labels/{label-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 labels label-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/labels/{label-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-labels-label-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 linked-files linked-file-public-id",
+      "summary": "Documented DELETE /api/v3/linked-files/{linked-file-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 linked-files linked-file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/linked-files/{linked-file-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-linked-files-linked-file-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 milestones milestone-public-id",
+      "summary": "Documented DELETE /api/v3/milestones/{milestone-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 milestones milestone-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/milestones/{milestone-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-milestones-milestone-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 objectives objective-public-id",
+      "summary": "Documented DELETE /api/v3/objectives/{objective-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 objectives objective-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/objectives/{objective-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-objectives-objective-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 projects project-public-id",
+      "summary": "Documented DELETE /api/v3/projects/{project-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 projects project-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/projects/{project-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-projects-project-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 stories bulk",
+      "summary": "Documented DELETE /api/v3/stories/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 stories bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/stories/bulk"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-stories-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 stories story-public-id",
+      "summary": "Documented DELETE /api/v3/stories/{story-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 stories story-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/stories/{story-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-stories-story-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 stories story-public-id comments comment-public-id",
+      "summary": "Documented DELETE /api/v3/stories/{story-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 stories story-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-stories-story-public-id-comments-comment-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 stories story-public-id comments comment-public-id reactions",
+      "summary": "Documented DELETE /api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 stories story-public-id comments comment-public-id reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-stories-story-public-id-comments-comment-public-id-reactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 stories story-public-id tasks task-public-id",
+      "summary": "Documented DELETE /api/v3/stories/{story-public-id}/tasks/{task-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 stories story-public-id tasks task-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-stories-story-public-id-tasks-task-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v3 story-links story-link-public-id",
+      "summary": "Documented DELETE /api/v3/story-links/{story-link-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api delete api v3 story-links story-link-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v3/story-links/{story-link-public-id}"
+        }
+      ],
+      "operation": "shortcut.delete.api-v3-story-links-story-link-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v3 categories",
+      "summary": "Documented GET /api/v3/categories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/categories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-categories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 categories category-public-id",
+      "summary": "Documented GET /api/v3/categories/{category-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 categories category-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/categories/{category-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-categories-category-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 categories category-public-id milestones",
+      "summary": "Documented GET /api/v3/categories/{category-public-id}/milestones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 categories category-public-id milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/categories/{category-public-id}/milestones"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-categories-category-public-id-milestones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 categories category-public-id objectives",
+      "summary": "Documented GET /api/v3/categories/{category-public-id}/objectives (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 categories category-public-id objectives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/categories/{category-public-id}/objectives"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-categories-category-public-id-objectives",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 custom-fields",
+      "summary": "Documented GET /api/v3/custom-fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/custom-fields"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-custom-fields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 custom-fields custom-field-public-id",
+      "summary": "Documented GET /api/v3/custom-fields/{custom-field-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 custom-fields custom-field-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/custom-fields/{custom-field-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-custom-fields-custom-field-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 documents",
+      "summary": "Documented GET /api/v3/documents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/documents"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-documents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 documents doc-public-id",
+      "summary": "Documented GET /api/v3/documents/{doc-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 documents doc-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/documents/{doc-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-documents-doc-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 documents doc-public-id epics",
+      "summary": "Documented GET /api/v3/documents/{doc-public-id}/epics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 documents doc-public-id epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/documents/{doc-public-id}/epics"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-documents-doc-public-id-epics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 entity-templates",
+      "summary": "Documented GET /api/v3/entity-templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 entity-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/entity-templates"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-entity-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 entity-templates entity-template-public-id",
+      "summary": "Documented GET /api/v3/entity-templates/{entity-template-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 entity-templates entity-template-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/entity-templates/{entity-template-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-entity-templates-entity-template-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epic-workflow",
+      "summary": "Documented GET /api/v3/epic-workflow (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epic-workflow --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epic-workflow"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epic-workflow",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id comments",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/comments"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id comments comment-public-id",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id documents",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/documents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/documents"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-documents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id health",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/health (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id health --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/health"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-health",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id health-history",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/health-history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id health-history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/health-history"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-health-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics epic-public-id stories",
+      "summary": "Documented GET /api/v3/epics/{epic-public-id}/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics epic-public-id stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/{epic-public-id}/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-epic-public-id-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 epics paginated",
+      "summary": "Documented GET /api/v3/epics/paginated (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 epics paginated --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics/paginated"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-epics-paginated",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 external-link stories",
+      "summary": "Documented GET /api/v3/external-link/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 external-link stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/external-link/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-external-link-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 files",
+      "summary": "Documented GET /api/v3/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/files"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 files file-public-id",
+      "summary": "Documented GET /api/v3/files/{file-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 files file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/files/{file-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-files-file-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 groups",
+      "summary": "Documented GET /api/v3/groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/groups"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 groups group-public-id",
+      "summary": "Documented GET /api/v3/groups/{group-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 groups group-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/groups/{group-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-groups-group-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 groups group-public-id stories",
+      "summary": "Documented GET /api/v3/groups/{group-public-id}/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 groups group-public-id stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/groups/{group-public-id}/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-groups-group-public-id-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 integrations webhook integration-public-id",
+      "summary": "Documented GET /api/v3/integrations/webhook/{integration-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 integrations webhook integration-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/integrations/webhook/{integration-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-integrations-webhook-integration-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 iterations iteration-public-id",
+      "summary": "Documented GET /api/v3/iterations/{iteration-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 iterations iteration-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/iterations/{iteration-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-iterations-iteration-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 iterations iteration-public-id stories",
+      "summary": "Documented GET /api/v3/iterations/{iteration-public-id}/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 iterations iteration-public-id stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/iterations/{iteration-public-id}/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-iterations-iteration-public-id-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 key-results key-result-public-id",
+      "summary": "Documented GET /api/v3/key-results/{key-result-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 key-results key-result-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/key-results/{key-result-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-key-results-key-result-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 labels",
+      "summary": "Documented GET /api/v3/labels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 labels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/labels"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-labels",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 labels label-public-id",
+      "summary": "Documented GET /api/v3/labels/{label-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 labels label-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/labels/{label-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-labels-label-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 labels label-public-id epics",
+      "summary": "Documented GET /api/v3/labels/{label-public-id}/epics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 labels label-public-id epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/labels/{label-public-id}/epics"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-labels-label-public-id-epics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 labels label-public-id stories",
+      "summary": "Documented GET /api/v3/labels/{label-public-id}/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 labels label-public-id stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/labels/{label-public-id}/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-labels-label-public-id-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 linked-files",
+      "summary": "Documented GET /api/v3/linked-files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 linked-files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/linked-files"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-linked-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 linked-files linked-file-public-id",
+      "summary": "Documented GET /api/v3/linked-files/{linked-file-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 linked-files linked-file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/linked-files/{linked-file-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-linked-files-linked-file-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 member",
+      "summary": "Documented GET /api/v3/member (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 member --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/member"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-member",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 members",
+      "summary": "Documented GET /api/v3/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/members"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-members",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 members member-public-id",
+      "summary": "Documented GET /api/v3/members/{member-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 members member-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/members/{member-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-members-member-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 milestones",
+      "summary": "Documented GET /api/v3/milestones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/milestones"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-milestones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 milestones milestone-public-id",
+      "summary": "Documented GET /api/v3/milestones/{milestone-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 milestones milestone-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/milestones/{milestone-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-milestones-milestone-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 milestones milestone-public-id epics",
+      "summary": "Documented GET /api/v3/milestones/{milestone-public-id}/epics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 milestones milestone-public-id epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/milestones/{milestone-public-id}/epics"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-milestones-milestone-public-id-epics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 objectives",
+      "summary": "Documented GET /api/v3/objectives (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 objectives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/objectives"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-objectives",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 objectives objective-public-id",
+      "summary": "Documented GET /api/v3/objectives/{objective-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 objectives objective-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/objectives/{objective-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-objectives-objective-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 objectives objective-public-id epics",
+      "summary": "Documented GET /api/v3/objectives/{objective-public-id}/epics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 objectives objective-public-id epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/objectives/{objective-public-id}/epics"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-objectives-objective-public-id-epics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 objectives objective-public-id health",
+      "summary": "Documented GET /api/v3/objectives/{objective-public-id}/health (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 objectives objective-public-id health --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/objectives/{objective-public-id}/health"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-objectives-objective-public-id-health",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 objectives objective-public-id health-history",
+      "summary": "Documented GET /api/v3/objectives/{objective-public-id}/health-history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 objectives objective-public-id health-history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/objectives/{objective-public-id}/health-history"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-objectives-objective-public-id-health-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 projects project-public-id",
+      "summary": "Documented GET /api/v3/projects/{project-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 projects project-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/projects/{project-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-projects-project-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 projects project-public-id stories",
+      "summary": "Documented GET /api/v3/projects/{project-public-id}/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 projects project-public-id stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/projects/{project-public-id}/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-projects-project-public-id-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 repositories",
+      "summary": "Documented GET /api/v3/repositories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 repositories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/repositories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-repositories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 repositories repo-public-id",
+      "summary": "Documented GET /api/v3/repositories/{repo-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 repositories repo-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/repositories/{repo-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-repositories-repo-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search",
+      "summary": "Documented GET /api/v3/search (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search documents",
+      "summary": "Documented GET /api/v3/search/documents (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/documents"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-documents",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search epics",
+      "summary": "Documented GET /api/v3/search/epics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/epics"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-epics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search iterations",
+      "summary": "Documented GET /api/v3/search/iterations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search iterations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/iterations"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-iterations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search milestones",
+      "summary": "Documented GET /api/v3/search/milestones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/milestones"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-milestones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search objectives",
+      "summary": "Documented GET /api/v3/search/objectives (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search objectives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/objectives"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-objectives",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 search stories",
+      "summary": "Documented GET /api/v3/search/stories (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 search stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/search/stories"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-search-stories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id",
+      "summary": "Documented GET /api/v3/stories/{story-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id comments",
+      "summary": "Documented GET /api/v3/stories/{story-public-id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}/comments"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id comments comment-public-id",
+      "summary": "Documented GET /api/v3/stories/{story-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id-comments-comment-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id history",
+      "summary": "Documented GET /api/v3/stories/{story-public-id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}/history"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id sub-tasks",
+      "summary": "Documented GET /api/v3/stories/{story-public-id}/sub-tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id sub-tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}/sub-tasks"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id-sub-tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 stories story-public-id tasks task-public-id",
+      "summary": "Documented GET /api/v3/stories/{story-public-id}/tasks/{task-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 stories story-public-id tasks task-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-stories-story-public-id-tasks-task-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 story-links story-link-public-id",
+      "summary": "Documented GET /api/v3/story-links/{story-link-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 story-links story-link-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/story-links/{story-link-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-story-links-story-link-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 workflows",
+      "summary": "Documented GET /api/v3/workflows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/workflows"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-workflows",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v3 workflows workflow-public-id",
+      "summary": "Documented GET /api/v3/workflows/{workflow-public-id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api get api v3 workflows workflow-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/workflows/{workflow-public-id}"
+        }
+      ],
+      "operation": "shortcut.get.api-v3-workflows-workflow-public-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api v3 categories",
+      "summary": "Documented POST /api/v3/categories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 categories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/categories"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-categories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 documents",
+      "summary": "Documented POST /api/v3/documents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 documents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/documents"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-documents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 entity-templates",
+      "summary": "Documented POST /api/v3/entity-templates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 entity-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/entity-templates"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-entity-templates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 epics",
+      "summary": "Documented POST /api/v3/epics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 epics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/epics"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-epics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 epics epic-public-id comments",
+      "summary": "Documented POST /api/v3/epics/{epic-public-id}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 epics epic-public-id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/epics/{epic-public-id}/comments"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-epics-epic-public-id-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 epics epic-public-id comments comment-public-id",
+      "summary": "Documented POST /api/v3/epics/{epic-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 epics epic-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 epics epic-public-id health",
+      "summary": "Documented POST /api/v3/epics/{epic-public-id}/health (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 epics epic-public-id health --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/epics/{epic-public-id}/health"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-epics-epic-public-id-health",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 files",
+      "summary": "Documented POST /api/v3/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/files"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 groups",
+      "summary": "Documented POST /api/v3/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/groups"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 integrations webhook",
+      "summary": "Documented POST /api/v3/integrations/webhook (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 integrations webhook --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/integrations/webhook"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-integrations-webhook",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 iterations",
+      "summary": "Documented POST /api/v3/iterations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 iterations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/iterations"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-iterations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 labels",
+      "summary": "Documented POST /api/v3/labels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 labels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/labels"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-labels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 linked-files",
+      "summary": "Documented POST /api/v3/linked-files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 linked-files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/linked-files"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-linked-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 milestones",
+      "summary": "Documented POST /api/v3/milestones (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/milestones"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-milestones",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 objectives",
+      "summary": "Documented POST /api/v3/objectives (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 objectives --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/objectives"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-objectives",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 objectives objective-public-id health",
+      "summary": "Documented POST /api/v3/objectives/{objective-public-id}/health (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 objectives objective-public-id health --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/objectives/{objective-public-id}/health"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-objectives-objective-public-id-health",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 projects",
+      "summary": "Documented POST /api/v3/projects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/projects"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories",
+      "summary": "Documented POST /api/v3/stories (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories bulk",
+      "summary": "Documented POST /api/v3/stories/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/bulk"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories from-template",
+      "summary": "Documented POST /api/v3/stories/from-template (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories from-template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/from-template"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-from-template",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories search",
+      "summary": "Documented POST /api/v3/stories/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/search"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories story-public-id comments",
+      "summary": "Documented POST /api/v3/stories/{story-public-id}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories story-public-id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/{story-public-id}/comments"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-story-public-id-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories story-public-id comments comment-public-id reactions",
+      "summary": "Documented POST /api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories story-public-id comments comment-public-id reactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/reactions"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-story-public-id-comments-comment-public-id-reactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories story-public-id comments comment-public-id unlink-from-slack",
+      "summary": "Documented POST /api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories story-public-id comments comment-public-id unlink-from-slack --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}/unlink-from-slack"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-story-public-id-comments-comment-public-id-unlink-from-slack",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 stories story-public-id tasks",
+      "summary": "Documented POST /api/v3/stories/{story-public-id}/tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 stories story-public-id tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/stories/{story-public-id}/tasks"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-stories-story-public-id-tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v3 story-links",
+      "summary": "Documented POST /api/v3/story-links (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api post api v3 story-links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v3/story-links"
+        }
+      ],
+      "operation": "shortcut.post.api-v3-story-links",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 categories category-public-id",
+      "summary": "Documented PUT /api/v3/categories/{category-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 categories category-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/categories/{category-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-categories-category-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 custom-fields custom-field-public-id",
+      "summary": "Documented PUT /api/v3/custom-fields/{custom-field-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 custom-fields custom-field-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/custom-fields/{custom-field-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-custom-fields-custom-field-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 documents doc-public-id",
+      "summary": "Documented PUT /api/v3/documents/{doc-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 documents doc-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/documents/{doc-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-documents-doc-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 documents doc-public-id epics epic-public-id",
+      "summary": "Documented PUT /api/v3/documents/{doc-public-id}/epics/{epic-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 documents doc-public-id epics epic-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/documents/{doc-public-id}/epics/{epic-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-documents-doc-public-id-epics-epic-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 entity-templates disable",
+      "summary": "Documented PUT /api/v3/entity-templates/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 entity-templates disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/entity-templates/disable"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-entity-templates-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 entity-templates enable",
+      "summary": "Documented PUT /api/v3/entity-templates/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 entity-templates enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/entity-templates/enable"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-entity-templates-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 entity-templates entity-template-public-id",
+      "summary": "Documented PUT /api/v3/entity-templates/{entity-template-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 entity-templates entity-template-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/entity-templates/{entity-template-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-entity-templates-entity-template-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 epics epic-public-id",
+      "summary": "Documented PUT /api/v3/epics/{epic-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 epics epic-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/epics/{epic-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-epics-epic-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 epics epic-public-id comments comment-public-id",
+      "summary": "Documented PUT /api/v3/epics/{epic-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 epics epic-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/epics/{epic-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-epics-epic-public-id-comments-comment-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 files file-public-id",
+      "summary": "Documented PUT /api/v3/files/{file-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 files file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/files/{file-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-files-file-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 groups group-public-id",
+      "summary": "Documented PUT /api/v3/groups/{group-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 groups group-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/groups/{group-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-groups-group-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 health health-public-id",
+      "summary": "Documented PUT /api/v3/health/{health-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 health health-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/health/{health-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-health-health-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 iterations disable",
+      "summary": "Documented PUT /api/v3/iterations/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 iterations disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/iterations/disable"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-iterations-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 iterations enable",
+      "summary": "Documented PUT /api/v3/iterations/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 iterations enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/iterations/enable"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-iterations-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 iterations iteration-public-id",
+      "summary": "Documented PUT /api/v3/iterations/{iteration-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 iterations iteration-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/iterations/{iteration-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-iterations-iteration-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 key-results key-result-public-id",
+      "summary": "Documented PUT /api/v3/key-results/{key-result-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 key-results key-result-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/key-results/{key-result-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-key-results-key-result-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 labels label-public-id",
+      "summary": "Documented PUT /api/v3/labels/{label-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 labels label-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/labels/{label-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-labels-label-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 linked-files linked-file-public-id",
+      "summary": "Documented PUT /api/v3/linked-files/{linked-file-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 linked-files linked-file-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/linked-files/{linked-file-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-linked-files-linked-file-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 milestones milestone-public-id",
+      "summary": "Documented PUT /api/v3/milestones/{milestone-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 milestones milestone-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/milestones/{milestone-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-milestones-milestone-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 objectives objective-public-id",
+      "summary": "Documented PUT /api/v3/objectives/{objective-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 objectives objective-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/objectives/{objective-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-objectives-objective-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 projects project-public-id",
+      "summary": "Documented PUT /api/v3/projects/{project-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 projects project-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/projects/{project-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-projects-project-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 stories bulk",
+      "summary": "Documented PUT /api/v3/stories/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 stories bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/stories/bulk"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-stories-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 stories story-public-id",
+      "summary": "Documented PUT /api/v3/stories/{story-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 stories story-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/stories/{story-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-stories-story-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 stories story-public-id comments comment-public-id",
+      "summary": "Documented PUT /api/v3/stories/{story-public-id}/comments/{comment-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 stories story-public-id comments comment-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/stories/{story-public-id}/comments/{comment-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-stories-story-public-id-comments-comment-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 stories story-public-id tasks task-public-id",
+      "summary": "Documented PUT /api/v3/stories/{story-public-id}/tasks/{task-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 stories story-public-id tasks task-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/stories/{story-public-id}/tasks/{task-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-stories-story-public-id-tasks-task-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v3 story-links story-link-public-id",
+      "summary": "Documented PUT /api/v3/story-links/{story-link-public-id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut api put api v3 story-links story-link-public-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v3/story-links/{story-link-public-id}"
+        }
+      ],
+      "operation": "shortcut.put.api-v3-story-links-story-link-public-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "epics list",
+      "summary": "Run the epics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "epics",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut epics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/epics"
+        }
+      ]
+    },
+    {
+      "path": "iterations list",
+      "summary": "Run the iterations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "iterations",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut iterations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/iterations"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/projects"
+        }
+      ]
+    },
+    {
+      "path": "stories list",
+      "summary": "Run the stories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stories",
+      "source_url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+      "examples": [
+        "pm shortcut stories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v3/stories"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "batch": "batch-013",
+  "source": "official Google Discovery retrieval",
+  "retrievals": [
+    {
+      "connector": "blogger",
+      "status": "fetched",
+      "evidence": "   72771"
+    },
+    {
+      "connector": "google-ads",
+      "status": "fetched",
+      "evidence": " 2936865"
+    },
+    {
+      "connector": "google-calendar",
+      "status": "fetched",
+      "evidence": "  169810"
+    },
+    {
+      "connector": "google-classroom",
+      "status": "fetched",
+      "evidence": "  350554"
+    },
+    {
+      "connector": "google-directory",
+      "status": "fetched",
+      "evidence": "  386140"
+    },
+    {
+      "connector": "google-forms",
+      "status": "fetched",
+      "evidence": "   69010"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "status": "fetched",
+      "evidence": "   37953"
+    },
+    {
+      "connector": "google-search-console",
+      "status": "fetched",
+      "evidence": "   57160"
+    },
+    {
+      "connector": "google-tasks",
+      "status": "fetched",
+      "evidence": "   31887"
+    },
+    {
+      "connector": "google-webfonts",
+      "status": "fetched",
+      "evidence": "    9454"
+    }
+  ]
+}

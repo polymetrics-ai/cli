@@ -1,66 +1,161 @@
 {
-  "api": "Marketstack API v1 (https://api.marketstack.com/v1)",
+  "api": "Marketstack API v1 (https://api.marketstack.com/v1); provider artifact version: Marketstack API v1",
   "docs": "https://marketstack.com/documentation",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; Marketstack's intraday/tickerinfo/currencies/timezones standalone endpoints are out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 8 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: wave2 fan-out migration: the 5 legacy-parity read streams only; Marketstack's intraday/tickerinfo/currencies/timezones standalone endpoints are out of scope until Pass B",
+  "artifacts": [
+    {
+      "id": "marketstack-artifact-2026-08-09",
+      "url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "kind": "html_reference",
+      "version": "Marketstack API v1",
+      "retrieved_at": "2026-08-09",
+      "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v1/exchanges",
-      "covered_by": {
-        "stream": "exchanges"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/tickers",
-      "covered_by": {
-        "stream": "tickers"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/eod",
-      "covered_by": {
-        "stream": "eod"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/splits",
-      "covered_by": {
-        "stream": "splits"
+      "path": "/v1/currencies",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/currencies]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v1/currencies is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/dividends",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/dividends]"
+      },
       "covered_by": {
         "stream": "dividends"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/intraday",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/intraday is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v1/eod",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/eod]"
+      },
+      "covered_by": {
+        "stream": "eod"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/currencies",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/currencies is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/v1/exchanges",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/exchanges]"
+      },
+      "covered_by": {
+        "stream": "exchanges"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/intraday",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/intraday]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v1/intraday is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/splits",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/splits]"
+      },
+      "covered_by": {
+        "stream": "splits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tickers",
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/tickers]"
+      },
+      "covered_by": {
+        "stream": "tickers"
       }
     },
     {
       "method": "GET",
       "path": "/v1/timezones",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/timezones is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "marketstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "source_kind": "html_reference",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3",
+        "coordinate": "existing-complete-surface[GET /v1/timezones]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v1/timezones is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

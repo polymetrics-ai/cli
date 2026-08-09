@@ -1,0 +1,429 @@
+{
+  "operations": [
+    {
+      "id": "postmarkapp.post.data-removals",
+      "kind": "rest_write",
+      "summary": "POST /data-removals",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data-removals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.data-removals-id",
+      "kind": "rest_read",
+      "summary": "GET /data-removals/{id}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data-removals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.domains",
+      "kind": "rest_read",
+      "summary": "GET /domains",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.domains",
+      "kind": "rest_write",
+      "summary": "POST /domains",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.domains-domainid",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domainid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domainid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.domains-domainid",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domainid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domainid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.delete.domains-domainid",
+      "kind": "rest_write",
+      "summary": "DELETE /domains/{domainid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/domains/{domainid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.domains-domainid-rotatedkim",
+      "kind": "rest_write",
+      "summary": "POST /domains/{domainid}/rotatedkim",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/domains/{domainid}/rotatedkim",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.domains-domainid-verifydkim",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domainid}/verifyDkim",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domainid}/verifyDkim",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.domains-domainid-verifyreturnpath",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domainid}/verifyReturnPath",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domainid}/verifyReturnPath",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.domains-domainid-verifyspf",
+      "kind": "rest_write",
+      "summary": "POST /domains/{domainid}/verifyspf",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/domains/{domainid}/verifyspf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.email-batch",
+      "kind": "rest_write",
+      "summary": "POST /email/batch",
+      "description": "batch send requires a root JSON array body, which writes.json cannot construct from record maps",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.email-batchwithtemplates",
+      "kind": "rest_write",
+      "summary": "POST /email/batchWithTemplates",
+      "description": "batch template send requires a root JSON array body, which writes.json cannot construct from record maps",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email/batchWithTemplates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.senders",
+      "kind": "rest_read",
+      "summary": "GET /senders",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/senders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.senders",
+      "kind": "rest_write",
+      "summary": "POST /senders",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/senders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.senders-signatureid",
+      "kind": "rest_read",
+      "summary": "GET /senders/{signatureid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/senders/{signatureid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.senders-signatureid",
+      "kind": "rest_write",
+      "summary": "PUT /senders/{signatureid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/senders/{signatureid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.delete.senders-signatureid",
+      "kind": "rest_write",
+      "summary": "DELETE /senders/{signatureid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/senders/{signatureid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.senders-signatureid-requestnewdkim",
+      "kind": "rest_write",
+      "summary": "POST /senders/{signatureid}/requestnewdkim",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/senders/{signatureid}/requestnewdkim",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.senders-signatureid-resend",
+      "kind": "rest_write",
+      "summary": "POST /senders/{signatureid}/resend",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/senders/{signatureid}/resend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.senders-signatureid-verifyspf",
+      "kind": "rest_write",
+      "summary": "POST /senders/{signatureid}/verifyspf",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/senders/{signatureid}/verifyspf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.servers",
+      "kind": "rest_read",
+      "summary": "GET /servers",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/servers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.post.servers",
+      "kind": "rest_write",
+      "summary": "POST /servers",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/servers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.get.servers-serverid",
+      "kind": "rest_read",
+      "summary": "GET /servers/{serverid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/servers/{serverid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.servers-serverid",
+      "kind": "rest_write",
+      "summary": "PUT /servers/{serverid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/servers/{serverid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.delete.servers-serverid",
+      "kind": "rest_write",
+      "summary": "DELETE /servers/{serverid}",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/servers/{serverid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "postmarkapp.put.templates-push",
+      "kind": "rest_write",
+      "summary": "PUT /templates/push",
+      "description": "requires X-Postmark-Account-Token account-level auth, but this bundle uses the server-token authenticator and the engine has no per-stream/per-action auth override",
+      "source_url": "https://postmarkapp.com/developer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/templates/push",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

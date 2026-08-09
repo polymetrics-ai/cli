@@ -1,0 +1,749 @@
+{
+  "operations": [
+    {
+      "id": "smartsheets.delete.favorites-favoritetype",
+      "kind": "rest_write",
+      "summary": "DELETE /favorites/{favoriteType}",
+      "description": "bulk favorite delete requires an objectIds query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/favorites/{favoriteType}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.filteredevents",
+      "kind": "rest_write",
+      "summary": "POST /filteredEvents",
+      "description": "POST filtered events is an alternate filtered query shape for the GET /events event stream; GET /events is covered by the events stream",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/filteredEvents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.folders-folderid",
+      "kind": "rest_write",
+      "summary": "DELETE /folders/{folderId}",
+      "description": "deletes an entire folder and its contained Smartsheet assets; not exposed as an autonomous reverse-ETL action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/folders/{folderId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.folders-folderid-sheets-import",
+      "kind": "rest_write",
+      "summary": "POST /folders/{folderId}/sheets/import",
+      "description": "imports a sheet from binary content and a required sheetName query parameter",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/folders/{folderId}/sheets/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.groups-groupid",
+      "kind": "rest_write",
+      "summary": "DELETE /groups/{groupId}",
+      "description": "deletes an organization group and requires administrative scope; group member removal remains covered",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/groups/{groupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.imageurls",
+      "kind": "rest_write",
+      "summary": "POST /imageurls",
+      "description": "utility endpoint that resolves image URLs for later binary cell-image operations, not a persistent data mutation",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/imageurls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.reports-reportid",
+      "kind": "rest_write",
+      "summary": "DELETE /reports/{reportId}",
+      "description": "deletes an entire report; not exposed as an autonomous reverse-ETL action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/reports/{reportId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.reports-reportid-columns",
+      "kind": "rest_read",
+      "summary": "GET /reports/{reportId}/columns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{reportId}/columns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.reports-reportid-columns-columnvirtualid",
+      "kind": "rest_read",
+      "summary": "GET /reports/{reportId}/columns/{columnVirtualId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{reportId}/columns/{columnVirtualId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.put.reports-reportid-columns-columnvirtualid",
+      "kind": "rest_write",
+      "summary": "PUT /reports/{reportId}/columns/{columnVirtualId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/reports/{reportId}/columns/{columnVirtualId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.reports-reportid-columns-columnvirtualid",
+      "kind": "rest_write",
+      "summary": "DELETE /reports/{reportId}/columns/{columnVirtualId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/reports/{reportId}/columns/{columnVirtualId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.reports-reportid-definition",
+      "kind": "rest_read",
+      "summary": "GET /reports/{reportId}/definition",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{reportId}/definition",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.reports-reportid-emails",
+      "kind": "rest_write",
+      "summary": "POST /reports/{reportId}/emails",
+      "description": "sends a report email notification rather than mutating a durable record",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/reports/{reportId}/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.reports-reportid-scope",
+      "kind": "rest_read",
+      "summary": "GET /reports/{reportId}/scope",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/{reportId}/scope",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.search",
+      "kind": "rest_read",
+      "summary": "GET /search",
+      "description": "requires a caller-supplied free-text query parameter, so it is an ad hoc search endpoint rather than a fixed syncable list/detail stream",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.search-sheets-sheetid",
+      "kind": "rest_read",
+      "summary": "GET /search/sheets/{sheetId}",
+      "description": "requires a caller-supplied free-text query parameter, so it is an ad hoc sheet search rather than a fixed syncable list/detail stream",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search/sheets/{sheetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.get.serverinfo",
+      "kind": "rest_read",
+      "summary": "GET /serverinfo",
+      "description": "returns API/application constants, not account data to sync",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/serverinfo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.shares",
+      "kind": "rest_write",
+      "summary": "POST /shares",
+      "description": "requires assetType and assetId query parameters; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.patch.shares-shareid",
+      "kind": "rest_write",
+      "summary": "PATCH /shares/{shareId}",
+      "description": "requires assetType and assetId query parameters; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/shares/{shareId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.shares-shareid",
+      "kind": "rest_write",
+      "summary": "DELETE /shares/{shareId}",
+      "description": "requires assetType and assetId query parameters; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/shares/{shareId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-import",
+      "kind": "rest_write",
+      "summary": "POST /sheets/import",
+      "description": "imports CSV/XLSX from an application/octet-stream body plus sheetName query parameter; writes.json supports JSON/form/none only",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.sheets-sheetid",
+      "kind": "rest_write",
+      "summary": "DELETE /sheets/{sheetId}",
+      "description": "deletes an entire sheet; row/column/comment scoped writes remain covered",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sheets/{sheetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-attachments-attachmentid-versions",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/attachments/{attachmentId}/versions",
+      "description": "attachment version upload requires octet-stream or multipart file content",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/attachments/{attachmentId}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-emails",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/emails",
+      "description": "sends a sheet email notification rather than mutating a durable record",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-proofs-proofid-attachments",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/proofs/{proofId}/attachments",
+      "description": "proof attachment upload requires binary file content",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/proofs/{proofId}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.sheets-sheetid-rows",
+      "kind": "rest_write",
+      "summary": "DELETE /sheets/{sheetId}/rows",
+      "description": "row delete requires an ids query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sheets/{sheetId}/rows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-rows-emails",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/rows/emails",
+      "description": "sends row email notifications rather than mutating durable row records",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/rows/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-rows-rowid-columns-columnid-cellimages",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/rows/{rowId}/columns/{columnId}/cellimages",
+      "description": "cell image upload requires an application/octet-stream image body",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/rows/{rowId}/columns/{columnId}/cellimages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-rows-rowid-proofs",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/rows/{rowId}/proofs",
+      "description": "proof creation from row requires binary file content",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/rows/{rowId}/proofs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.sheets-sheetid-summary-fields",
+      "kind": "rest_write",
+      "summary": "DELETE /sheets/{sheetId}/summary/fields",
+      "description": "summary field delete requires an ids query parameter; writes.json has no query parameter field",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sheets/{sheetId}/summary/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.sheets-sheetid-summary-fields-fieldid-images",
+      "kind": "rest_write",
+      "summary": "POST /sheets/{sheetId}/summary/fields/{fieldId}/images",
+      "description": "summary field image upload requires an application/octet-stream image body",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sheets/{sheetId}/summary/fields/{fieldId}/images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.put.sheets-sheetid-updaterequests-updaterequestid",
+      "kind": "rest_write",
+      "summary": "PUT /sheets/{sheetId}/updaterequests/{updateRequestId}",
+      "description": "the OpenAPI operation declares no JSON request body shape; exposing a bodyless update would not be useful or documented enough for reverse ETL",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sheets/{sheetId}/updaterequests/{updateRequestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.sights-sightid",
+      "kind": "rest_write",
+      "summary": "DELETE /sights/{sightId}",
+      "description": "deletes an entire dashboard; not exposed as an autonomous reverse-ETL action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sights/{sightId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.token",
+      "kind": "rest_write",
+      "summary": "POST /token",
+      "description": "OAuth token issuance/refresh endpoint; this connector uses a pre-provisioned bearer token secret instead",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.token",
+      "kind": "rest_write",
+      "summary": "DELETE /token",
+      "description": "OAuth token revocation endpoint; credential lifecycle is handled outside connector writes",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "adds an organization user and requires administrative account scope; excluded from reverse-ETL business-object writes",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.put.users-userid",
+      "kind": "rest_write",
+      "summary": "PUT /users/{userId}",
+      "description": "updates organization user profile/role fields and requires administrative scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.users-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{userId}",
+      "description": "removes a user from the organization and requires administrative scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users-userid-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/deactivate",
+      "description": "deactivates an organization user account; administrative lifecycle action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.users-userid-plans-planid",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{userId}/plans/{planId}",
+      "description": "removes a user from a plan and requires administrative scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{userId}/plans/{planId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users-userid-plans-planid-downgrade",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/plans/{planId}/downgrade",
+      "description": "changes user plan membership and requires administrative scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/plans/{planId}/downgrade",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users-userid-plans-planid-upgrade",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/plans/{planId}/upgrade",
+      "description": "changes user plan membership and requires administrative scope",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/plans/{planId}/upgrade",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users-userid-profileimage",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/profileimage",
+      "description": "profile image upload requires binary or multipart image content",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/profileimage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.users-userid-reactivate",
+      "kind": "rest_write",
+      "summary": "POST /users/{userId}/reactivate",
+      "description": "reactivates an organization user account; administrative lifecycle action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{userId}/reactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.webhooks-webhookid-resetsharedsecret",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/{webhookId}/resetSharedSecret",
+      "description": "rotates a webhook shared secret; credential-like lifecycle action outside reverse-ETL data writes",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/{webhookId}/resetSharedSecret",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.delete.workspaces-workspaceid",
+      "kind": "rest_write",
+      "summary": "DELETE /workspaces/{workspaceId}",
+      "description": "deletes an entire workspace; not exposed as an autonomous reverse-ETL action",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/workspaces/{workspaceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "smartsheets.post.workspaces-workspaceid-sheets-import",
+      "kind": "rest_write",
+      "summary": "POST /workspaces/{workspaceId}/sheets/import",
+      "description": "imports a sheet into a workspace from binary content and a required sheetName query parameter",
+      "source_url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspaceId}/sheets/import",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

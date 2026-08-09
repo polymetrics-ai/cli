@@ -1,0 +1,1386 @@
+{
+  "tagline": "Run Circa's declared streams and reverse-ETL actions.",
+  "usage": "pm circa \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v1 companies",
+        "api get api v1 companies company-id",
+        "api get api v1 companies company-id contacts",
+        "api get api v1 contacts",
+        "api get api v1 contacts contact-id",
+        "api get api v1 events",
+        "api get api v1 events event-id",
+        "api get api v1 events event-id contacts",
+        "api get api v1 events event-id contacts contact-id",
+        "api get api v1 events event-id contacts exports export-id",
+        "api get api v1 events event-id expenses",
+        "api get api v1 events event-id staff",
+        "api get api v1 fields",
+        "api get api v1 fields field-id",
+        "api get api v1 teams",
+        "api get api v1 teams team-id",
+        "api get companies company-id",
+        "api get contacts contact-id",
+        "api get events event-id",
+        "api get events event-id contacts contact-id",
+        "api get events event-id contacts exports export-id",
+        "api get fields field-id",
+        "api get teams team-id",
+        "companies list",
+        "company contacts list",
+        "contacts list",
+        "event contacts list",
+        "event expenses list",
+        "event staff list",
+        "events list",
+        "fields list",
+        "teams list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add event contact apply",
+        "api delete api v1 companies company-id",
+        "api delete api v1 contacts contact-id",
+        "api delete api v1 events event-id",
+        "api delete api v1 events event-id contacts contact-id",
+        "api delete api v1 events event-id contacts exports export-id",
+        "api delete events event-id contacts exports export-id",
+        "api patch api v1 companies company-id",
+        "api patch api v1 contacts contact-id",
+        "api patch api v1 events event-id",
+        "api patch api v1 events event-id contacts contact-id",
+        "api post api v1 companies",
+        "api post api v1 contacts",
+        "api post api v1 events",
+        "api post api v1 events event-id contacts",
+        "api post api v1 events event-id contacts exports",
+        "api post events event-id contacts exports",
+        "create company apply",
+        "create contact apply",
+        "create event apply",
+        "delete company apply",
+        "delete contact apply",
+        "delete event apply",
+        "remove event contact apply",
+        "update company apply",
+        "update contact apply",
+        "update event apply",
+        "update event contact apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add event contact apply",
+      "summary": "Plan and execute the add event contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_event_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa add event contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/contacts"
+        }
+      ],
+      "risk": "external mutation; registers an existing contact onto an event",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete api v1 companies company-id",
+      "summary": "Documented DELETE /api/v1/companies/{company_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete api v1 companies company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/companies/{company_id}"
+        }
+      ],
+      "operation": "circa.delete.api-v1-companies-company-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 contacts contact-id",
+      "summary": "Documented DELETE /api/v1/contacts/{contact_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete api v1 contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.delete.api-v1-contacts-contact-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 events event-id",
+      "summary": "Documented DELETE /api/v1/events/{event_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete api v1 events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/events/{event_id}"
+        }
+      ],
+      "operation": "circa.delete.api-v1-events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 events event-id contacts contact-id",
+      "summary": "Documented DELETE /api/v1/events/{event_id}/contacts/{contact_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete api v1 events event-id contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.delete.api-v1-events-event-id-contacts-contact-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 events event-id contacts exports export-id",
+      "summary": "Documented DELETE /api/v1/events/{event_id}/contacts/exports/{export_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete api v1 events event-id contacts exports export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/events/{event_id}/contacts/exports/{export_id}"
+        }
+      ],
+      "operation": "circa.delete.api-v1-events-event-id-contacts-exports-export-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete events event-id contacts exports export-id",
+      "summary": "Documented DELETE /events/{event_id}/contacts/exports/{export_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api delete events event-id contacts exports export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}/contacts/exports/{export_id}"
+        }
+      ],
+      "operation": "circa.delete.events-event-id-contacts-exports-export-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v1 companies",
+      "summary": "Documented GET /api/v1/companies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/companies"
+        }
+      ],
+      "operation": "circa.get.api-v1-companies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 companies company-id",
+      "summary": "Documented GET /api/v1/companies/{company_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 companies company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/companies/{company_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-companies-company-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 companies company-id contacts",
+      "summary": "Documented GET /api/v1/companies/{company_id}/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 companies company-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/companies/{company_id}/contacts"
+        }
+      ],
+      "operation": "circa.get.api-v1-companies-company-id-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 contacts",
+      "summary": "Documented GET /api/v1/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/contacts"
+        }
+      ],
+      "operation": "circa.get.api-v1-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 contacts contact-id",
+      "summary": "Documented GET /api/v1/contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-contacts-contact-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events",
+      "summary": "Documented GET /api/v1/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events"
+        }
+      ],
+      "operation": "circa.get.api-v1-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id",
+      "summary": "Documented GET /api/v1/events/{event_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id contacts",
+      "summary": "Documented GET /api/v1/events/{event_id}/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}/contacts"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id contacts contact-id",
+      "summary": "Documented GET /api/v1/events/{event_id}/contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id-contacts-contact-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id contacts exports export-id",
+      "summary": "Documented GET /api/v1/events/{event_id}/contacts/exports/{export_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id contacts exports export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}/contacts/exports/{export_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id-contacts-exports-export-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id expenses",
+      "summary": "Documented GET /api/v1/events/{event_id}/expenses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id expenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}/expenses"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id-expenses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 events event-id staff",
+      "summary": "Documented GET /api/v1/events/{event_id}/staff (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 events event-id staff --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/events/{event_id}/staff"
+        }
+      ],
+      "operation": "circa.get.api-v1-events-event-id-staff",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 fields",
+      "summary": "Documented GET /api/v1/fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/fields"
+        }
+      ],
+      "operation": "circa.get.api-v1-fields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 fields field-id",
+      "summary": "Documented GET /api/v1/fields/{field_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 fields field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/fields/{field_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-fields-field-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 teams",
+      "summary": "Documented GET /api/v1/teams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 teams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/teams"
+        }
+      ],
+      "operation": "circa.get.api-v1-teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 teams team-id",
+      "summary": "Documented GET /api/v1/teams/{team_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get api v1 teams team-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/teams/{team_id}"
+        }
+      ],
+      "operation": "circa.get.api-v1-teams-team-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get companies company-id",
+      "summary": "Documented GET /companies/{company_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get companies company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "operation": "circa.get.companies-company-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts contact-id",
+      "summary": "Documented GET /contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.get.contacts-contact-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id",
+      "summary": "Documented GET /events/{event_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}"
+        }
+      ],
+      "operation": "circa.get.events-event-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id contacts contact-id",
+      "summary": "Documented GET /events/{event_id}/contacts/{contact_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get events event-id contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.get.events-event-id-contacts-contact-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id contacts exports export-id",
+      "summary": "Documented GET /events/{event_id}/contacts/exports/{export_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get events event-id contacts exports export-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/contacts/exports/{export_id}"
+        }
+      ],
+      "operation": "circa.get.events-event-id-contacts-exports-export-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get fields field-id",
+      "summary": "Documented GET /fields/{field_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get fields field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields/{field_id}"
+        }
+      ],
+      "operation": "circa.get.fields-field-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams team-id",
+      "summary": "Documented GET /teams/{team_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api get teams team-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_id}"
+        }
+      ],
+      "operation": "circa.get.teams-team-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api v1 companies company-id",
+      "summary": "Documented PATCH /api/v1/companies/{company_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api patch api v1 companies company-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/companies/{company_id}"
+        }
+      ],
+      "operation": "circa.patch.api-v1-companies-company-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api v1 contacts contact-id",
+      "summary": "Documented PATCH /api/v1/contacts/{contact_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api patch api v1 contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.patch.api-v1-contacts-contact-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api v1 events event-id",
+      "summary": "Documented PATCH /api/v1/events/{event_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api patch api v1 events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/events/{event_id}"
+        }
+      ],
+      "operation": "circa.patch.api-v1-events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api v1 events event-id contacts contact-id",
+      "summary": "Documented PATCH /api/v1/events/{event_id}/contacts/{contact_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api patch api v1 events event-id contacts contact-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "operation": "circa.patch.api-v1-events-event-id-contacts-contact-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 companies",
+      "summary": "Documented POST /api/v1/companies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post api v1 companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/companies"
+        }
+      ],
+      "operation": "circa.post.api-v1-companies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 contacts",
+      "summary": "Documented POST /api/v1/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post api v1 contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/contacts"
+        }
+      ],
+      "operation": "circa.post.api-v1-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 events",
+      "summary": "Documented POST /api/v1/events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post api v1 events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/events"
+        }
+      ],
+      "operation": "circa.post.api-v1-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 events event-id contacts",
+      "summary": "Documented POST /api/v1/events/{event_id}/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post api v1 events event-id contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/events/{event_id}/contacts"
+        }
+      ],
+      "operation": "circa.post.api-v1-events-event-id-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 events event-id contacts exports",
+      "summary": "Documented POST /api/v1/events/{event_id}/contacts/exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post api v1 events event-id contacts exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/events/{event_id}/contacts/exports"
+        }
+      ],
+      "operation": "circa.post.api-v1-events-event-id-contacts-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id contacts exports",
+      "summary": "Documented POST /events/{event_id}/contacts/exports (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa api post events event-id contacts exports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/contacts/exports"
+        }
+      ],
+      "operation": "circa.post.events-event-id-contacts-exports",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "company contacts list",
+      "summary": "Run the company contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_contacts",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa company contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/contacts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create company apply",
+      "summary": "Plan and execute the create company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_company",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa create company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies"
+        }
+      ],
+      "risk": "external mutation; creates a new company record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "external mutation; creates a new CRM contact record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create event apply",
+      "summary": "Plan and execute the create event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_event",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa create event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events"
+        }
+      ],
+      "risk": "external mutation; creates a new event record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete company apply",
+      "summary": "Plan and execute the delete company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_company",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa delete company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "risk": "irreversible external deletion of a company; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "irreversible external deletion of a CRM contact; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete event apply",
+      "summary": "Plan and execute the delete event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_event",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa delete event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}"
+        }
+      ],
+      "risk": "irreversible external deletion of an event; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "event contacts list",
+      "summary": "Run the event contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_contacts",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa event contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/contacts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "event expenses list",
+      "summary": "Run the event expenses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_expenses",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa event expenses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/expenses"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "event staff list",
+      "summary": "Run the event staff ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_staff",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa event staff list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/staff"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "fields list",
+      "summary": "Run the fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "remove event contact apply",
+      "summary": "Plan and execute the remove event contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_event_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa remove event contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "risk": "irreversible external removal of a contact's event registration; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://docs.circa.co/",
+      "examples": [
+        "pm circa teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update company apply",
+      "summary": "Plan and execute the update company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_company",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa update company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing company record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing CRM contact record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update event apply",
+      "summary": "Plan and execute the update event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_event",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa update event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/events/{event_id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing event record",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update event contact apply",
+      "summary": "Plan and execute the update event contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_event_contact",
+      "source_url": "https://docs.circa.co/",
+      "flags": [
+        {
+          "name": "contact_id",
+          "type": "string",
+          "summary": "Required contact id record field.",
+          "maps_to": "record.contact_id",
+          "required": true
+        },
+        {
+          "name": "event_id",
+          "type": "string",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circa update event contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/events/{event_id}/contacts/{contact_id}"
+        }
+      ],
+      "risk": "external mutation; updates an event-contact's attendance/registration status",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

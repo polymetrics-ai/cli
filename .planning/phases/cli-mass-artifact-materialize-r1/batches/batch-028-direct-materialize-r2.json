@@ -1,0 +1,752 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-exact-existing-surface-manifest.json",
+  "candidates": 31,
+  "included": [
+    {
+      "connector": "bigmailer",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.bigmailer.io/llms.txt",
+        "version": "v1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94ee1a37425f904e65c59390c780c1a458a0355fcfda702c99589b9429e2b0cb"
+      },
+      "artifact_operations": 80,
+      "declared_operations": 80,
+      "operation_split": {
+        "executable": 42,
+        "provider_blocked": 0,
+        "excluded": 38
+      },
+      "cli_commands": 80,
+      "implemented_commands": 41,
+      "named_dependency_commands": 39,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 38
+    },
+    {
+      "connector": "bluetally",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.bluetally.com/llms.txt",
+        "version": "v1; OpenAPI 3.1.0; info version 1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c61bcfe1e5c2d02dbbe1f906a8860f2a556408c255c161f6484e5e5b60623e76"
+      },
+      "artifact_operations": 91,
+      "declared_operations": 91,
+      "operation_split": {
+        "executable": 18,
+        "provider_blocked": 0,
+        "excluded": 73
+      },
+      "cli_commands": 91,
+      "implemented_commands": 18,
+      "named_dependency_commands": 73,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 73
+    },
+    {
+      "connector": "buzzsprout",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://github.com/buzzsprout/buzzsprout-api",
+        "version": "v1; master f94910e0de19044a0f098def576672349548f3d1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8efda2c83aaf8e5ddfa7e37e6cb4a154221e2f203cfbbeb1fec1f22a3f8e7b8f"
+      },
+      "artifact_operations": 5,
+      "declared_operations": 5,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 1
+      },
+      "cli_commands": 5,
+      "implemented_commands": 4,
+      "named_dependency_commands": 1,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1
+    },
+    {
+      "connector": "campayn",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://github.com/nebojsac/Campayn-API",
+        "version": "v1; master 1635142d9799e0a50ba6fdc84118e027114ae734",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5a4a1ce7cad535c7a3e98843e07a7c60489f8ae795967192a1a3ba9fba42c4f8"
+      },
+      "artifact_operations": 11,
+      "declared_operations": 11,
+      "operation_split": {
+        "executable": 8,
+        "provider_blocked": 0,
+        "excluded": 3
+      },
+      "cli_commands": 11,
+      "implemented_commands": 8,
+      "named_dependency_commands": 3,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 3
+    },
+    {
+      "connector": "capsule-crm",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.capsulecrm.com/v2",
+        "version": "v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "284c79fe904172cb10cf7b17a2136b574f3f2e7f75717aeb4fa36452d457af34"
+      },
+      "artifact_operations": 132,
+      "declared_operations": 132,
+      "operation_split": {
+        "executable": 26,
+        "provider_blocked": 0,
+        "excluded": 106
+      },
+      "cli_commands": 132,
+      "implemented_commands": 18,
+      "named_dependency_commands": 114,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 106
+    },
+    {
+      "connector": "cimis",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://et.water.ca.gov/Rest/Index",
+        "version": "CIMIS Web API REST Services; last modified 2014-05-27",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31ad93ee2ab358178591823c4fb7d0dc3fc336b4fca0c18d49c251f3a017e808"
+      },
+      "artifact_operations": 7,
+      "declared_operations": 7,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 0,
+        "excluded": 4
+      },
+      "cli_commands": 7,
+      "implemented_commands": 3,
+      "named_dependency_commands": 4,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 4
+    },
+    {
+      "connector": "convertkit",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.kit.com/api-reference/v3/overview",
+        "version": "Kit (formerly ConvertKit) API v3; legacy, not in active development",
+        "retrieved_at": "2026-08-09",
+        "sha256": "566d8ef53ed714f498ccc92cb79582f8a21071bf471062e373e551b6e76fddc4"
+      },
+      "artifact_operations": 33,
+      "declared_operations": 33,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 12
+      },
+      "cli_commands": 33,
+      "implemented_commands": 19,
+      "named_dependency_commands": 14,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 12
+    },
+    {
+      "connector": "customerly",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://customerlypublic.docs.apiary.io/api-description-document",
+        "version": "Customerly REST API; API Blueprint FORMAT 1A; release version not supplied",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2910022a0f6201c17a0a171a54f28d6034cc8810c04a61eb4ce4b9d53d7c7e48"
+      },
+      "artifact_operations": 30,
+      "declared_operations": 30,
+      "operation_split": {
+        "executable": 12,
+        "provider_blocked": 0,
+        "excluded": 18
+      },
+      "cli_commands": 30,
+      "implemented_commands": 10,
+      "named_dependency_commands": 20,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 18
+    },
+    {
+      "connector": "emailoctopus",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://emailoctopus.com/api-documentation",
+        "version": "EmailOctopus API v1.6 (legacy)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "26ef44aa9c229f7f9077305d657574e6fe1c213db6c6d6fbae0d319c2fb7b382"
+      },
+      "artifact_operations": 34,
+      "declared_operations": 34,
+      "operation_split": {
+        "executable": 18,
+        "provider_blocked": 0,
+        "excluded": 16
+      },
+      "cli_commands": 34,
+      "implemented_commands": 18,
+      "named_dependency_commands": 16,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 16
+    },
+    {
+      "connector": "exchange-rates",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://exchangeratesapi.io/documentation/",
+        "version": "v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c417dd40948ea3eab875a7ab5d098fc357c30a53f8e29fc41d930bcaaa71836f"
+      },
+      "artifact_operations": 6,
+      "declared_operations": 6,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 2
+      },
+      "cli_commands": 6,
+      "implemented_commands": 4,
+      "named_dependency_commands": 2,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 2
+    },
+    {
+      "connector": "firehydrant",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.firehydrant.com/reference/firehydrant-api",
+        "version": "FireHydrant API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56b874b6196fe172ee4bf0f72cd3c976c4ea6f248c293b34f0df2ab245b20a9d"
+      },
+      "artifact_operations": 479,
+      "declared_operations": 479,
+      "operation_split": {
+        "executable": 449,
+        "provider_blocked": 0,
+        "excluded": 30
+      },
+      "cli_commands": 479,
+      "implemented_commands": 449,
+      "named_dependency_commands": 30,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 30
+    },
+    {
+      "connector": "gitlab",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+        "version": "master",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e2bff70760618d472b65c6c3627b00870057a4273c2c062f7464f261acf3a694"
+      },
+      "artifact_operations": 1745,
+      "declared_operations": 1745,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 1663,
+        "excluded": 78
+      },
+      "cli_commands": 1745,
+      "implemented_commands": 4,
+      "named_dependency_commands": 1741,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1741
+    },
+    {
+      "connector": "gnews",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.gnews.io/",
+        "version": "GNews API v4 (live documentation)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "59f1bee34f990b54fd271185c295a2e004ac957cb86f7d89b01b7682332c942b"
+      },
+      "artifact_operations": 2,
+      "declared_operations": 2,
+      "operation_split": {
+        "executable": 2,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 2,
+      "implemented_commands": 2,
+      "named_dependency_commands": 0,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 0
+    },
+    {
+      "connector": "mailchimp",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
+        "version": "3.0.91",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ea6ee004ea59e2aefdc79350680fb7e4eb2c9623026f033028ba373bcbad805a"
+      },
+      "artifact_operations": 298,
+      "declared_operations": 298,
+      "operation_split": {
+        "executable": 295,
+        "provider_blocked": 2,
+        "excluded": 1
+      },
+      "cli_commands": 298,
+      "implemented_commands": 294,
+      "named_dependency_commands": 4,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 71
+    },
+    {
+      "connector": "marketstack",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+        "version": "Marketstack API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "363a0b4968b41eb835f14b17013afe0c87e774a1a259ef6e374ae76dbe42f4d3"
+      },
+      "artifact_operations": 8,
+      "declared_operations": 8,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 0,
+        "excluded": 3
+      },
+      "cli_commands": 8,
+      "implemented_commands": 5,
+      "named_dependency_commands": 3,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 3
+    },
+    {
+      "connector": "news-api",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://newsapi.org/docs/endpoints",
+        "version": "News API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8419fb21490ce1ef3e8ab915d64964ae0f333e9e5d0367c8e5591b978620f7b9"
+      },
+      "artifact_operations": 3,
+      "declared_operations": 3,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 3,
+      "implemented_commands": 3,
+      "named_dependency_commands": 0,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 0
+    },
+    {
+      "connector": "nutshell",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.nutshell.com/reference/",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6"
+      },
+      "artifact_operations": 109,
+      "declared_operations": 109,
+      "operation_split": {
+        "executable": 101,
+        "provider_blocked": 0,
+        "excluded": 8
+      },
+      "cli_commands": 109,
+      "implemented_commands": 66,
+      "named_dependency_commands": 43,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 8
+    },
+    {
+      "connector": "postmarkapp",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://postmarkapp.com/developer",
+        "version": "Postmark HTTP API current rendered developer reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b18e0caec52016b4fd80c273e8d6de4d6645237cb4961e119b58ce2b138008d3"
+      },
+      "artifact_operations": 84,
+      "declared_operations": 84,
+      "operation_split": {
+        "executable": 57,
+        "provider_blocked": 0,
+        "excluded": 27
+      },
+      "cli_commands": 84,
+      "implemented_commands": 37,
+      "named_dependency_commands": 47,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 27
+    },
+    {
+      "connector": "printify",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.printify.com/openapi.json",
+        "version": "Printify Public API 1.0.0; OpenAPI 3.0.3, supplemented by the current V2 rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c7ddbd430e36bbc3c9836fd741c6543327b6dbd22610c10adfc81bce40acd62"
+      },
+      "artifact_operations": 44,
+      "declared_operations": 44,
+      "operation_split": {
+        "executable": 40,
+        "provider_blocked": 0,
+        "excluded": 4
+      },
+      "cli_commands": 44,
+      "implemented_commands": 36,
+      "named_dependency_commands": 8,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 4
+    },
+    {
+      "connector": "rki-covid",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://api.corona-zahlen.org/docs/",
+        "version": "current unversioned corona-zahlen.org JSON REST API documentation",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f45c38b6791b0a1aac5c4a9d38d88cb2d5fc1bee374e0cf0f6dd04368875d5c6"
+      },
+      "artifact_operations": 93,
+      "declared_operations": 93,
+      "operation_split": {
+        "executable": 28,
+        "provider_blocked": 0,
+        "excluded": 65
+      },
+      "cli_commands": 93,
+      "implemented_commands": 28,
+      "named_dependency_commands": 65,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 65
+    },
+    {
+      "connector": "searxng",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.searxng.org/dev/search_api.html",
+        "version": "2026.8.4+c63835bd2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9a13527530cfde389d57bed147c5f41433f5ab359605837ba6ee3cfd24bc5139"
+      },
+      "artifact_operations": 3,
+      "declared_operations": 3,
+      "operation_split": {
+        "executable": 1,
+        "provider_blocked": 0,
+        "excluded": 2
+      },
+      "cli_commands": 4,
+      "implemented_commands": 2,
+      "named_dependency_commands": 2,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 2
+    },
+    {
+      "connector": "senseforce",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints.md",
+        "version": "Senseforce 2.0 Manual; current SF Platform Public API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "929324899da45766f43cca8853a1ac08f25075d18e4d5b1500338df3d412f16b"
+      },
+      "artifact_operations": 2,
+      "declared_operations": 2,
+      "operation_split": {
+        "executable": 1,
+        "provider_blocked": 0,
+        "excluded": 1
+      },
+      "cli_commands": 2,
+      "implemented_commands": 1,
+      "named_dependency_commands": 1,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1
+    },
+    {
+      "connector": "shopwired",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://shopwired.readme.io/llms.txt",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284"
+      },
+      "artifact_operations": 237,
+      "declared_operations": 237,
+      "operation_split": {
+        "executable": 207,
+        "provider_blocked": 0,
+        "excluded": 30
+      },
+      "cli_commands": 237,
+      "implemented_commands": 94,
+      "named_dependency_commands": 143,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 30
+    },
+    {
+      "connector": "smaily",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://smaily.com/help/api/",
+        "version": "current Smaily API provider HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7c36253e3602e32b65ad6fa3054e3e277412e4c52855bc82b9675322c8eec9e5"
+      },
+      "artifact_operations": 22,
+      "declared_operations": 22,
+      "operation_split": {
+        "executable": 15,
+        "provider_blocked": 0,
+        "excluded": 7
+      },
+      "cli_commands": 22,
+      "implemented_commands": 12,
+      "named_dependency_commands": 10,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 7
+    },
+    {
+      "connector": "statuspage",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.statuspage.io/",
+        "version": "Statuspage API 1.0.0 (embedded OpenAPI 3.0.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ef08fa05bf1818be747a0e5d5b577dc7ee17f693bbe72de412523ab4dafd2a5f"
+      },
+      "artifact_operations": 112,
+      "declared_operations": 112,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 102
+      },
+      "cli_commands": 112,
+      "implemented_commands": 10,
+      "named_dependency_commands": 102,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 102
+    },
+    {
+      "connector": "survey-sparrow",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.surveysparrow.com/rest-apis/",
+        "version": "SurveySparrow API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "df8428b119765f572ccb60bd8c3e86d6936945c28bec4c06dac490fdcd49854d"
+      },
+      "artifact_operations": 113,
+      "declared_operations": 113,
+      "operation_split": {
+        "executable": 55,
+        "provider_blocked": 0,
+        "excluded": 58
+      },
+      "cli_commands": 113,
+      "implemented_commands": 55,
+      "named_dependency_commands": 58,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 58
+    },
+    {
+      "connector": "surveymonkey",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://api.surveymonkey.com/v3/docs",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46"
+      },
+      "artifact_operations": 135,
+      "declared_operations": 135,
+      "operation_split": {
+        "executable": 135,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 135,
+      "implemented_commands": 91,
+      "named_dependency_commands": 44,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 0
+    },
+    {
+      "connector": "survicate",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.survicate.com/data-export/",
+        "version": "Data Export API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6571b523b56e02e9d9fd78f47d19174cbea2ded79044c0f1299f68e142fdf164"
+      },
+      "artifact_operations": 9,
+      "declared_operations": 9,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 0,
+        "excluded": 6
+      },
+      "cli_commands": 9,
+      "implemented_commands": 3,
+      "named_dependency_commands": 6,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 6
+    },
+    {
+      "connector": "tickettailor",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+        "version": "Ticket Tailor API v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "01a2c5ab47e3ba56b60bd6bd466faf2c5a472d0f68ab6a57178bed18c67eb0d7"
+      },
+      "artifact_operations": 80,
+      "declared_operations": 80,
+      "operation_split": {
+        "executable": 42,
+        "provider_blocked": 0,
+        "excluded": 38
+      },
+      "cli_commands": 80,
+      "implemented_commands": 42,
+      "named_dependency_commands": 38,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 38
+    },
+    {
+      "connector": "uppromote",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "openapi_fragments",
+        "url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684"
+      },
+      "artifact_operations": 28,
+      "declared_operations": 28,
+      "operation_split": {
+        "executable": 19,
+        "provider_blocked": 0,
+        "excluded": 9
+      },
+      "cli_commands": 28,
+      "implemented_commands": 19,
+      "named_dependency_commands": 9,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 9
+    },
+    {
+      "connector": "weatherstack",
+      "evidence_mode": "existing_surface_evidence",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7"
+      },
+      "artifact_operations": 5,
+      "declared_operations": 5,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 0,
+        "excluded": 0
+      },
+      "cli_commands": 5,
+      "implemented_commands": 5,
+      "named_dependency_commands": 0,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 0
+    }
+  ],
+  "dropped": []
+}

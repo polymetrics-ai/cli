@@ -1,0 +1,154 @@
+{
+  "tagline": "Run Opinion Stage's declared streams and reverse-ETL actions.",
+  "usage": "pm opinion-stage \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 items itemid",
+        "api get api v2 items itemid questions",
+        "api get api v2 items itemid responses",
+        "api get api v2 items itemid responses operation responseid",
+        "items list",
+        "questions list",
+        "responses list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get api v2 items itemid",
+      "summary": "Documented GET /api/v2/items/{itemId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage api get api v2 items itemid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{itemId}"
+        }
+      ],
+      "operation": "opinion-stage.get.api-v2-items-itemid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 items itemid questions",
+      "summary": "Documented GET /api/v2/items/{itemId}/questions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage api get api v2 items itemid questions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{itemId}/questions"
+        }
+      ],
+      "operation": "opinion-stage.get.api-v2-items-itemid-questions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 items itemid responses",
+      "summary": "Documented GET /api/v2/items/{itemId}/responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage api get api v2 items itemid responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{itemId}/responses"
+        }
+      ],
+      "operation": "opinion-stage.get.api-v2-items-itemid-responses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 items itemid responses operation responseid",
+      "summary": "Documented GET /api/v2/items/{itemId}/responses/#{responseId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage api get api v2 items itemid responses operation responseid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{itemId}/responses/#{responseId}"
+        }
+      ],
+      "operation": "opinion-stage.get.api-v2-items-itemid-responses-responseid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "items list",
+      "summary": "Run the items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items"
+        }
+      ]
+    },
+    {
+      "path": "questions list",
+      "summary": "Run the questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "questions",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{id}/questions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "examples": [
+        "pm opinion-stage responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/items/{id}/responses"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

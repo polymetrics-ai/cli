@@ -148,6 +148,7 @@
         "properties": {
           "task_id": { "type": "string" },
           "field_id": { "type": "string" },
+          "value": {},
           "value_options": { "type": "object" }
         }
       },

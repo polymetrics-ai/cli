@@ -1,0 +1,64 @@
+{
+  "operations": [
+    {
+      "id": "opinion-stage.get.api-v2-items-itemid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/items/{itemId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/items/{itemId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "opinion-stage.get.api-v2-items-itemid-questions",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/items/{itemId}/questions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/items/{itemId}/questions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "opinion-stage.get.api-v2-items-itemid-responses",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/items/{itemId}/responses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/items/{itemId}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "opinion-stage.get.api-v2-items-itemid-responses-responseid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/items/{itemId}/responses/#{responseId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.opinionstage.com/api-docs/api/v2/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/items/{itemId}/responses/#{responseId}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

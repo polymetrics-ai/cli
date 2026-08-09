@@ -1,0 +1,2819 @@
+{
+  "tagline": "Run TMDb's declared streams and reverse-ETL actions.",
+  "usage": "pm tmdb \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account details list",
+        "account favorite tv list",
+        "account get favorites list",
+        "account lists list",
+        "account rated movies list",
+        "account rated tv episodes list",
+        "account rated tv list",
+        "account watchlist movies list",
+        "account watchlist tv list",
+        "alternative names copy list",
+        "api get 3 authentication",
+        "api get 3 authentication guest-session new",
+        "api get 3 authentication token new",
+        "api get 3 configuration primary-translations",
+        "certification movie list list",
+        "certifications tv list list",
+        "changes movie list list",
+        "changes people list list",
+        "changes tv list list",
+        "collection details list",
+        "collection images list",
+        "collection translations list",
+        "company alternative names list",
+        "company details list",
+        "company images list",
+        "configuration countries list",
+        "configuration details list",
+        "configuration jobs list",
+        "configuration languages list",
+        "configuration timezones list",
+        "credit details list",
+        "details copy list",
+        "discover movie list",
+        "discover tv list",
+        "find by id list",
+        "genre movie list list",
+        "genre tv list list",
+        "guest session rated movies list",
+        "guest session rated tv episodes list",
+        "guest session rated tv list",
+        "keyword details list",
+        "keyword movies list",
+        "list check item status list",
+        "list details list",
+        "lists copy list",
+        "movie account states list",
+        "movie alternative titles list",
+        "movie changes list",
+        "movie credits list",
+        "movie details list",
+        "movie external ids list",
+        "movie images list",
+        "movie keywords list",
+        "movie latest id list",
+        "movie lists list",
+        "movie recommendations list",
+        "movie release dates list",
+        "movie reviews list",
+        "movie similar list",
+        "movie top rated list list",
+        "movie translations list",
+        "movie upcoming list list",
+        "movie videos list",
+        "movie watch providers list",
+        "network details list",
+        "now playing movies list",
+        "person changes list",
+        "person combined credits list",
+        "person details list",
+        "person external ids list",
+        "person images list",
+        "person latest id list",
+        "person movie credits list",
+        "person popular list list",
+        "person tagged images list",
+        "person tv credits list",
+        "popular movies list",
+        "review details list",
+        "search collection list",
+        "search company list",
+        "search keyword list",
+        "search movies list",
+        "search multi list",
+        "search person list",
+        "search tv list",
+        "translations list",
+        "trending all list",
+        "trending movies list",
+        "trending people list",
+        "trending tv list",
+        "tv episode account states list",
+        "tv episode changes by id list",
+        "tv episode credits list",
+        "tv episode details list",
+        "tv episode external ids list",
+        "tv episode group details list",
+        "tv episode images list",
+        "tv episode translations list",
+        "tv episode videos list",
+        "tv season account states list",
+        "tv season aggregate credits list",
+        "tv season changes by id list",
+        "tv season credits list",
+        "tv season details list",
+        "tv season external ids list",
+        "tv season images list",
+        "tv season translations list",
+        "tv season videos list",
+        "tv season watch providers list",
+        "tv series account states list",
+        "tv series aggregate credits list",
+        "tv series airing today list list",
+        "tv series alternative titles list",
+        "tv series changes list",
+        "tv series content ratings list",
+        "tv series credits list",
+        "tv series details list",
+        "tv series episode groups list",
+        "tv series external ids list",
+        "tv series images list",
+        "tv series keywords list",
+        "tv series latest id list",
+        "tv series on the air list list",
+        "tv series popular list list",
+        "tv series recommendations list",
+        "tv series reviews list",
+        "tv series screened theatrically list",
+        "tv series similar list",
+        "tv series top rated list list",
+        "tv series translations list",
+        "tv series videos list",
+        "tv series watch providers list",
+        "watch provider tv list list",
+        "watch providers available regions list",
+        "watch providers movie list list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete 3 authentication session",
+        "api delete 3 list list-id",
+        "api delete 3 movie movie-id rating",
+        "api delete 3 tv series-id rating",
+        "api delete 3 tv series-id season season-number episode episode-number rating",
+        "api post 3 account account-id favorite",
+        "api post 3 account account-id watchlist",
+        "api post 3 authentication session convert 4",
+        "api post 3 authentication session new",
+        "api post 3 authentication token validate-with-login",
+        "api post 3 list",
+        "api post 3 list list-id add-item",
+        "api post 3 list list-id clear",
+        "api post 3 list list-id remove-item",
+        "api post 3 movie movie-id rating",
+        "api post 3 tv series-id rating",
+        "api post 3 tv series-id season season-number episode episode-number rating"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account details list",
+      "summary": "Run the account details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}"
+        }
+      ]
+    },
+    {
+      "path": "account favorite tv list",
+      "summary": "Run the account favorite tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_favorite_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account favorite tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/favorite/tv"
+        }
+      ]
+    },
+    {
+      "path": "account get favorites list",
+      "summary": "Run the account get favorites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_get_favorites",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account get favorites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/favorite/movies"
+        }
+      ]
+    },
+    {
+      "path": "account lists list",
+      "summary": "Run the account lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_lists",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/lists"
+        }
+      ]
+    },
+    {
+      "path": "account rated movies list",
+      "summary": "Run the account rated movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_rated_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account rated movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/rated/movies"
+        }
+      ]
+    },
+    {
+      "path": "account rated tv episodes list",
+      "summary": "Run the account rated tv episodes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_rated_tv_episodes",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account rated tv episodes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/rated/tv/episodes"
+        }
+      ]
+    },
+    {
+      "path": "account rated tv list",
+      "summary": "Run the account rated tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_rated_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account rated tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/rated/tv"
+        }
+      ]
+    },
+    {
+      "path": "account watchlist movies list",
+      "summary": "Run the account watchlist movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_watchlist_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account watchlist movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/watchlist/movies"
+        }
+      ]
+    },
+    {
+      "path": "account watchlist tv list",
+      "summary": "Run the account watchlist tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_watchlist_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb account watchlist tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/account/{account_id}/watchlist/tv"
+        }
+      ]
+    },
+    {
+      "path": "alternative names copy list",
+      "summary": "Run the alternative names copy ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alternative_names_copy",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb alternative names copy list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/network/{network_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "api delete 3 authentication session",
+      "summary": "Documented DELETE /3/authentication/session (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api delete 3 authentication session --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/3/authentication/session"
+        }
+      ],
+      "operation": "tmdb.delete.3-authentication-session",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 3 list list-id",
+      "summary": "Documented DELETE /3/list/{list_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api delete 3 list list-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/3/list/{list_id}"
+        }
+      ],
+      "operation": "tmdb.delete.3-list-list-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 3 movie movie-id rating",
+      "summary": "Documented DELETE /3/movie/{movie_id}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api delete 3 movie movie-id rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/3/movie/{movie_id}/rating"
+        }
+      ],
+      "operation": "tmdb.delete.3-movie-movie-id-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 3 tv series-id rating",
+      "summary": "Documented DELETE /3/tv/{series_id}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api delete 3 tv series-id rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/3/tv/{series_id}/rating"
+        }
+      ],
+      "operation": "tmdb.delete.3-tv-series-id-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete 3 tv series-id season season-number episode episode-number rating",
+      "summary": "Documented DELETE /3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api delete 3 tv series-id season season-number episode episode-number rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating"
+        }
+      ],
+      "operation": "tmdb.delete.3-tv-series-id-season-season-number-episode-episode-number-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get 3 authentication",
+      "summary": "Documented GET /3/authentication (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api get 3 authentication --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/authentication"
+        }
+      ],
+      "operation": "tmdb.get.3-authentication",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 3 authentication guest-session new",
+      "summary": "Documented GET /3/authentication/guest_session/new (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api get 3 authentication guest-session new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/authentication/guest_session/new"
+        }
+      ],
+      "operation": "tmdb.get.3-authentication-guest-session-new",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 3 authentication token new",
+      "summary": "Documented GET /3/authentication/token/new (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api get 3 authentication token new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/authentication/token/new"
+        }
+      ],
+      "operation": "tmdb.get.3-authentication-token-new",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 3 configuration primary-translations",
+      "summary": "Documented GET /3/configuration/primary_translations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api get 3 configuration primary-translations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration/primary_translations"
+        }
+      ],
+      "operation": "tmdb.get.3-configuration-primary-translations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post 3 account account-id favorite",
+      "summary": "Documented POST /3/account/{account_id}/favorite (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 account account-id favorite --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/account/{account_id}/favorite"
+        }
+      ],
+      "operation": "tmdb.post.3-account-account-id-favorite",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 account account-id watchlist",
+      "summary": "Documented POST /3/account/{account_id}/watchlist (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 account account-id watchlist --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/account/{account_id}/watchlist"
+        }
+      ],
+      "operation": "tmdb.post.3-account-account-id-watchlist",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 authentication session convert 4",
+      "summary": "Documented POST /3/authentication/session/convert/4 (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 authentication session convert 4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/authentication/session/convert/4"
+        }
+      ],
+      "operation": "tmdb.post.3-authentication-session-convert-4",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 authentication session new",
+      "summary": "Documented POST /3/authentication/session/new (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 authentication session new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/authentication/session/new"
+        }
+      ],
+      "operation": "tmdb.post.3-authentication-session-new",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 authentication token validate-with-login",
+      "summary": "Documented POST /3/authentication/token/validate_with_login (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 authentication token validate-with-login --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/authentication/token/validate_with_login"
+        }
+      ],
+      "operation": "tmdb.post.3-authentication-token-validate-with-login",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 list",
+      "summary": "Documented POST /3/list (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 list --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/list"
+        }
+      ],
+      "operation": "tmdb.post.3-list",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 list list-id add-item",
+      "summary": "Documented POST /3/list/{list_id}/add_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 list list-id add-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/list/{list_id}/add_item"
+        }
+      ],
+      "operation": "tmdb.post.3-list-list-id-add-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 list list-id clear",
+      "summary": "Documented POST /3/list/{list_id}/clear (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 list list-id clear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/list/{list_id}/clear"
+        }
+      ],
+      "operation": "tmdb.post.3-list-list-id-clear",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 list list-id remove-item",
+      "summary": "Documented POST /3/list/{list_id}/remove_item (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 list list-id remove-item --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/list/{list_id}/remove_item"
+        }
+      ],
+      "operation": "tmdb.post.3-list-list-id-remove-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 movie movie-id rating",
+      "summary": "Documented POST /3/movie/{movie_id}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 movie movie-id rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/movie/{movie_id}/rating"
+        }
+      ],
+      "operation": "tmdb.post.3-movie-movie-id-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 tv series-id rating",
+      "summary": "Documented POST /3/tv/{series_id}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 tv series-id rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/tv/{series_id}/rating"
+        }
+      ],
+      "operation": "tmdb.post.3-tv-series-id-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 3 tv series-id season season-number episode episode-number rating",
+      "summary": "Documented POST /3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb api post 3 tv series-id season season-number episode episode-number rating --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating"
+        }
+      ],
+      "operation": "tmdb.post.3-tv-series-id-season-season-number-episode-episode-number-rating",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "certification movie list list",
+      "summary": "Run the certification movie list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "certification_movie_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb certification movie list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/certification/movie/list"
+        }
+      ]
+    },
+    {
+      "path": "certifications tv list list",
+      "summary": "Run the certifications tv list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "certifications_tv_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb certifications tv list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/certification/tv/list"
+        }
+      ]
+    },
+    {
+      "path": "changes movie list list",
+      "summary": "Run the changes movie list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "changes_movie_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb changes movie list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/changes"
+        }
+      ]
+    },
+    {
+      "path": "changes people list list",
+      "summary": "Run the changes people list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "changes_people_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb changes people list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/changes"
+        }
+      ]
+    },
+    {
+      "path": "changes tv list list",
+      "summary": "Run the changes tv list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "changes_tv_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb changes tv list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/changes"
+        }
+      ]
+    },
+    {
+      "path": "collection details list",
+      "summary": "Run the collection details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb collection details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/collection/{collection_id}"
+        }
+      ]
+    },
+    {
+      "path": "collection images list",
+      "summary": "Run the collection images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb collection images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/collection/{collection_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "collection translations list",
+      "summary": "Run the collection translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb collection translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/collection/{collection_id}/translations"
+        }
+      ]
+    },
+    {
+      "path": "company alternative names list",
+      "summary": "Run the company alternative names ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_alternative_names",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb company alternative names list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/company/{company_id}/alternative_names"
+        }
+      ]
+    },
+    {
+      "path": "company details list",
+      "summary": "Run the company details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb company details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/company/{company_id}"
+        }
+      ]
+    },
+    {
+      "path": "company images list",
+      "summary": "Run the company images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb company images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/company/{company_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "configuration countries list",
+      "summary": "Run the configuration countries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_countries",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb configuration countries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration/countries"
+        }
+      ]
+    },
+    {
+      "path": "configuration details list",
+      "summary": "Run the configuration details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb configuration details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration"
+        }
+      ]
+    },
+    {
+      "path": "configuration jobs list",
+      "summary": "Run the configuration jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_jobs",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb configuration jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration/jobs"
+        }
+      ]
+    },
+    {
+      "path": "configuration languages list",
+      "summary": "Run the configuration languages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_languages",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb configuration languages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration/languages"
+        }
+      ]
+    },
+    {
+      "path": "configuration timezones list",
+      "summary": "Run the configuration timezones ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configuration_timezones",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb configuration timezones list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/configuration/timezones"
+        }
+      ]
+    },
+    {
+      "path": "credit details list",
+      "summary": "Run the credit details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credit_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb credit details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/credit/{credit_id}"
+        }
+      ]
+    },
+    {
+      "path": "details copy list",
+      "summary": "Run the details copy ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "details_copy",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb details copy list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/network/{network_id}/alternative_names"
+        }
+      ]
+    },
+    {
+      "path": "discover movie list",
+      "summary": "Run the discover movie ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "discover_movie",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb discover movie list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/discover/movie"
+        }
+      ]
+    },
+    {
+      "path": "discover tv list",
+      "summary": "Run the discover tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "discover_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb discover tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/discover/tv"
+        }
+      ]
+    },
+    {
+      "path": "find by id list",
+      "summary": "Run the find by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "find_by_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb find by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/find/{external_id}"
+        }
+      ]
+    },
+    {
+      "path": "genre movie list list",
+      "summary": "Run the genre movie list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "genre_movie_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb genre movie list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/genre/movie/list"
+        }
+      ]
+    },
+    {
+      "path": "genre tv list list",
+      "summary": "Run the genre tv list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "genre_tv_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb genre tv list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/genre/tv/list"
+        }
+      ]
+    },
+    {
+      "path": "guest session rated movies list",
+      "summary": "Run the guest session rated movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guest_session_rated_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb guest session rated movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/guest_session/{guest_session_id}/rated/movies"
+        }
+      ]
+    },
+    {
+      "path": "guest session rated tv episodes list",
+      "summary": "Run the guest session rated tv episodes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guest_session_rated_tv_episodes",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb guest session rated tv episodes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/guest_session/{guest_session_id}/rated/tv/episodes"
+        }
+      ]
+    },
+    {
+      "path": "guest session rated tv list",
+      "summary": "Run the guest session rated tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guest_session_rated_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb guest session rated tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/guest_session/{guest_session_id}/rated/tv"
+        }
+      ]
+    },
+    {
+      "path": "keyword details list",
+      "summary": "Run the keyword details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "keyword_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb keyword details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/keyword/{keyword_id}"
+        }
+      ]
+    },
+    {
+      "path": "keyword movies list",
+      "summary": "Run the keyword movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "keyword_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb keyword movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/keyword/{keyword_id}/movies"
+        }
+      ]
+    },
+    {
+      "path": "list check item status list",
+      "summary": "Run the list check item status ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_check_item_status",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb list check item status list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/list/{list_id}/item_status"
+        }
+      ]
+    },
+    {
+      "path": "list details list",
+      "summary": "Run the list details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb list details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/list/{list_id}"
+        }
+      ]
+    },
+    {
+      "path": "lists copy list",
+      "summary": "Run the lists copy ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists_copy",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb lists copy list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/lists"
+        }
+      ]
+    },
+    {
+      "path": "movie account states list",
+      "summary": "Run the movie account states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_account_states",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie account states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/account_states"
+        }
+      ]
+    },
+    {
+      "path": "movie alternative titles list",
+      "summary": "Run the movie alternative titles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_alternative_titles",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie alternative titles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/alternative_titles"
+        }
+      ]
+    },
+    {
+      "path": "movie changes list",
+      "summary": "Run the movie changes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_changes",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie changes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/changes"
+        }
+      ]
+    },
+    {
+      "path": "movie credits list",
+      "summary": "Run the movie credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/credits"
+        }
+      ]
+    },
+    {
+      "path": "movie details list",
+      "summary": "Run the movie details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}"
+        }
+      ]
+    },
+    {
+      "path": "movie external ids list",
+      "summary": "Run the movie external ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_external_ids",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie external ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/external_ids"
+        }
+      ]
+    },
+    {
+      "path": "movie images list",
+      "summary": "Run the movie images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "movie keywords list",
+      "summary": "Run the movie keywords ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_keywords",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie keywords list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/keywords"
+        }
+      ]
+    },
+    {
+      "path": "movie latest id list",
+      "summary": "Run the movie latest id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_latest_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie latest id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/latest"
+        }
+      ]
+    },
+    {
+      "path": "movie lists list",
+      "summary": "Run the movie lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_lists",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/lists"
+        }
+      ]
+    },
+    {
+      "path": "movie recommendations list",
+      "summary": "Run the movie recommendations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_recommendations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie recommendations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/recommendations"
+        }
+      ]
+    },
+    {
+      "path": "movie release dates list",
+      "summary": "Run the movie release dates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_release_dates",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie release dates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/release_dates"
+        }
+      ]
+    },
+    {
+      "path": "movie reviews list",
+      "summary": "Run the movie reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_reviews",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/reviews"
+        }
+      ]
+    },
+    {
+      "path": "movie similar list",
+      "summary": "Run the movie similar ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_similar",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie similar list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/similar"
+        }
+      ]
+    },
+    {
+      "path": "movie top rated list list",
+      "summary": "Run the movie top rated list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_top_rated_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie top rated list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/top_rated"
+        }
+      ]
+    },
+    {
+      "path": "movie translations list",
+      "summary": "Run the movie translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/translations"
+        }
+      ]
+    },
+    {
+      "path": "movie upcoming list list",
+      "summary": "Run the movie upcoming list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_upcoming_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie upcoming list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/upcoming"
+        }
+      ]
+    },
+    {
+      "path": "movie videos list",
+      "summary": "Run the movie videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_videos",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/videos"
+        }
+      ]
+    },
+    {
+      "path": "movie watch providers list",
+      "summary": "Run the movie watch providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "movie_watch_providers",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb movie watch providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/{movie_id}/watch/providers"
+        }
+      ]
+    },
+    {
+      "path": "network details list",
+      "summary": "Run the network details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "network_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb network details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/network/{network_id}"
+        }
+      ]
+    },
+    {
+      "path": "now playing movies list",
+      "summary": "Run the now playing movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "now_playing_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb now playing movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/now_playing"
+        }
+      ]
+    },
+    {
+      "path": "person changes list",
+      "summary": "Run the person changes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_changes",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person changes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/changes"
+        }
+      ]
+    },
+    {
+      "path": "person combined credits list",
+      "summary": "Run the person combined credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_combined_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person combined credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/combined_credits"
+        }
+      ]
+    },
+    {
+      "path": "person details list",
+      "summary": "Run the person details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}"
+        }
+      ]
+    },
+    {
+      "path": "person external ids list",
+      "summary": "Run the person external ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_external_ids",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person external ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/external_ids"
+        }
+      ]
+    },
+    {
+      "path": "person images list",
+      "summary": "Run the person images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "person latest id list",
+      "summary": "Run the person latest id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_latest_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person latest id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/latest"
+        }
+      ]
+    },
+    {
+      "path": "person movie credits list",
+      "summary": "Run the person movie credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_movie_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person movie credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/movie_credits"
+        }
+      ]
+    },
+    {
+      "path": "person popular list list",
+      "summary": "Run the person popular list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_popular_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person popular list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/popular"
+        }
+      ]
+    },
+    {
+      "path": "person tagged images list",
+      "summary": "Run the person tagged images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_tagged_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person tagged images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/tagged_images"
+        }
+      ]
+    },
+    {
+      "path": "person tv credits list",
+      "summary": "Run the person tv credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "person_tv_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb person tv credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/tv_credits"
+        }
+      ]
+    },
+    {
+      "path": "popular movies list",
+      "summary": "Run the popular movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "popular_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb popular movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/movie/popular"
+        }
+      ]
+    },
+    {
+      "path": "review details list",
+      "summary": "Run the review details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "review_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb review details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/review/{review_id}"
+        }
+      ]
+    },
+    {
+      "path": "search collection list",
+      "summary": "Run the search collection ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_collection",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search collection list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/collection"
+        }
+      ]
+    },
+    {
+      "path": "search company list",
+      "summary": "Run the search company ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_company",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/company"
+        }
+      ]
+    },
+    {
+      "path": "search keyword list",
+      "summary": "Run the search keyword ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_keyword",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search keyword list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/keyword"
+        }
+      ]
+    },
+    {
+      "path": "search movies list",
+      "summary": "Run the search movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/movie"
+        }
+      ]
+    },
+    {
+      "path": "search multi list",
+      "summary": "Run the search multi ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_multi",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search multi list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/multi"
+        }
+      ]
+    },
+    {
+      "path": "search person list",
+      "summary": "Run the search person ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_person",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search person list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/person"
+        }
+      ]
+    },
+    {
+      "path": "search tv list",
+      "summary": "Run the search tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "search_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb search tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/search/tv"
+        }
+      ]
+    },
+    {
+      "path": "translations list",
+      "summary": "Run the translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/person/{person_id}/translations"
+        }
+      ]
+    },
+    {
+      "path": "trending all list",
+      "summary": "Run the trending all ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trending_all",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb trending all list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/trending/all/{time_window}"
+        }
+      ]
+    },
+    {
+      "path": "trending movies list",
+      "summary": "Run the trending movies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trending_movies",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb trending movies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/trending/movie/{time_window}"
+        }
+      ]
+    },
+    {
+      "path": "trending people list",
+      "summary": "Run the trending people ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trending_people",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb trending people list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/trending/person/{time_window}"
+        }
+      ]
+    },
+    {
+      "path": "trending tv list",
+      "summary": "Run the trending tv ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trending_tv",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb trending tv list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/trending/tv/{time_window}"
+        }
+      ]
+    },
+    {
+      "path": "tv episode account states list",
+      "summary": "Run the tv episode account states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_account_states",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode account states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states"
+        }
+      ]
+    },
+    {
+      "path": "tv episode changes by id list",
+      "summary": "Run the tv episode changes by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_changes_by_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode changes by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/episode/{episode_id}/changes"
+        }
+      ]
+    },
+    {
+      "path": "tv episode credits list",
+      "summary": "Run the tv episode credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/credits"
+        }
+      ]
+    },
+    {
+      "path": "tv episode details list",
+      "summary": "Run the tv episode details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}"
+        }
+      ]
+    },
+    {
+      "path": "tv episode external ids list",
+      "summary": "Run the tv episode external ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_external_ids",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode external ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/external_ids"
+        }
+      ]
+    },
+    {
+      "path": "tv episode group details list",
+      "summary": "Run the tv episode group details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_group_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode group details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/episode_group/{tv_episode_group_id}"
+        }
+      ]
+    },
+    {
+      "path": "tv episode images list",
+      "summary": "Run the tv episode images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/images"
+        }
+      ]
+    },
+    {
+      "path": "tv episode translations list",
+      "summary": "Run the tv episode translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/translations"
+        }
+      ]
+    },
+    {
+      "path": "tv episode videos list",
+      "summary": "Run the tv episode videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_episode_videos",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv episode videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos"
+        }
+      ]
+    },
+    {
+      "path": "tv season account states list",
+      "summary": "Run the tv season account states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_account_states",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season account states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/account_states"
+        }
+      ]
+    },
+    {
+      "path": "tv season aggregate credits list",
+      "summary": "Run the tv season aggregate credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_aggregate_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season aggregate credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/aggregate_credits"
+        }
+      ]
+    },
+    {
+      "path": "tv season changes by id list",
+      "summary": "Run the tv season changes by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_changes_by_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season changes by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/season/{season_id}/changes"
+        }
+      ]
+    },
+    {
+      "path": "tv season credits list",
+      "summary": "Run the tv season credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/credits"
+        }
+      ]
+    },
+    {
+      "path": "tv season details list",
+      "summary": "Run the tv season details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}"
+        }
+      ]
+    },
+    {
+      "path": "tv season external ids list",
+      "summary": "Run the tv season external ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_external_ids",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season external ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/external_ids"
+        }
+      ]
+    },
+    {
+      "path": "tv season images list",
+      "summary": "Run the tv season images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/images"
+        }
+      ]
+    },
+    {
+      "path": "tv season translations list",
+      "summary": "Run the tv season translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/translations"
+        }
+      ]
+    },
+    {
+      "path": "tv season videos list",
+      "summary": "Run the tv season videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_videos",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/videos"
+        }
+      ]
+    },
+    {
+      "path": "tv season watch providers list",
+      "summary": "Run the tv season watch providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_season_watch_providers",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv season watch providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/season/{season_number}/watch/providers"
+        }
+      ]
+    },
+    {
+      "path": "tv series account states list",
+      "summary": "Run the tv series account states ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_account_states",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series account states list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/account_states"
+        }
+      ]
+    },
+    {
+      "path": "tv series aggregate credits list",
+      "summary": "Run the tv series aggregate credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_aggregate_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series aggregate credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/aggregate_credits"
+        }
+      ]
+    },
+    {
+      "path": "tv series airing today list list",
+      "summary": "Run the tv series airing today list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_airing_today_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series airing today list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/airing_today"
+        }
+      ]
+    },
+    {
+      "path": "tv series alternative titles list",
+      "summary": "Run the tv series alternative titles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_alternative_titles",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series alternative titles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/alternative_titles"
+        }
+      ]
+    },
+    {
+      "path": "tv series changes list",
+      "summary": "Run the tv series changes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_changes",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series changes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/changes"
+        }
+      ]
+    },
+    {
+      "path": "tv series content ratings list",
+      "summary": "Run the tv series content ratings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_content_ratings",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series content ratings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/content_ratings"
+        }
+      ]
+    },
+    {
+      "path": "tv series credits list",
+      "summary": "Run the tv series credits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_credits",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series credits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/credits"
+        }
+      ]
+    },
+    {
+      "path": "tv series details list",
+      "summary": "Run the tv series details ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_details",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series details list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}"
+        }
+      ]
+    },
+    {
+      "path": "tv series episode groups list",
+      "summary": "Run the tv series episode groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_episode_groups",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series episode groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/episode_groups"
+        }
+      ]
+    },
+    {
+      "path": "tv series external ids list",
+      "summary": "Run the tv series external ids ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_external_ids",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series external ids list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/external_ids"
+        }
+      ]
+    },
+    {
+      "path": "tv series images list",
+      "summary": "Run the tv series images ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_images",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series images list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/images"
+        }
+      ]
+    },
+    {
+      "path": "tv series keywords list",
+      "summary": "Run the tv series keywords ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_keywords",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series keywords list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/keywords"
+        }
+      ]
+    },
+    {
+      "path": "tv series latest id list",
+      "summary": "Run the tv series latest id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_latest_id",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series latest id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/latest"
+        }
+      ]
+    },
+    {
+      "path": "tv series on the air list list",
+      "summary": "Run the tv series on the air list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_on_the_air_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series on the air list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/on_the_air"
+        }
+      ]
+    },
+    {
+      "path": "tv series popular list list",
+      "summary": "Run the tv series popular list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_popular_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series popular list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/popular"
+        }
+      ]
+    },
+    {
+      "path": "tv series recommendations list",
+      "summary": "Run the tv series recommendations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_recommendations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series recommendations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/recommendations"
+        }
+      ]
+    },
+    {
+      "path": "tv series reviews list",
+      "summary": "Run the tv series reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_reviews",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/reviews"
+        }
+      ]
+    },
+    {
+      "path": "tv series screened theatrically list",
+      "summary": "Run the tv series screened theatrically ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_screened_theatrically",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series screened theatrically list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/screened_theatrically"
+        }
+      ]
+    },
+    {
+      "path": "tv series similar list",
+      "summary": "Run the tv series similar ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_similar",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series similar list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/similar"
+        }
+      ]
+    },
+    {
+      "path": "tv series top rated list list",
+      "summary": "Run the tv series top rated list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_top_rated_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series top rated list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/top_rated"
+        }
+      ]
+    },
+    {
+      "path": "tv series translations list",
+      "summary": "Run the tv series translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_translations",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/translations"
+        }
+      ]
+    },
+    {
+      "path": "tv series videos list",
+      "summary": "Run the tv series videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_videos",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/videos"
+        }
+      ]
+    },
+    {
+      "path": "tv series watch providers list",
+      "summary": "Run the tv series watch providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tv_series_watch_providers",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb tv series watch providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/tv/{series_id}/watch/providers"
+        }
+      ]
+    },
+    {
+      "path": "watch provider tv list list",
+      "summary": "Run the watch provider tv list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "watch_provider_tv_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb watch provider tv list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/watch/providers/tv"
+        }
+      ]
+    },
+    {
+      "path": "watch providers available regions list",
+      "summary": "Run the watch providers available regions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "watch_providers_available_regions",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb watch providers available regions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/watch/providers/regions"
+        }
+      ]
+    },
+    {
+      "path": "watch providers movie list list",
+      "summary": "Run the watch providers movie list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "watch_providers_movie_list",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "examples": [
+        "pm tmdb watch providers movie list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/3/watch/providers/movie"
+        }
+      ]
+    }
+  ]
+}

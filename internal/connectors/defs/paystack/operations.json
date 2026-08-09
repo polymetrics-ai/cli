@@ -1,0 +1,2459 @@
+{
+  "operations": [
+    {
+      "id": "paystack.get.address-verification-states",
+      "kind": "rest_read",
+      "summary": "GET /address_verification/states",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/address_verification/states",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.apple-pay-domain",
+      "kind": "rest_read",
+      "summary": "GET /apple-pay/domain",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/apple-pay/domain",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.apple-pay-domain",
+      "kind": "rest_write",
+      "summary": "POST /apple-pay/domain",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/apple-pay/domain",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.apple-pay-domain",
+      "kind": "rest_write",
+      "summary": "DELETE /apple-pay/domain",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/apple-pay/domain",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.balance",
+      "kind": "rest_read",
+      "summary": "GET /balance",
+      "description": "account balance snapshot, not a syncable object stream",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/balance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.balance-ledger",
+      "kind": "rest_read",
+      "summary": "GET /balance/ledger",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/balance/ledger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bank",
+      "kind": "rest_read",
+      "summary": "GET /bank",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bank",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bank-resolve",
+      "kind": "rest_read",
+      "summary": "GET /bank/resolve",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bank/resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.bank-validate",
+      "kind": "rest_write",
+      "summary": "POST /bank/validate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bank/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bulkcharge",
+      "kind": "rest_read",
+      "summary": "GET /bulkcharge",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulkcharge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.bulkcharge",
+      "kind": "rest_write",
+      "summary": "POST /bulkcharge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulkcharge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bulkcharge-pause-code",
+      "kind": "rest_read",
+      "summary": "GET /bulkcharge/pause/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulkcharge/pause/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bulkcharge-resume-code",
+      "kind": "rest_read",
+      "summary": "GET /bulkcharge/resume/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulkcharge/resume/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bulkcharge-code",
+      "kind": "rest_read",
+      "summary": "GET /bulkcharge/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulkcharge/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.bulkcharge-code-charges",
+      "kind": "rest_read",
+      "summary": "GET /bulkcharge/{code}/charges",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulkcharge/{code}/charges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge",
+      "kind": "rest_write",
+      "summary": "POST /charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge-submit-address",
+      "kind": "rest_write",
+      "summary": "POST /charge/submit_address",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge/submit_address",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge-submit-birthday",
+      "kind": "rest_write",
+      "summary": "POST /charge/submit_birthday",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge/submit_birthday",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge-submit-otp",
+      "kind": "rest_write",
+      "summary": "POST /charge/submit_otp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge/submit_otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge-submit-phone",
+      "kind": "rest_write",
+      "summary": "POST /charge/submit_phone",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge/submit_phone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.charge-submit-pin",
+      "kind": "rest_write",
+      "summary": "POST /charge/submit_pin",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/charge/submit_pin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.charge-reference",
+      "kind": "rest_read",
+      "summary": "GET /charge/{reference}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/charge/{reference}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.country",
+      "kind": "rest_read",
+      "summary": "GET /country",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/country",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer",
+      "kind": "rest_write",
+      "summary": "POST /customer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer-authorization-deactivate",
+      "kind": "rest_write",
+      "summary": "POST /customer/authorization/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer/authorization/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer-authorization-initialize",
+      "kind": "rest_write",
+      "summary": "POST /customer/authorization/initialize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer/authorization/initialize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.customer-authorization-verify-reference",
+      "kind": "rest_read",
+      "summary": "GET /customer/authorization/verify/{reference}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/authorization/verify/{reference}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer-set-risk-action",
+      "kind": "rest_write",
+      "summary": "POST /customer/set_risk_action",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer/set_risk_action",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.customer-code",
+      "kind": "rest_read",
+      "summary": "GET /customer/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.customer-code",
+      "kind": "rest_write",
+      "summary": "PUT /customer/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customer/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer-code-identification",
+      "kind": "rest_write",
+      "summary": "POST /customer/{code}/identification",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer/{code}/identification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.customer-id-directdebit-activation-charge",
+      "kind": "rest_write",
+      "summary": "PUT /customer/{id}/directdebit-activation-charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customer/{id}/directdebit-activation-charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.customer-id-directdebit-mandate-authorizations",
+      "kind": "rest_read",
+      "summary": "GET /customer/{id}/directdebit-mandate-authorizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customer/{id}/directdebit-mandate-authorizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.customer-id-initialize-direct-debit",
+      "kind": "rest_write",
+      "summary": "POST /customer/{id}/initialize-direct-debit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customer/{id}/initialize-direct-debit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.decision-bin-bin",
+      "kind": "rest_read",
+      "summary": "GET /decision/bin/{bin}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/decision/bin/{bin}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dedicated-account",
+      "kind": "rest_read",
+      "summary": "GET /dedicated_account",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dedicated_account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.dedicated-account",
+      "kind": "rest_write",
+      "summary": "POST /dedicated_account",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dedicated_account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.dedicated-account-assign",
+      "kind": "rest_write",
+      "summary": "POST /dedicated_account/assign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dedicated_account/assign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dedicated-account-available-providers",
+      "kind": "rest_read",
+      "summary": "GET /dedicated_account/available_providers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dedicated_account/available_providers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dedicated-account-requery",
+      "kind": "rest_read",
+      "summary": "GET /dedicated_account/requery",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dedicated_account/requery",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.dedicated-account-split",
+      "kind": "rest_write",
+      "summary": "POST /dedicated_account/split",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dedicated_account/split",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.dedicated-account-split",
+      "kind": "rest_write",
+      "summary": "DELETE /dedicated_account/split",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/dedicated_account/split",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dedicated-account-id",
+      "kind": "rest_read",
+      "summary": "GET /dedicated_account/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dedicated_account/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.dedicated-account-id",
+      "kind": "rest_write",
+      "summary": "DELETE /dedicated_account/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/dedicated_account/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.directdebit-activation-charge",
+      "kind": "rest_write",
+      "summary": "PUT /directdebit/activation-charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/directdebit/activation-charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.directdebit-mandate-authorizations",
+      "kind": "rest_read",
+      "summary": "GET /directdebit/mandate-authorizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/directdebit/mandate-authorizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dispute-export",
+      "kind": "rest_read",
+      "summary": "GET /dispute/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dispute/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dispute-transaction-id",
+      "kind": "rest_read",
+      "summary": "GET /dispute/transaction/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dispute/transaction/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dispute-id",
+      "kind": "rest_read",
+      "summary": "GET /dispute/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dispute/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.dispute-id",
+      "kind": "rest_write",
+      "summary": "PUT /dispute/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/dispute/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.dispute-id-evidence",
+      "kind": "rest_write",
+      "summary": "POST /dispute/{id}/evidence",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/dispute/{id}/evidence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.dispute-id-resolve",
+      "kind": "rest_write",
+      "summary": "PUT /dispute/{id}/resolve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/dispute/{id}/resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.dispute-id-upload-url",
+      "kind": "rest_read",
+      "summary": "GET /dispute/{id}/upload_url",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dispute/{id}/upload_url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.integration-payment-session-timeout",
+      "kind": "rest_read",
+      "summary": "GET /integration/payment_session_timeout",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration/payment_session_timeout",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.integration-payment-session-timeout",
+      "kind": "rest_write",
+      "summary": "PUT /integration/payment_session_timeout",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/integration/payment_session_timeout",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.order",
+      "kind": "rest_read",
+      "summary": "GET /order",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.order",
+      "kind": "rest_write",
+      "summary": "POST /order",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.order-product-id",
+      "kind": "rest_read",
+      "summary": "GET /order/product/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/order/product/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.order-code-validate",
+      "kind": "rest_read",
+      "summary": "GET /order/{code}/validate",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/order/{code}/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.order-id",
+      "kind": "rest_read",
+      "summary": "GET /order/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/order/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.page",
+      "kind": "rest_read",
+      "summary": "GET /page",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/page",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.page",
+      "kind": "rest_write",
+      "summary": "POST /page",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/page",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.page-check-slug-availability-slug",
+      "kind": "rest_read",
+      "summary": "GET /page/check_slug_availability/{slug}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/page/check_slug_availability/{slug}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.page-id",
+      "kind": "rest_read",
+      "summary": "GET /page/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/page/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.page-id",
+      "kind": "rest_write",
+      "summary": "PUT /page/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/page/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.page-id-product",
+      "kind": "rest_write",
+      "summary": "POST /page/{id}/product",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/page/{id}/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.paymentrequest",
+      "kind": "rest_write",
+      "summary": "POST /paymentrequest",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/paymentrequest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.paymentrequest-archive-id",
+      "kind": "rest_write",
+      "summary": "POST /paymentrequest/archive/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/paymentrequest/archive/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.paymentrequest-finalize-id",
+      "kind": "rest_write",
+      "summary": "POST /paymentrequest/finalize/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/paymentrequest/finalize/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.paymentrequest-notify-id",
+      "kind": "rest_write",
+      "summary": "POST /paymentrequest/notify/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/paymentrequest/notify/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.paymentrequest-totals",
+      "kind": "rest_read",
+      "summary": "GET /paymentrequest/totals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/paymentrequest/totals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.paymentrequest-verify-id",
+      "kind": "rest_read",
+      "summary": "GET /paymentrequest/verify/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/paymentrequest/verify/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.paymentrequest-id",
+      "kind": "rest_read",
+      "summary": "GET /paymentrequest/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/paymentrequest/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.paymentrequest-id",
+      "kind": "rest_write",
+      "summary": "PUT /paymentrequest/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/paymentrequest/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.plan",
+      "kind": "rest_read",
+      "summary": "GET /plan",
+      "description": "/plan is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.plan",
+      "kind": "rest_write",
+      "summary": "POST /plan",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/plan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.plan-code",
+      "kind": "rest_read",
+      "summary": "GET /plan/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/plan/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.plan-code",
+      "kind": "rest_write",
+      "summary": "PUT /plan/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/plan/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.product",
+      "kind": "rest_read",
+      "summary": "GET /product",
+      "description": "/product is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.product",
+      "kind": "rest_write",
+      "summary": "POST /product",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.product-id",
+      "kind": "rest_read",
+      "summary": "GET /product/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/product/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.product-id",
+      "kind": "rest_write",
+      "summary": "PUT /product/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/product/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.product-id",
+      "kind": "rest_write",
+      "summary": "DELETE /product/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/product/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.refund",
+      "kind": "rest_read",
+      "summary": "GET /refund",
+      "description": "/refund is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.refund",
+      "kind": "rest_write",
+      "summary": "POST /refund",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.refund-retry-with-customer-details-id",
+      "kind": "rest_write",
+      "summary": "POST /refund/retry_with_customer_details/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/refund/retry_with_customer_details/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.refund-id",
+      "kind": "rest_read",
+      "summary": "GET /refund/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/refund/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.settlement",
+      "kind": "rest_read",
+      "summary": "GET /settlement",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settlement",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.settlement-id-transactions",
+      "kind": "rest_read",
+      "summary": "GET /settlement/{id}/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settlement/{id}/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.split",
+      "kind": "rest_read",
+      "summary": "GET /split",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/split",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.split",
+      "kind": "rest_write",
+      "summary": "POST /split",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/split",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.split-id",
+      "kind": "rest_read",
+      "summary": "GET /split/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/split/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.split-id",
+      "kind": "rest_write",
+      "summary": "PUT /split/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/split/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.split-id-subaccount-add",
+      "kind": "rest_write",
+      "summary": "POST /split/{id}/subaccount/add",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/split/{id}/subaccount/add",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.split-id-subaccount-remove",
+      "kind": "rest_write",
+      "summary": "POST /split/{id}/subaccount/remove",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/split/{id}/subaccount/remove",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.storefront",
+      "kind": "rest_read",
+      "summary": "GET /storefront",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/storefront",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.storefront",
+      "kind": "rest_write",
+      "summary": "POST /storefront",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/storefront",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.storefront-verify-slug",
+      "kind": "rest_read",
+      "summary": "GET /storefront/verify/{slug}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/storefront/verify/{slug}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.storefront-id",
+      "kind": "rest_read",
+      "summary": "GET /storefront/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/storefront/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.storefront-id",
+      "kind": "rest_write",
+      "summary": "PUT /storefront/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/storefront/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.storefront-id",
+      "kind": "rest_write",
+      "summary": "DELETE /storefront/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/storefront/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.storefront-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /storefront/{id}/duplicate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/storefront/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.storefront-id-order",
+      "kind": "rest_read",
+      "summary": "GET /storefront/{id}/order",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/storefront/{id}/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.storefront-id-product",
+      "kind": "rest_read",
+      "summary": "GET /storefront/{id}/product",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/storefront/{id}/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.storefront-id-product",
+      "kind": "rest_write",
+      "summary": "POST /storefront/{id}/product",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/storefront/{id}/product",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.storefront-id-publish",
+      "kind": "rest_write",
+      "summary": "POST /storefront/{id}/publish",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/storefront/{id}/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.subaccount",
+      "kind": "rest_read",
+      "summary": "GET /subaccount",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subaccount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.subaccount",
+      "kind": "rest_write",
+      "summary": "POST /subaccount",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subaccount",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.subaccount-code",
+      "kind": "rest_read",
+      "summary": "GET /subaccount/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subaccount/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.subaccount-code",
+      "kind": "rest_write",
+      "summary": "PUT /subaccount/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/subaccount/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.subscription",
+      "kind": "rest_write",
+      "summary": "POST /subscription",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.subscription-disable",
+      "kind": "rest_write",
+      "summary": "POST /subscription/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.subscription-enable",
+      "kind": "rest_write",
+      "summary": "POST /subscription/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.subscription-code",
+      "kind": "rest_read",
+      "summary": "GET /subscription/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscription/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.subscription-code-manage-email",
+      "kind": "rest_write",
+      "summary": "POST /subscription/{code}/manage/email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/subscription/{code}/manage/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.subscription-code-manage-link",
+      "kind": "rest_read",
+      "summary": "GET /subscription/{code}/manage/link",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/subscription/{code}/manage/link",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.terminal",
+      "kind": "rest_read",
+      "summary": "GET /terminal",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/terminal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.terminal-commission-device",
+      "kind": "rest_write",
+      "summary": "POST /terminal/commission_device",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/terminal/commission_device",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.terminal-decommission-device",
+      "kind": "rest_write",
+      "summary": "POST /terminal/decommission_device",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/terminal/decommission_device",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.terminal-id-event",
+      "kind": "rest_write",
+      "summary": "POST /terminal/{id}/event",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/terminal/{id}/event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.terminal-terminal-id",
+      "kind": "rest_read",
+      "summary": "GET /terminal/{terminal_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/terminal/{terminal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.terminal-terminal-id",
+      "kind": "rest_write",
+      "summary": "PUT /terminal/{terminal_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/terminal/{terminal_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.terminal-terminal-id-event-event-id",
+      "kind": "rest_read",
+      "summary": "GET /terminal/{terminal_id}/event/{event_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/terminal/{terminal_id}/event/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.terminal-terminal-id-presence",
+      "kind": "rest_read",
+      "summary": "GET /terminal/{terminal_id}/presence",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/terminal/{terminal_id}/presence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transaction-charge-authorization",
+      "kind": "rest_write",
+      "summary": "POST /transaction/charge_authorization",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transaction/charge_authorization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transaction-export",
+      "kind": "rest_read",
+      "summary": "GET /transaction/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transaction/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transaction-initialize",
+      "kind": "rest_write",
+      "summary": "POST /transaction/initialize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transaction/initialize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transaction-partial-debit",
+      "kind": "rest_write",
+      "summary": "POST /transaction/partial_debit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transaction/partial_debit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transaction-timeline-id",
+      "kind": "rest_read",
+      "summary": "GET /transaction/timeline/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transaction/timeline/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transaction-totals",
+      "kind": "rest_read",
+      "summary": "GET /transaction/totals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transaction/totals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transaction-verify-reference",
+      "kind": "rest_read",
+      "summary": "GET /transaction/verify/{reference}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transaction/verify/{reference}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transaction-id",
+      "kind": "rest_read",
+      "summary": "GET /transaction/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transaction/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transfer",
+      "kind": "rest_read",
+      "summary": "GET /transfer",
+      "description": "/transfer is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transfer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer",
+      "kind": "rest_write",
+      "summary": "POST /transfer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-bulk",
+      "kind": "rest_write",
+      "summary": "POST /transfer/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-disable-otp",
+      "kind": "rest_write",
+      "summary": "POST /transfer/disable_otp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/disable_otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-disable-otp-finalize",
+      "kind": "rest_write",
+      "summary": "POST /transfer/disable_otp_finalize",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/disable_otp_finalize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-enable-otp",
+      "kind": "rest_write",
+      "summary": "POST /transfer/enable_otp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/enable_otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transfer-export",
+      "kind": "rest_read",
+      "summary": "GET /transfer/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transfer/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-finalize-transfer",
+      "kind": "rest_write",
+      "summary": "POST /transfer/finalize_transfer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/finalize_transfer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transfer-resend-otp",
+      "kind": "rest_write",
+      "summary": "POST /transfer/resend_otp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transfer/resend_otp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transfer-verify-reference",
+      "kind": "rest_read",
+      "summary": "GET /transfer/verify/{reference}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transfer/verify/{reference}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transfer-code",
+      "kind": "rest_read",
+      "summary": "GET /transfer/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transfer/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transferrecipient",
+      "kind": "rest_read",
+      "summary": "GET /transferrecipient",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transferrecipient",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transferrecipient",
+      "kind": "rest_write",
+      "summary": "POST /transferrecipient",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transferrecipient",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.transferrecipient-bulk",
+      "kind": "rest_write",
+      "summary": "POST /transferrecipient/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transferrecipient/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.transferrecipient-code",
+      "kind": "rest_read",
+      "summary": "GET /transferrecipient/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transferrecipient/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.transferrecipient-code",
+      "kind": "rest_write",
+      "summary": "PUT /transferrecipient/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/transferrecipient/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.transferrecipient-code",
+      "kind": "rest_write",
+      "summary": "DELETE /transferrecipient/{code}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/transferrecipient/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.virtual-terminal",
+      "kind": "rest_read",
+      "summary": "GET /virtual_terminal",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_terminal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.virtual-terminal",
+      "kind": "rest_write",
+      "summary": "POST /virtual_terminal",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/virtual_terminal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.get.virtual-terminal-code",
+      "kind": "rest_read",
+      "summary": "GET /virtual_terminal/{code}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_terminal/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.virtual-terminal-code",
+      "kind": "rest_write",
+      "summary": "PUT /virtual_terminal/{code}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/virtual_terminal/{code}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.virtual-terminal-code-deactivate",
+      "kind": "rest_write",
+      "summary": "PUT /virtual_terminal/{code}/deactivate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/virtual_terminal/{code}/deactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.virtual-terminal-code-destination-assign",
+      "kind": "rest_write",
+      "summary": "POST /virtual_terminal/{code}/destination/assign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/virtual_terminal/{code}/destination/assign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.post.virtual-terminal-code-destination-unassign",
+      "kind": "rest_write",
+      "summary": "POST /virtual_terminal/{code}/destination/unassign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/virtual_terminal/{code}/destination/unassign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.put.virtual-terminal-code-split-code",
+      "kind": "rest_write",
+      "summary": "PUT /virtual_terminal/{code}/split_code",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/virtual_terminal/{code}/split_code",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "paystack.delete.virtual-terminal-code-split-code",
+      "kind": "rest_write",
+      "summary": "DELETE /virtual_terminal/{code}/split_code",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://raw.githubusercontent.com/PaystackOSS/openapi/main/dist/paystack.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/virtual_terminal/{code}/split_code",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

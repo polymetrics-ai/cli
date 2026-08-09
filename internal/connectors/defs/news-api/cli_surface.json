@@ -1,0 +1,68 @@
+{
+  "tagline": "Run News API's declared streams and reverse-ETL actions.",
+  "usage": "pm news-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "everything list",
+        "sources list",
+        "top headlines list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "everything list",
+      "summary": "Run the everything ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "everything",
+      "source_url": "https://newsapi.org/docs/endpoints",
+      "examples": [
+        "pm news-api everything list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/everything"
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://newsapi.org/docs/endpoints",
+      "examples": [
+        "pm news-api sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/top-headlines/sources"
+        }
+      ]
+    },
+    {
+      "path": "top headlines list",
+      "summary": "Run the top headlines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "top_headlines",
+      "source_url": "https://newsapi.org/docs/endpoints",
+      "examples": [
+        "pm news-api top headlines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/top-headlines"
+        }
+      ]
+    }
+  ]
+}

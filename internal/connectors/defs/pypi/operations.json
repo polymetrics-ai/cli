@@ -1,0 +1,49 @@
+{
+  "operations": [
+    {
+      "id": "pypi.get.pypi-project-version-json",
+      "kind": "rest_read",
+      "summary": "GET /pypi/{project}/{version}/json",
+      "description": "ENGINE_GAP: powers the releases stream's map-of-arrays flatten-with-key-stamp behavior, which the current records.path/computed_fields dialect cannot express; see this migration's blockers[] and docs.md Known limits",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pypi/{project}/{version}/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pypi.get.simple-project",
+      "kind": "rest_read",
+      "summary": "GET /simple/{project}/",
+      "description": "not implemented in this bundle; legacy never implemented the Simple API index",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/simple/{project}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pypi.get.stats",
+      "kind": "rest_read",
+      "summary": "GET /stats",
+      "description": "aggregate registry-wide statistics, not a per-project syncable object stream",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stats",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

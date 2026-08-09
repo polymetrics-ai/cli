@@ -1,0 +1,34 @@
+{
+  "operations": [
+    {
+      "id": "searxng.get.config",
+      "kind": "rest_read",
+      "summary": "GET /config",
+      "description": "instance configuration/capabilities introspection, not a syncable object stream",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/config",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "searxng.get.healthz",
+      "kind": "rest_read",
+      "summary": "GET /healthz",
+      "description": "instance health probe, not a syncable object stream",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/healthz",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

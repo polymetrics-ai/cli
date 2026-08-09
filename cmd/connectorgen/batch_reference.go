@@ -14,6 +14,58 @@ import (
 
 var batchHTMLExplicitOperation = regexp.MustCompile(`(?i)\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE)\s+(/[A-Za-z0-9._~%!$&'()*+,;=:@/{}\[\]-]+)`)
 var batchMarkdownReferenceLink = regexp.MustCompile(`\[[^\]]+\]\(([^)\s]+)\)`)
+var batchHTMLAnglePathParameter = regexp.MustCompile(`<([A-Za-z_][A-Za-z0-9_-]*)>`)
+
+// completeBatchHTMLReferenceRoot accepts a provider's root reference without
+// traversing unrelated linked documents only when its own explicit request
+// inventory already satisfies the immutable ledger count.
+func completeBatchHTMLReferenceRoot(candidate BatchManifestConnector, raw []byte, source batchArtifactSource) (batchArtifactInventory, bool, error) {
+	inventory, err := parseBatchHTMLReferenceRoot(raw, source)
+	if err != nil {
+		return batchArtifactInventory{}, false, err
+	}
+	return inventory, len(inventory.Endpoints) >= candidate.OperationsTotal, nil
+}
+
+func parseBatchHTMLReferenceRoot(raw []byte, source batchArtifactSource) (batchArtifactInventory, error) {
+	if source.URL == "" {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference has no source URL")
+	}
+	if source.Kind == "" {
+		source.Kind = "html_reference"
+	}
+	if source.SHA256 == "" {
+		source.SHA256 = fmt.Sprintf("%x", sha256Bytes(raw))
+	}
+	rootURL, err := parseBatchReferenceURL(source.URL)
+	if err != nil {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference URL is unsafe: %v", err)
+	}
+	inventory := batchArtifactInventory{Sources: []batchArtifactSource{source}}
+	for _, match := range batchHTMLExplicitOperation.FindAllSubmatch(raw, -1) {
+		method := strings.ToUpper(string(match[1]))
+		path := normalizeBatchHTMLOperationPath(string(match[2]))
+		if path == "" {
+			continue
+		}
+		endpoint := batchArtifactEndpoint{
+			Method:           method,
+			Path:             path,
+			Summary:          fmt.Sprintf("%s %s", method, path),
+			SourceURL:        source.URL,
+			SourceKind:       source.Kind,
+			SourceVersion:    source.Version,
+			SourceRetrieved:  source.Retrieved,
+			SourceSHA256:     source.SHA256,
+			SourceCoordinate: fmt.Sprintf("%s#%s %s", rootURL.String(), method, path),
+		}
+		inventory = mergeBatchArtifactInventories(inventory, batchArtifactInventory{Endpoints: []batchArtifactEndpoint{endpoint}})
+	}
+	if len(inventory.Endpoints) == 0 {
+		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML root contains no explicit operations")
+	}
+	return deduplicateBatchArtifactSources(inventory), nil
+}
 
 // parseBatchHTMLReference is deliberately conservative: it only normalizes
 // method/path pairs printed by the provider and machine-readable sources
@@ -156,12 +208,16 @@ func parseBatchReferenceMachineArtifactWithBudget(raw []byte, source batchArtifa
 	if openAPIErr == nil {
 		return inventory, true, nil
 	}
+	inventory, discoveryErr := parseBatchGoogleDiscoveryArtifact(raw, source)
+	if discoveryErr == nil {
+		return inventory, true, nil
+	}
 	inventory, postmanErr := parseBatchPostmanArtifact(raw, source)
 	if postmanErr == nil {
 		return inventory, true, nil
 	}
 	if batchReferenceLooksLikeMachineArtifact(raw, source.URL) {
-		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: %v; Postman: %v", source.URL, openAPIErr, postmanErr)
+		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: %v; Google Discovery: %v; Postman: %v", source.URL, openAPIErr, discoveryErr, postmanErr)
 	}
 	if !batchReferenceLooksLikeText(raw, source.URL) {
 		return batchArtifactInventory{}, true, batchArtifactInventoryUnknown("official reference %q is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document", source.URL)
@@ -243,7 +299,10 @@ func batchHTMLReferenceLinks(raw []byte, base *url.URL) ([]string, error) {
 		resolved.Fragment = ""
 		resolved.RawFragment = ""
 		if !batchReferenceHostAdmitted(base, resolved) {
-			return batchArtifactInventoryUnknown("official reference contains a selected link outside the trusted provider host")
+			if batchReferenceLinkRequiresTrustedHost(candidate) {
+				return batchArtifactInventoryUnknown("official reference contains a selected link outside the trusted provider host")
+			}
+			return nil
 		}
 		if err := validateBatchReferenceURLObject(resolved); err != nil {
 			return batchArtifactInventoryUnknown("official reference contains a selected link that failed URL admission")
@@ -314,7 +373,24 @@ func isLikelyBatchReferenceLink(raw string) bool {
 	if lower == "" || strings.HasPrefix(lower, "#") || strings.HasPrefix(lower, "mailto:") || strings.HasPrefix(lower, "javascript:") {
 		return false
 	}
+	if parsed, err := url.Parse(lower); err == nil {
+		for _, suffix := range []string{".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot"} {
+			if strings.HasSuffix(parsed.Path, suffix) {
+				return false
+			}
+		}
+	}
 	for _, marker := range []string{".json", ".yaml", ".yml", "openapi", "swagger", "postman", "reference", "endpoint", "operation", "api-doc", "api/"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func batchReferenceLinkRequiresTrustedHost(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	for _, marker := range []string{".json", ".yaml", ".yml", "openapi", "swagger", "postman"} {
 		if strings.Contains(lower, marker) {
 			return true
 		}
@@ -324,7 +400,11 @@ func isLikelyBatchReferenceLink(raw string) bool {
 
 func normalizeBatchHTMLOperationPath(raw string) string {
 	path := nethtml.UnescapeString(strings.TrimSpace(raw))
-	if cut := strings.IndexAny(path, "?#\"'<>"); cut >= 0 {
+	path = batchHTMLAnglePathParameter.ReplaceAllString(path, "{$1}")
+	if strings.ContainsAny(path, "<>") {
+		return ""
+	}
+	if cut := strings.IndexAny(path, "?#\"'"); cut >= 0 {
 		path = path[:cut]
 	}
 	if path == "" || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {

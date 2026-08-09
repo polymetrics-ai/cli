@@ -11,8 +11,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/audienceInsights:listInsightsEligibleDates",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -22,8 +22,7 @@
               "additionalProperties": true
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -37,8 +36,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}/assetGenerations:generateImages",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -117,8 +116,7 @@
               "additionalProperties": true
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -132,8 +130,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}/assetGenerations:generateText",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -219,8 +217,7 @@
           "required": [
             "assetFieldTypes"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -234,8 +231,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:generateAdGroupThemes",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -257,8 +254,7 @@
             "adGroups",
             "keywords"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -272,8 +268,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -314,8 +310,7 @@
               }
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -329,8 +324,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:generateKeywordIdeas",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -398,8 +393,7 @@
               ]
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -413,8 +407,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:generateSuggestedTargetingInsights",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -435,8 +429,7 @@
               "additionalProperties": true
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -492,8 +485,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}/recommendations:generate",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -665,8 +658,7 @@
             "recommendationTypes",
             "advertisingChannelType"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -680,8 +672,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:searchAudienceInsightsAttributes",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -737,8 +729,7 @@
             "dimensions",
             "queryText"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -752,8 +743,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:suggestBrands",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -771,8 +762,7 @@
           "required": [
             "brandPrefix"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -786,8 +776,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/customers/{customer_id}:suggestTravelAssets",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -805,8 +795,7 @@
           "required": [
             "languageOption"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -820,8 +809,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/geoTargetConstants:suggest",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -841,8 +830,7 @@
               "type": "string"
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -856,8 +844,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22/keywordThemeConstants:suggest",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -872,8 +860,7 @@
               "type": "string"
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -887,8 +874,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22:generateConversionRates",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -907,8 +894,7 @@
           "required": [
             "customerId"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -922,8 +908,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22:listPlannableLocations",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -933,8 +919,7 @@
               "additionalProperties": true
             }
           }
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -948,8 +933,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22:listPlannableProducts",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -965,8 +950,7 @@
           "required": [
             "plannableLocationId"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -980,8 +964,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22:listPlannableUserInterests",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -1018,8 +1002,7 @@
           "required": [
             "customerId"
           ]
-        },
-        "body": {}
+        }
       }
     },
     {
@@ -1033,8 +1016,8 @@
       "rest": {
         "method": "POST",
         "path": "/v22:listPlannableUserLists",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "additionalProperties": false,
@@ -1053,8 +1036,2144 @@
           "required": [
             "customerId"
           ]
-        },
-        "body": {}
+        }
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupcriterioncustomizers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigngoalconfigs-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/CampaignGoalConfigs:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/CampaignGoalConfigs:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customercustomizers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/CustomerCustomizers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/CustomerCustomizers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-goals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/Goals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/Goals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-accountbudgetproposals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/accountBudgetProposals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountBudgetProposals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-accountlinks-create",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/accountLinks:create",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountLinks:create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-accountlinks-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/accountLinks:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/accountLinks:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupadlabels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupAdLabels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAdLabels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupads-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupAds:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAds:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupassetsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupAssetSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAssetSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupassets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupAssets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupAssets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupbidmodifiers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupBidModifiers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupBidModifiers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupcriteria-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupCriteria:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCriteria:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupcriterionlabels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupCriterionLabels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCriterionLabels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroupcustomizers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupCustomizers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupCustomizers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgrouplabels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroupLabels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroupLabels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adgroups-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adGroups:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adGroups:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-adparameters-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/adParameters:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/adParameters:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-ads-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/ads:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/ads:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetgroupassets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetGroupAssets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupAssets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetgrouplistinggroupfilters-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetGroupListingGroupFilters:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupListingGroupFilters:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetgroupsignals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetGroupSignals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroupSignals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetgroups-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetGroups:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetGroups:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetsetassets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetSetAssets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetSetAssets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assetsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assetSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assetSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-assets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/assets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/assets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-audiences-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/audiences:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/audiences:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-batchjobs-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/batchJobs:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/batchJobs:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-biddingdataexclusions-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/biddingDataExclusions:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingDataExclusions:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-biddingseasonalityadjustments-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/biddingSeasonalityAdjustments:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingSeasonalityAdjustments:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-biddingstrategies-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/biddingStrategies:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/biddingStrategies:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-billingsetups-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/billingSetups:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/billingSetups:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignassetsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignAssetSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignAssetSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignassets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignAssets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignAssets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignbidmodifiers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignBidModifiers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignBidModifiers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignbudgets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignBudgets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignBudgets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignconversiongoals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignConversionGoals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignConversionGoals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigncriteria-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignCriteria:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignCriteria:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigncustomizers-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignCustomizers:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignCustomizers:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigndrafts-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignDrafts:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignDrafts:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigngroups-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignGroups:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignGroups:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignlabels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignLabels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignLabels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignlifecyclegoal-configurecampaignlifecyclegoals",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignLifecycleGoal:configureCampaignLifecycleGoals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaignsharedsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaignSharedSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaignSharedSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigns-enablepmaxbrandguidelines",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaigns:enablePMaxBrandGuidelines",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaigns:enablePMaxBrandGuidelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-campaigns-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/campaigns:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/campaigns:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-conversionactions-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/conversionActions:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionActions:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-conversioncustomvariables-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/conversionCustomVariables:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionCustomVariables:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-conversiongoalcampaignconfigs-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/conversionGoalCampaignConfigs:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionGoalCampaignConfigs:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-conversionvaluerulesets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/conversionValueRuleSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionValueRuleSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-conversionvaluerules-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/conversionValueRules:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/conversionValueRules:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customaudiences-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customAudiences:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customAudiences:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customconversiongoals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customConversionGoals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customConversionGoals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-custominterests-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customInterests:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customInterests:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerassetsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerAssetSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerAssetSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerassets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerAssets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerAssets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerclientlinks-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerClientLinks:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerClientLinks:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerconversiongoals-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerConversionGoals:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerConversionGoals:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerlabels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerLabels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerLabels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerlifecyclegoal-configurecustomerlifecyclegoals",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerLifecycleGoal:configureCustomerLifecycleGoals",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerLifecycleGoal:configureCustomerLifecycleGoals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customermanagerlinks-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerManagerLinks:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerManagerLinks:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customernegativecriteria-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerNegativeCriteria:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerNegativeCriteria:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customerskadnetworkconversionvalueschemas-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerSkAdNetworkConversionValueSchemas:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerSkAdNetworkConversionValueSchemas:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customeruseraccessinvitations-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerUserAccessInvitations:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerUserAccessInvitations:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customeruseraccesses-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customerUserAccesses:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customerUserAccesses:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-customizerattributes-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/customizerAttributes:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/customizerAttributes:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-datalinks-create",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/dataLinks:create",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/dataLinks:create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-experimentarms-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/experimentArms:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/experimentArms:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-experiments-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/experiments:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/experiments:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-googleads-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/googleAds:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-googleads-search",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/googleAds:search",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-googleads-searchstream",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/googleAds:searchStream",
+      "description": "SearchStream is the streaming transport for the same GAQL search surface; the connector implements fixed, bounded campaign/ad_group reads through googleAds:search instead.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "low",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/googleAds:searchStream",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-keywordplanadgroupkeywords-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/keywordPlanAdGroupKeywords:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanAdGroupKeywords:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-keywordplanadgroups-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/keywordPlanAdGroups:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanAdGroups:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-keywordplancampaignkeywords-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/keywordPlanCampaignKeywords:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanCampaignKeywords:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-keywordplancampaigns-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/keywordPlanCampaigns:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlanCampaigns:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-keywordplans-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/keywordPlans:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/keywordPlans:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-labels-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/labels:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/labels:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-localservices-appendleadconversation",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/localServices:appendLeadConversation",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/localServices:appendLeadConversation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-multipartyauthreview-resolve",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/multiPartyAuthReview:resolve",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/multiPartyAuthReview:resolve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-offlineuserdatajobs-create",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/offlineUserDataJobs:create",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/offlineUserDataJobs:create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-productlinkinvitations-create",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/productLinkInvitations:create",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinkInvitations:create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-productlinks-create",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/productLinks:create",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/productLinks:create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-recommendationsubscriptions-mutaterecommendationsubscription",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/recommendationSubscriptions:mutateRecommendationSubscription",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendationSubscriptions:mutateRecommendationSubscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-recommendations-apply",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/recommendations:apply",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:apply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-recommendations-dismiss",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/recommendations:dismiss",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/recommendations:dismiss",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-remarketingactions-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/remarketingActions:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/remarketingActions:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-sharedcriteria-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/sharedCriteria:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/sharedCriteria:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-sharedsets-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/sharedSets:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/sharedSets:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-smartcampaignsettings-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/smartCampaignSettings:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/smartCampaignSettings:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-userlistcustomertypes-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/userListCustomerTypes:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/userListCustomerTypes:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-userlists-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}/userLists:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}/userLists:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-createcustomerclient",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:createCustomerClient",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:createCustomerClient",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateaudiencecompositioninsights",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateAudienceCompositionInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateaudienceoverlapinsights",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateAudienceOverlapInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatecreatorinsights",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateCreatorInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateCreatorInsights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateinsightsfinderreport",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateInsightsFinderReport",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatekeywordforecastmetrics",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateKeywordForecastMetrics",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatereachforecast",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateReachForecast",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateReachForecast",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generateshareablepreviews",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateShareablePreviews",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateShareablePreviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatetargetingsuggestionmetrics",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-generatetrendinginsights",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:generateTrendingInsights",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:generateTrendingInsights",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-mutate",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:mutate",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:mutate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-removecampaignautomaticallycreatedasset",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:removeCampaignAutomaticallyCreatedAsset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestkeywordthemes",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:suggestKeywordThemes",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignad",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignAd",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignbudgetoptions",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
+      "description": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-uploadcallconversions",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:uploadCallConversions",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadCallConversions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-uploadclickconversions",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:uploadClickConversions",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadClickConversions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-uploadconversionadjustments",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:uploadConversionAdjustments",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadConversionAdjustments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-customers-customer-id-uploaduserdata",
+      "kind": "rest_write",
+      "summary": "POST /v22/customers/{customer_id}:uploadUserData",
+      "description": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/customers/{customer_id}:uploadUserData",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-googleadsfields-search",
+      "kind": "rest_write",
+      "summary": "POST /v22/googleAdsFields:search",
+      "description": "Blocked because body.query accepts arbitrary GAQL text; Google Ads query surfaces must use fixed connector-owned stream queries.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/googleAdsFields:search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-ad-group-ad-removeautomaticallycreatedassets",
+      "kind": "rest_write",
+      "summary": "POST /v22/{ad_group_ad}:removeAutomaticallyCreatedAssets",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (adGroupAd) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{ad_group_ad}:removeAutomaticallyCreatedAssets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-campaign-draft-promote",
+      "kind": "rest_write",
+      "summary": "POST /v22/{campaign_draft}:promote",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (campaignDraft) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{campaign_draft}:promote",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-experiment-endexperiment",
+      "kind": "rest_write",
+      "summary": "POST /v22/{experiment}:endExperiment",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (experiment) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{experiment}:endExperiment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-experiment-graduateexperiment",
+      "kind": "rest_write",
+      "summary": "POST /v22/{experiment}:graduateExperiment",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (experiment) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{experiment}:graduateExperiment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-name",
+      "kind": "rest_read",
+      "summary": "GET /v22/{name}",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-name-2",
+      "kind": "rest_read",
+      "summary": "GET /v22/{name}",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.delete.v22-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v22/{name}",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v22/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-name-cancel",
+      "kind": "rest_write",
+      "summary": "POST /v22/{name}:cancel",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{name}:cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-name-wait",
+      "kind": "rest_write",
+      "summary": "POST /v22/{name}:wait",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{name}:wait",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-resource-name",
+      "kind": "rest_read",
+      "summary": "GET /v22/{resource_name}",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{resource_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-addoperations",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:addOperations",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:addOperations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-addoperations-2",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:addOperations",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:addOperations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-resource-name-getsmartcampaignstatus",
+      "kind": "rest_read",
+      "summary": "GET /v22/{resource_name}:getSmartCampaignStatus",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{resource_name}:getSmartCampaignStatus",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-resource-name-listasyncerrors",
+      "kind": "rest_read",
+      "summary": "GET /v22/{resource_name}:listAsyncErrors",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{resource_name}:listAsyncErrors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-resource-name-listexperimentasyncerrors",
+      "kind": "rest_read",
+      "summary": "GET /v22/{resource_name}:listExperimentAsyncErrors",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{resource_name}:listExperimentAsyncErrors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.get.v22-resource-name-listresults",
+      "kind": "rest_read",
+      "summary": "GET /v22/{resource_name}:listResults",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v22/{resource_name}:listResults",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-promoteexperiment",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:promoteExperiment",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:promoteExperiment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-provideleadfeedback",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:provideLeadFeedback",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:provideLeadFeedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-regenerateshareablelinkid",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:regenerateShareableLinkId",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:regenerateShareableLinkId",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-run",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:run",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-run-2",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:run",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-ads.post.v22-resource-name-scheduleexperiment",
+      "kind": "rest_write",
+      "summary": "POST /v22/{resource_name}:scheduleExperiment",
+      "description": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v22/{resource_name}:scheduleExperiment",
+        "max_bytes": 16777216
       }
     }
   ]

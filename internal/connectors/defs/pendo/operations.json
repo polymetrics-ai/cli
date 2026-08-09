@@ -1,0 +1,1387 @@
+{
+  "operations": [
+    {
+      "id": "pendo.get.account-b64-id",
+      "kind": "rest_read",
+      "summary": "GET /account/{b64_id}",
+      "description": "base64 account lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/account/{b64_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.aggregation",
+      "kind": "rest_write",
+      "summary": "POST /aggregation",
+      "description": "Pendo aggregation is a semantic read/report DSL carried in a POST JSON body; the current declarative read path does not transmit stream.body and generic user-supplied aggregation queries are not safe write actions",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/aggregation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-account-accountid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/account/{accountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/account/{accountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-account-b64-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/account/{b64_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/account/{b64_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-aggregation",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/aggregation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/aggregation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-blacklist",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/blacklist",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/blacklist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-blacklist-type-type",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/blacklist/type/{type}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/blacklist/type/{type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-bulkdelete",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/bulkdelete",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/bulkdelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-bulkdelete-account",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/bulkdelete/account",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/bulkdelete/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-bulkdelete-visitor",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/bulkdelete/visitor",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/bulkdelete/visitor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-bulkdelete-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/bulkdelete/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/bulkdelete/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-datasync-storagetypes-azure-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/datasync/storageTypes/azure/destinations/Default/credentials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/datasync/storageTypes/azure/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-datasync-storagetypes-gcs-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/datasync/storageTypes/gcs/destinations/Default/credentials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/datasync/storageTypes/gcs/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-datasync-storagetypes-s3-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/datasync/storageTypes/s3/destinations/Default/credentials",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/datasync/storageTypes/s3/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-feature",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/feature",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/feature",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-feedback",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/feedback",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.delete.api-v1-feedback",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/feedback",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-feedback-options",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/feedback/options",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/feedback/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.patch.api-v1-feedback-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/feedback/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/feedback/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-guide",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/guide",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/guide",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-all-visitor-visitorid-reset",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/all/visitor/{visitorId}/reset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/all/visitor/{visitorId}/reset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-guide-localization-export",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/guide/localization/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/guide/localization/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-localization-import",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/localization/import",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/localization/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-guide-order",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/guide/order",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/guide/order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-staged-reset",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/staged/reset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/staged/reset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-guideid-experiment-export",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/{guideId}/experiment/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/{guideId}/experiment/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-guide-guideid-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/guide/{guideId}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/guide/{guideId}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-guideid-reset",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/{guideId}/reset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/{guideId}/reset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-guide-guideid-segment",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/guide/{guideId}/segment",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/guide/{guideId}/segment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-guide-guideid-state",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/guide/{guideId}/state",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/guide/{guideId}/state",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-guide-guideid-visitor-visitorid-reset",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/guide/{guideId}/visitor/{visitorId}/reset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/guide/{guideId}/visitor/{visitorId}/reset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-metadata-dependencies",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metadata/dependencies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metadata/dependencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-metadata-dependencies-kind-group-fieldname",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metadata/dependencies/{kind}/{group}/{fieldName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metadata/dependencies/{kind}/{group}/{fieldName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-metadata-schema-kind",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metadata/schema/{kind}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metadata/schema/{kind}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-metadata-schema-kind-group",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/metadata/schema/{kind}/{group}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/metadata/schema/{kind}/{group}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.delete.api-v1-metadata-schema-kind-group-field",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/metadata/schema/{kind}/{group}/{field}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/metadata/schema/{kind}/{group}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-metadata-kind-pendo-value-id-blacklistguides",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/metadata/{kind}/pendo/value/{id}/blacklistguides",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/metadata/{kind}/pendo/value/{id}/blacklistguides",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-metadata-kind-pendo-value-id-donotprocess",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/metadata/{kind}/pendo/value/{id}/donotprocess",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/metadata/{kind}/pendo/value/{id}/donotprocess",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-metadata-kind-group-value",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/metadata/{kind}/{group}/value",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/metadata/{kind}/{group}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-metadata-kind-group-value-id-fieldname",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-metadata-kind-group-value-id-fieldname",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/metadata/{kind}/{group}/value/{id}/{fieldName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-page",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/page",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/page",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-report",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/report",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-report-reportid-results-csv",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/report/{reportId}/results.csv",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/report/{reportId}/results.csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-report-reportid-results-json",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/report/{reportId}/results.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/report/{reportId}/results.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-segment",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/segment",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/segment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-segment-upload",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/segment/upload",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/segment/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-segment-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/segment/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/segment/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-segment-segmentid",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/segment/{segmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/segment/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.delete.api-v1-segment-segmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/segment/{segmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/segment/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-segment-segmentid-status",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/segment/{segmentId}/status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/segment/{segmentId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.patch.api-v1-segment-segmentid-visitor",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/segment/{segmentId}/visitor",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/segment/{segmentId}/visitor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.api-v1-segment-segmentid-visitor-visitorid",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/segment/{segmentId}/visitor/{visitorId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.delete.api-v1-segment-segmentid-visitor-visitorid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/segment/{segmentId}/visitor/{visitorId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/segment/{segmentId}/visitor/{visitorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.api-v1-segment-segmentid-visitors",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/segment/{segmentId}/visitors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/segment/{segmentId}/visitors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-segment-segmentid-visitors-jobid-results-contenttype",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-segment-segmentid-visitors-jobid-status",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/segment/{segmentId}/visitors/{jobId}/status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/segment/{segmentId}/visitors/{jobId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-servername",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/servername",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/servername",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-servername-flag-flagname",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/servername/flag/{flagname}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/servername/flag/{flagname}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-servername-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/servername/{name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/servername/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-token-verify",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/token/verify",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/token/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-tracktype",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/tracktype",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/tracktype",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-visitor-b64-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/visitor/{b64_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/visitor/{b64_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-visitor-visitorid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/visitor/{visitorId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/visitor/{visitorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.api-v1-visitor-visitorid-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/visitor/{visitorId}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/visitor/{visitorId}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.bulkdelete-account",
+      "kind": "rest_write",
+      "summary": "POST /bulkdelete/account",
+      "description": "bulk GDPR/CCPA account deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulkdelete/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.bulkdelete-visitor",
+      "kind": "rest_write",
+      "summary": "POST /bulkdelete/visitor",
+      "description": "bulk GDPR/CCPA visitor deletion is irreversible administrative erasure, not exposed as a reverse-ETL write action",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulkdelete/visitor",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.data-agentic",
+      "kind": "rest_write",
+      "summary": "POST /data/agentic",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data/agentic",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.data-track",
+      "kind": "rest_write",
+      "summary": "POST /data/track",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/data/track",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.datasync-storagetypes-azure-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /datasync/storageTypes/azure/destinations/Default/credentials",
+      "description": "rotates external Azure credentials and requires client secret material in the request body",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/datasync/storageTypes/azure/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.datasync-storagetypes-gcs-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /datasync/storageTypes/gcs/destinations/Default/credentials",
+      "description": "rotates external GCS credentials and requires secret material in the request body",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/datasync/storageTypes/gcs/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.datasync-storagetypes-s3-destinations-default-credentials",
+      "kind": "rest_write",
+      "summary": "PUT /datasync/storageTypes/s3/destinations/Default/credentials",
+      "description": "rotates external S3 credentials and requires secret access key material in the request body",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/datasync/storageTypes/s3/destinations/Default/credentials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.guide-localization-export-guideids-guide-ids",
+      "kind": "rest_read",
+      "summary": "GET /guide/localization/export?guideids={guide_ids}",
+      "description": "bulk localization export returns XLIFF/XML content rather than JSON records",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/guide/localization/export?guideids={guide_ids}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.guide-localization-import",
+      "kind": "rest_write",
+      "summary": "POST /guide/localization/import",
+      "description": "bulk localization import requires raw XLIFF/XML request bodies; writes.json can only construct JSON/form/object bodies",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/guide/localization/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.guide-guideid-experiment-export",
+      "kind": "rest_write",
+      "summary": "POST /guide/{guideId}/experiment/export",
+      "description": "guide experiment export returns CSV, not a JSON mutation response or record stream",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/guide/{guideId}/experiment/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.metadata-schema-kind-group",
+      "kind": "rest_write",
+      "summary": "POST /metadata/schema/{kind}/{group}",
+      "description": "metadata field creation requires a root JSON array body; writes.json cannot serialize records as a root array",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/metadata/schema/{kind}/{group}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.delete.metadata-schema-kind-group-field",
+      "kind": "rest_write",
+      "summary": "DELETE /metadata/schema/{kind}/{group}/{field}",
+      "description": "deleting metadata schema fields is an administrative data-model change and can affect downstream reports/segments",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/metadata/schema/{kind}/{group}/{field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.metadata-kind-pendo-value-id-blacklistguides",
+      "kind": "rest_write",
+      "summary": "PUT /metadata/{kind}/pendo/value/{id}/blacklistguides",
+      "description": "privacy/guide-display opt-out mutation requires a raw boolean body and changes compliance-sensitive visitor/account handling",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/metadata/{kind}/pendo/value/{id}/blacklistguides",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.metadata-kind-pendo-value-id-donotprocess",
+      "kind": "rest_write",
+      "summary": "PUT /metadata/{kind}/pendo/value/{id}/donotprocess",
+      "description": "Do Not Process mutation requires a raw boolean body and changes compliance-sensitive visitor/account processing",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/metadata/{kind}/pendo/value/{id}/donotprocess",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.metadata-kind-group-value",
+      "kind": "rest_write",
+      "summary": "POST /metadata/{kind}/{group}/value",
+      "description": "bulk metadata value update requires a root JSON array body; writes.json cannot serialize records as a root array",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/metadata/{kind}/{group}/value",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.metadata-kind-group-value-id-fieldname",
+      "kind": "rest_read",
+      "summary": "GET /metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "description": "the endpoint returns a raw JSON scalar metadata value; declarative streams emit JSON object records only",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.put.metadata-kind-group-value-id-fieldname",
+      "kind": "rest_write",
+      "summary": "PUT /metadata/{kind}/{group}/value/{id}/{fieldName}",
+      "description": "single metadata value update accepts an arbitrary raw JSON value body, including scalars, which writes.json cannot model safely as a record-object body",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/metadata/{kind}/{group}/value/{id}/{fieldName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.report-reportid-results-csv",
+      "kind": "rest_read",
+      "summary": "GET /report/{reportId}/results.csv",
+      "description": "report CSV export is a non-JSON payload and requires CSV parsing outside the declarative stream dialect",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/{reportId}/results.csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.segment-segmentid-visitors-jobid-results-contenttype",
+      "kind": "rest_read",
+      "summary": "GET /segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+      "description": "segment export results are documented as downloadable CSV-style payloads rather than JSON object records",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segment/{segmentId}/visitors/{jobId}/results/{contentType}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.segment-segmentid-visitors-jobid-status",
+      "kind": "rest_read",
+      "summary": "GET /segment/{segmentId}/visitors/{jobId}/status",
+      "description": "async export status returns a scalar status string rather than JSON object records",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segment/{segmentId}/visitors/{jobId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.token-verify",
+      "kind": "rest_read",
+      "summary": "GET /token/verify",
+      "description": "integration-key validity probe, not a syncable data resource",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/token/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.get.visitor-b64-id",
+      "kind": "rest_read",
+      "summary": "GET /visitor/{b64_id}",
+      "description": "base64 visitor lookup requires the per-request x-pendo-base64-encoded-params: true header, but stream specs only support global base headers",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/visitor/{b64_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.https-data-pendo-io-data-agentic",
+      "kind": "rest_write",
+      "summary": "POST https://data.pendo.io/data/agentic",
+      "description": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "https://data.pendo.io/data/agentic",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pendo.post.https-data-pendo-io-data-track",
+      "kind": "rest_write",
+      "summary": "POST https://data.pendo.io/data/track",
+      "description": "requires a different per-action x-pendo-integration-key track-event shared secret on data.pendo.io; the current write dialect shares the bundle base authenticator across all actions",
+      "source_url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true\u0026versionTag=latest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "https://data.pendo.io/data/track",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

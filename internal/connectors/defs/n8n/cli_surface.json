@@ -1,0 +1,3922 @@
+{
+  "tagline": "Run n8n's declared streams and reverse-ETL actions.",
+  "usage": "pm n8n \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get community-packages",
+        "api get credentials",
+        "api get credentials id",
+        "api get credentials schema credentialtypename",
+        "api get data-tables",
+        "api get data-tables datatableid",
+        "api get data-tables datatableid columns",
+        "api get data-tables datatableid rows",
+        "api get discover",
+        "api get executions",
+        "api get executions id",
+        "api get executions id tags",
+        "api get insights summary",
+        "api get projects",
+        "api get projects projectid folders",
+        "api get projects projectid folders folderid",
+        "api get projects projectid users",
+        "api get settings ldap",
+        "api get settings ldap sync",
+        "api get settings log-streaming destinations",
+        "api get settings log-streaming destinations id",
+        "api get settings log-streaming event-types",
+        "api get settings otel",
+        "api get settings security-policy",
+        "api get settings sso oidc",
+        "api get settings sso saml",
+        "api get tags",
+        "api get tags id",
+        "api get users",
+        "api get users id",
+        "api get variables",
+        "api get workflows",
+        "api get workflows id",
+        "api get workflows id history",
+        "api get workflows id tags",
+        "api get workflows id test-runs",
+        "api get workflows id test-runs runid",
+        "api get workflows id test-runs runid test-cases",
+        "api get workflows id versionid",
+        "credential list",
+        "credential schema list",
+        "credentials list",
+        "data table columns list",
+        "data table list",
+        "data table rows list",
+        "data tables list",
+        "execution list",
+        "execution tags list",
+        "executions list",
+        "project members list",
+        "projects list",
+        "tag list",
+        "tags list",
+        "user list",
+        "users list",
+        "variables list",
+        "workflow list",
+        "workflow tags list",
+        "workflow version list",
+        "workflows list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add data table column apply",
+        "add project users apply",
+        "api delete api v1 credentials id",
+        "api delete api v1 data-tables datatableid",
+        "api delete api v1 data-tables datatableid columns columnid",
+        "api delete api v1 data-tables datatableid rows delete",
+        "api delete api v1 executions id",
+        "api delete api v1 projects projectid",
+        "api delete api v1 projects projectid users userid",
+        "api delete api v1 tags id",
+        "api delete api v1 users id",
+        "api delete api v1 variables id",
+        "api delete api v1 workflows id",
+        "api delete community-packages name",
+        "api delete credentials id",
+        "api delete data-tables datatableid",
+        "api delete data-tables datatableid columns columnid",
+        "api delete data-tables datatableid rows clear",
+        "api delete data-tables datatableid rows delete",
+        "api delete executions id",
+        "api delete projects projectid",
+        "api delete projects projectid folders folderid",
+        "api delete projects projectid users userid",
+        "api delete settings log-streaming destinations id",
+        "api delete tags id",
+        "api delete users id",
+        "api delete variables id",
+        "api delete workflows id",
+        "api patch api v1 credentials id",
+        "api patch api v1 users id role",
+        "api patch community-packages name",
+        "api patch credentials id",
+        "api patch data-tables datatableid",
+        "api patch data-tables datatableid columns columnid",
+        "api patch data-tables datatableid rows update",
+        "api patch projects projectid folders folderid",
+        "api patch projects projectid users userid",
+        "api patch users id role",
+        "api post api v1 credentials",
+        "api post api v1 users",
+        "api post audit",
+        "api post community-packages",
+        "api post credentials",
+        "api post credentials id test",
+        "api post data-tables",
+        "api post data-tables datatableid columns",
+        "api post data-tables datatableid rows",
+        "api post data-tables datatableid rows upsert",
+        "api post executions id retry",
+        "api post executions id stop",
+        "api post executions stop",
+        "api post n8n-packages export",
+        "api post n8n-packages import",
+        "api post projects",
+        "api post projects projectid folders",
+        "api post projects projectid users",
+        "api post settings ldap sync",
+        "api post settings log-streaming destinations",
+        "api post settings log-streaming destinations id test",
+        "api post settings otel test-trace",
+        "api post source-control pull",
+        "api post tags",
+        "api post users",
+        "api post variables",
+        "api post workflows",
+        "api post workflows id activate",
+        "api post workflows id archive",
+        "api post workflows id deactivate",
+        "api post workflows id publish",
+        "api post workflows id test-runs",
+        "api post workflows id test-runs runid cancel",
+        "api post workflows id unarchive",
+        "api post workflows id unpublish",
+        "api put api v1 executions id tags",
+        "api put api v1 workflows id tags",
+        "api put credentials id transfer",
+        "api put executions id tags",
+        "api put projects projectid",
+        "api put settings ldap",
+        "api put settings log-streaming destinations id",
+        "api put settings otel",
+        "api put settings security-policy",
+        "api put settings sso oidc",
+        "api put settings sso saml",
+        "api put tags id",
+        "api put variables id",
+        "api put workflows id",
+        "api put workflows id tags",
+        "api put workflows id transfer",
+        "archive workflow apply",
+        "change project user role apply",
+        "create data table apply",
+        "create project apply",
+        "create tag apply",
+        "create variable apply",
+        "create workflow apply",
+        "deactivate workflow apply",
+        "generate audit apply",
+        "insert data table rows apply",
+        "publish workflow apply",
+        "pull source control apply",
+        "retry execution apply",
+        "stop execution apply",
+        "stop executions apply",
+        "test credential apply",
+        "transfer credential apply",
+        "transfer workflow apply",
+        "unarchive workflow apply",
+        "update data table apply",
+        "update data table column apply",
+        "update data table rows apply",
+        "update project apply",
+        "update tag apply",
+        "update variable apply",
+        "update workflow apply",
+        "upsert data table row apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add data table column apply",
+      "summary": "Plan and execute the add data table column reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_data_table_column",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n add data table column apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/columns"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add project users apply",
+      "summary": "Plan and execute the add project users reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_project_users",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n add project users apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/projects/{projectId}/users"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "api delete api v1 credentials id",
+      "summary": "Documented DELETE /api/v1/credentials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 credentials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/credentials/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-credentials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 data-tables datatableid",
+      "summary": "Documented DELETE /api/v1/data-tables/{dataTableId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 data-tables datatableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/data-tables/{dataTableId}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-data-tables-datatableid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 data-tables datatableid columns columnid",
+      "summary": "Documented DELETE /api/v1/data-tables/{dataTableId}/columns/{columnId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 data-tables datatableid columns columnid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-data-tables-datatableid-columns-columnid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 data-tables datatableid rows delete",
+      "summary": "Documented DELETE /api/v1/data-tables/{dataTableId}/rows/delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 data-tables datatableid rows delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/data-tables/{dataTableId}/rows/delete"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-data-tables-datatableid-rows-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 executions id",
+      "summary": "Documented DELETE /api/v1/executions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 executions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/executions/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-executions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 projects projectid",
+      "summary": "Documented DELETE /api/v1/projects/{projectId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 projects projectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/projects/{projectId}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-projects-projectid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 projects projectid users userid",
+      "summary": "Documented DELETE /api/v1/projects/{projectId}/users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 projects projectid users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/projects/{projectId}/users/{userId}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-projects-projectid-users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 tags id",
+      "summary": "Documented DELETE /api/v1/tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/tags/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 users id",
+      "summary": "Documented DELETE /api/v1/users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/users/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 variables id",
+      "summary": "Documented DELETE /api/v1/variables/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 variables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/variables/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-variables-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v1 workflows id",
+      "summary": "Documented DELETE /api/v1/workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete api v1 workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/workflows/{id}"
+        }
+      ],
+      "operation": "n8n.delete.api-v1-workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete community-packages name",
+      "summary": "Documented DELETE /community-packages/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete community-packages name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/community-packages/{name}"
+        }
+      ],
+      "operation": "n8n.delete.community-packages-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete credentials id",
+      "summary": "Documented DELETE /credentials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete credentials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credentials/{id}"
+        }
+      ],
+      "operation": "n8n.delete.credentials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete data-tables datatableid",
+      "summary": "Documented DELETE /data-tables/{dataTableId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete data-tables datatableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data-tables/{dataTableId}"
+        }
+      ],
+      "operation": "n8n.delete.data-tables-datatableid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete data-tables datatableid columns columnid",
+      "summary": "Documented DELETE /data-tables/{dataTableId}/columns/{columnId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete data-tables datatableid columns columnid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data-tables/{dataTableId}/columns/{columnId}"
+        }
+      ],
+      "operation": "n8n.delete.data-tables-datatableid-columns-columnid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete data-tables datatableid rows clear",
+      "summary": "Documented DELETE /data-tables/{dataTableId}/rows/clear (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete data-tables datatableid rows clear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data-tables/{dataTableId}/rows/clear"
+        }
+      ],
+      "operation": "n8n.delete.data-tables-datatableid-rows-clear",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete data-tables datatableid rows delete",
+      "summary": "Documented DELETE /data-tables/{dataTableId}/rows/delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete data-tables datatableid rows delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data-tables/{dataTableId}/rows/delete"
+        }
+      ],
+      "operation": "n8n.delete.data-tables-datatableid-rows-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete executions id",
+      "summary": "Documented DELETE /executions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete executions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/executions/{id}"
+        }
+      ],
+      "operation": "n8n.delete.executions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects projectid",
+      "summary": "Documented DELETE /projects/{projectId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete projects projectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}"
+        }
+      ],
+      "operation": "n8n.delete.projects-projectid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects projectid folders folderid",
+      "summary": "Documented DELETE /projects/{projectId}/folders/{folderId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete projects projectid folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/folders/{folderId}"
+        }
+      ],
+      "operation": "n8n.delete.projects-projectid-folders-folderid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects projectid users userid",
+      "summary": "Documented DELETE /projects/{projectId}/users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete projects projectid users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/users/{userId}"
+        }
+      ],
+      "operation": "n8n.delete.projects-projectid-users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete settings log-streaming destinations id",
+      "summary": "Documented DELETE /settings/log-streaming/destinations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete settings log-streaming destinations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/settings/log-streaming/destinations/{id}"
+        }
+      ],
+      "operation": "n8n.delete.settings-log-streaming-destinations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tags id",
+      "summary": "Documented DELETE /tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "n8n.delete.tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete users id",
+      "summary": "Documented DELETE /users/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "n8n.delete.users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete variables id",
+      "summary": "Documented DELETE /variables/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete variables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/variables/{id}"
+        }
+      ],
+      "operation": "n8n.delete.variables-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete workflows id",
+      "summary": "Documented DELETE /workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api delete workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workflows/{id}"
+        }
+      ],
+      "operation": "n8n.delete.workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get community-packages",
+      "summary": "Documented GET /community-packages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get community-packages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/community-packages"
+        }
+      ],
+      "operation": "n8n.get.community-packages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credentials",
+      "summary": "Documented GET /credentials (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credentials"
+        }
+      ],
+      "operation": "n8n.get.credentials",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credentials id",
+      "summary": "Documented GET /credentials/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get credentials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credentials/{id}"
+        }
+      ],
+      "operation": "n8n.get.credentials-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credentials schema credentialtypename",
+      "summary": "Documented GET /credentials/schema/{credentialTypeName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get credentials schema credentialtypename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credentials/schema/{credentialTypeName}"
+        }
+      ],
+      "operation": "n8n.get.credentials-schema-credentialtypename",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get data-tables",
+      "summary": "Documented GET /data-tables (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get data-tables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-tables"
+        }
+      ],
+      "operation": "n8n.get.data-tables",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get data-tables datatableid",
+      "summary": "Documented GET /data-tables/{dataTableId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get data-tables datatableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-tables/{dataTableId}"
+        }
+      ],
+      "operation": "n8n.get.data-tables-datatableid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get data-tables datatableid columns",
+      "summary": "Documented GET /data-tables/{dataTableId}/columns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get data-tables datatableid columns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-tables/{dataTableId}/columns"
+        }
+      ],
+      "operation": "n8n.get.data-tables-datatableid-columns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get data-tables datatableid rows",
+      "summary": "Documented GET /data-tables/{dataTableId}/rows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get data-tables datatableid rows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-tables/{dataTableId}/rows"
+        }
+      ],
+      "operation": "n8n.get.data-tables-datatableid-rows",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discover",
+      "summary": "Documented GET /discover (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get discover --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discover"
+        }
+      ],
+      "operation": "n8n.get.discover",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get executions",
+      "summary": "Documented GET /executions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get executions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/executions"
+        }
+      ],
+      "operation": "n8n.get.executions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get executions id",
+      "summary": "Documented GET /executions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get executions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/executions/{id}"
+        }
+      ],
+      "operation": "n8n.get.executions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get executions id tags",
+      "summary": "Documented GET /executions/{id}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get executions id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/executions/{id}/tags"
+        }
+      ],
+      "operation": "n8n.get.executions-id-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get insights summary",
+      "summary": "Documented GET /insights/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get insights summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/summary"
+        }
+      ],
+      "operation": "n8n.get.insights-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects",
+      "summary": "Documented GET /projects (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ],
+      "operation": "n8n.get.projects",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects projectid folders",
+      "summary": "Documented GET /projects/{projectId}/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get projects projectid folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/folders"
+        }
+      ],
+      "operation": "n8n.get.projects-projectid-folders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects projectid folders folderid",
+      "summary": "Documented GET /projects/{projectId}/folders/{folderId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get projects projectid folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/folders/{folderId}"
+        }
+      ],
+      "operation": "n8n.get.projects-projectid-folders-folderid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects projectid users",
+      "summary": "Documented GET /projects/{projectId}/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get projects projectid users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/users"
+        }
+      ],
+      "operation": "n8n.get.projects-projectid-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings ldap",
+      "summary": "Documented GET /settings/ldap (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings ldap --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/ldap"
+        }
+      ],
+      "operation": "n8n.get.settings-ldap",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings ldap sync",
+      "summary": "Documented GET /settings/ldap/sync (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings ldap sync --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/ldap/sync"
+        }
+      ],
+      "operation": "n8n.get.settings-ldap-sync",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings log-streaming destinations",
+      "summary": "Documented GET /settings/log-streaming/destinations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings log-streaming destinations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/log-streaming/destinations"
+        }
+      ],
+      "operation": "n8n.get.settings-log-streaming-destinations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings log-streaming destinations id",
+      "summary": "Documented GET /settings/log-streaming/destinations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings log-streaming destinations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/log-streaming/destinations/{id}"
+        }
+      ],
+      "operation": "n8n.get.settings-log-streaming-destinations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings log-streaming event-types",
+      "summary": "Documented GET /settings/log-streaming/event-types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings log-streaming event-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/log-streaming/event-types"
+        }
+      ],
+      "operation": "n8n.get.settings-log-streaming-event-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings otel",
+      "summary": "Documented GET /settings/otel (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings otel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/otel"
+        }
+      ],
+      "operation": "n8n.get.settings-otel",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings security-policy",
+      "summary": "Documented GET /settings/security-policy (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings security-policy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/security-policy"
+        }
+      ],
+      "operation": "n8n.get.settings-security-policy",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings sso oidc",
+      "summary": "Documented GET /settings/sso/oidc (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings sso oidc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/sso/oidc"
+        }
+      ],
+      "operation": "n8n.get.settings-sso-oidc",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get settings sso saml",
+      "summary": "Documented GET /settings/sso/saml (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get settings sso saml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/sso/saml"
+        }
+      ],
+      "operation": "n8n.get.settings-sso-saml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags",
+      "summary": "Documented GET /tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "operation": "n8n.get.tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tags id",
+      "summary": "Documented GET /tags/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "n8n.get.tags-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users",
+      "summary": "Documented GET /users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "operation": "n8n.get.users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "n8n.get.users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get variables",
+      "summary": "Documented GET /variables (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/variables"
+        }
+      ],
+      "operation": "n8n.get.variables",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows",
+      "summary": "Documented GET /workflows (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows"
+        }
+      ],
+      "operation": "n8n.get.workflows",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id",
+      "summary": "Documented GET /workflows/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}"
+        }
+      ],
+      "operation": "n8n.get.workflows-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id history",
+      "summary": "Documented GET /workflows/{id}/history (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id history --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/history"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-history",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id tags",
+      "summary": "Documented GET /workflows/{id}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/tags"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id test-runs",
+      "summary": "Documented GET /workflows/{id}/test-runs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id test-runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/test-runs"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-test-runs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id test-runs runid",
+      "summary": "Documented GET /workflows/{id}/test-runs/{runId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id test-runs runid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/test-runs/{runId}"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-test-runs-runid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id test-runs runid test-cases",
+      "summary": "Documented GET /workflows/{id}/test-runs/{runId}/test-cases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id test-runs runid test-cases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/test-runs/{runId}/test-cases"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-test-runs-runid-test-cases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workflows id versionid",
+      "summary": "Documented GET /workflows/{id}/{versionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api get workflows id versionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflows/{id}/{versionId}"
+        }
+      ],
+      "operation": "n8n.get.workflows-id-versionid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api v1 credentials id",
+      "summary": "Documented PATCH /api/v1/credentials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch api v1 credentials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/credentials/{id}"
+        }
+      ],
+      "operation": "n8n.patch.api-v1-credentials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api v1 users id role",
+      "summary": "Documented PATCH /api/v1/users/{id}/role (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch api v1 users id role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/users/{id}/role"
+        }
+      ],
+      "operation": "n8n.patch.api-v1-users-id-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch community-packages name",
+      "summary": "Documented PATCH /community-packages/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch community-packages name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/community-packages/{name}"
+        }
+      ],
+      "operation": "n8n.patch.community-packages-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch credentials id",
+      "summary": "Documented PATCH /credentials/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch credentials id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/credentials/{id}"
+        }
+      ],
+      "operation": "n8n.patch.credentials-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch data-tables datatableid",
+      "summary": "Documented PATCH /data-tables/{dataTableId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch data-tables datatableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/data-tables/{dataTableId}"
+        }
+      ],
+      "operation": "n8n.patch.data-tables-datatableid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch data-tables datatableid columns columnid",
+      "summary": "Documented PATCH /data-tables/{dataTableId}/columns/{columnId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch data-tables datatableid columns columnid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/data-tables/{dataTableId}/columns/{columnId}"
+        }
+      ],
+      "operation": "n8n.patch.data-tables-datatableid-columns-columnid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch data-tables datatableid rows update",
+      "summary": "Documented PATCH /data-tables/{dataTableId}/rows/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch data-tables datatableid rows update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/data-tables/{dataTableId}/rows/update"
+        }
+      ],
+      "operation": "n8n.patch.data-tables-datatableid-rows-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch projects projectid folders folderid",
+      "summary": "Documented PATCH /projects/{projectId}/folders/{folderId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch projects projectid folders folderid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{projectId}/folders/{folderId}"
+        }
+      ],
+      "operation": "n8n.patch.projects-projectid-folders-folderid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch projects projectid users userid",
+      "summary": "Documented PATCH /projects/{projectId}/users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch projects projectid users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{projectId}/users/{userId}"
+        }
+      ],
+      "operation": "n8n.patch.projects-projectid-users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch users id role",
+      "summary": "Documented PATCH /users/{id}/role (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api patch users id role --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{id}/role"
+        }
+      ],
+      "operation": "n8n.patch.users-id-role",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 credentials",
+      "summary": "Documented POST /api/v1/credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post api v1 credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/credentials"
+        }
+      ],
+      "operation": "n8n.post.api-v1-credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 users",
+      "summary": "Documented POST /api/v1/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post api v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/users"
+        }
+      ],
+      "operation": "n8n.post.api-v1-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post audit",
+      "summary": "Documented POST /audit (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post audit --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/audit"
+        }
+      ],
+      "operation": "n8n.post.audit",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post community-packages",
+      "summary": "Documented POST /community-packages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post community-packages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/community-packages"
+        }
+      ],
+      "operation": "n8n.post.community-packages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credentials",
+      "summary": "Documented POST /credentials (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post credentials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credentials"
+        }
+      ],
+      "operation": "n8n.post.credentials",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credentials id test",
+      "summary": "Documented POST /credentials/{id}/test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post credentials id test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credentials/{id}/test"
+        }
+      ],
+      "operation": "n8n.post.credentials-id-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data-tables",
+      "summary": "Documented POST /data-tables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post data-tables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-tables"
+        }
+      ],
+      "operation": "n8n.post.data-tables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data-tables datatableid columns",
+      "summary": "Documented POST /data-tables/{dataTableId}/columns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post data-tables datatableid columns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-tables/{dataTableId}/columns"
+        }
+      ],
+      "operation": "n8n.post.data-tables-datatableid-columns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data-tables datatableid rows",
+      "summary": "Documented POST /data-tables/{dataTableId}/rows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post data-tables datatableid rows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-tables/{dataTableId}/rows"
+        }
+      ],
+      "operation": "n8n.post.data-tables-datatableid-rows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post data-tables datatableid rows upsert",
+      "summary": "Documented POST /data-tables/{dataTableId}/rows/upsert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post data-tables datatableid rows upsert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-tables/{dataTableId}/rows/upsert"
+        }
+      ],
+      "operation": "n8n.post.data-tables-datatableid-rows-upsert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post executions id retry",
+      "summary": "Documented POST /executions/{id}/retry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post executions id retry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/executions/{id}/retry"
+        }
+      ],
+      "operation": "n8n.post.executions-id-retry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post executions id stop",
+      "summary": "Documented POST /executions/{id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post executions id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/executions/{id}/stop"
+        }
+      ],
+      "operation": "n8n.post.executions-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post executions stop",
+      "summary": "Documented POST /executions/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post executions stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/executions/stop"
+        }
+      ],
+      "operation": "n8n.post.executions-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post n8n-packages export",
+      "summary": "Documented POST /n8n-packages/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post n8n-packages export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/n8n-packages/export"
+        }
+      ],
+      "operation": "n8n.post.n8n-packages-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post n8n-packages import",
+      "summary": "Documented POST /n8n-packages/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post n8n-packages import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/n8n-packages/import"
+        }
+      ],
+      "operation": "n8n.post.n8n-packages-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects",
+      "summary": "Documented POST /projects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "operation": "n8n.post.projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects projectid folders",
+      "summary": "Documented POST /projects/{projectId}/folders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post projects projectid folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/folders"
+        }
+      ],
+      "operation": "n8n.post.projects-projectid-folders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects projectid users",
+      "summary": "Documented POST /projects/{projectId}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post projects projectid users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/users"
+        }
+      ],
+      "operation": "n8n.post.projects-projectid-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post settings ldap sync",
+      "summary": "Documented POST /settings/ldap/sync (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post settings ldap sync --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/settings/ldap/sync"
+        }
+      ],
+      "operation": "n8n.post.settings-ldap-sync",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post settings log-streaming destinations",
+      "summary": "Documented POST /settings/log-streaming/destinations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post settings log-streaming destinations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/settings/log-streaming/destinations"
+        }
+      ],
+      "operation": "n8n.post.settings-log-streaming-destinations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post settings log-streaming destinations id test",
+      "summary": "Documented POST /settings/log-streaming/destinations/{id}/test (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post settings log-streaming destinations id test --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/settings/log-streaming/destinations/{id}/test"
+        }
+      ],
+      "operation": "n8n.post.settings-log-streaming-destinations-id-test",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post settings otel test-trace",
+      "summary": "Documented POST /settings/otel/test-trace (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post settings otel test-trace --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/settings/otel/test-trace"
+        }
+      ],
+      "operation": "n8n.post.settings-otel-test-trace",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post source-control pull",
+      "summary": "Documented POST /source-control/pull (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post source-control pull --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/source-control/pull"
+        }
+      ],
+      "operation": "n8n.post.source-control-pull",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tags",
+      "summary": "Documented POST /tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "operation": "n8n.post.tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "n8n.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post variables",
+      "summary": "Documented POST /variables (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post variables --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/variables"
+        }
+      ],
+      "operation": "n8n.post.variables",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows",
+      "summary": "Documented POST /workflows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows"
+        }
+      ],
+      "operation": "n8n.post.workflows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id activate",
+      "summary": "Documented POST /workflows/{id}/activate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id activate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/activate"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-activate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id archive",
+      "summary": "Documented POST /workflows/{id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/archive"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id deactivate",
+      "summary": "Documented POST /workflows/{id}/deactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id deactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/deactivate"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-deactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id publish",
+      "summary": "Documented POST /workflows/{id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/publish"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id test-runs",
+      "summary": "Documented POST /workflows/{id}/test-runs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id test-runs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/test-runs"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-test-runs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id test-runs runid cancel",
+      "summary": "Documented POST /workflows/{id}/test-runs/{runId}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id test-runs runid cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/test-runs/{runId}/cancel"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-test-runs-runid-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id unarchive",
+      "summary": "Documented POST /workflows/{id}/unarchive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id unarchive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/unarchive"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-unarchive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post workflows id unpublish",
+      "summary": "Documented POST /workflows/{id}/unpublish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api post workflows id unpublish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflows/{id}/unpublish"
+        }
+      ],
+      "operation": "n8n.post.workflows-id-unpublish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 executions id tags",
+      "summary": "Documented PUT /api/v1/executions/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put api v1 executions id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/executions/{id}/tags"
+        }
+      ],
+      "operation": "n8n.put.api-v1-executions-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api v1 workflows id tags",
+      "summary": "Documented PUT /api/v1/workflows/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put api v1 workflows id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/workflows/{id}/tags"
+        }
+      ],
+      "operation": "n8n.put.api-v1-workflows-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put credentials id transfer",
+      "summary": "Documented PUT /credentials/{id}/transfer (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put credentials id transfer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/credentials/{id}/transfer"
+        }
+      ],
+      "operation": "n8n.put.credentials-id-transfer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put executions id tags",
+      "summary": "Documented PUT /executions/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put executions id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/executions/{id}/tags"
+        }
+      ],
+      "operation": "n8n.put.executions-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put projects projectid",
+      "summary": "Documented PUT /projects/{projectId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put projects projectid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{projectId}"
+        }
+      ],
+      "operation": "n8n.put.projects-projectid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings ldap",
+      "summary": "Documented PUT /settings/ldap (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings ldap --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/ldap"
+        }
+      ],
+      "operation": "n8n.put.settings-ldap",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings log-streaming destinations id",
+      "summary": "Documented PUT /settings/log-streaming/destinations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings log-streaming destinations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/log-streaming/destinations/{id}"
+        }
+      ],
+      "operation": "n8n.put.settings-log-streaming-destinations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings otel",
+      "summary": "Documented PUT /settings/otel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings otel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/otel"
+        }
+      ],
+      "operation": "n8n.put.settings-otel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings security-policy",
+      "summary": "Documented PUT /settings/security-policy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings security-policy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/security-policy"
+        }
+      ],
+      "operation": "n8n.put.settings-security-policy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings sso oidc",
+      "summary": "Documented PUT /settings/sso/oidc (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings sso oidc --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/sso/oidc"
+        }
+      ],
+      "operation": "n8n.put.settings-sso-oidc",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put settings sso saml",
+      "summary": "Documented PUT /settings/sso/saml (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put settings sso saml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/settings/sso/saml"
+        }
+      ],
+      "operation": "n8n.put.settings-sso-saml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put tags id",
+      "summary": "Documented PUT /tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tags/{id}"
+        }
+      ],
+      "operation": "n8n.put.tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put variables id",
+      "summary": "Documented PUT /variables/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put variables id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/variables/{id}"
+        }
+      ],
+      "operation": "n8n.put.variables-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put workflows id",
+      "summary": "Documented PUT /workflows/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put workflows id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workflows/{id}"
+        }
+      ],
+      "operation": "n8n.put.workflows-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put workflows id tags",
+      "summary": "Documented PUT /workflows/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put workflows id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workflows/{id}/tags"
+        }
+      ],
+      "operation": "n8n.put.workflows-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put workflows id transfer",
+      "summary": "Documented PUT /workflows/{id}/transfer (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n api put workflows id transfer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workflows/{id}/transfer"
+        }
+      ],
+      "operation": "n8n.put.workflows-id-transfer",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "archive workflow apply",
+      "summary": "Plan and execute the archive workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n archive workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/archive"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "change project user role apply",
+      "summary": "Plan and execute the change project user role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "change_project_user_role",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        },
+        {
+          "name": "project_user_id",
+          "type": "string",
+          "summary": "Required project user id record field.",
+          "maps_to": "record.project_user_id",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Required role record field.",
+          "maps_to": "record.role",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n change project user role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/projects/{projectId}/users/{userId}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create data table apply",
+      "summary": "Plan and execute the create data table reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_data_table",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n create data table apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create project apply",
+      "summary": "Plan and execute the create project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_project",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n create project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/projects"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/tags"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create variable apply",
+      "summary": "Plan and execute the create variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_variable",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n create variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/variables"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create workflow apply",
+      "summary": "Plan and execute the create workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n create workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "credential list",
+      "summary": "Run the credential ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credential",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n credential list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/credentials/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "credential schema list",
+      "summary": "Run the credential schema ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credential_schema",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n credential schema list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/credentials/schema/{credentialTypeName}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "credentials list",
+      "summary": "Run the credentials ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "credentials",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n credentials list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/credentials"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "data table columns list",
+      "summary": "Run the data table columns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "data_table_columns",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n data table columns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/data-tables/{dataTableId}/columns"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "data table list",
+      "summary": "Run the data table ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "data_table",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n data table list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/data-tables/{dataTableId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "data table rows list",
+      "summary": "Run the data table rows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "data_table_rows",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n data table rows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/data-tables/{dataTableId}/rows"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "data tables list",
+      "summary": "Run the data tables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "data_tables",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n data tables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/data-tables"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "deactivate workflow apply",
+      "summary": "Plan and execute the deactivate workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deactivate_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n deactivate workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/deactivate"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "execution list",
+      "summary": "Run the execution ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "execution",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n execution list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/executions/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "execution tags list",
+      "summary": "Run the execution tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "execution_tags",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n execution tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/executions/{id}/tags"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "executions list",
+      "summary": "Run the executions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "executions",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n executions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/executions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "generate audit apply",
+      "summary": "Plan and execute the generate audit reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "generate_audit",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n generate audit apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/audit"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "insert data table rows apply",
+      "summary": "Plan and execute the insert data table rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "insert_data_table_rows",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n insert data table rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/rows"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "project members list",
+      "summary": "Run the project members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_members",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n project members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/projects/{projectId}/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/projects"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "publish workflow apply",
+      "summary": "Plan and execute the publish workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n publish workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/activate"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "pull source control apply",
+      "summary": "Plan and execute the pull source control reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pull_source_control",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n pull source control apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/source-control/pull"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "retry execution apply",
+      "summary": "Plan and execute the retry execution reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "retry_execution",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "execution_id",
+          "type": "string",
+          "summary": "Required execution id record field.",
+          "maps_to": "record.execution_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n retry execution apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/{id}/retry"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "stop execution apply",
+      "summary": "Plan and execute the stop execution reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "stop_execution",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "execution_id",
+          "type": "string",
+          "summary": "Required execution id record field.",
+          "maps_to": "record.execution_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n stop execution apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/{id}/stop"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "stop executions apply",
+      "summary": "Plan and execute the stop executions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "stop_executions",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n stop executions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/executions/stop"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "tag list",
+      "summary": "Run the tag ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tag",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tags/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/tags"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "test credential apply",
+      "summary": "Plan and execute the test credential reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "test_credential",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "credential_id",
+          "type": "string",
+          "summary": "Required credential id record field.",
+          "maps_to": "record.credential_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n test credential apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/credentials/{id}/test"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "transfer credential apply",
+      "summary": "Plan and execute the transfer credential reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "transfer_credential",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "credential_id",
+          "type": "string",
+          "summary": "Required credential id record field.",
+          "maps_to": "record.credential_id",
+          "required": true
+        },
+        {
+          "name": "destinationProjectId",
+          "type": "string",
+          "summary": "Required destinationProjectId record field.",
+          "maps_to": "record.destinationProjectId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n transfer credential apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/credentials/{id}/transfer"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "transfer workflow apply",
+      "summary": "Plan and execute the transfer workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "transfer_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "destinationProjectId",
+          "type": "string",
+          "summary": "Required destinationProjectId record field.",
+          "maps_to": "record.destinationProjectId",
+          "required": true
+        },
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n transfer workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/workflows/{id}/transfer"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "unarchive workflow apply",
+      "summary": "Plan and execute the unarchive workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unarchive_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "workflow_id",
+          "type": "string",
+          "summary": "Required workflow id record field.",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n unarchive workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/workflows/{id}/unarchive"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update data table apply",
+      "summary": "Plan and execute the update data table reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_table",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n update data table apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update data table column apply",
+      "summary": "Plan and execute the update data table column reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_data_table_column",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "data_table_column_id",
+          "type": "string",
+          "summary": "Required data table column id record field.",
+          "maps_to": "record.data_table_column_id",
+          "required": true
+        },
+        {
+          "name": "data_table_id",
+          "type": "string",
+          "summary": "Required data table id record field.",
+          "maps_to": "record.data_table_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n update data table column apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}/columns/{columnId}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update data table rows apply",
+      "summary": "Plan and execute the update data table rows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_data_table_rows",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n update data table rows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v1/data-tables/{dataTableId}/rows/update"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update project apply",
+      "summary": "Plan and execute the update project reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_project",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "string",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n update project apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/projects/{projectId}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update tag apply",
+      "summary": "Plan and execute the update tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tag",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "string",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n update tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/tags/{id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update variable apply",
+      "summary": "Plan and execute the update variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_variable",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "flags": [
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Required key record field.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        },
+        {
+          "name": "variable_id",
+          "type": "string",
+          "summary": "Required variable id record field.",
+          "maps_to": "record.variable_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm n8n update variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/variables/{id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update workflow apply",
+      "summary": "Plan and execute the update workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n update workflow apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/workflows/{id}"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "upsert data table row apply",
+      "summary": "Plan and execute the upsert data table row reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "upsert_data_table_row",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n upsert data table row apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/data-tables/{dataTableId}/rows/upsert"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/users/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "variables list",
+      "summary": "Run the variables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "variables",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n variables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/variables"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "workflow list",
+      "summary": "Run the workflow ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n workflow list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/workflows/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "workflow tags list",
+      "summary": "Run the workflow tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_tags",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n workflow tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/workflows/{id}/tags"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "workflow version list",
+      "summary": "Run the workflow version ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_version",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n workflow version list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/workflows/{id}/{versionId}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "workflows list",
+      "summary": "Run the workflows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_url": "https://internal.users.n8n.cloud/api/v1/openapi.yml",
+      "examples": [
+        "pm n8n workflows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/workflows"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

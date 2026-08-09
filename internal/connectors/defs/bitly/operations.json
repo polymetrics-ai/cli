@@ -1,0 +1,2333 @@
+{
+  "operations": [
+    {
+      "id": "bitly.get.apps-client-id",
+      "kind": "rest_read",
+      "summary": "GET /apps/{client_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/apps/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.bitlinks",
+      "kind": "rest_write",
+      "summary": "POST /bitlinks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bitlinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.bitlinks-bitlink",
+      "kind": "rest_write",
+      "summary": "PATCH /bitlinks/{bitlink}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/bitlinks/{bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.delete.bitlinks-bitlink",
+      "kind": "rest_write",
+      "summary": "DELETE /bitlinks/{bitlink}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/bitlinks/{bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-cities",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/cities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-clicks",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/clicks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-clicks-summary",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/clicks/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/clicks/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-countries",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-devices",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/devices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-engagements",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/engagements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/engagements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-engagements-summary",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/engagements/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/engagements/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-referrer-name",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/referrer_name",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/referrer_name",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-referrers",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/referrers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-referrers-by-domains",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/referrers_by_domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/referrers_by_domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bitlinks-bitlink-referring-domains",
+      "kind": "rest_read",
+      "summary": "GET /bitlinks/{bitlink}/referring_domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bitlinks/{bitlink}/referring_domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.bsds",
+      "kind": "rest_read",
+      "summary": "GET /bsds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bsds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.campaigns",
+      "kind": "rest_read",
+      "summary": "GET /campaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.campaigns",
+      "kind": "rest_write",
+      "summary": "POST /campaigns",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.campaigns-campaign-guid",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaign_guid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaign_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.campaigns-campaign-guid",
+      "kind": "rest_write",
+      "summary": "PATCH /campaigns/{campaign_guid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/campaigns/{campaign_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.channels",
+      "kind": "rest_read",
+      "summary": "GET /channels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.channels",
+      "kind": "rest_write",
+      "summary": "POST /channels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.channels-channel-guid",
+      "kind": "rest_read",
+      "summary": "GET /channels/{channel_guid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/channels/{channel_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.channels-channel-guid",
+      "kind": "rest_write",
+      "summary": "PATCH /channels/{channel_guid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/channels/{channel_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.custom-bitlinks",
+      "kind": "rest_write",
+      "summary": "POST /custom_bitlinks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_bitlinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.custom-bitlinks-custom-bitlink",
+      "kind": "rest_read",
+      "summary": "GET /custom_bitlinks/{custom_bitlink}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_bitlinks/{custom_bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.custom-bitlinks-custom-bitlink",
+      "kind": "rest_write",
+      "summary": "PATCH /custom_bitlinks/{custom_bitlink}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/custom_bitlinks/{custom_bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.custom-bitlinks-custom-bitlink-clicks",
+      "kind": "rest_read",
+      "summary": "GET /custom_bitlinks/{custom_bitlink}/clicks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_bitlinks/{custom_bitlink}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.custom-bitlinks-custom-bitlink-clicks-by-destination",
+      "kind": "rest_read",
+      "summary": "GET /custom_bitlinks/{custom_bitlink}/clicks_by_destination",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_bitlinks/{custom_bitlink}/clicks_by_destination",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.expand",
+      "kind": "rest_write",
+      "summary": "POST /expand",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/expand",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups",
+      "kind": "rest_read",
+      "summary": "GET /groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.groups-group-guid",
+      "kind": "rest_write",
+      "summary": "PATCH /groups/{group_guid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/groups/{group_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-bitlinks",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/bitlinks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/bitlinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.groups-group-guid-bitlinks",
+      "kind": "rest_write",
+      "summary": "PATCH /groups/{group_guid}/bitlinks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/groups/{group_guid}/bitlinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-bitlinks-sort",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/bitlinks/{sort}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/bitlinks/{sort}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-cities",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/cities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-clicks",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/clicks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-codes-scans-cities",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/codes/scans/cities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/codes/scans/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-codes-scans-countries",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/codes/scans/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/codes/scans/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-codes-scans-over-time",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/codes/scans/over_time",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/codes/scans/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-codes-scans-top",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/codes/scans/top",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/codes/scans/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-countries",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-devices",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/devices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-engagements-over-time",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/engagements/over_time",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/engagements/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-engagements-sorted-top",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/engagements/sorted/top",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/engagements/sorted/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-engagements-top",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/engagements/top",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/engagements/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.groups-group-guid-exports",
+      "kind": "rest_write",
+      "summary": "POST /groups/{group_guid}/exports",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/groups/{group_guid}/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-feature-usage",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/feature_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/feature_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-historical-usage",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/historical_usage",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/historical_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-cities",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/cities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-countries",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-devices",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/devices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-over-time",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/over_time",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-referrers",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/referrers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-links-clicks-top",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/links/clicks/top",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/links/clicks/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-preferences",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/preferences",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.groups-group-guid-preferences",
+      "kind": "rest_write",
+      "summary": "PATCH /groups/{group_guid}/preferences",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/groups/{group_guid}/preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-qr-codes",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/qr-codes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/qr-codes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.groups-group-guid-qr-codes",
+      "kind": "rest_write",
+      "summary": "PATCH /groups/{group_guid}/qr-codes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/groups/{group_guid}/qr-codes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-referrers",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/referrers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-referring-networks",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/referring_networks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/referring_networks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-shorten-counts",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/shorten_counts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/shorten_counts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.groups-group-guid-tags",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_guid}/tags",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_guid}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations",
+      "kind": "rest_read",
+      "summary": "GET /organizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations-organization-guid",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_guid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations-organization-guid-plan-limits",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_guid}/plan_limits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_guid}/plan_limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations-organization-guid-shorten-counts",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_guid}/shorten_counts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_guid}/shorten_counts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations-organization-guid-shorten-counts-by-group",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_guid}/shorten_counts_by_group",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_guid}/shorten_counts_by_group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.organizations-organization-guid-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organization_guid}/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organization_guid}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.qr-codes",
+      "kind": "rest_write",
+      "summary": "POST /qr-codes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/qr-codes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.qr-codes-static",
+      "kind": "rest_write",
+      "summary": "POST /qr-codes/static",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/qr-codes/static",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.qr-codes-qrcode-id",
+      "kind": "rest_write",
+      "summary": "PATCH /qr-codes/{qrcode_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/qr-codes/{qrcode_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.delete.qr-codes-qrcode-id",
+      "kind": "rest_write",
+      "summary": "DELETE /qr-codes/{qrcode_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/qr-codes/{qrcode_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-image",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/image",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/image",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.qr-codes-qrcode-id-redirect",
+      "kind": "rest_write",
+      "summary": "PATCH /qr-codes/{qrcode_id}/redirect",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/qr-codes/{qrcode_id}/redirect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans-browsers",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans/browsers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans/browsers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans-cities",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans/cities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans-countries",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans-device-os",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans/device_os",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans/device_os",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.qr-codes-qrcode-id-scans-summary",
+      "kind": "rest_read",
+      "summary": "GET /qr-codes/{qrcode_id}/scans/summary",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/qr-codes/{qrcode_id}/scans/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.put.qr-codes-qrcode-id-to-bitlink",
+      "kind": "rest_write",
+      "summary": "PUT /qr-codes/{qrcode_id}/to-bitlink",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/qr-codes/{qrcode_id}/to-bitlink",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.shorten",
+      "kind": "rest_write",
+      "summary": "POST /shorten",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shorten",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.user",
+      "kind": "rest_read",
+      "summary": "GET /user",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.user",
+      "kind": "rest_write",
+      "summary": "PATCH /user",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.user-platform-limits",
+      "kind": "rest_read",
+      "summary": "GET /user/platform_limits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/platform_limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}",
+      "description": "single-bitlink detail; identical record shape to the bitlinks list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-cities",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/cities",
+      "description": "bitlink-level click breakdown by city; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-clicks",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/clicks",
+      "description": "raw click event list; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-clicks-summary",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/clicks/summary",
+      "description": "single-scalar total-click-count summary requiring a per-bitlink config coupling for a one-row result; part of the metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/clicks/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-countries",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/countries",
+      "description": "bitlink-level click breakdown by country; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-devices",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/devices",
+      "description": "bitlink-level click breakdown by device; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-engagements",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/engagements",
+      "description": "bitlink-level engagement event list; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/engagements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-engagements-summary",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/engagements/summary",
+      "description": "bitlink-level engagement summary; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/engagements/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-qr-code",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/qr_code",
+      "description": "returns the QR code record already reachable via the qr_codes stream once the bitlink's associated qrcode_id is known; not a distinct resource shape",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/qr_code",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-referrer-name",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/referrer_name",
+      "description": "same referrer breakdown as /referrers keyed by referrer_name instead of the default field; not a distinct resource shape",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/referrer_name",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-referrers",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/referrers",
+      "description": "bitlink-level click breakdown by referrer; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-referrers-by-domains",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/referrers_by_domains",
+      "description": "same referrer data as /referring_domains, grouped by domain then referrer; not a distinct resource shape",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/referrers_by_domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-bitlinks-bitlink-referring-domains",
+      "kind": "rest_read",
+      "summary": "GET /v4/bitlinks/{bitlink}/referring_domains",
+      "description": "bitlink-level click breakdown by referring domain; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/bitlinks/{bitlink}/referring_domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-campaigns-campaign-guid",
+      "kind": "rest_read",
+      "summary": "GET /v4/campaigns/{campaign_guid}",
+      "description": "single-campaign detail; identical record shape to the campaigns list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/campaigns/{campaign_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-channels-channel-guid",
+      "kind": "rest_read",
+      "summary": "GET /v4/channels/{channel_guid}",
+      "description": "single-channel detail; identical record shape to the channels list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/channels/{channel_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-custom-bitlinks-custom-bitlink",
+      "kind": "rest_read",
+      "summary": "GET /v4/custom_bitlinks/{custom_bitlink}",
+      "description": "no list endpoint exists to enumerate custom_bitlink ids; a lone detail-by-id GET with no discovery path is not a syncable stream without an id already in hand from an external source",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/custom_bitlinks/{custom_bitlink}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-custom-bitlinks-custom-bitlink-clicks",
+      "kind": "rest_read",
+      "summary": "GET /v4/custom_bitlinks/{custom_bitlink}/clicks",
+      "description": "custom-bitlink click event list; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/custom_bitlinks/{custom_bitlink}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-custom-bitlinks-custom-bitlink-clicks-by-destination",
+      "kind": "rest_read",
+      "summary": "GET /v4/custom_bitlinks/{custom_bitlink}/clicks_by_destination",
+      "description": "same click data as clicks, broken out by destination long_url; part of the excluded analytics matrix",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/custom_bitlinks/{custom_bitlink}/clicks_by_destination",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.v4-expand",
+      "kind": "rest_write",
+      "summary": "POST /v4/expand",
+      "description": "long-URL lookup alias returning the same record shape GET /v4/bitlinks/{bitlink} does; not a distinct syncable resource",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/expand",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}",
+      "description": "single-group detail; identical record shape to the groups list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.v4-groups-group-guid-bitlinks",
+      "kind": "rest_write",
+      "summary": "PATCH /v4/groups/{group_guid}/bitlinks",
+      "description": "bulk multi-bitlink patch over the same group-scoped collection the bitlinks stream reads; single-record update_bitlink already covers the per-record mutation shape this dialect can express",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v4/groups/{group_guid}/bitlinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-bitlinks-sort",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/bitlinks/{sort}",
+      "description": "the group bitlinks list re-sorted by an engagement metric; same underlying records already covered by the bitlinks stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/bitlinks/{sort}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-cities",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/cities",
+      "description": "group-level click analytics breakdown by city; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-clicks",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/clicks",
+      "description": "group-level total click time series; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/clicks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-codes-scans-cities",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/codes/scans/cities",
+      "description": "group-level QR code scan breakdown by city; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/codes/scans/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-codes-scans-countries",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/codes/scans/countries",
+      "description": "group-level QR code scan breakdown by country; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/codes/scans/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-codes-scans-over-time",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/codes/scans/over_time",
+      "description": "group-level QR code scan time series; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/codes/scans/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-codes-scans-top",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/codes/scans/top",
+      "description": "group-level top-QR-codes-by-scan-count ranking; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/codes/scans/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-countries",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/countries",
+      "description": "group-level click analytics breakdown by country; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-devices",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/devices",
+      "description": "group-level click analytics breakdown by device; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-engagements-over-time",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/engagements/over_time",
+      "description": "group-level engagement time series; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/engagements/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-engagements-sorted-top",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/engagements/sorted/top",
+      "description": "same engagement-ranking data as engagements/top, sorted-variant endpoint; part of the excluded analytics matrix",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/engagements/sorted/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-engagements-top",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/engagements/top",
+      "description": "group-level top-bitlinks-by-engagement analytics; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/engagements/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.v4-groups-group-guid-exports",
+      "kind": "rest_write",
+      "summary": "POST /v4/groups/{group_guid}/exports",
+      "description": "asynchronous bulk CSV export job kickoff, not a synchronous read/write record operation; Pass B breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/groups/{group_guid}/exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-feature-usage",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/feature_usage",
+      "description": "plan feature-flag/quota snapshot, not a syncable object stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/feature_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-historical-usage",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/historical_usage",
+      "description": "group-wide historical shorten/click usage aggregate, not a syncable object list; Pass B breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/historical_usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-cities",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/cities",
+      "description": "group-level per-link click breakdown by city; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/cities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-countries",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/countries",
+      "description": "group-level per-link click breakdown by country; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-devices",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/devices",
+      "description": "group-level per-link click breakdown by device; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/devices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-over-time",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/over_time",
+      "description": "group-level per-link click time series; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/over_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-referrers",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/referrers",
+      "description": "group-level per-link click breakdown by referrer; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-links-clicks-top",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/links/clicks/top",
+      "description": "group-level top-links-by-click-count ranking; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/links/clicks/top",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-preferences",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/preferences",
+      "description": "group preference sub-object read; the same preferences payload is embedded in/updatable via update_group_preferences, not modeled as a separate list-shaped read stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-referrers",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/referrers",
+      "description": "group-level click analytics breakdown by referrer; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/referrers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-referring-networks",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/referring_networks",
+      "description": "group-level click analytics breakdown by referring network; part of the ~30-endpoint metrics matrix excluded this pass for breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/referring_networks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-groups-group-guid-shorten-counts",
+      "kind": "rest_read",
+      "summary": "GET /v4/groups/{group_guid}/shorten_counts",
+      "description": "group-wide shorten-count aggregate, not a syncable object list; Pass B breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/groups/{group_guid}/shorten_counts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-oauth-deauthorize",
+      "kind": "rest_read",
+      "summary": "GET /v4/oauth/deauthorize",
+      "description": "revokes the calling application's own OAuth access token; irreversibly ends the connector's own session, never a data operation",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/oauth/deauthorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.v4-oauth-deauthorize",
+      "kind": "rest_write",
+      "summary": "POST /v4/oauth/deauthorize",
+      "description": "revokes the calling application's own OAuth access token; irreversibly ends the connector's own session, never a data operation",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/oauth/deauthorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-organizations-organization-guid",
+      "kind": "rest_read",
+      "summary": "GET /v4/organizations/{organization_guid}",
+      "description": "single-organization detail; identical record shape to the organizations list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/organizations/{organization_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-organizations-organization-guid-plan-limits",
+      "kind": "rest_read",
+      "summary": "GET /v4/organizations/{organization_guid}/plan_limits",
+      "description": "billing-plan quota snapshot, not a syncable object stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/organizations/{organization_guid}/plan_limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-organizations-organization-guid-shorten-counts",
+      "kind": "rest_read",
+      "summary": "GET /v4/organizations/{organization_guid}/shorten_counts",
+      "description": "org-wide shorten-count aggregate, not a syncable object list; Pass B breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/organizations/{organization_guid}/shorten_counts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-organizations-organization-guid-shorten-counts-by-group",
+      "kind": "rest_read",
+      "summary": "GET /v4/organizations/{organization_guid}/shorten_counts_by_group",
+      "description": "org-wide shorten-count aggregate broken out by group, not a syncable object list; Pass B breadth-vs-cost triage",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/organizations/{organization_guid}/shorten_counts_by_group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-qr-codes-qr-code-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/qr-codes/{qr_code_id}",
+      "description": "single-QR-code detail; identical record shape to the qr_codes list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/qr-codes/{qr_code_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.v4-qr-codes-qr-code-id-customize",
+      "kind": "rest_write",
+      "summary": "POST /v4/qr-codes/{qr_code_id}/customize",
+      "description": "premium-tier visual QR code styling (colors/logo/frame), not a plain data mutation and gated behind a paid QR customization entitlement",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/qr-codes/{qr_code_id}/customize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.v4-shorten",
+      "kind": "rest_write",
+      "summary": "POST /v4/shorten",
+      "description": "minimal-body shortening alias of POST /v4/bitlinks; create_bitlink already covers bitlink creation with the full field set",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/shorten",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-user",
+      "kind": "rest_read",
+      "summary": "GET /v4/user",
+      "description": "authenticated-user profile introspection, not a syncable object stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.v4-user",
+      "kind": "rest_write",
+      "summary": "PATCH /v4/user",
+      "description": "authenticated-user profile self-update (name/default_group_guid), not a syncable-collection mutation",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v4/user",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-user-link-history",
+      "kind": "rest_read",
+      "summary": "GET /v4/user/link_history",
+      "description": "same bitlink records as the bitlinks stream, filtered to the caller's personal shorten history rather than group-scoped; not a distinct resource shape",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/user/link_history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.v4-webhooks-webhook-guid",
+      "kind": "rest_read",
+      "summary": "GET /v4/webhooks/{webhook_guid}",
+      "description": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/webhooks/{webhook_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.get.webhooks-webhook-guid",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhook_guid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhook_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.patch.webhooks-webhook-guid",
+      "kind": "rest_write",
+      "summary": "PATCH /webhooks/{webhook_guid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/webhooks/{webhook_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.delete.webhooks-webhook-guid",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{webhook_guid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhook_guid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bitly.post.webhooks-webhook-guid-verify",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/{webhook_guid}/verify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://dev.bitly.com/v4/v4.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/{webhook_guid}/verify",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

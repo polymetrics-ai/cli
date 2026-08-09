@@ -1,0 +1,104 @@
+{
+  "tagline": "Run Google Webfonts's declared streams and reverse-ETL actions.",
+  "usage": "pm google-webfonts \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "alpha fonts list",
+        "newest fonts list",
+        "popular fonts list",
+        "trending fonts list",
+        "webfonts list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "alpha fonts list",
+      "summary": "Run the alpha fonts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "alpha_fonts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "examples": [
+        "pm google-webfonts alpha fonts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webfonts"
+        }
+      ]
+    },
+    {
+      "path": "newest fonts list",
+      "summary": "Run the newest fonts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "newest_fonts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "examples": [
+        "pm google-webfonts newest fonts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webfonts"
+        }
+      ]
+    },
+    {
+      "path": "popular fonts list",
+      "summary": "Run the popular fonts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "popular_fonts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "examples": [
+        "pm google-webfonts popular fonts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webfonts"
+        }
+      ]
+    },
+    {
+      "path": "trending fonts list",
+      "summary": "Run the trending fonts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trending_fonts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "examples": [
+        "pm google-webfonts trending fonts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webfonts"
+        }
+      ]
+    },
+    {
+      "path": "webfonts list",
+      "summary": "Run the webfonts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webfonts",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "examples": [
+        "pm google-webfonts webfonts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webfonts"
+        }
+      ]
+    }
+  ]
+}

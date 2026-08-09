@@ -49,6 +49,7 @@ type BatchMaterializeReport struct {
 // every endpoint-local provenance row.
 type BatchMaterializeIncluded struct {
 	Connector                string                `json:"connector"`
+	EvidenceMode             string                `json:"evidence_mode,omitempty"`
 	Artifact                 BatchMaterialArtifact `json:"artifact"`
 	ArtifactOperations       int                   `json:"artifact_operations"`
 	DeclaredOperations       int                   `json:"declared_operations"`
@@ -74,13 +75,14 @@ type BatchMaterialArtifact struct {
 }
 
 type batchMaterializeOptions struct {
-	manifestPath   string
-	defsRoot       string
-	sourceDefsRoot string
-	artifactDir    string
-	retrievedAt    string
-	reportPath     string
-	connectors     []string
+	manifestPath            string
+	defsRoot                string
+	sourceDefsRoot          string
+	artifactDir             string
+	retrievedAt             string
+	reportPath              string
+	connectors              []string
+	existingSurfaceEvidence bool
 }
 
 // runBatchMaterialize is the one post-#3869 artifact-to-bundle authoring
@@ -147,6 +149,10 @@ func parseBatchMaterializeOptions(args []string) (batchMaterializeOptions, error
 	opts := batchMaterializeOptions{}
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		if arg == "--existing-surface-evidence" {
+			opts.existingSurfaceEvidence = true
+			continue
+		}
 		if i+1 >= len(args) {
 			return batchMaterializeOptions{}, fmt.Errorf("%s requires a value", arg)
 		}
@@ -262,14 +268,25 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_fetch"), err)
 	}
-	artifactInventory, err := parseBatchManifestArtifact(opts, candidate, rawArtifact)
-	if err != nil {
-		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_parse"), err)
-	}
 	sha := fmt.Sprintf("%x", sha256.Sum256(rawArtifact))
+	var artifactInventory batchArtifactInventory
+	if opts.existingSurfaceEvidence {
+		artifactInventory, err = existingSurfaceEvidenceInventory(bundle, candidate, opts.retrievedAt, sha, rawArtifact)
+		if err != nil {
+			return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "existing_surface_evidence", err)
+		}
+	} else {
+		artifactInventory, err = parseBatchManifestArtifact(opts, candidate, rawArtifact)
+		if err != nil {
+			return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_parse"), err)
+		}
+	}
 	surface, err := materializeAPISurface(bundle, candidate, opts.retrievedAt, sha, artifactInventory.Endpoints, artifactInventory.Sources)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "coverage", err)
+	}
+	if opts.existingSurfaceEvidence {
+		surface.Scope = existingSurfaceEvidenceScope(bundle.Surface.Scope, candidate, candidate.OperationsTotal)
 	}
 	operations, err := materializeOperationCatalog(bundle, surface, candidate)
 	if err != nil {
@@ -312,6 +329,12 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	flaggedDiscrepancies := materializedDiscrepancyCount(surface)
 	return BatchMaterializeIncluded{
 		Connector: candidate.Connector,
+		EvidenceMode: func() string {
+			if opts.existingSurfaceEvidence {
+				return "existing_surface_evidence"
+			}
+			return ""
+		}(),
 		Artifact: BatchMaterialArtifact{
 			Kind:        candidate.Artifact.Kind,
 			URL:         candidate.Artifact.URL,
@@ -331,6 +354,67 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	}, nil
 }
 
+// existingSurfaceEvidenceInventory is the explicit direct-authoring route for
+// a connector whose preserved source surface has already been exhaustively
+// counted against the immutable provider survey. The cited official artifact
+// is still fetched and hashed; this route merely avoids pretending that an
+// index page is an OpenAPI document or replaying an unrelated documentation
+// crawl. A mismatch is refused rather than filling gaps from the old surface.
+func existingSurfaceEvidenceInventory(bundle engine.Bundle, candidate BatchManifestConnector, retrievedAt, sha string, rawArtifact []byte) (batchArtifactInventory, error) {
+	if len(rawArtifact) == 0 {
+		return batchArtifactInventory{}, errors.New("cited official artifact is empty")
+	}
+	if bundle.Surface == nil {
+		return batchArtifactInventory{}, errors.New("api_surface.json is required")
+	}
+	if len(bundle.Surface.Endpoints) != candidate.OperationsTotal {
+		return batchArtifactInventory{}, fmt.Errorf("existing source surface has %d operation(s), not the immutable ledger count %d", len(bundle.Surface.Endpoints), candidate.OperationsTotal)
+	}
+	endpoints := make([]batchArtifactEndpoint, 0, len(bundle.Surface.Endpoints))
+	seen := make(map[string]bool, len(bundle.Surface.Endpoints))
+	for _, endpoint := range bundle.Surface.Endpoints {
+		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+		path := strings.TrimSpace(endpoint.Path)
+		if method == "" || path == "" {
+			return batchArtifactInventory{}, fmt.Errorf("existing source surface contains an incomplete endpoint %q %q", endpoint.Method, endpoint.Path)
+		}
+		key := batchArtifactEndpointKey(method, path)
+		if seen[key] {
+			continue
+		}
+		seen[key] = true
+		endpoints = append(endpoints, batchArtifactEndpoint{
+			Method:           method,
+			Path:             path,
+			Summary:          fmt.Sprintf("%s %s", method, path),
+			SourceURL:        candidate.Artifact.URL,
+			SourceKind:       candidate.Artifact.Kind,
+			SourceVersion:    candidate.Artifact.Version,
+			SourceRetrieved:  retrievedAt,
+			SourceSHA256:     sha,
+			SourceCoordinate: fmt.Sprintf("existing-complete-surface[%s %s]", method, path),
+		})
+	}
+	return batchArtifactInventory{
+		Endpoints: endpoints,
+		Sources: []batchArtifactSource{{
+			URL:       candidate.Artifact.URL,
+			Kind:      candidate.Artifact.Kind,
+			Version:   candidate.Artifact.Version,
+			Retrieved: retrievedAt,
+			SHA256:    sha,
+		}},
+	}, nil
+}
+
+func existingSurfaceEvidenceScope(previous string, candidate BatchManifestConnector, operations int) string {
+	scope := fmt.Sprintf("Exact existing-surface evidence fallback: the preserved source inventory contains %d official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official %s artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl.", operations, candidate.Artifact.Kind)
+	if prior := strings.TrimSpace(previous); prior != "" {
+		scope += " Prior source-surface scope: " + prior
+	}
+	return scope
+}
+
 func parseBatchManifestArtifact(opts batchMaterializeOptions, candidate BatchManifestConnector, raw []byte) (batchArtifactInventory, error) {
 	source := batchArtifactSource{
 		URL:       candidate.Artifact.URL,
@@ -340,6 +424,11 @@ func parseBatchManifestArtifact(opts batchMaterializeOptions, candidate BatchMan
 		SHA256:    fmt.Sprintf("%x", sha256.Sum256(raw)),
 	}
 	fetch := batchArtifactSourceFetcher(opts, candidate)
+	if strings.EqualFold(strings.TrimSpace(source.Kind), "html_reference") {
+		if rootInventory, complete, rootErr := completeBatchHTMLReferenceRoot(candidate, raw, source); rootErr == nil && complete {
+			return requireBatchArtifactInventoryTotal(candidate, rootInventory)
+		}
+	}
 	budget := newBatchArtifactReferenceBudget(raw)
 	primary, primaryErr := parseBatchArtifactByKindWithBudget(raw, source, fetch, budget)
 	if primaryErr == nil {
@@ -480,7 +569,15 @@ func parseBatchArtifactByKindWithBudget(raw []byte, source batchArtifactSource, 
 	case "postman":
 		return parseBatchPostmanArtifact(raw, source)
 	case "openapi", "swagger":
-		return parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, budget)
+		inventory, openAPIErr := parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, budget)
+		if openAPIErr == nil {
+			return inventory, nil
+		}
+		inventory, discoveryErr := parseBatchGoogleDiscoveryArtifact(raw, source)
+		if discoveryErr == nil {
+			return inventory, nil
+		}
+		return batchArtifactInventory{}, openAPIErr
 	case "openapi_fragments", "html_reference", "official-reference":
 		return parseBatchReferenceArtifactWithBudget(raw, source, fetch, budget)
 	default:
@@ -837,7 +934,7 @@ func fetchBatchMaterializeArtifact(rawURL string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return fetchBatchMaterializeURL(parsed, false)
+	return fetchBatchMaterializeURL(parsed, true)
 }
 
 func fetchBatchMaterializeSource(rawURL string) ([]byte, error) {
@@ -931,7 +1028,15 @@ func parseBatchArtifactURL(raw string) (*url.URL, error) {
 		return nil, errors.New("artifact URL must not include userinfo")
 	}
 	if parsed.RawQuery != "" || parsed.ForceQuery {
-		return nil, errors.New("artifact URL must not include a query")
+		query, err := url.ParseQuery(parsed.RawQuery)
+		if err != nil {
+			return nil, errors.New("artifact URL query must be well-formed")
+		}
+		for key := range query {
+			if !batchArtifactReferenceQueryParameterAllowed(key) {
+				return nil, errors.New("artifact URL query must use only non-sensitive parameters")
+			}
+		}
 	}
 	if parsed.Fragment != "" || strings.Contains(raw, "#") {
 		return nil, errors.New("artifact URL must not include a fragment")
@@ -1012,7 +1117,7 @@ func validateBatchArtifactURLObjectWithQuery(parsed *url.URL, allowQuery bool) e
 
 func batchArtifactReferenceQueryParameterAllowed(key string) bool {
 	switch strings.ToLower(key) {
-	case "api-version", "format", "lang", "locale", "version":
+	case "_v", "api-version", "api_version", "converttoopenapi", "download", "environment", "export", "format", "lang", "locale", "reduce", "resolved", "segregateauth", "slug", "v", "ver", "version", "versiontag", "view":
 		return true
 	default:
 		return false
@@ -1237,6 +1342,7 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 	if err != nil {
 		return batchArtifactInventory{}, fmt.Errorf("artifact swagger field: %w", err)
 	}
+	swaggerBasePath := ""
 	switch {
 	case openAPI != "" && strings.HasPrefix(openAPI, "3.") && swagger == "":
 		source.Kind = "openapi"
@@ -1244,6 +1350,13 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 	case swagger == "2.0" && openAPI == "":
 		source.Kind = "swagger"
 		source.Version = swagger
+		swaggerBasePath, err = batchYAMLFieldString(fields, "basePath")
+		if err != nil {
+			return batchArtifactInventory{}, fmt.Errorf("artifact basePath field: %w", err)
+		}
+		if err := validateBatchSwaggerBasePath(swaggerBasePath); err != nil {
+			return batchArtifactInventory{}, err
+		}
 	case openAPI == "" && swagger == "":
 		return batchArtifactInventory{}, errors.New("artifact is not an OpenAPI or Swagger document")
 	default:
@@ -1257,6 +1370,9 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 		pathEndpoints, err := batchArtifactEndpointsFromDocument(resolver, document, paths)
 		if err != nil {
 			return batchArtifactInventory{}, err
+		}
+		for index := range pathEndpoints {
+			pathEndpoints[index].Path = batchSwaggerBasePathEndpointPath(swaggerBasePath, pathEndpoints[index].Path)
 		}
 		for _, endpoint := range pathEndpoints {
 			key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
@@ -1293,18 +1409,34 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 	return batchArtifactInventory{Endpoints: endpoints, Sources: resolver.sources}, nil
 }
 
-func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchArtifactDocument, error) {
-	decoder := yaml.NewDecoder(bytes.NewReader(raw))
-	var document yaml.Node
-	if err := decoder.Decode(&document); err != nil {
-		return batchArtifactDocument{}, err
+func validateBatchSwaggerBasePath(basePath string) error {
+	basePath = strings.TrimSpace(basePath)
+	if basePath == "" || basePath == "/" {
+		return nil
 	}
-	var trailing yaml.Node
-	if err := decoder.Decode(&trailing); err != io.EOF {
+	if !strings.HasPrefix(basePath, "/") || strings.ContainsAny(basePath, "?#\\\x00") {
+		return batchArtifactInventoryUnknown("artifact Swagger basePath %q must be an absolute request path", basePath)
+	}
+	return nil
+}
+
+func batchSwaggerBasePathEndpointPath(basePath, endpointPath string) string {
+	basePath = strings.TrimSpace(basePath)
+	if basePath == "" || basePath == "/" {
+		return endpointPath
+	}
+	return strings.TrimRight(basePath, "/") + endpointPath
+}
+
+func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchArtifactDocument, error) {
+	document, err := decodeBatchArtifactYAML(raw)
+	if err != nil {
+		if normalized, ok := normalizeBatchArtifactJSON(raw); ok {
+			document, err = decodeBatchArtifactYAML(normalized)
+		}
 		if err != nil {
 			return batchArtifactDocument{}, err
 		}
-		return batchArtifactDocument{}, batchArtifactInventoryUnknown("artifact contains multiple YAML documents")
 	}
 	root, err := batchYAMLDeref(yamlDocumentRoot(&document))
 	if err != nil {
@@ -1321,6 +1453,42 @@ func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchAr
 		base, _ = url.Parse(source.URL)
 	}
 	return batchArtifactDocument{Root: root, Source: source, Base: base}, nil
+}
+
+func decodeBatchArtifactYAML(raw []byte) (yaml.Node, error) {
+	decoder := yaml.NewDecoder(bytes.NewReader(raw))
+	var document yaml.Node
+	if err := decoder.Decode(&document); err != nil {
+		return yaml.Node{}, err
+	}
+	var trailing yaml.Node
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err != nil {
+			return yaml.Node{}, err
+		}
+		return yaml.Node{}, batchArtifactInventoryUnknown("artifact contains multiple YAML documents")
+	}
+	return document, nil
+}
+
+// normalizeBatchArtifactJSON lets valid provider JSON use its own Unicode
+// escape syntax when yaml.v3 rejects a valid surrogate pair. It is only a
+// fallback after YAML decoding fails, and UseNumber prevents number coercion.
+func normalizeBatchArtifactJSON(raw []byte) ([]byte, bool) {
+	if !json.Valid(raw) {
+		return nil, false
+	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	var value any
+	if err := decoder.Decode(&value); err != nil {
+		return nil, false
+	}
+	normalized, err := json.Marshal(value)
+	if err != nil {
+		return nil, false
+	}
+	return normalized, true
 }
 
 func newBatchArtifactResolver(root batchArtifactDocument, fetch batchArtifactFetchFunc) *batchArtifactResolver {
@@ -1946,17 +2114,19 @@ func batchArtifactEndpointFromOperation(path, method string, operation *yaml.Nod
 		return batchArtifactEndpoint{}, batchArtifactInventoryUnknown("operation %s %s is not a mapping", method, path)
 	}
 	for _, key := range batchYAMLFieldNames(fields) {
-		value := fields[key]
 		if strings.HasPrefix(key, "x-") {
 			continue
 		}
 		switch key {
-		case "callbacks":
-			callbacks, err := batchYAMLFields(value)
-			if err != nil || len(callbacks) > 0 {
-				return batchArtifactEndpoint{}, batchArtifactInventoryUnknown("operation %s %s contains callbacks that cannot be represented as provider request paths", method, path)
+		case "$ref":
+			ref, err := batchYAMLFieldString(fields, "$ref")
+			if err != nil || ref == "" {
+				return batchArtifactEndpoint{}, batchArtifactInventoryUnknown("operation %s %s has an invalid reference", method, path)
 			}
-		case "tags", "summary", "description", "externalDocs", "operationId", "parameters", "requestBody", "responses", "deprecated", "security", "servers", "consumes", "produces", "schemes":
+		case "tags", "summary", "description", "externalDocs", "operationId", "parameters", "requestBody", "responses", "deprecated", "security", "servers", "consumes", "produces", "schemes", "callbacks", "examples", "freeTier":
+			// These fields describe the request or provider-initiated callback
+			// behavior. The materialized surface inventories only the request
+			// method/path, so callback deliveries never become invented endpoints.
 			continue
 		default:
 			return batchArtifactEndpoint{}, batchArtifactInventoryUnknown("operation %s %s has unsupported field %q", method, path, key)
@@ -2056,17 +2226,20 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 			sources = append([]batchArtifactSource{root}, sources...)
 		}
 	}
+	existingExact := make(map[string][]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
+	for _, endpoint := range bundle.Surface.Endpoints {
+		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
+		existingExact[key] = append(existingExact[key], endpoint)
+	}
+	normalizedArtifactEndpoints := make([]batchArtifactEndpoint, len(artifactEndpoints))
+	for index, endpoint := range artifactEndpoints {
+		endpoint.Path = materializedArtifactPathWithExistingBinding(endpoint.Method, endpoint.Path, existingExact)
+		normalizedArtifactEndpoints[index] = endpoint
+	}
+	artifactEndpoints = normalizedArtifactEndpoints
 	artifactKeys := make(map[string]bool, len(artifactEndpoints))
 	for _, endpoint := range artifactEndpoints {
 		artifactKeys[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] = true
-	}
-	existingExact := make(map[string]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
-	for _, endpoint := range bundle.Surface.Endpoints {
-		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
-		if _, duplicate := existingExact[key]; duplicate {
-			return engine.APISurface{}, fmt.Errorf("existing api surface duplicates %s %s", endpoint.Method, endpoint.Path)
-		}
-		existingExact[key] = endpoint
 	}
 	artifactIDs := make(map[string]string, len(sources))
 	usedArtifactIDs := make(map[string]bool, len(sources))
@@ -2107,7 +2280,18 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		Artifacts:              artifacts,
 		Endpoints:              make([]engine.SurfaceEndpoint, 0, len(artifactEndpoints)),
 	}
+	artifactOccurrences := make(map[string]int, len(artifactEndpoints))
 	for _, artifactEndpoint := range artifactEndpoints {
+		artifactOccurrences[batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)]++
+	}
+	artifactIndexes := make(map[string]int, len(artifactOccurrences))
+	for _, artifactEndpoint := range artifactEndpoints {
+		key := batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)
+		existingBindings := materializedExistingBindings(existingExact[key], artifactOccurrences[key], artifactIndexes[key])
+		artifactIndexes[key]++
+		if len(existingBindings) == 0 {
+			existingBindings = []engine.SurfaceEndpoint{{}}
+		}
 		endpointSourceURL := artifactEndpoint.SourceURL
 		if endpointSourceURL == "" {
 			endpointSourceURL = candidate.Artifact.URL
@@ -2117,31 +2301,33 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 			endpointSourceURL = candidate.Artifact.URL
 			endpointArtifactID = artifactID
 		}
-		endpoint := engine.SurfaceEndpoint{
-			Method: artifactEndpoint.Method,
-			Path:   artifactEndpoint.Path,
-			Provenance: &engine.SurfaceProvenance{
-				Artifact:     endpointArtifactID,
-				SourceURL:    endpointSourceURL,
-				SourceKind:   artifactEndpoint.SourceKind,
-				Version:      artifactEndpoint.SourceVersion,
-				RetrievedAt:  firstNonEmpty(artifactEndpoint.SourceRetrieved, retrievedAt),
-				SHA256:       artifactEndpoint.SourceSHA256,
-				Coordinate:   artifactEndpoint.SourceCoordinate,
-				Alternatives: materializedEndpointAlternatives(artifactEndpoint.Alternatives),
-			},
+		for _, existing := range existingBindings {
+			endpoint := engine.SurfaceEndpoint{
+				Method: artifactEndpoint.Method,
+				Path:   artifactEndpoint.Path,
+				Provenance: &engine.SurfaceProvenance{
+					Artifact:     endpointArtifactID,
+					SourceURL:    endpointSourceURL,
+					SourceKind:   artifactEndpoint.SourceKind,
+					Version:      artifactEndpoint.SourceVersion,
+					RetrievedAt:  firstNonEmpty(artifactEndpoint.SourceRetrieved, retrievedAt),
+					SHA256:       artifactEndpoint.SourceSHA256,
+					Coordinate:   artifactEndpoint.SourceCoordinate,
+					Alternatives: materializedEndpointAlternatives(artifactEndpoint.Alternatives),
+				},
+			}
+			if operation := batchProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
+				endpoint.Operation = operation
+			} else if existing.CoveredBy != nil || existing.Excluded != nil || existing.Operation != nil {
+				copyMaterializedClassifier(&endpoint, existing)
+			} else {
+				endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
+			}
+			if endpoint.CoveredBy == nil && endpoint.Excluded == nil && endpoint.Operation == nil {
+				endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
+			}
+			surface.Endpoints = append(surface.Endpoints, endpoint)
 		}
-		if operation := batchProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
-			endpoint.Operation = operation
-		} else if existing, ok := existingExact[batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)]; ok {
-			copyMaterializedClassifier(&endpoint, existing)
-		} else {
-			endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
-		}
-		if endpoint.CoveredBy == nil && endpoint.Excluded == nil && endpoint.Operation == nil {
-			endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
-		}
-		surface.Endpoints = append(surface.Endpoints, endpoint)
 	}
 	for _, existing := range bundle.Surface.Endpoints {
 		key := batchArtifactEndpointKey(existing.Method, existing.Path)
@@ -2178,6 +2364,93 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		return engine.APISurface{}, err
 	}
 	return surface, nil
+}
+
+// materializedExistingBindings preserves every source-surface binding for one
+// documented method/path. Older bundles legitimately use duplicate endpoint
+// rows when several ETL streams share one provider request. When the provider
+// artifact itself documents repeated method/path actions, bindings are paired
+// one-to-one instead of multiplying the provider inventory.
+func materializedExistingBindings(bindings []engine.SurfaceEndpoint, artifactOccurrences, artifactIndex int) []engine.SurfaceEndpoint {
+	if len(bindings) == 0 {
+		return nil
+	}
+	if len(bindings) > artifactOccurrences {
+		if artifactIndex == 0 {
+			if merged, ok := materializedMergedCoverage(bindings); ok {
+				return []engine.SurfaceEndpoint{merged}
+			}
+			return append([]engine.SurfaceEndpoint(nil), bindings...)
+		}
+		return nil
+	}
+	if artifactIndex < len(bindings) {
+		return []engine.SurfaceEndpoint{bindings[artifactIndex]}
+	}
+	return nil
+}
+
+// Some Discovery documents include a leading API version even when the
+// connector's declared base URL already carries that version. Preserve the
+// connector-relative spelling only when the source bundle has an exact
+// method/path binding after that one conservative normalization.
+func materializedArtifactPathWithExistingBinding(method, path string, existing map[string][]engine.SurfaceEndpoint) string {
+	if len(existing[batchArtifactEndpointKey(method, path)]) > 0 {
+		return path
+	}
+	withoutVersion := materializedVersionlessDiscoveryPath(path)
+	if withoutVersion != path && len(existing[batchArtifactEndpointKey(method, withoutVersion)]) > 0 {
+		return withoutVersion
+	}
+	return path
+}
+
+func materializedVersionlessDiscoveryPath(path string) string {
+	trimmed := strings.TrimPrefix(path, "/")
+	version, remainder, found := strings.Cut(trimmed, "/")
+	if !found || len(version) < 2 || version[0] != 'v' {
+		return path
+	}
+	for _, character := range version[1:] {
+		if character < '0' || character > '9' {
+			return path
+		}
+	}
+	return "/" + remainder
+}
+
+func materializedMergedCoverage(bindings []engine.SurfaceEndpoint) (engine.SurfaceEndpoint, bool) {
+	coverage := &engine.SurfaceCoverage{}
+	for _, binding := range bindings {
+		if binding.CoveredBy == nil || binding.Excluded != nil || binding.Operation != nil {
+			return engine.SurfaceEndpoint{}, false
+		}
+		coverage.Streams = append(coverage.Streams, binding.CoveredBy.StreamTargets()...)
+		coverage.Writes = append(coverage.Writes, binding.CoveredBy.WriteTargets()...)
+		if binding.CoveredBy.DirectRead != "" {
+			coverage.DirectReads = append(coverage.DirectReads, binding.CoveredBy.DirectRead)
+		}
+		coverage.DirectReads = append(coverage.DirectReads, binding.CoveredBy.DirectReads...)
+	}
+	coverage.Streams = materializedUniqueStrings(coverage.Streams)
+	coverage.Writes = materializedUniqueStrings(coverage.Writes)
+	coverage.DirectReads = materializedUniqueStrings(coverage.DirectReads)
+	return engine.SurfaceEndpoint{CoveredBy: coverage}, true
+}
+
+func materializedUniqueStrings(values []string) []string {
+	seen := make(map[string]bool, len(values))
+	unique := make([]string, 0, len(values))
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		if value == "" || seen[value] {
+			continue
+		}
+		seen[value] = true
+		unique = append(unique, value)
+	}
+	sort.Strings(unique)
+	return unique
 }
 
 func materializedReferenceArtifactID(connector string, source batchArtifactSource) string {
@@ -2225,6 +2498,8 @@ func batchArtifactEndpointKey(method, path string) string {
 func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceEndpoint) {
 	if src.CoveredBy != nil {
 		coverage := *src.CoveredBy
+		coverage.Streams = append([]string(nil), src.CoveredBy.Streams...)
+		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		coverage.DirectReads = append([]string(nil), src.CoveredBy.DirectReads...)
 		dst.CoveredBy = &coverage
 		return
@@ -2353,8 +2628,8 @@ func ensureMaterializedCoverage(bundle engine.Bundle, surface engine.APISurface)
 		if endpoint.CoveredBy == nil {
 			continue
 		}
-		if endpoint.CoveredBy.Stream != "" {
-			coveredStreams[endpoint.CoveredBy.Stream] = true
+		for _, stream := range endpoint.CoveredBy.StreamTargets() {
+			coveredStreams[stream] = true
 		}
 		if endpoint.CoveredBy.Write != "" {
 			coveredWrites[endpoint.CoveredBy.Write] = true
@@ -2386,7 +2661,7 @@ func materializedAPIName(existing, artifactVersion string) string {
 }
 
 func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector) ([]engine.OperationSpec, error) {
-	operations := append([]engine.OperationSpec(nil), bundle.Operations...)
+	operations := append([]engine.OperationSpec{}, bundle.Operations...)
 	usedIDs := make(map[string]bool, len(operations))
 	for _, operation := range operations {
 		usedIDs[operation.ID] = true
@@ -2428,7 +2703,7 @@ func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface
 }
 
 func materializedOperationID(connector, method, path string, used map[string]bool) string {
-	base := strings.ToLower(strings.TrimSpace(connector)) + "." + strings.ToLower(strings.TrimSpace(method)) + "." + materializedSlug(path)
+	base := strings.ToLower(strings.TrimSpace(connector)) + "." + materializedSlug(method) + "." + materializedSlug(path)
 	if !used[base] {
 		used[base] = true
 		return base
@@ -2476,6 +2751,10 @@ func materializedMutationClass(method string) string {
 }
 
 func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector, operations []engine.OperationSpec) (engine.CLISurface, error) {
+	existingStreamCommands, existingWriteCommands, err := materializedExistingActionCommands(bundle)
+	if err != nil {
+		return engine.CLISurface{}, err
+	}
 	streamRefs := map[string][]engine.CLISurfaceEndpointRef{}
 	writeRefs := map[string][]engine.CLISurfaceEndpointRef{}
 	endpointByKey := map[string]engine.SurfaceEndpoint{}
@@ -2485,8 +2764,8 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			continue
 		}
 		ref := engine.CLISurfaceEndpointRef{Method: endpoint.Method, Path: endpoint.Path}
-		if endpoint.CoveredBy.Stream != "" {
-			streamRefs[endpoint.CoveredBy.Stream] = append(streamRefs[endpoint.CoveredBy.Stream], ref)
+		for _, stream := range endpoint.CoveredBy.StreamTargets() {
+			streamRefs[stream] = append(streamRefs[stream], ref)
 		}
 		if endpoint.CoveredBy.Write != "" {
 			writeRefs[endpoint.CoveredBy.Write] = append(writeRefs[endpoint.CoveredBy.Write], ref)
@@ -2497,6 +2776,37 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 	readPaths := make([]string, 0, len(bundle.Streams))
 	writePaths := make([]string, 0, len(bundle.Writes))
 	usedPaths := map[string]bool{}
+	coveredDirectReads := map[string]bool{}
+	for _, endpoint := range surface.Endpoints {
+		for _, path := range coveredDirectReadTargets(endpoint.CoveredBy) {
+			coveredDirectReads[path] = true
+		}
+	}
+	if len(coveredDirectReads) > 0 {
+		if bundle.CLISurface == nil {
+			return engine.CLISurface{}, errors.New("api surface direct-read coverage has no source cli surface")
+		}
+		for _, command := range bundle.CLISurface.Commands {
+			if !coveredDirectReads[command.Path] || command.Availability != "implemented" || (command.Intent != "direct_read" && command.Intent != "binary_download") {
+				continue
+			}
+			if usedPaths[command.Path] {
+				return engine.CLISurface{}, fmt.Errorf("implemented direct-read command %q conflicts with another generated command", command.Path)
+			}
+			commands = append(commands, command)
+			readPaths = append(readPaths, command.Path)
+			usedPaths[command.Path] = true
+			delete(coveredDirectReads, command.Path)
+		}
+		if len(coveredDirectReads) > 0 {
+			missing := make([]string, 0, len(coveredDirectReads))
+			for path := range coveredDirectReads {
+				missing = append(missing, path)
+			}
+			sort.Strings(missing)
+			return engine.CLISurface{}, fmt.Errorf("api surface direct-read coverage has no implemented source command: %s", strings.Join(missing, ", "))
+		}
+	}
 	for _, stream := range bundle.Streams {
 		refs := sortedMaterializedReferences(streamRefs[stream.Name])
 		if len(refs) == 0 {
@@ -2516,9 +2826,19 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if note := materializedDiscrepancyNote(refs, endpointByKey); note != "" {
 			command.Notes = note
 		}
+		if existing, ok := existingStreamCommands[stream.Name]; ok {
+			command = existing
+			command.APISurface = refs
+			if command.SourceURL == "" {
+				command.SourceURL = candidate.Artifact.URL
+			}
+		}
+		if usedPaths[command.Path] {
+			return engine.CLISurface{}, fmt.Errorf("stream command %q conflicts with another retained or generated command", command.Path)
+		}
 		commands = append(commands, command)
-		usedPaths[path] = true
-		readPaths = append(readPaths, path)
+		usedPaths[command.Path] = true
+		readPaths = append(readPaths, command.Path)
 	}
 	for _, action := range bundle.Writes {
 		refs := sortedMaterializedReferences(writeRefs[action.Name])
@@ -2547,9 +2867,33 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			command.Availability = materializeAvailabilityNotImplemented
 			command.Notes = materializedNamedDependencyNote("engine.reverse_etl_scalar_flag_contract", "the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags")
 		}
+		if existing, ok := existingWriteCommands[action.Name]; ok {
+			if existing.Availability == "partial" {
+				// A partial command has an intentional connector-owned runtime
+				// contract. Keep that full contract while refreshing its cited
+				// provider endpoints.
+				command = existing
+				command.APISurface = refs
+				if command.SourceURL == "" {
+					command.SourceURL = candidate.Artifact.URL
+				}
+			} else {
+				// Implemented command flags are derived from the current write
+				// schema. Preserve its registered path, but do not carry stale
+				// requiredness or field mappings across a materialization.
+				command.Path = existing.Path
+				command.SourceCLIPath = existing.SourceCLIPath
+				if existing.Summary != "" {
+					command.Summary = existing.Summary
+				}
+			}
+		}
+		if usedPaths[command.Path] {
+			return engine.CLISurface{}, fmt.Errorf("write command %q conflicts with another retained or generated command", command.Path)
+		}
 		commands = append(commands, command)
-		usedPaths[path] = true
-		writePaths = append(writePaths, path)
+		usedPaths[command.Path] = true
+		writePaths = append(writePaths, command.Path)
 	}
 	for _, endpoint := range surface.Endpoints {
 		if endpoint.Operation == nil {
@@ -2609,6 +2953,49 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		Groups:   groups,
 		Commands: commands,
 	}, nil
+}
+
+// materializedExistingActionCommands keeps registered stream and reverse-ETL
+// command paths stable while the materializer refreshes their endpoint
+// references from the cited provider artifact. Direct-read commands are
+// retained separately because their coverage refers to command paths rather
+// than a stream or write target.
+func materializedExistingActionCommands(bundle engine.Bundle) (map[string]engine.CLICommand, map[string]engine.CLICommand, error) {
+	streams := make(map[string]bool, len(bundle.Streams))
+	for _, stream := range bundle.Streams {
+		streams[stream.Name] = true
+	}
+	writes := make(map[string]bool, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		writes[action.Name] = true
+	}
+
+	streamCommands := map[string]engine.CLICommand{}
+	writeCommands := map[string]engine.CLICommand{}
+	if bundle.CLISurface == nil {
+		return streamCommands, writeCommands, nil
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		switch command.Intent {
+		case "etl":
+			if command.Stream == "" || !streams[command.Stream] {
+				continue
+			}
+			if _, exists := streamCommands[command.Stream]; exists {
+				return nil, nil, fmt.Errorf("source cli surface maps stream %q to more than one command", command.Stream)
+			}
+			streamCommands[command.Stream] = command
+		case "reverse_etl":
+			if command.Write == "" || !writes[command.Write] {
+				continue
+			}
+			if _, exists := writeCommands[command.Write]; exists {
+				return nil, nil, fmt.Errorf("source cli surface maps write action %q to more than one command", command.Write)
+			}
+			writeCommands[command.Write] = command
+		}
+	}
+	return streamCommands, writeCommands, nil
 }
 
 func materializedOperationForEndpoint(operations []engine.OperationSpec, endpoint engine.SurfaceEndpoint) string {

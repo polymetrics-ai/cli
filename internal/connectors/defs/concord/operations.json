@@ -1,0 +1,1203 @@
+{
+  "operations": [
+    {
+      "id": "concord.post.organizations",
+      "kind": "rest_write",
+      "summary": "POST /organizations",
+      "description": "creates a brand-new Concord organization (tenant-level provisioning), not a resource within the configured organization_id this connector operates inside.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements",
+      "description": "AgreementCreate's own schema is a deeply nested templating/source-agreement/parameter-replacement shape (create from template, copy from contract, draft creation) not safely reducible to a flat JSON write action without risking silent mis-mapping of legally-binding contract content; deferred pending a dedicated schema review.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}",
+      "description": "partial agreement metadata patch; deferred alongside agreement creation (same content-mutation review needed before modeling).",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}",
+      "description": "permanently deletes a signed/negotiated legal agreement and its full history; destructive beyond this pass's write scope (folders/reports/clauses/groups/approvals only).",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-docx",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}.docx",
+      "description": "returns a binary Word document, not structured record data.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}.docx",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-pdf",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}.pdf",
+      "description": "returns a binary PDF document, not structured record data.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}.pdf",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-approval",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "description": "the approval workflow instance attached to one specific agreement; a distinct per-agreement sub-resource from the org-level approvals stream already covered, deferred pending its own schema review.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-approval",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "description": "replaces the approval workflow on a live agreement negotiation; deferred alongside the read side.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-approval",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/approval",
+      "description": "discards an in-flight approval from an agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-attachments",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/attachments",
+      "description": "uploads binary attachment content to an agreement; a multipart/binary-payload write not modeled this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "description": "returns the raw attachment file content, not structured record data (the attachments LIST endpoint, already covered, returns the structured metadata).",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "description": "updates attachment metadata; deferred alongside attachment upload.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+      "description": "deletes an agreement attachment; deferred alongside attachment upload.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-comments",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/comments",
+      "description": "adds or updates a comment thread on a live agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/comments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-folder",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/folder",
+      "description": "moves an agreement to a different folder; a targeted single-field agreement mutation deferred alongside the broader agreement-content-mutation exclusion above.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/folder",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-integration",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/integration",
+      "description": "exports an agreement to a third-party integration (e.g. Salesforce); an outbound side-effecting action, not a data mutation this connector's write model represents.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/integration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-members",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/members",
+      "description": "invites a new member into a live agreement negotiation; deferred pending a dedicated review of the agreement-negotiation write surface.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-members-delayed-invitations",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations",
+      "description": "adds a delayed invitation to an agreement; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}",
+      "description": "removes a delayed invitation from a negotiation; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid-permission",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/permission",
+      "description": "edits a delayed invitation's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/permission",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid-send",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/send",
+      "description": "sends a pending delayed invitation; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-members-invitations-invitationid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}",
+      "description": "removes an invited user from a negotiation; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-members-invitations-invitationid-permission",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}/permission",
+      "description": "edits an invited user's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}/permission",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-members-me",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/members/me",
+      "description": "joins the calling user into an agreement negotiation; a session-bound action, not a bulk-syncable mutation.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-members-users-me",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/users/me",
+      "description": "removes the calling user from a negotiation; a session-bound action, not a bulk-syncable mutation.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-members-users-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}",
+      "description": "removes an active member from a negotiation; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-members-users-userid-permission",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}/permission",
+      "description": "edits an active member's negotiation permission; deferred alongside the broader agreement-negotiation write exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}/permission",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-metadata",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/metadata",
+      "description": "updates agreement metadata (title/description/tags/status); deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-path",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/path",
+      "description": "returns the folder-path breadcrumb for an agreement, derivable from the already-covered agreement/folder streams' folderId/parentId chain; not modeled as a separate stream.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/path",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-rules-id",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/rules/{id}",
+      "description": "sends an action to an automation rule on a live agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/rules/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-signature",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "description": "e-signature metadata for one specific agreement; deferred pending its own schema review, distinct from the metadata/summary sub-resources already covered.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-signature",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "description": "completes the signing flow on a live agreement; a legally-consequential action out of scope for this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-signature",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "description": "modifies in-flight signature metadata; deferred alongside the signing-flow exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-signature",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/signature",
+      "description": "revokes all signatures on an agreement, a legally-consequential destructive action out of scope for this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-signature-request",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/signature/request",
+      "description": "requests e-signature on a live agreement, a legally-consequential action out of scope for this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/request",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-signature-slots",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/signature/slots",
+      "description": "reconfigures signature slot assignments on an agreement; deferred alongside the signing-flow exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/slots",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-summary-clauses",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses",
+      "description": "adds a clause instance to a live agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "description": "single-clause detail already enumerable via the covered agreement_summary stream's clauses array.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "description": "updates a clause instance on a live agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+      "description": "removes a clause instance from a live agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-summary-endclauses",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses",
+      "description": "renews a live agreement (creates a new end-clause/term extension); a legally-consequential action out of scope for this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-summary-endclauses-last",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+      "description": "the most-recent end-clause, already enumerable via the covered agreement_summary stream's endclauses array.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-endclauses-last",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+      "description": "updates the current end-clause/renewal terms; deferred alongside the renewal-mutation exclusion above.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-summary-endclauses-id",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+      "description": "single end-clause detail already enumerable via the covered agreement_summary stream's endclauses array.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-endclauses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+      "description": "cancels an agreement renewal; deferred alongside the renewal-mutation exclusion above.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-summary-fields",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+      "description": "custom summary-field definitions for one agreement; a distinct nested sub-resource from the summary object already covered, deferred pending its own schema review.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-summary-fields",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+      "description": "creates a custom summary field on an agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-fields-id",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+      "description": "updates a custom summary field; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+      "description": "deletes a custom summary field; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-lifecycle",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/lifecycle",
+      "description": "updates the agreement lifecycle stage (e.g. force-expire/renew state machine transition); a legally-consequential action out of scope for this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/lifecycle",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-summary-links",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/summary/links",
+      "description": "links two agreements together; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-links-id",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/links/{id}",
+      "description": "removes a link between agreements; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-agreements-agreementuid-summary-signedwithlabels",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/agreements/{agreementUid}/summary/signedwithlabels",
+      "description": "updates the \"signed with\" party labels on an agreement; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/signedwithlabels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-track-changes",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/track-changes",
+      "description": "in-document track-changes/redline data for one agreement version; a distinct document-content sub-resource deferred pending its own schema review.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/track-changes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-versions-diff",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/versions/diff",
+      "description": "a computed diff between two agreement versions (requires two version-id query params to select the comparison pair); a distinct on-demand-computation shape, not a listable resource, deferred pending its own schema review.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/diff",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-versions-last",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/versions/last",
+      "description": "the most-recent version, already enumerable via the covered agreement_versions stream (its first/last element by date).",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.organizations-organizationid-agreements-agreementuid-versions-last-fields",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+      "description": "template field values from the latest version; deferred pending its own schema review, distinct from the version metadata already covered.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-versions-last-fields",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+      "description": "fills template field values on the latest version; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-agreements-agreementuid-versions-last-pdffields",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/agreements/{agreementUid}/versions/last/pdffields",
+      "description": "fills PDF form fields on the latest version; deferred alongside the broader agreement-content-mutation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/pdffields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-agreements-agreementuid-versions-upload",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/agreements/{agreementUid}/versions/upload",
+      "description": "uploads a new agreement version from a PDF/Word file; a multipart/binary-payload write not modeled this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-auto-agreementuid",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/auto/{agreementUid}",
+      "description": "instantiates an agreement from an automated template; deferred alongside the broader agreement-creation exclusion.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/auto/{agreementUid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-branding-agreementview",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/branding/agreementview",
+      "description": "org-wide branding/white-label configuration change; an organization-admin-level setting outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/branding/agreementview",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-branding-email",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/branding/email",
+      "description": "creates a custom email domain for org branding; organization-admin-level setting outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/branding/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-branding-email",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/branding/email",
+      "description": "org-wide email-sender branding configuration; organization-admin-level setting outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/branding/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-branding-email",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/branding/email",
+      "description": "deletes org email branding configuration; organization-admin-level setting outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/branding/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-branding-logo",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/branding/logo",
+      "description": "uploads a temporary logo image; a binary-payload write, not JSON record data.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/branding/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.put.organizations-organizationid-branding-logo",
+      "kind": "rest_write",
+      "summary": "PUT /organizations/{organizationId}/branding/logo",
+      "description": "sets a logo image; a binary-payload write, not JSON record data.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organizations/{organizationId}/branding/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.delete.organizations-organizationid-branding-logo",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/branding/logo",
+      "description": "deletes org branding logo; organization-admin-level setting outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/branding/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.patch.organizations-organizationid-groups",
+      "kind": "rest_write",
+      "summary": "PATCH /organizations/{organizationId}/groups",
+      "description": "bulk user-group membership update (add/remove many users across many groups in one request body); a distinct batch-mutation shape from the single-resource create action this pass models; not modeled this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/organizations/{organizationId}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-invitations",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/invitations",
+      "description": "invites a new user into the organization; an organization-admin user-provisioning action outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/invitations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.organizations-organizationid-reports-id",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/reports/{id}",
+      "description": "\"Create a new Report from a sample\" -- a create variant keyed by a sample-report enum id, distinct from and narrower than the already-covered create_report/update_report pair; not modeled separately this pass.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/reports/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.user-me-organizations-organizationid-agreements",
+      "kind": "rest_read",
+      "summary": "GET /user/me/organizations/{organizationId}/agreements",
+      "description": "an alternate agreements-list path scoped under /user/me/; this connector's agreements stream already covers agreement listing via the organization-scoped path legacy targets (/organizations/{organizationId}/agreements), matching this bundle's pre-existing parity choice.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/me/organizations/{organizationId}/agreements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.user-me-organizations-organizationid-agreements-count",
+      "kind": "rest_write",
+      "summary": "POST /user/me/organizations/{organizationId}/agreements/count",
+      "description": "returns only an aggregate count, not record data; not modeled as a stream.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user/me/organizations/{organizationId}/agreements/count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.get.user-me-organizations-organizationid-folders",
+      "kind": "rest_read",
+      "summary": "GET /user/me/organizations/{organizationId}/folders",
+      "description": "an alternate folders-list path scoped under /user/me/; this connector's folders stream already covers folder listing via the organization-scoped path legacy targets (/organizations/{organizationId}/folders).",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/me/organizations/{organizationId}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.post.users-me-integrations-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /users/me/integrations/webhooks",
+      "description": "creates a personal webhook integration tied to the authenticated user's own account, not organization CLM content; outside this pass's write scope.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/me/integrations/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "concord.webhook.newagreement-post",
+      "kind": "composite",
+      "summary": "WEBHOOK newAgreement#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK newAgreement#POST"
+        ]
+      }
+    }
+  ]
+}

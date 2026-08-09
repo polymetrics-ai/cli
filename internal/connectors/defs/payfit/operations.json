@@ -1,0 +1,127 @@
+{
+  "operations": [
+    {
+      "id": "payfit.post.companies-fr-companyid-health-insurance-setup-sheets",
+      "kind": "rest_write",
+      "summary": "POST /companies-fr/{companyId}/health-insurance-setup-sheets",
+      "description": "multipart/form-data upload is not expressible by declarative JSON writes",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies-fr/{companyId}/health-insurance-setup-sheets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.get.companies-companyid-accounting",
+      "kind": "rest_read",
+      "summary": "GET /companies/{companyId}/accounting",
+      "description": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{companyId}/accounting",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.post.companies-companyid-billing-declarations",
+      "kind": "rest_write",
+      "summary": "POST /companies/{companyId}/billing-declarations",
+      "description": "partner-only billing declaration endpoint; the migrated connector authenticates with a customer API key, not partner-only credentials",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies/{companyId}/billing-declarations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.get.companies-companyid-collaborators-collaboratorid-contracts-contractid-payslips-payslipid",
+      "kind": "rest_read",
+      "summary": "GET /companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}",
+      "description": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.get.companies-companyid-documents-documentid",
+      "kind": "rest_read",
+      "summary": "GET /companies/{companyId}/documents/{documentId}",
+      "description": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{companyId}/documents/{documentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.get.companies-companyid-payment-files",
+      "kind": "rest_read",
+      "summary": "GET /companies/{companyId}/payment-files",
+      "description": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{companyId}/payment-files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.post.https-oauth-payfit-com-introspect",
+      "kind": "rest_write",
+      "summary": "POST https://oauth.payfit.com/introspect",
+      "description": "API-key/OAuth introspection helper used to discover company_id; not a syncable resource or reverse-ETL mutation",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "https://oauth.payfit.com/introspect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "payfit.get.https-oauth-payfit-com-webhooks",
+      "kind": "rest_read",
+      "summary": "GET https://oauth.payfit.com/webhooks",
+      "description": "returns a webhook dashboard URL using OAuth client credentials; webhook setup is an operational configuration helper, not a data stream",
+      "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "https://oauth.payfit.com/webhooks",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

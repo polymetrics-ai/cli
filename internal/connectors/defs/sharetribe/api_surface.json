@@ -1,39 +1,849 @@
 {
-  "api": "Sharetribe Integration API v1 (https://flex-api.sharetribe.com/v1)",
+  "api": "Sharetribe Integration API v1 (https://flex-api.sharetribe.com/v1); provider artifact version: Sharetribe Integration API v1; current provider-rendered reference",
   "docs": "https://www.sharetribe.com/api-reference/integration.html",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion. Full documented Sharetribe Integration API surface (https://www.sharetribe.com/api-reference/integration.html, fetched and parsed 2026-07-03) accounted for below, covered_by a stream/write or excluded with a real reason. Adds 3 new read streams (marketplace, files, file_attachments) alongside the 4 legacy-parity streams (listings, users, transactions, events), and 13 new write actions covering the listing lifecycle (create/update/close/open/approve), user lifecycle (approve/update_profile/update_permissions/verify_email), transaction transitions (transition/transition_speculative/update_metadata), availability exceptions (create/delete), and stock (compare_and_set/stock_adjustments create). capabilities.write flips to true. Endpoints whose ONLY query shape requires a mandatory per-parent-resource filter (listingId/transactionId with no unfiltered-list alternative) are excluded as out_of_scope rather than forced into an awkward single-parent-scoped stream; endpoints reachable only by single-id GET with no corresponding list/query endpoint are excluded as duplicate_of (or out_of_scope when no covering stream exists at all); the multipart-upload images endpoint is excluded as binary_payload.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (45 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "sharetribe-artifact-2026-08-09",
+      "url": "https://www.sharetribe.com/api-reference/integration.html",
+      "kind": "html_reference",
+      "version": "Sharetribe Integration API v1; current provider-rendered reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/integration_api/listings/query", "covered_by": { "stream": "listings" } },
-    { "method": "GET", "path": "/integration_api/users/query", "covered_by": { "stream": "users" } },
-    { "method": "GET", "path": "/integration_api/transactions/query", "covered_by": { "stream": "transactions" } },
-    { "method": "GET", "path": "/integration_api/events/query", "covered_by": { "stream": "events" } },
-    { "method": "GET", "path": "/integration_api/marketplace/show", "covered_by": { "stream": "marketplace" } },
-    { "method": "GET", "path": "/integration_api/files/query", "covered_by": { "stream": "files" } },
-    { "method": "GET", "path": "/integration_api/file_attachments/query", "covered_by": { "stream": "file_attachments" } },
-    { "method": "GET", "path": "/integration_api/listings/show", "excluded": { "category": "duplicate_of", "reason": "single-listing detail fetch for a resource the listings stream (GET /integration_api/listings/query with no filter body, listing every listing) already lists in full" } },
-    { "method": "GET", "path": "/integration_api/users/show", "excluded": { "category": "duplicate_of", "reason": "single-user detail fetch for a resource the users stream already lists in full" } },
-    { "method": "GET", "path": "/integration_api/transactions/show", "excluded": { "category": "duplicate_of", "reason": "single-transaction detail fetch for a resource the transactions stream already lists in full" } },
-    { "method": "POST", "path": "/integration_api/listings/create", "covered_by": { "write": "create_listing" } },
-    { "method": "POST", "path": "/integration_api/listings/update", "covered_by": { "write": "update_listing" } },
-    { "method": "POST", "path": "/integration_api/listings/close", "covered_by": { "write": "close_listing" } },
-    { "method": "POST", "path": "/integration_api/listings/open", "covered_by": { "write": "open_listing" } },
-    { "method": "POST", "path": "/integration_api/listings/approve", "covered_by": { "write": "approve_listing" } },
-    { "method": "POST", "path": "/integration_api/users/approve", "covered_by": { "write": "approve_user" } },
-    { "method": "POST", "path": "/integration_api/users/update_profile", "covered_by": { "write": "update_user_profile" } },
-    { "method": "POST", "path": "/integration_api/users/update_permissions", "covered_by": { "write": "update_user_permissions" } },
-    { "method": "POST", "path": "/integration_api/users/verify_email", "covered_by": { "write": "verify_user_email" } },
-    { "method": "POST", "path": "/integration_api/transactions/transition", "covered_by": { "write": "transition_transaction" } },
-    { "method": "POST", "path": "/integration_api/transactions/transition_speculative", "covered_by": { "write": "transition_transaction_speculative" } },
-    { "method": "POST", "path": "/integration_api/transactions/update_metadata", "covered_by": { "write": "update_transaction_metadata" } },
-    { "method": "POST", "path": "/integration_api/availability_exceptions/create", "covered_by": { "write": "create_availability_exception" } },
-    { "method": "POST", "path": "/integration_api/availability_exceptions/delete", "covered_by": { "write": "delete_availability_exception" } },
-    { "method": "POST", "path": "/integration_api/stock/compare_and_set", "covered_by": { "write": "set_listing_stock" } },
-    { "method": "POST", "path": "/integration_api/stock_adjustments/create", "covered_by": { "write": "create_stock_adjustment" } },
-    { "method": "GET", "path": "/integration_api/messages/query", "excluded": { "category": "out_of_scope", "reason": "every documented query requires either transactionId or ids (the docs state explicitly: 'Either transactionId or ids must be provided') — there is no unfiltered list-all-messages shape, and no natural connector-instance-level config value (a single fixed transaction id) that would make this a meaningful sync-all stream; a caller wanting a specific transaction's messages should read the transactions stream and cross-reference, or this could be added as a fan_out stream keyed off transaction ids in a future capability expansion" } },
-    { "method": "GET", "path": "/integration_api/availability_exceptions/query", "excluded": { "category": "out_of_scope", "reason": "the only query shape is scoped to a single mandatory listingId (plus a mandatory start/end range capped at 366 days) — there is no unfiltered list-all-availability-exceptions endpoint across the whole marketplace, so this cannot back a top-level sync stream the way listings/users/transactions/events can" } },
-    { "method": "GET", "path": "/integration_api/stock_adjustments/query", "excluded": { "category": "out_of_scope", "reason": "the only query shape is scoped to a single mandatory listingId, same reasoning as availability_exceptions/query — no unfiltered list-all-stock-adjustments endpoint exists" } },
-    { "method": "GET", "path": "/integration_api/stock_reservations/show", "excluded": { "category": "out_of_scope", "reason": "single-stock-reservation detail fetch by mandatory id, with NO corresponding list/query endpoint at all (stock reservations are reachable only via the stockReservation relationship of a stock adjustment) — there is no way to enumerate reservation ids to iterate this endpoint over" } },
-    { "method": "POST", "path": "/integration_api/images/upload", "excluded": { "category": "binary_payload", "reason": "accepts a multipart/form-data file upload body, not a JSON payload; the engine's declarative HTTP write dialect has no multipart-body primitive. Listing/user image attachment (imageId/profileImageId) already flows through create_listing/update_listing/update_user_profile for an id previously uploaded out-of-band" } }
+    {
+      "method": "POST",
+      "path": "/integration_api/availability_exceptions/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/availability_exceptions/create"
+      },
+      "covered_by": {
+        "write": "create_availability_exception"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/availability_exceptions/delete",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/availability_exceptions/delete"
+      },
+      "covered_by": {
+        "write": "delete_availability_exception"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/availability_exceptions/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/availability_exceptions/query"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "the only query shape is scoped to a single mandatory listingId (plus a mandatory start/end range capped at 366 days) — there is no unfiltered list-all-availability-exceptions endpoint across the whole marketplace, so this cannot back a top-level sync stream the way listings/users/transactions/events can",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/events/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/events/query"
+      },
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/file_attachments/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/file_attachments/query"
+      },
+      "covered_by": {
+        "stream": "file_attachments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/files/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/files/query"
+      },
+      "covered_by": {
+        "stream": "files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/images/upload",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/images/upload"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "accepts a multipart/form-data file upload body, not a JSON payload; the engine's declarative HTTP write dialect has no multipart-body primitive. Listing/user image attachment (imageId/profileImageId) already flows through create_listing/update_listing/update_user_profile for an id previously uploaded out-of-band",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/listings/approve",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/listings/approve"
+      },
+      "covered_by": {
+        "write": "approve_listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/listings/close",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/listings/close"
+      },
+      "covered_by": {
+        "write": "close_listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/listings/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/listings/create"
+      },
+      "covered_by": {
+        "write": "create_listing"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/listings/open",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/listings/open"
+      },
+      "covered_by": {
+        "write": "open_listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/listings/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/listings/query"
+      },
+      "covered_by": {
+        "stream": "listings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/listings/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/listings/show"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-listing detail fetch for a resource the listings stream (GET /integration_api/listings/query with no filter body, listing every listing) already lists in full",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/listings/update",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/listings/update"
+      },
+      "covered_by": {
+        "write": "update_listing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/marketplace/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/marketplace/show"
+      },
+      "covered_by": {
+        "stream": "marketplace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/messages/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/messages/query"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "every documented query requires either transactionId or ids (the docs state explicitly: 'Either transactionId or ids must be provided') — there is no unfiltered list-all-messages shape, and no natural connector-instance-level config value (a single fixed transaction id) that would make this a meaningful sync-all stream; a caller wanting a specific transaction's messages should read the transactions stream and cross-reference, or this could be added as a fan_out stream keyed off transaction ids in a future capability expansion",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/stock/compare_and_set",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/stock/compare_and_set"
+      },
+      "covered_by": {
+        "write": "set_listing_stock"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/stock_adjustments/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/stock_adjustments/create"
+      },
+      "covered_by": {
+        "write": "create_stock_adjustment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/stock_adjustments/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/stock_adjustments/query"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "the only query shape is scoped to a single mandatory listingId, same reasoning as availability_exceptions/query — no unfiltered list-all-stock-adjustments endpoint exists",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/stock_reservations/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/stock_reservations/show"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-stock-reservation detail fetch by mandatory id, with NO corresponding list/query endpoint at all (stock reservations are reachable only via the stockReservation relationship of a stock adjustment) — there is no way to enumerate reservation ids to iterate this endpoint over",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/transactions/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/transactions/query"
+      },
+      "covered_by": {
+        "stream": "transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/transactions/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/transactions/show"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-transaction detail fetch for a resource the transactions stream already lists in full",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/transactions/transition",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/transactions/transition"
+      },
+      "covered_by": {
+        "write": "transition_transaction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/transactions/transition_speculative",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/transactions/transition_speculative"
+      },
+      "covered_by": {
+        "write": "transition_transaction_speculative"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/transactions/update_metadata",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/transactions/update_metadata"
+      },
+      "covered_by": {
+        "write": "update_transaction_metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/users/approve",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/users/approve"
+      },
+      "covered_by": {
+        "write": "approve_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/users/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/users/query"
+      },
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integration_api/users/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /v1/integration_api/users/show"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-user detail fetch for a resource the users stream already lists in full",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/users/update_permissions",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/users/update_permissions"
+      },
+      "covered_by": {
+        "write": "update_user_permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/users/update_profile",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/users/update_profile"
+      },
+      "covered_by": {
+        "write": "update_user_profile"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integration_api/users/verify_email",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/users/verify_email"
+      },
+      "covered_by": {
+        "write": "verify_user_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/listings/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /listings/query"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/listings/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /listings/show"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/own_listings/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /own_listings/create"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/own_listings/create_draft",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /own_listings/create_draft"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/own_listings/open",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /own_listings/open"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/own_listings/publish_draft",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /own_listings/publish_draft"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reviews/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /reviews/query"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reviews/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /reviews/show"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeslots/query",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /timeslots/query"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions/initiate",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /transactions/initiate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/show",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#GET /users/show"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integration_api/file_downloads/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/file_downloads/create"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integration_api/file_uploads/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/file_uploads/create"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/integration_api/files/create",
+      "provenance": {
+        "artifact": "sharetribe-artifact-2026-08-09",
+        "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+        "source_kind": "html_reference",
+        "version": "Sharetribe Integration API v1; current provider-rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2435849aabd1d0226995fc57aaf3bec5a8dc78bef7ca28dea113f074b790be4f",
+        "coordinate": "https://www.sharetribe.com/api-reference/integration.html#POST /v1/integration_api/files/create"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

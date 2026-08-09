@@ -1,13 +1,99 @@
 {
-  "api": "Weatherstack REST API (https://weatherstack.com/documentation)",
+  "api": "Weatherstack REST API (https://weatherstack.com/documentation); provider artifact version: live Weatherstack API documentation (last modified 2026-03-23)",
   "docs": "https://weatherstack.com/documentation",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every documented Weatherstack endpoint (current, historical incl. its date-range time-series mode, forecast, marine, autocomplete) is now covered_by a stream. Weatherstack's semicolon-separated 'bulk' query capability (documented at weatherstack.com/documentation's Bulk Queries section) is not a distinct endpoint/path — it is a caller-supplied value SHAPE on the existing query parameter of current/historical/forecast/marine, so it needs no separate api_surface.json entry; a caller may already pass a semicolon-joined query value through config.query today. Weatherstack has no write/mutation endpoints at all (a read-only weather-data API), so capabilities.write stays false and this bundle ships no writes.json.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 5 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: every documented Weatherstack endpoint (current, historical incl. its date-range time-series mode, forecast, marine, autocomplete) is now covered_by a stream. Weatherstack's semicolon-separated 'bulk' query capability (documented at weatherstack.com/documentation's Bulk Queries section) is not a distinct endpoint/path — it is a caller-supplied value SHAPE on the existing query parameter of current/historical/forecast/marine, so it needs no separate api_surface.json entry; a caller may already pass a semicolon-joined query value through config.query today. Weatherstack has no write/mutation endpoints at all (a read-only weather-data API), so capabilities.write stays false and this bundle ships no writes.json.",
+  "artifacts": [
+    {
+      "id": "weatherstack-artifact-2026-08-09",
+      "url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "kind": "html_reference",
+      "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/current", "covered_by": { "stream": "current" } },
-    { "method": "GET", "path": "/historical", "covered_by": { "stream": "historical" } },
-    { "method": "GET", "path": "/forecast", "covered_by": { "stream": "forecast" } },
-    { "method": "GET", "path": "/marine", "covered_by": { "stream": "marine" } },
-    { "method": "GET", "path": "/autocomplete", "covered_by": { "stream": "autocomplete" } }
+    {
+      "method": "GET",
+      "path": "/autocomplete",
+      "provenance": {
+        "artifact": "weatherstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "source_kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7",
+        "coordinate": "existing-complete-surface[GET /autocomplete]"
+      },
+      "covered_by": {
+        "stream": "autocomplete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/current",
+      "provenance": {
+        "artifact": "weatherstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "source_kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7",
+        "coordinate": "existing-complete-surface[GET /current]"
+      },
+      "covered_by": {
+        "stream": "current"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forecast",
+      "provenance": {
+        "artifact": "weatherstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "source_kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7",
+        "coordinate": "existing-complete-surface[GET /forecast]"
+      },
+      "covered_by": {
+        "stream": "forecast"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/historical",
+      "provenance": {
+        "artifact": "weatherstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "source_kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7",
+        "coordinate": "existing-complete-surface[GET /historical]"
+      },
+      "covered_by": {
+        "stream": "historical"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/marine",
+      "provenance": {
+        "artifact": "weatherstack-artifact-2026-08-09",
+        "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+        "source_kind": "html_reference",
+        "version": "live Weatherstack API documentation (last modified 2026-03-23)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "990b2885040439f458dd12c9001bf2b3ce5e8ab6c0d43bf6eaf9bf12af4274c7",
+        "coordinate": "existing-complete-surface[GET /marine]"
+      },
+      "covered_by": {
+        "stream": "marine"
+      }
+    }
   ]
 }

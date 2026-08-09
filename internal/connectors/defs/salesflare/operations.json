@@ -1,0 +1,559 @@
+{
+  "operations": [
+    {
+      "id": "salesflare.get.accounts-account-id",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{account_id}",
+      "description": "single-account detail; identical record shape to the accounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.accounts-account-id-contacts",
+      "kind": "rest_write",
+      "summary": "POST /accounts/{account_id}/contacts",
+      "description": "account-to-contact membership add/link operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accounts/{account_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.accounts-account-id-contacts",
+      "kind": "rest_write",
+      "summary": "PUT /accounts/{account_id}/contacts",
+      "description": "account-to-contact membership replace operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/accounts/{account_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.accounts-account-id-feed",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{account_id}/feed",
+      "description": "per-account activity feed/timeline sub-resource; a fan_out read over every account id is beyond this pass's breadth-vs-cost triage",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{account_id}/feed",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.accounts-account-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{account_id}/messages",
+      "description": "per-account message/internal-note sub-resource; a fan_out read over every account id is beyond this pass's breadth-vs-cost triage",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{account_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.accounts-account-id-users",
+      "kind": "rest_write",
+      "summary": "POST /accounts/{account_id}/users",
+      "description": "account-to-user assignment add/link operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accounts/{account_id}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.accounts-account-id-users",
+      "kind": "rest_write",
+      "summary": "PUT /accounts/{account_id}/users",
+      "description": "account-to-user assignment replace operation, not a single-record create/update/delete on a syncable resource; the dialect's write shapes do not model list-membership mutations",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/accounts/{account_id}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.calls-meeting-id",
+      "kind": "rest_write",
+      "summary": "PUT /calls/{meeting_id}",
+      "description": "call updates share the same meeting_id-keyed update shape as update_meeting; not modeled as a second write action for the same underlying record type",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/calls/{meeting_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.campaigns-mergefields",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/mergefields",
+      "description": "returns the set of template merge-field tokens available to workflow email campaigns, not a syncable object stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/mergefields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.conferences-conference-id",
+      "kind": "rest_read",
+      "summary": "GET /conferences/{conference_id}",
+      "description": "no list/discovery endpoint exists for conference ids independent of an already-known meeting; a lone detail-by-id GET with no enumeration path is not a syncable stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/conferences/{conference_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{contact_id}",
+      "description": "single-contact detail; identical record shape to the contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.customfields-itemclass",
+      "kind": "rest_read",
+      "summary": "GET /customfields/{itemClass}",
+      "description": "per-item-class custom-field definition list; itemClass is a caller-supplied path segment (accounts/contacts/opportunities/etc.), not a fixed resource this dialect's static path templating models as one stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customfields/{itemClass}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.customfields-itemclass",
+      "kind": "rest_write",
+      "summary": "POST /customfields/{itemClass}",
+      "description": "per-item-class custom-field creation; itemClass is a caller-supplied path segment, not a fixed resource",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/customfields/{itemClass}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.customfields-itemclass-customfieldapifield-options",
+      "kind": "rest_read",
+      "summary": "GET /customfields/{itemClass}/{customFieldApiField}/options",
+      "description": "per-custom-field dropdown option list requiring both itemClass and customFieldApiField path segments in hand; not a syncable top-level collection",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customfields/{itemClass}/{customFieldApiField}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.customfields-itemclass-id",
+      "kind": "rest_read",
+      "summary": "GET /customfields/{itemClass}/{id}",
+      "description": "single-custom-field detail; would duplicate the excluded per-item-class list's record shape",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/customfields/{itemClass}/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.customfields-itemclass-id",
+      "kind": "rest_write",
+      "summary": "PUT /customfields/{itemClass}/{id}",
+      "description": "per-item-class custom-field update; itemClass is a caller-supplied path segment, not a fixed resource",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/customfields/{itemClass}/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.delete.customfields-itemclass-id",
+      "kind": "rest_write",
+      "summary": "DELETE /customfields/{itemClass}/{id}",
+      "description": "deletes a custom-field DEFINITION (schema-level metadata affecting every record of that item class), not a data-record mutation; also requires a caller-supplied itemClass path segment",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/customfields/{itemClass}/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.datasources-email-id",
+      "kind": "rest_write",
+      "summary": "PUT /datasources/email/{id}",
+      "description": "reconfigures a connected email account's sync settings; an account-security-adjacent mailbox-integration setting, not an ordinary CRM data record mutation",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/datasources/email/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.filterfields-entity",
+      "kind": "rest_read",
+      "summary": "GET /filterfields/{entity}",
+      "description": "returns the set of fields available for building a saved filter on the given entity type, not a syncable object stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/filterfields/{entity}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.groups-id",
+      "kind": "rest_read",
+      "summary": "GET /groups/{id}",
+      "description": "single-group detail; identical record shape to the groups list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.me",
+      "kind": "rest_read",
+      "summary": "GET /me",
+      "description": "authenticated-user profile introspection, not a syncable object stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.me-contacts",
+      "kind": "rest_read",
+      "summary": "GET /me/contacts",
+      "description": "same contact records as the contacts list stream, filtered to the caller's own assigned contacts; not a distinct resource shape",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.meetings-meeting-id",
+      "kind": "rest_read",
+      "summary": "GET /meetings/{meeting_id}",
+      "description": "no top-level list endpoint exists to enumerate meeting ids; a lone detail-by-id GET with no discovery path is not a syncable stream without an id already in hand from a write response",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/meetings/{meeting_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.message-message-id-feedback",
+      "kind": "rest_write",
+      "summary": "POST /message/{message_id}/feedback",
+      "description": "records AI-generated-message quality feedback (thumbs up/down style), not a CRM data-record mutation",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/message/{message_id}/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.messages-message-id-feedback",
+      "kind": "rest_write",
+      "summary": "POST /messages/{message_id}/feedback",
+      "description": "identical AI-message-feedback endpoint to POST /message/{message_id}/feedback (singular vs. plural path prefix); not a CRM data-record mutation either way",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/messages/{message_id}/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.opportunities-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunities/{id}",
+      "description": "single-opportunity detail; identical record shape to the opportunities list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.settings-ai",
+      "kind": "rest_read",
+      "summary": "GET /settings/ai",
+      "description": "account-wide AI-feature configuration singleton, not a syncable object stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/ai",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.settings-ai",
+      "kind": "rest_write",
+      "summary": "PUT /settings/ai",
+      "description": "account-wide AI-feature configuration change, an admin/settings action rather than an ordinary CRM data-record mutation",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/settings/ai",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.stages-stage-id",
+      "kind": "rest_read",
+      "summary": "GET /stages/{stage_id}",
+      "description": "single-stage detail; identical record shape to the stages list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stages/{stage_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.tags-tag-id",
+      "kind": "rest_read",
+      "summary": "GET /tags/{tag_id}",
+      "description": "single-tag detail; identical record shape to the tags list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{tag_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.tags-tag-id-usage",
+      "kind": "rest_read",
+      "summary": "GET /tags/{tag_id}/usage",
+      "description": "per-tag usage-count breakdown across workflows/filters/reports; a fan_out read over every tag id is beyond this pass's breadth-vs-cost triage",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{tag_id}/usage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.post.workflows",
+      "kind": "rest_write",
+      "summary": "POST /workflows",
+      "description": "creates a full marketing-automation workflow definition (trigger + multi-step action graph); no documented flat request schema, and workflow authoring is a builder-tool operation rather than a plain CRM record create",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.get.workflows-id",
+      "kind": "rest_read",
+      "summary": "GET /workflows/{id}",
+      "description": "single-workflow detail; identical record shape to the workflows list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.workflows-id",
+      "kind": "rest_write",
+      "summary": "PUT /workflows/{id}",
+      "description": "updates a full marketing-automation workflow's trigger/step graph; a builder-tool operation, not a plain CRM record update",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/workflows/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "salesflare.put.workflows-id-audience-record-id",
+      "kind": "rest_write",
+      "summary": "PUT /workflows/{id}/audience/{record_id}",
+      "description": "re-enters or exits a single entity from a running workflow's audience; a workflow-runtime control action, not a CRM data-record mutation",
+      "source_url": "https://api.salesflare.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/workflows/{id}/audience/{record_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

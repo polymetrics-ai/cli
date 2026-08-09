@@ -30,6 +30,26 @@
       "type": "string",
       "format": "date-time",
       "description": "RFC3339 lower bound; sent as modifiedSince to scope conversations/customers to records changed at or after this time."
+    },
+    "conversationid": {
+      "type": "string",
+      "description": "Help Scout conversation id that scopes the conversations_threads stream; supplied per read with --conversation-id."
+    },
+    "customerid": {
+      "type": "string",
+      "description": "Help Scout customer id that scopes the customers_chats, customers_emails, customers_phones, customers_social_profiles, and customers_websites streams; supplied per read with --customer-id."
+    },
+    "mailboxid": {
+      "type": "string",
+      "description": "Help Scout mailbox id that scopes the mailboxes_fields, mailboxes_folders, and mailboxes_saved_replies streams; supplied per read with --mailbox-id."
+    },
+    "organizationid": {
+      "type": "string",
+      "description": "Help Scout organization id that scopes the organizations_conversations and organizations_customers streams; supplied per read with --organization-id."
+    },
+    "teamid": {
+      "type": "string",
+      "description": "Help Scout team id that scopes the teams_members stream; supplied per read with --team-id."
     }
   }
 }

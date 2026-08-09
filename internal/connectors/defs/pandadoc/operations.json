@@ -1,0 +1,320 @@
+{
+  "operations": [
+    {
+      "id": "pandadoc.post.oauth2-access-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth2/access_token",
+      "description": "OAuth token exchange endpoint; credential lifecycle is not a connector data stream or reverse-ETL action.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth2/access_token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-content-library-items-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/content-library-items?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/content-library-items?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-document-id-sections-uploads",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents/{document_id}/sections/uploads",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents/{document_id}/sections/uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-document-id-sections-uploads-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents/{document_id}/sections/uploads?upload",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents/{document_id}/sections/uploads?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-document-id-sections-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents/{document_id}/sections?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents/{document_id}/sections?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.get.public-v1-documents-id-attachments-attachment-id-download",
+      "kind": "rest_read",
+      "summary": "GET /public/v1/documents/{id}/attachments/{attachment_id}/download",
+      "description": "Returns a binary file payload rather than a JSON record stream.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public/v1/documents/{id}/attachments/{attachment_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-id-attachments-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents/{id}/attachments?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents/{id}/attachments?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.get.public-v1-documents-id-download",
+      "kind": "rest_read",
+      "summary": "GET /public/v1/documents/{id}/download",
+      "description": "Returns a binary file payload rather than a JSON record stream.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public/v1/documents/{id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.get.public-v1-documents-id-download-protected",
+      "kind": "rest_read",
+      "summary": "GET /public/v1/documents/{id}/download-protected",
+      "description": "Returns a binary file payload rather than a JSON record stream.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public/v1/documents/{id}/download-protected",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.patch.public-v1-documents-id-status-upload",
+      "kind": "rest_write",
+      "summary": "PATCH /public/v1/documents/{id}/status?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/public/v1/documents/{id}/status?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-documents-upload-markdown",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/documents?upload-markdown",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/documents?upload-markdown",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-members-member-id-token",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/members/{member_id}/token",
+      "description": "Creates a member-scoped access token; token-generation endpoints are excluded from ordinary write actions.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/members/{member_id}/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-templates-id-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/templates/{id}/duplicate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/templates/{id}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.get.public-v1-templates-template-id-shares",
+      "kind": "rest_read",
+      "summary": "GET /public/v1/templates/{template_id}/shares",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public/v1/templates/{template_id}/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.put.public-v1-templates-template-id-shares",
+      "kind": "rest_write",
+      "summary": "PUT /public/v1/templates/{template_id}/shares",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/public/v1/templates/{template_id}/shares",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-templates-upload",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/templates?upload",
+      "description": "Requires multipart/form-data file upload, which the declarative write dialect cannot construct.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/templates?upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.patch.public-v1-webhook-subscriptions-id-shared-key",
+      "kind": "rest_write",
+      "summary": "PATCH /public/v1/webhook-subscriptions/{id}/shared-key",
+      "description": "Rotates or updates a webhook shared secret; secret material is excluded from ordinary write records and fixtures.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/public/v1/webhook-subscriptions/{id}/shared-key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v1-workspaces-workspace-id-api-keys",
+      "kind": "rest_write",
+      "summary": "POST /public/v1/workspaces/{workspace_id}/api-keys",
+      "description": "Generates a workspace API key secret and requires elevated organization/workspace administration.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v1/workspaces/{workspace_id}/api-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pandadoc.post.public-v2-dsv-document-id-add-named-items",
+      "kind": "rest_write",
+      "summary": "POST /public/v2/dsv/{document_id}/add-named-items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.pandadoc.com/openapi/pandadoc-public-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/public/v2/dsv/{document_id}/add-named-items",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

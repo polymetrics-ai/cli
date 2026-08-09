@@ -1,0 +1,2580 @@
+{
+  "tagline": "Run Concord's declared streams and reverse-ETL actions.",
+  "usage": "pm concord \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "agreement activities list",
+        "agreement attachments list",
+        "agreement comments list",
+        "agreement list",
+        "agreement members list",
+        "agreement metadata list",
+        "agreement summary list",
+        "agreement versions list",
+        "agreements list",
+        "api get organizations organizationid agreements agreementuid approval",
+        "api get organizations organizationid agreements agreementuid attachments id",
+        "api get organizations organizationid agreements agreementuid docx",
+        "api get organizations organizationid agreements agreementuid path",
+        "api get organizations organizationid agreements agreementuid pdf",
+        "api get organizations organizationid agreements agreementuid signature",
+        "api get organizations organizationid agreements agreementuid summary clauses id",
+        "api get organizations organizationid agreements agreementuid summary endclauses id",
+        "api get organizations organizationid agreements agreementuid summary endclauses last",
+        "api get organizations organizationid agreements agreementuid summary fields",
+        "api get organizations organizationid agreements agreementuid track-changes",
+        "api get organizations organizationid agreements agreementuid versions diff",
+        "api get organizations organizationid agreements agreementuid versions last",
+        "api get organizations organizationid agreements agreementuid versions last fields",
+        "api get user me organizations organizationid agreements",
+        "api get user me organizations organizationid folders",
+        "api webhook newagreement-post",
+        "approval list",
+        "approvals list",
+        "automated templates list",
+        "branding list",
+        "clause list",
+        "clauses list",
+        "events list",
+        "folder agreements list",
+        "folder list",
+        "folders list",
+        "groups list",
+        "members list",
+        "organization list",
+        "report list",
+        "reports list",
+        "subscription list",
+        "tags list",
+        "user me list",
+        "user organizations list",
+        "user preferences list",
+        "webhooks integrations list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete organizations organizationid agreements agreementuid",
+        "api delete organizations organizationid agreements agreementuid approval",
+        "api delete organizations organizationid agreements agreementuid attachments id",
+        "api delete organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid",
+        "api delete organizations organizationid agreements agreementuid members invitations invitationid",
+        "api delete organizations organizationid agreements agreementuid members users me",
+        "api delete organizations organizationid agreements agreementuid members users userid",
+        "api delete organizations organizationid agreements agreementuid signature",
+        "api delete organizations organizationid agreements agreementuid summary clauses id",
+        "api delete organizations organizationid agreements agreementuid summary endclauses id",
+        "api delete organizations organizationid agreements agreementuid summary fields id",
+        "api delete organizations organizationid agreements agreementuid summary links id",
+        "api delete organizations organizationid branding email",
+        "api delete organizations organizationid branding logo",
+        "api patch organizations organizationid agreements agreementuid",
+        "api patch organizations organizationid agreements agreementuid attachments id",
+        "api patch organizations organizationid agreements agreementuid metadata",
+        "api patch organizations organizationid agreements agreementuid rules id",
+        "api patch organizations organizationid agreements agreementuid signature",
+        "api patch organizations organizationid agreements agreementuid summary clauses id",
+        "api patch organizations organizationid agreements agreementuid summary endclauses last",
+        "api patch organizations organizationid agreements agreementuid summary fields id",
+        "api patch organizations organizationid agreements agreementuid summary lifecycle",
+        "api patch organizations organizationid agreements agreementuid versions last fields",
+        "api patch organizations organizationid agreements agreementuid versions last pdffields",
+        "api patch organizations organizationid groups",
+        "api post organizations",
+        "api post organizations organizationid agreements",
+        "api post organizations organizationid agreements agreementuid approval",
+        "api post organizations organizationid agreements agreementuid attachments",
+        "api post organizations organizationid agreements agreementuid comments",
+        "api post organizations organizationid agreements agreementuid integration",
+        "api post organizations organizationid agreements agreementuid members",
+        "api post organizations organizationid agreements agreementuid members delayed-invitations",
+        "api post organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid send",
+        "api post organizations organizationid agreements agreementuid members me",
+        "api post organizations organizationid agreements agreementuid signature request",
+        "api post organizations organizationid agreements agreementuid summary clauses",
+        "api post organizations organizationid agreements agreementuid summary endclauses",
+        "api post organizations organizationid agreements agreementuid summary fields",
+        "api post organizations organizationid agreements agreementuid summary links",
+        "api post organizations organizationid agreements agreementuid versions upload",
+        "api post organizations organizationid auto agreementuid",
+        "api post organizations organizationid branding email",
+        "api post organizations organizationid branding logo",
+        "api post organizations organizationid invitations",
+        "api post organizations organizationid reports id",
+        "api post user me organizations organizationid agreements count",
+        "api post users me integrations webhooks",
+        "api put organizations organizationid agreements agreementuid folder",
+        "api put organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid permission",
+        "api put organizations organizationid agreements agreementuid members invitations invitationid permission",
+        "api put organizations organizationid agreements agreementuid members users userid permission",
+        "api put organizations organizationid agreements agreementuid signature",
+        "api put organizations organizationid agreements agreementuid signature slots",
+        "api put organizations organizationid agreements agreementuid summary signedwithlabels",
+        "api put organizations organizationid branding agreementview",
+        "api put organizations organizationid branding email",
+        "api put organizations organizationid branding logo",
+        "create approval apply",
+        "create clause apply",
+        "create folder apply",
+        "create group apply",
+        "create report apply",
+        "delete approval apply",
+        "delete clause apply",
+        "delete folder apply",
+        "delete report apply",
+        "update approval apply",
+        "update clause apply",
+        "update folder apply",
+        "update report apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "agreement activities list",
+      "summary": "Run the agreement activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_activities",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/activities"
+        }
+      ]
+    },
+    {
+      "path": "agreement attachments list",
+      "summary": "Run the agreement attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_attachments",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "agreement comments list",
+      "summary": "Run the agreement comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_comments",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/comments"
+        }
+      ]
+    },
+    {
+      "path": "agreement list",
+      "summary": "Run the agreement ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}"
+        }
+      ]
+    },
+    {
+      "path": "agreement members list",
+      "summary": "Run the agreement members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_members",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members"
+        }
+      ]
+    },
+    {
+      "path": "agreement metadata list",
+      "summary": "Run the agreement metadata ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_metadata",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement metadata list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/metadata"
+        }
+      ]
+    },
+    {
+      "path": "agreement summary list",
+      "summary": "Run the agreement summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_summary",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary"
+        }
+      ]
+    },
+    {
+      "path": "agreement versions list",
+      "summary": "Run the agreement versions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreement_versions",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreement versions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions"
+        }
+      ]
+    },
+    {
+      "path": "agreements list",
+      "summary": "Run the agreements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agreements",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord agreements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid approval",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/approval (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid approval --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-approval",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid attachments id",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid attachments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid members invitations invitationid",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid members invitations invitationid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-members-invitations-invitationid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid members users me",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/users/me (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid members users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/me"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-members-users-me",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid members users userid",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid members users userid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-members-users-userid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid signature",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/signature (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid signature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-signature",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid summary clauses id",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid summary clauses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid summary endclauses id",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid summary endclauses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-endclauses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid summary fields id",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid summary fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid agreements agreementuid summary links id",
+      "summary": "Documented DELETE /organizations/{organizationId}/agreements/{agreementUid}/summary/links/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid agreements agreementuid summary links id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links/{id}"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-agreements-agreementuid-summary-links-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid branding email",
+      "summary": "Documented DELETE /organizations/{organizationId}/branding/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid branding email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/branding/email"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-branding-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete organizations organizationid branding logo",
+      "summary": "Documented DELETE /organizations/{organizationId}/branding/logo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api delete organizations organizationid branding logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/branding/logo"
+        }
+      ],
+      "operation": "concord.delete.organizations-organizationid-branding-logo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid approval",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/approval (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid approval --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-approval",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid attachments id",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid attachments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid docx",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}.docx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid docx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}.docx"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-docx",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid path",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/path (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid path --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/path"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-path",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid pdf",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}.pdf (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid pdf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}.pdf"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-pdf",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid signature",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/signature (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid signature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-signature",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid summary clauses id",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid summary clauses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid summary endclauses id",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid summary endclauses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/{id}"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-summary-endclauses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid summary endclauses last",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid summary endclauses last --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-summary-endclauses-last",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid summary fields",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/summary/fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid summary fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-summary-fields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid track-changes",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/track-changes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid track-changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/track-changes"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-track-changes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid versions diff",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/versions/diff (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid versions diff --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/diff"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-versions-diff",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid versions last",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/versions/last (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid versions last --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-versions-last",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organizationid agreements agreementuid versions last fields",
+      "summary": "Documented GET /organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get organizations organizationid agreements agreementuid versions last fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields"
+        }
+      ],
+      "operation": "concord.get.organizations-organizationid-agreements-agreementuid-versions-last-fields",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user me organizations organizationid agreements",
+      "summary": "Documented GET /user/me/organizations/{organizationId}/agreements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get user me organizations organizationid agreements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/me/organizations/{organizationId}/agreements"
+        }
+      ],
+      "operation": "concord.get.user-me-organizations-organizationid-agreements",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get user me organizations organizationid folders",
+      "summary": "Documented GET /user/me/organizations/{organizationId}/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api get user me organizations organizationid folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/me/organizations/{organizationId}/folders"
+        }
+      ],
+      "operation": "concord.get.user-me-organizations-organizationid-folders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid attachments id",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/attachments/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid attachments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments/{id}"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-attachments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid metadata",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/metadata (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid metadata --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/metadata"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-metadata",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid rules id",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/rules/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid rules id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/rules/{id}"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-rules-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid signature",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/signature (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid signature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-signature",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid summary clauses id",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid summary clauses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses/{id}"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-clauses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid summary endclauses last",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid summary endclauses last --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses/last"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-endclauses-last",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid summary fields id",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid summary fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields/{id}"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid summary lifecycle",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/summary/lifecycle (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid summary lifecycle --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/lifecycle"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-summary-lifecycle",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid versions last fields",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid versions last fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/fields"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-versions-last-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid agreements agreementuid versions last pdffields",
+      "summary": "Documented PATCH /organizations/{organizationId}/agreements/{agreementUid}/versions/last/pdffields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid agreements agreementuid versions last pdffields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/last/pdffields"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-agreements-agreementuid-versions-last-pdffields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch organizations organizationid groups",
+      "summary": "Documented PATCH /organizations/{organizationId}/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api patch organizations organizationid groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/organizations/{organizationId}/groups"
+        }
+      ],
+      "operation": "concord.patch.organizations-organizationid-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations",
+      "summary": "Documented POST /organizations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations"
+        }
+      ],
+      "operation": "concord.post.organizations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements",
+      "summary": "Documented POST /organizations/{organizationId}/agreements (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid approval",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/approval (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid approval --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/approval"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-approval",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid attachments",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/attachments"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid comments",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/comments"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid integration",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/integration (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid integration --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/integration"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-integration",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid members",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/members (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-members",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid members delayed-invitations",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid members delayed-invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-members-delayed-invitations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid send",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/send"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid members me",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/members/me (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid members me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/me"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-members-me",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid signature request",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/signature/request (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid signature request --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/request"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-signature-request",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid summary clauses",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/summary/clauses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid summary clauses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/clauses"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-summary-clauses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid summary endclauses",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid summary endclauses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/endclauses"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-summary-endclauses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid summary fields",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/summary/fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid summary fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/fields"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-summary-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid summary links",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/summary/links (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid summary links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/links"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-summary-links",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid agreements agreementuid versions upload",
+      "summary": "Documented POST /organizations/{organizationId}/agreements/{agreementUid}/versions/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid agreements agreementuid versions upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/versions/upload"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-agreements-agreementuid-versions-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid auto agreementuid",
+      "summary": "Documented POST /organizations/{organizationId}/auto/{agreementUid} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid auto agreementuid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/auto/{agreementUid}"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-auto-agreementuid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid branding email",
+      "summary": "Documented POST /organizations/{organizationId}/branding/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid branding email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/branding/email"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-branding-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid branding logo",
+      "summary": "Documented POST /organizations/{organizationId}/branding/logo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid branding logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/branding/logo"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-branding-logo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid invitations",
+      "summary": "Documented POST /organizations/{organizationId}/invitations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid invitations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/invitations"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-invitations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organizationid reports id",
+      "summary": "Documented POST /organizations/{organizationId}/reports/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post organizations organizationid reports id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/reports/{id}"
+        }
+      ],
+      "operation": "concord.post.organizations-organizationid-reports-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post user me organizations organizationid agreements count",
+      "summary": "Documented POST /user/me/organizations/{organizationId}/agreements/count (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post user me organizations organizationid agreements count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/user/me/organizations/{organizationId}/agreements/count"
+        }
+      ],
+      "operation": "concord.post.user-me-organizations-organizationid-agreements-count",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users me integrations webhooks",
+      "summary": "Documented POST /users/me/integrations/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api post users me integrations webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/me/integrations/webhooks"
+        }
+      ],
+      "operation": "concord.post.users-me-integrations-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid folder",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/folder (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid folder --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/folder"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-folder",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid permission",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/permission (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid members delayed-invitations delayedinvitationid permission --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/delayed-invitations/{delayedInvitationId}/permission"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-members-delayed-invitations-delayedinvitationid-permission",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid members invitations invitationid permission",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}/permission (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid members invitations invitationid permission --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/invitations/{invitationId}/permission"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-members-invitations-invitationid-permission",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid members users userid permission",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}/permission (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid members users userid permission --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/members/users/{userId}/permission"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-members-users-userid-permission",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid signature",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/signature (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid signature --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-signature",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid signature slots",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/signature/slots (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid signature slots --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/signature/slots"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-signature-slots",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid agreements agreementuid summary signedwithlabels",
+      "summary": "Documented PUT /organizations/{organizationId}/agreements/{agreementUid}/summary/signedwithlabels (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid agreements agreementuid summary signedwithlabels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/agreements/{agreementUid}/summary/signedwithlabels"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-agreements-agreementuid-summary-signedwithlabels",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid branding agreementview",
+      "summary": "Documented PUT /organizations/{organizationId}/branding/agreementview (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid branding agreementview --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/branding/agreementview"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-branding-agreementview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid branding email",
+      "summary": "Documented PUT /organizations/{organizationId}/branding/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid branding email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/branding/email"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-branding-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put organizations organizationid branding logo",
+      "summary": "Documented PUT /organizations/{organizationId}/branding/logo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api put organizations organizationid branding logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/branding/logo"
+        }
+      ],
+      "operation": "concord.put.organizations-organizationid-branding-logo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api webhook newagreement-post",
+      "summary": "Documented WEBHOOK newAgreement#POST (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord api webhook newagreement-post --help"
+      ],
+      "api_surface": [
+        {
+          "method": "WEBHOOK",
+          "path": "newAgreement#POST"
+        }
+      ],
+      "operation": "concord.webhook.newagreement-post",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+    },
+    {
+      "path": "approval list",
+      "summary": "Run the approval ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approval",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord approval list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/approvals/{approvalId}"
+        }
+      ]
+    },
+    {
+      "path": "approvals list",
+      "summary": "Run the approvals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approvals",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord approvals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/approvals"
+        }
+      ]
+    },
+    {
+      "path": "automated templates list",
+      "summary": "Run the automated templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "automated_templates",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord automated templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/auto"
+        }
+      ]
+    },
+    {
+      "path": "branding list",
+      "summary": "Run the branding ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "branding",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord branding list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/branding"
+        }
+      ]
+    },
+    {
+      "path": "clause list",
+      "summary": "Run the clause ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clause",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord clause list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/clauses/{clauseId}"
+        }
+      ]
+    },
+    {
+      "path": "clauses list",
+      "summary": "Run the clauses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clauses",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord clauses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/clauses"
+        }
+      ]
+    },
+    {
+      "path": "create approval apply",
+      "summary": "Plan and execute the create approval reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_approval",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "blockThirdPartySignature",
+          "type": "boolean",
+          "summary": "Required blockThirdPartySignature record field.",
+          "maps_to": "record.blockThirdPartySignature",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord create approval apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/approvals"
+        }
+      ],
+      "risk": "creates a new Concord company approval workflow within the configured organization; affects future agreement signature routing",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create clause apply",
+      "summary": "Plan and execute the create clause reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_clause",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord create clause apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/clauses"
+        }
+      ],
+      "risk": "creates a new reusable Concord clause template within the configured organization; low risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create folder apply",
+      "summary": "Plan and execute the create folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_folder",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "parentId",
+          "type": "integer",
+          "summary": "Required parentId record field.",
+          "maps_to": "record.parentId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord create folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/folders"
+        }
+      ],
+      "risk": "creates a new Concord folder within the configured organization; low risk, no data destruction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create group apply",
+      "summary": "Plan and execute the create group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord create group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/groups"
+        }
+      ],
+      "risk": "creates a new Concord user group within the configured organization; low risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create report apply",
+      "summary": "Plan and execute the create report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_report",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord create report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/reports"
+        }
+      ],
+      "risk": "creates a new saved Concord report within the configured organization; low risk",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete approval apply",
+      "summary": "Plan and execute the delete approval reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_approval",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord delete approval apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/approvals/{approvalId}"
+        }
+      ],
+      "risk": "permanently deletes a Concord company approval workflow; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete clause apply",
+      "summary": "Plan and execute the delete clause reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_clause",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord delete clause apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/clauses/{clauseId}"
+        }
+      ],
+      "risk": "permanently deletes a Concord clause template; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete folder apply",
+      "summary": "Plan and execute the delete folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_folder",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord delete folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/folders/{folderId}"
+        }
+      ],
+      "risk": "permanently deletes a Concord folder; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete report apply",
+      "summary": "Plan and execute the delete report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_report",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord delete report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/reports/{id}"
+        }
+      ],
+      "risk": "permanently deletes a Concord saved report; destructive, external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/events"
+        }
+      ]
+    },
+    {
+      "path": "folder agreements list",
+      "summary": "Run the folder agreements ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folder_agreements",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord folder agreements list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/folders/{folderId}/agreements"
+        }
+      ]
+    },
+    {
+      "path": "folder list",
+      "summary": "Run the folder ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folder",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord folder list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/folders/{folderId}"
+        }
+      ]
+    },
+    {
+      "path": "folders list",
+      "summary": "Run the folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "folders",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/folders"
+        }
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/groups"
+        }
+      ]
+    },
+    {
+      "path": "members list",
+      "summary": "Run the members ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "members",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord members list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/members"
+        }
+      ]
+    },
+    {
+      "path": "organization list",
+      "summary": "Run the organization ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord organization list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}"
+        }
+      ]
+    },
+    {
+      "path": "report list",
+      "summary": "Run the report ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "report",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord report list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/reports/{id}"
+        }
+      ]
+    },
+    {
+      "path": "reports list",
+      "summary": "Run the reports ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reports",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord reports list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/reports"
+        }
+      ]
+    },
+    {
+      "path": "subscription list",
+      "summary": "Run the subscription ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscription",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord subscription list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/subscription"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "update approval apply",
+      "summary": "Plan and execute the update approval reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_approval",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "blockThirdPartySignature",
+          "type": "boolean",
+          "summary": "Required blockThirdPartySignature record field.",
+          "maps_to": "record.blockThirdPartySignature",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Required description record field.",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord update approval apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/approvals/{approvalId}"
+        }
+      ],
+      "risk": "replaces an existing Concord company approval workflow; affects agreements already routed through it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update clause apply",
+      "summary": "Plan and execute the update clause reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_clause",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord update clause apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/clauses/{clauseId}"
+        }
+      ],
+      "risk": "updates an existing Concord clause template; may affect future agreements linked to this clause",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update folder apply",
+      "summary": "Plan and execute the update folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_folder",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm concord update folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/folders/{folderId}"
+        }
+      ],
+      "risk": "renames/moves an existing Concord folder; may change document organization visible to other users",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update report apply",
+      "summary": "Plan and execute the update report reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_report",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord update report apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organizationId}/reports/{id}"
+        }
+      ],
+      "risk": "replaces an existing Concord saved report's definition; may change what other users see when they run it",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user me list",
+      "summary": "Run the user me ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_me",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord user me list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/me"
+        }
+      ]
+    },
+    {
+      "path": "user organizations list",
+      "summary": "Run the user organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_organizations",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord user organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/me/organizations"
+        }
+      ]
+    },
+    {
+      "path": "user preferences list",
+      "summary": "Run the user preferences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_preferences",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord user preferences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/me/preferences"
+        }
+      ]
+    },
+    {
+      "path": "webhooks integrations list",
+      "summary": "Run the webhooks integrations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks_integrations",
+      "source_url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+      "examples": [
+        "pm concord webhooks integrations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/integrations/webhooks"
+        }
+      ]
+    }
+  ]
+}

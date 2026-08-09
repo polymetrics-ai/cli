@@ -1,0 +1,3141 @@
+{
+  "tagline": "Run Orb's declared streams and reverse-ETL actions.",
+  "usage": "pm orb \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get alerts",
+        "api get alerts alert-id",
+        "api get coupons",
+        "api get coupons coupon-id",
+        "api get coupons coupon-id subscriptions",
+        "api get credit-blocks block-id",
+        "api get credit-blocks block-id invoices",
+        "api get credit-notes",
+        "api get credit-notes credit-note-id",
+        "api get customers",
+        "api get customers customer-id",
+        "api get customers customer-id balance-transactions",
+        "api get customers customer-id costs",
+        "api get customers customer-id credits",
+        "api get customers customer-id credits ledger",
+        "api get customers customer-id credits top-ups",
+        "api get customers external-customer-id external-customer-id",
+        "api get customers external-customer-id external-customer-id costs",
+        "api get customers external-customer-id external-customer-id credits",
+        "api get customers external-customer-id external-customer-id credits ledger",
+        "api get customers external-customer-id external-customer-id credits top-ups",
+        "api get dimensional-price-groups",
+        "api get dimensional-price-groups dimensional-price-group-id",
+        "api get dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id",
+        "api get events backfills",
+        "api get events backfills backfill-id",
+        "api get events volume",
+        "api get invoices",
+        "api get invoices invoice-id",
+        "api get invoices summary",
+        "api get invoices upcoming",
+        "api get items",
+        "api get items item-id",
+        "api get license-types",
+        "api get license-types license-type-id",
+        "api get licenses",
+        "api get licenses external-license-id external-license-id",
+        "api get licenses external-licenses external-license-id usage",
+        "api get licenses license-id",
+        "api get licenses license-id usage",
+        "api get licenses usage",
+        "api get metrics",
+        "api get metrics metric-id",
+        "api get ping",
+        "api get plans",
+        "api get plans external-plan-id external-plan-id",
+        "api get plans external-plan-id external-plan-id versions version",
+        "api get plans plan-id",
+        "api get plans plan-id migrations",
+        "api get plans plan-id migrations migration-id",
+        "api get plans plan-id versions version",
+        "api get prices",
+        "api get prices external-price-id external-price-id",
+        "api get prices price-id",
+        "api get subscription-changes",
+        "api get subscription-changes subscription-change-id",
+        "api get subscriptions",
+        "api get subscriptions subscription-id",
+        "api get subscriptions subscription-id costs",
+        "api get subscriptions subscription-id schedule",
+        "api get subscriptions subscription-id usage",
+        "customers list",
+        "invoices list",
+        "plans list",
+        "subscriptions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete alerts alert-configuration-id",
+        "api delete credit-blocks block-id",
+        "api delete customers customer-id",
+        "api delete customers customer-id credits top-ups top-up-id",
+        "api delete customers external-customer-id external-customer-id credits top-ups top-up-id",
+        "api delete invoices invoice-id invoice-line-items line-item-id",
+        "api post alerts alert-configuration-id disable",
+        "api post alerts alert-configuration-id enable",
+        "api post alerts customer-id customer-id",
+        "api post alerts external-customer-id external-customer-id",
+        "api post alerts plan-id plan-id",
+        "api post alerts subscription-id subscription-id",
+        "api post coupons",
+        "api post coupons coupon-id archive",
+        "api post credit-notes",
+        "api post customers",
+        "api post customers customer-id balance-transactions",
+        "api post customers customer-id credits ledger-entry",
+        "api post customers customer-id credits top-ups",
+        "api post customers customer-id portal-sessions",
+        "api post customers customer-id sync-payment-methods-from-gateway",
+        "api post customers external-customer-id external-customer-id credits ledger-entry",
+        "api post customers external-customer-id external-customer-id credits top-ups",
+        "api post customers external-customer-id external-customer-id portal-sessions",
+        "api post customers external-customer-id external-customer-id sync-payment-methods-from-gateway",
+        "api post dimensional-price-groups",
+        "api post events backfills",
+        "api post events backfills backfill-id close",
+        "api post events backfills backfill-id revert",
+        "api post events search",
+        "api post ingest",
+        "api post invoice-line-items",
+        "api post invoices",
+        "api post invoices invoice-id issue",
+        "api post invoices invoice-id mark-paid",
+        "api post invoices invoice-id pay",
+        "api post invoices invoice-id regenerate-invoice-pdf",
+        "api post invoices invoice-id regenerate-receipt-pdf",
+        "api post invoices invoice-id void",
+        "api post invoices summary invoice-id issue",
+        "api post items",
+        "api post items item-id archive",
+        "api post license-types",
+        "api post licenses",
+        "api post licenses license-id deactivate",
+        "api post metrics",
+        "api post plans",
+        "api post plans external-plan-id external-plan-id set-default-version",
+        "api post plans external-plan-id external-plan-id versions",
+        "api post plans plan-id migrations migration-id cancel",
+        "api post plans plan-id set-default-version",
+        "api post plans plan-id versions",
+        "api post prices",
+        "api post prices evaluate",
+        "api post prices evaluate-preview-events",
+        "api post prices price-id evaluate",
+        "api post subscription-changes subscription-change-id apply",
+        "api post subscription-changes subscription-change-id cancel",
+        "api post subscriptions",
+        "api post subscriptions subscription-id cancel",
+        "api post subscriptions subscription-id price-intervals",
+        "api post subscriptions subscription-id redeem-coupon",
+        "api post subscriptions subscription-id schedule-plan-change",
+        "api post subscriptions subscription-id trigger-phase",
+        "api post subscriptions subscription-id unschedule-cancellation",
+        "api post subscriptions subscription-id unschedule-fixed-fee-quantity-updates",
+        "api post subscriptions subscription-id unschedule-pending-plan-changes",
+        "api post subscriptions subscription-id update-fixed-fee-quantity",
+        "api post subscriptions subscription-id update-trial",
+        "api put alerts alert-configuration-id",
+        "api put customers customer-id",
+        "api put customers external-customer-id external-customer-id",
+        "api put dimensional-price-groups dimensional-price-group-id",
+        "api put dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id",
+        "api put events event-id",
+        "api put events event-id deprecate",
+        "api put invoices invoice-id",
+        "api put items item-id",
+        "api put metrics metric-id",
+        "api put plans external-plan-id external-plan-id",
+        "api put plans plan-id",
+        "api put prices external-price-id external-price-id",
+        "api put prices price-id",
+        "api put subscriptions subscription-id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete alerts alert-configuration-id",
+      "summary": "Documented DELETE /alerts/{alert_configuration_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete alerts alert-configuration-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/alerts/{alert_configuration_id}"
+        }
+      ],
+      "operation": "orb.delete.alerts-alert-configuration-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete credit-blocks block-id",
+      "summary": "Documented DELETE /credit_blocks/{block_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete credit-blocks block-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/credit_blocks/{block_id}"
+        }
+      ],
+      "operation": "orb.delete.credit-blocks-block-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id",
+      "summary": "Documented DELETE /customers/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "operation": "orb.delete.customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id credits top-ups top-up-id",
+      "summary": "Documented DELETE /customers/{customer_id}/credits/top_ups/{top_up_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete customers customer-id credits top-ups top-up-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{customer_id}/credits/top_ups/{top_up_id}"
+        }
+      ],
+      "operation": "orb.delete.customers-customer-id-credits-top-ups-top-up-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers external-customer-id external-customer-id credits top-ups top-up-id",
+      "summary": "Documented DELETE /customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete customers external-customer-id external-customer-id credits top-ups top-up-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}"
+        }
+      ],
+      "operation": "orb.delete.customers-external-customer-id-external-customer-id-credits-top-ups-top-up-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices invoice-id invoice-line-items line-item-id",
+      "summary": "Documented DELETE /invoices/{invoice_id}/invoice_line_items/{line_item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api delete invoices invoice-id invoice-line-items line-item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{invoice_id}/invoice_line_items/{line_item_id}"
+        }
+      ],
+      "operation": "orb.delete.invoices-invoice-id-invoice-line-items-line-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get alerts",
+      "summary": "Documented GET /alerts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get alerts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerts"
+        }
+      ],
+      "operation": "orb.get.alerts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get alerts alert-id",
+      "summary": "Documented GET /alerts/{alert_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get alerts alert-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/alerts/{alert_id}"
+        }
+      ],
+      "operation": "orb.get.alerts-alert-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupons",
+      "summary": "Documented GET /coupons (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get coupons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons"
+        }
+      ],
+      "operation": "orb.get.coupons",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupons coupon-id",
+      "summary": "Documented GET /coupons/{coupon_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get coupons coupon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/{coupon_id}"
+        }
+      ],
+      "operation": "orb.get.coupons-coupon-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupons coupon-id subscriptions",
+      "summary": "Documented GET /coupons/{coupon_id}/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get coupons coupon-id subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupons/{coupon_id}/subscriptions"
+        }
+      ],
+      "operation": "orb.get.coupons-coupon-id-subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-blocks block-id",
+      "summary": "Documented GET /credit_blocks/{block_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get credit-blocks block-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_blocks/{block_id}"
+        }
+      ],
+      "operation": "orb.get.credit-blocks-block-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-blocks block-id invoices",
+      "summary": "Documented GET /credit_blocks/{block_id}/invoices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get credit-blocks block-id invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_blocks/{block_id}/invoices"
+        }
+      ],
+      "operation": "orb.get.credit-blocks-block-id-invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-notes",
+      "summary": "Documented GET /credit_notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get credit-notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes"
+        }
+      ],
+      "operation": "orb.get.credit-notes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get credit-notes credit-note-id",
+      "summary": "Documented GET /credit_notes/{credit_note_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get credit-notes credit-note-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/credit_notes/{credit_note_id}"
+        }
+      ],
+      "operation": "orb.get.credit-notes-credit-note-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers",
+      "summary": "Documented GET /customers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ],
+      "operation": "orb.get.customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id",
+      "summary": "Documented GET /customers/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id balance-transactions",
+      "summary": "Documented GET /customers/{customer_id}/balance_transactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id balance-transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/balance_transactions"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id-balance-transactions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id costs",
+      "summary": "Documented GET /customers/{customer_id}/costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/costs"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id-costs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id credits",
+      "summary": "Documented GET /customers/{customer_id}/credits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id credits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/credits"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id-credits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id credits ledger",
+      "summary": "Documented GET /customers/{customer_id}/credits/ledger (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id credits ledger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/credits/ledger"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id-credits-ledger",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers customer-id credits top-ups",
+      "summary": "Documented GET /customers/{customer_id}/credits/top_ups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers customer-id credits top-ups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customer_id}/credits/top_ups"
+        }
+      ],
+      "operation": "orb.get.customers-customer-id-credits-top-ups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers external-customer-id external-customer-id",
+      "summary": "Documented GET /customers/external_customer_id/{external_customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers external-customer-id external-customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/external_customer_id/{external_customer_id}"
+        }
+      ],
+      "operation": "orb.get.customers-external-customer-id-external-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers external-customer-id external-customer-id costs",
+      "summary": "Documented GET /customers/external_customer_id/{external_customer_id}/costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers external-customer-id external-customer-id costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/external_customer_id/{external_customer_id}/costs"
+        }
+      ],
+      "operation": "orb.get.customers-external-customer-id-external-customer-id-costs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers external-customer-id external-customer-id credits",
+      "summary": "Documented GET /customers/external_customer_id/{external_customer_id}/credits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers external-customer-id external-customer-id credits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits"
+        }
+      ],
+      "operation": "orb.get.customers-external-customer-id-external-customer-id-credits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers external-customer-id external-customer-id credits ledger",
+      "summary": "Documented GET /customers/external_customer_id/{external_customer_id}/credits/ledger (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers external-customer-id external-customer-id credits ledger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger"
+        }
+      ],
+      "operation": "orb.get.customers-external-customer-id-external-customer-id-credits-ledger",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customers external-customer-id external-customer-id credits top-ups",
+      "summary": "Documented GET /customers/external_customer_id/{external_customer_id}/credits/top_ups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get customers external-customer-id external-customer-id credits top-ups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups"
+        }
+      ],
+      "operation": "orb.get.customers-external-customer-id-external-customer-id-credits-top-ups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dimensional-price-groups",
+      "summary": "Documented GET /dimensional_price_groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get dimensional-price-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dimensional_price_groups"
+        }
+      ],
+      "operation": "orb.get.dimensional-price-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dimensional-price-groups dimensional-price-group-id",
+      "summary": "Documented GET /dimensional_price_groups/{dimensional_price_group_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get dimensional-price-groups dimensional-price-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dimensional_price_groups/{dimensional_price_group_id}"
+        }
+      ],
+      "operation": "orb.get.dimensional-price-groups-dimensional-price-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id",
+      "summary": "Documented GET /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}"
+        }
+      ],
+      "operation": "orb.get.dimensional-price-groups-external-dimensional-price-group-id-external-dimensional-price-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events backfills",
+      "summary": "Documented GET /events/backfills (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get events backfills --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/backfills"
+        }
+      ],
+      "operation": "orb.get.events-backfills",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events backfills backfill-id",
+      "summary": "Documented GET /events/backfills/{backfill_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get events backfills backfill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/backfills/{backfill_id}"
+        }
+      ],
+      "operation": "orb.get.events-backfills-backfill-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events volume",
+      "summary": "Documented GET /events/volume (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get events volume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/volume"
+        }
+      ],
+      "operation": "orb.get.events-volume",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices",
+      "summary": "Documented GET /invoices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "orb.get.invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices invoice-id",
+      "summary": "Documented GET /invoices/{invoice_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get invoices invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{invoice_id}"
+        }
+      ],
+      "operation": "orb.get.invoices-invoice-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices summary",
+      "summary": "Documented GET /invoices/summary (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get invoices summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/summary"
+        }
+      ],
+      "operation": "orb.get.invoices-summary",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices upcoming",
+      "summary": "Documented GET /invoices/upcoming (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get invoices upcoming --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/upcoming"
+        }
+      ],
+      "operation": "orb.get.invoices-upcoming",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get items",
+      "summary": "Documented GET /items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items"
+        }
+      ],
+      "operation": "orb.get.items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get items item-id",
+      "summary": "Documented GET /items/{item_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get items item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/items/{item_id}"
+        }
+      ],
+      "operation": "orb.get.items-item-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get license-types",
+      "summary": "Documented GET /license_types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get license-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/license_types"
+        }
+      ],
+      "operation": "orb.get.license-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get license-types license-type-id",
+      "summary": "Documented GET /license_types/{license_type_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get license-types license-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/license_types/{license_type_id}"
+        }
+      ],
+      "operation": "orb.get.license-types-license-type-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses",
+      "summary": "Documented GET /licenses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses"
+        }
+      ],
+      "operation": "orb.get.licenses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses external-license-id external-license-id",
+      "summary": "Documented GET /licenses/external_license_id/{external_license_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses external-license-id external-license-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/external_license_id/{external_license_id}"
+        }
+      ],
+      "operation": "orb.get.licenses-external-license-id-external-license-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses external-licenses external-license-id usage",
+      "summary": "Documented GET /licenses/external_licenses/{external_license_id}/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses external-licenses external-license-id usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/external_licenses/{external_license_id}/usage"
+        }
+      ],
+      "operation": "orb.get.licenses-external-licenses-external-license-id-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses license-id",
+      "summary": "Documented GET /licenses/{license_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses license-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/{license_id}"
+        }
+      ],
+      "operation": "orb.get.licenses-license-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses license-id usage",
+      "summary": "Documented GET /licenses/{license_id}/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses license-id usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/{license_id}/usage"
+        }
+      ],
+      "operation": "orb.get.licenses-license-id-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get licenses usage",
+      "summary": "Documented GET /licenses/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get licenses usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/licenses/usage"
+        }
+      ],
+      "operation": "orb.get.licenses-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics",
+      "summary": "Documented GET /metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics"
+        }
+      ],
+      "operation": "orb.get.metrics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get metrics metric-id",
+      "summary": "Documented GET /metrics/{metric_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metrics/{metric_id}"
+        }
+      ],
+      "operation": "orb.get.metrics-metric-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ping",
+      "summary": "Documented GET /ping (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ping"
+        }
+      ],
+      "operation": "orb.get.ping",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans",
+      "summary": "Documented GET /plans (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans"
+        }
+      ],
+      "operation": "orb.get.plans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans external-plan-id external-plan-id",
+      "summary": "Documented GET /plans/external_plan_id/{external_plan_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans external-plan-id external-plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/external_plan_id/{external_plan_id}"
+        }
+      ],
+      "operation": "orb.get.plans-external-plan-id-external-plan-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans external-plan-id external-plan-id versions version",
+      "summary": "Documented GET /plans/external_plan_id/{external_plan_id}/versions/{version} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans external-plan-id external-plan-id versions version --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/external_plan_id/{external_plan_id}/versions/{version}"
+        }
+      ],
+      "operation": "orb.get.plans-external-plan-id-external-plan-id-versions-version",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans plan-id",
+      "summary": "Documented GET /plans/{plan_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{plan_id}"
+        }
+      ],
+      "operation": "orb.get.plans-plan-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans plan-id migrations",
+      "summary": "Documented GET /plans/{plan_id}/migrations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans plan-id migrations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{plan_id}/migrations"
+        }
+      ],
+      "operation": "orb.get.plans-plan-id-migrations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans plan-id migrations migration-id",
+      "summary": "Documented GET /plans/{plan_id}/migrations/{migration_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans plan-id migrations migration-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{plan_id}/migrations/{migration_id}"
+        }
+      ],
+      "operation": "orb.get.plans-plan-id-migrations-migration-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans plan-id versions version",
+      "summary": "Documented GET /plans/{plan_id}/versions/{version} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get plans plan-id versions version --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{plan_id}/versions/{version}"
+        }
+      ],
+      "operation": "orb.get.plans-plan-id-versions-version",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prices",
+      "summary": "Documented GET /prices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get prices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prices"
+        }
+      ],
+      "operation": "orb.get.prices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prices external-price-id external-price-id",
+      "summary": "Documented GET /prices/external_price_id/{external_price_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get prices external-price-id external-price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prices/external_price_id/{external_price_id}"
+        }
+      ],
+      "operation": "orb.get.prices-external-price-id-external-price-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get prices price-id",
+      "summary": "Documented GET /prices/{price_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get prices price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/prices/{price_id}"
+        }
+      ],
+      "operation": "orb.get.prices-price-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription-changes",
+      "summary": "Documented GET /subscription_changes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscription-changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription_changes"
+        }
+      ],
+      "operation": "orb.get.subscription-changes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription-changes subscription-change-id",
+      "summary": "Documented GET /subscription_changes/{subscription_change_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscription-changes subscription-change-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription_changes/{subscription_change_id}"
+        }
+      ],
+      "operation": "orb.get.subscription-changes-subscription-change-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions",
+      "summary": "Documented GET /subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ],
+      "operation": "orb.get.subscriptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id",
+      "summary": "Documented GET /subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "orb.get.subscriptions-subscription-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id costs",
+      "summary": "Documented GET /subscriptions/{subscription_id}/costs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscriptions subscription-id costs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/costs"
+        }
+      ],
+      "operation": "orb.get.subscriptions-subscription-id-costs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id schedule",
+      "summary": "Documented GET /subscriptions/{subscription_id}/schedule (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscriptions subscription-id schedule --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/schedule"
+        }
+      ],
+      "operation": "orb.get.subscriptions-subscription-id-schedule",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions subscription-id usage",
+      "summary": "Documented GET /subscriptions/{subscription_id}/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api get subscriptions subscription-id usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{subscription_id}/usage"
+        }
+      ],
+      "operation": "orb.get.subscriptions-subscription-id-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post alerts alert-configuration-id disable",
+      "summary": "Documented POST /alerts/{alert_configuration_id}/disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts alert-configuration-id disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/{alert_configuration_id}/disable"
+        }
+      ],
+      "operation": "orb.post.alerts-alert-configuration-id-disable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post alerts alert-configuration-id enable",
+      "summary": "Documented POST /alerts/{alert_configuration_id}/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts alert-configuration-id enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/{alert_configuration_id}/enable"
+        }
+      ],
+      "operation": "orb.post.alerts-alert-configuration-id-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post alerts customer-id customer-id",
+      "summary": "Documented POST /alerts/customer_id/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts customer-id customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/customer_id/{customer_id}"
+        }
+      ],
+      "operation": "orb.post.alerts-customer-id-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post alerts external-customer-id external-customer-id",
+      "summary": "Documented POST /alerts/external_customer_id/{external_customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts external-customer-id external-customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/external_customer_id/{external_customer_id}"
+        }
+      ],
+      "operation": "orb.post.alerts-external-customer-id-external-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post alerts plan-id plan-id",
+      "summary": "Documented POST /alerts/plan_id/{plan_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts plan-id plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/plan_id/{plan_id}"
+        }
+      ],
+      "operation": "orb.post.alerts-plan-id-plan-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post alerts subscription-id subscription-id",
+      "summary": "Documented POST /alerts/subscription_id/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post alerts subscription-id subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/alerts/subscription_id/{subscription_id}"
+        }
+      ],
+      "operation": "orb.post.alerts-subscription-id-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupons",
+      "summary": "Documented POST /coupons (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post coupons --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons"
+        }
+      ],
+      "operation": "orb.post.coupons",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupons coupon-id archive",
+      "summary": "Documented POST /coupons/{coupon_id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post coupons coupon-id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupons/{coupon_id}/archive"
+        }
+      ],
+      "operation": "orb.post.coupons-coupon-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post credit-notes",
+      "summary": "Documented POST /credit_notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post credit-notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/credit_notes"
+        }
+      ],
+      "operation": "orb.post.credit-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers",
+      "summary": "Documented POST /customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers"
+        }
+      ],
+      "operation": "orb.post.customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id balance-transactions",
+      "summary": "Documented POST /customers/{customer_id}/balance_transactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers customer-id balance-transactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/balance_transactions"
+        }
+      ],
+      "operation": "orb.post.customers-customer-id-balance-transactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id credits ledger-entry",
+      "summary": "Documented POST /customers/{customer_id}/credits/ledger_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers customer-id credits ledger-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/credits/ledger_entry"
+        }
+      ],
+      "operation": "orb.post.customers-customer-id-credits-ledger-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id credits top-ups",
+      "summary": "Documented POST /customers/{customer_id}/credits/top_ups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers customer-id credits top-ups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/credits/top_ups"
+        }
+      ],
+      "operation": "orb.post.customers-customer-id-credits-top-ups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id portal-sessions",
+      "summary": "Documented POST /customers/{customer_id}/portal_sessions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers customer-id portal-sessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/portal_sessions"
+        }
+      ],
+      "operation": "orb.post.customers-customer-id-portal-sessions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers customer-id sync-payment-methods-from-gateway",
+      "summary": "Documented POST /customers/{customer_id}/sync_payment_methods_from_gateway (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers customer-id sync-payment-methods-from-gateway --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/{customer_id}/sync_payment_methods_from_gateway"
+        }
+      ],
+      "operation": "orb.post.customers-customer-id-sync-payment-methods-from-gateway",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers external-customer-id external-customer-id credits ledger-entry",
+      "summary": "Documented POST /customers/external_customer_id/{external_customer_id}/credits/ledger_entry (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers external-customer-id external-customer-id credits ledger-entry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger_entry"
+        }
+      ],
+      "operation": "orb.post.customers-external-customer-id-external-customer-id-credits-ledger-entry",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers external-customer-id external-customer-id credits top-ups",
+      "summary": "Documented POST /customers/external_customer_id/{external_customer_id}/credits/top_ups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers external-customer-id external-customer-id credits top-ups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups"
+        }
+      ],
+      "operation": "orb.post.customers-external-customer-id-external-customer-id-credits-top-ups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers external-customer-id external-customer-id portal-sessions",
+      "summary": "Documented POST /customers/external_customer_id/{external_customer_id}/portal_sessions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers external-customer-id external-customer-id portal-sessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/external_customer_id/{external_customer_id}/portal_sessions"
+        }
+      ],
+      "operation": "orb.post.customers-external-customer-id-external-customer-id-portal-sessions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post customers external-customer-id external-customer-id sync-payment-methods-from-gateway",
+      "summary": "Documented POST /customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post customers external-customer-id external-customer-id sync-payment-methods-from-gateway --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway"
+        }
+      ],
+      "operation": "orb.post.customers-external-customer-id-external-customer-id-sync-payment-methods-from-gateway",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post dimensional-price-groups",
+      "summary": "Documented POST /dimensional_price_groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post dimensional-price-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/dimensional_price_groups"
+        }
+      ],
+      "operation": "orb.post.dimensional-price-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events backfills",
+      "summary": "Documented POST /events/backfills (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post events backfills --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/backfills"
+        }
+      ],
+      "operation": "orb.post.events-backfills",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events backfills backfill-id close",
+      "summary": "Documented POST /events/backfills/{backfill_id}/close (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post events backfills backfill-id close --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/backfills/{backfill_id}/close"
+        }
+      ],
+      "operation": "orb.post.events-backfills-backfill-id-close",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events backfills backfill-id revert",
+      "summary": "Documented POST /events/backfills/{backfill_id}/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post events backfills backfill-id revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/backfills/{backfill_id}/revert"
+        }
+      ],
+      "operation": "orb.post.events-backfills-backfill-id-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events search",
+      "summary": "Documented POST /events/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post events search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/search"
+        }
+      ],
+      "operation": "orb.post.events-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post ingest",
+      "summary": "Documented POST /ingest (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post ingest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ingest"
+        }
+      ],
+      "operation": "orb.post.ingest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoice-line-items",
+      "summary": "Documented POST /invoice_line_items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoice-line-items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoice_line_items"
+        }
+      ],
+      "operation": "orb.post.invoice-line-items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices",
+      "summary": "Documented POST /invoices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "orb.post.invoices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id issue",
+      "summary": "Documented POST /invoices/{invoice_id}/issue (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id issue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/issue"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-issue",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id mark-paid",
+      "summary": "Documented POST /invoices/{invoice_id}/mark_paid (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id mark-paid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/mark_paid"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-mark-paid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id pay",
+      "summary": "Documented POST /invoices/{invoice_id}/pay (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id pay --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/pay"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-pay",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id regenerate-invoice-pdf",
+      "summary": "Documented POST /invoices/{invoice_id}/regenerate_invoice_pdf (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id regenerate-invoice-pdf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/regenerate_invoice_pdf"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-regenerate-invoice-pdf",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id regenerate-receipt-pdf",
+      "summary": "Documented POST /invoices/{invoice_id}/regenerate_receipt_pdf (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id regenerate-receipt-pdf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/regenerate_receipt_pdf"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-regenerate-receipt-pdf",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices invoice-id void",
+      "summary": "Documented POST /invoices/{invoice_id}/void (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices invoice-id void --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/{invoice_id}/void"
+        }
+      ],
+      "operation": "orb.post.invoices-invoice-id-void",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices summary invoice-id issue",
+      "summary": "Documented POST /invoices/summary/{invoice_id}/issue (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post invoices summary invoice-id issue --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/summary/{invoice_id}/issue"
+        }
+      ],
+      "operation": "orb.post.invoices-summary-invoice-id-issue",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post items",
+      "summary": "Documented POST /items (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/items"
+        }
+      ],
+      "operation": "orb.post.items",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post items item-id archive",
+      "summary": "Documented POST /items/{item_id}/archive (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post items item-id archive --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/items/{item_id}/archive"
+        }
+      ],
+      "operation": "orb.post.items-item-id-archive",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post license-types",
+      "summary": "Documented POST /license_types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post license-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/license_types"
+        }
+      ],
+      "operation": "orb.post.license-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post licenses",
+      "summary": "Documented POST /licenses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/licenses"
+        }
+      ],
+      "operation": "orb.post.licenses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post licenses license-id deactivate",
+      "summary": "Documented POST /licenses/{license_id}/deactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post licenses license-id deactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/licenses/{license_id}/deactivate"
+        }
+      ],
+      "operation": "orb.post.licenses-license-id-deactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post metrics",
+      "summary": "Documented POST /metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/metrics"
+        }
+      ],
+      "operation": "orb.post.metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans",
+      "summary": "Documented POST /plans (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans"
+        }
+      ],
+      "operation": "orb.post.plans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans external-plan-id external-plan-id set-default-version",
+      "summary": "Documented POST /plans/external_plan_id/{external_plan_id}/set_default_version (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans external-plan-id external-plan-id set-default-version --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans/external_plan_id/{external_plan_id}/set_default_version"
+        }
+      ],
+      "operation": "orb.post.plans-external-plan-id-external-plan-id-set-default-version",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans external-plan-id external-plan-id versions",
+      "summary": "Documented POST /plans/external_plan_id/{external_plan_id}/versions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans external-plan-id external-plan-id versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans/external_plan_id/{external_plan_id}/versions"
+        }
+      ],
+      "operation": "orb.post.plans-external-plan-id-external-plan-id-versions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans plan-id migrations migration-id cancel",
+      "summary": "Documented POST /plans/{plan_id}/migrations/{migration_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans plan-id migrations migration-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans/{plan_id}/migrations/{migration_id}/cancel"
+        }
+      ],
+      "operation": "orb.post.plans-plan-id-migrations-migration-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans plan-id set-default-version",
+      "summary": "Documented POST /plans/{plan_id}/set_default_version (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans plan-id set-default-version --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans/{plan_id}/set_default_version"
+        }
+      ],
+      "operation": "orb.post.plans-plan-id-set-default-version",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post plans plan-id versions",
+      "summary": "Documented POST /plans/{plan_id}/versions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post plans plan-id versions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plans/{plan_id}/versions"
+        }
+      ],
+      "operation": "orb.post.plans-plan-id-versions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post prices",
+      "summary": "Documented POST /prices (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post prices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/prices"
+        }
+      ],
+      "operation": "orb.post.prices",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post prices evaluate",
+      "summary": "Documented POST /prices/evaluate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post prices evaluate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/prices/evaluate"
+        }
+      ],
+      "operation": "orb.post.prices-evaluate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post prices evaluate-preview-events",
+      "summary": "Documented POST /prices/evaluate_preview_events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post prices evaluate-preview-events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/prices/evaluate_preview_events"
+        }
+      ],
+      "operation": "orb.post.prices-evaluate-preview-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post prices price-id evaluate",
+      "summary": "Documented POST /prices/{price_id}/evaluate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post prices price-id evaluate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/prices/{price_id}/evaluate"
+        }
+      ],
+      "operation": "orb.post.prices-price-id-evaluate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription-changes subscription-change-id apply",
+      "summary": "Documented POST /subscription_changes/{subscription_change_id}/apply (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscription-changes subscription-change-id apply --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription_changes/{subscription_change_id}/apply"
+        }
+      ],
+      "operation": "orb.post.subscription-changes-subscription-change-id-apply",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription-changes subscription-change-id cancel",
+      "summary": "Documented POST /subscription_changes/{subscription_change_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscription-changes subscription-change-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription_changes/{subscription_change_id}/cancel"
+        }
+      ],
+      "operation": "orb.post.subscription-changes-subscription-change-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions",
+      "summary": "Documented POST /subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions"
+        }
+      ],
+      "operation": "orb.post.subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id cancel",
+      "summary": "Documented POST /subscriptions/{subscription_id}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/cancel"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id price-intervals",
+      "summary": "Documented POST /subscriptions/{subscription_id}/price_intervals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id price-intervals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/price_intervals"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-price-intervals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id redeem-coupon",
+      "summary": "Documented POST /subscriptions/{subscription_id}/redeem_coupon (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id redeem-coupon --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/redeem_coupon"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-redeem-coupon",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id schedule-plan-change",
+      "summary": "Documented POST /subscriptions/{subscription_id}/schedule_plan_change (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id schedule-plan-change --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/schedule_plan_change"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-schedule-plan-change",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id trigger-phase",
+      "summary": "Documented POST /subscriptions/{subscription_id}/trigger_phase (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id trigger-phase --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/trigger_phase"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-trigger-phase",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id unschedule-cancellation",
+      "summary": "Documented POST /subscriptions/{subscription_id}/unschedule_cancellation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id unschedule-cancellation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/unschedule_cancellation"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-unschedule-cancellation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id unschedule-fixed-fee-quantity-updates",
+      "summary": "Documented POST /subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id unschedule-fixed-fee-quantity-updates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-unschedule-fixed-fee-quantity-updates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id unschedule-pending-plan-changes",
+      "summary": "Documented POST /subscriptions/{subscription_id}/unschedule_pending_plan_changes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id unschedule-pending-plan-changes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/unschedule_pending_plan_changes"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-unschedule-pending-plan-changes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id update-fixed-fee-quantity",
+      "summary": "Documented POST /subscriptions/{subscription_id}/update_fixed_fee_quantity (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id update-fixed-fee-quantity --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/update_fixed_fee_quantity"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-update-fixed-fee-quantity",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscriptions subscription-id update-trial",
+      "summary": "Documented POST /subscriptions/{subscription_id}/update_trial (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api post subscriptions subscription-id update-trial --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscriptions/{subscription_id}/update_trial"
+        }
+      ],
+      "operation": "orb.post.subscriptions-subscription-id-update-trial",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put alerts alert-configuration-id",
+      "summary": "Documented PUT /alerts/{alert_configuration_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put alerts alert-configuration-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/alerts/{alert_configuration_id}"
+        }
+      ],
+      "operation": "orb.put.alerts-alert-configuration-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers customer-id",
+      "summary": "Documented PUT /customers/{customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/{customer_id}"
+        }
+      ],
+      "operation": "orb.put.customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customers external-customer-id external-customer-id",
+      "summary": "Documented PUT /customers/external_customer_id/{external_customer_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put customers external-customer-id external-customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customers/external_customer_id/{external_customer_id}"
+        }
+      ],
+      "operation": "orb.put.customers-external-customer-id-external-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put dimensional-price-groups dimensional-price-group-id",
+      "summary": "Documented PUT /dimensional_price_groups/{dimensional_price_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put dimensional-price-groups dimensional-price-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dimensional_price_groups/{dimensional_price_group_id}"
+        }
+      ],
+      "operation": "orb.put.dimensional-price-groups-dimensional-price-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id",
+      "summary": "Documented PUT /dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put dimensional-price-groups external-dimensional-price-group-id external-dimensional-price-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}"
+        }
+      ],
+      "operation": "orb.put.dimensional-price-groups-external-dimensional-price-group-id-external-dimensional-price-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put events event-id",
+      "summary": "Documented PUT /events/{event_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/events/{event_id}"
+        }
+      ],
+      "operation": "orb.put.events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put events event-id deprecate",
+      "summary": "Documented PUT /events/{event_id}/deprecate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put events event-id deprecate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/events/{event_id}/deprecate"
+        }
+      ],
+      "operation": "orb.put.events-event-id-deprecate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put invoices invoice-id",
+      "summary": "Documented PUT /invoices/{invoice_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put invoices invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/invoices/{invoice_id}"
+        }
+      ],
+      "operation": "orb.put.invoices-invoice-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put items item-id",
+      "summary": "Documented PUT /items/{item_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put items item-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/items/{item_id}"
+        }
+      ],
+      "operation": "orb.put.items-item-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put metrics metric-id",
+      "summary": "Documented PUT /metrics/{metric_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/metrics/{metric_id}"
+        }
+      ],
+      "operation": "orb.put.metrics-metric-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put plans external-plan-id external-plan-id",
+      "summary": "Documented PUT /plans/external_plan_id/{external_plan_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put plans external-plan-id external-plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plans/external_plan_id/{external_plan_id}"
+        }
+      ],
+      "operation": "orb.put.plans-external-plan-id-external-plan-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put plans plan-id",
+      "summary": "Documented PUT /plans/{plan_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put plans plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plans/{plan_id}"
+        }
+      ],
+      "operation": "orb.put.plans-plan-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put prices external-price-id external-price-id",
+      "summary": "Documented PUT /prices/external_price_id/{external_price_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put prices external-price-id external-price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/prices/external_price_id/{external_price_id}"
+        }
+      ],
+      "operation": "orb.put.prices-external-price-id-external-price-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put prices price-id",
+      "summary": "Documented PUT /prices/{price_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put prices price-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/prices/{price_id}"
+        }
+      ],
+      "operation": "orb.put.prices-price-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscriptions subscription-id",
+      "summary": "Documented PUT /subscriptions/{subscription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb api put subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscriptions/{subscription_id}"
+        }
+      ],
+      "operation": "orb.put.subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/invoices"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "plans list",
+      "summary": "Run the plans ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb plans list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/plans"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "examples": [
+        "pm orb subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/subscriptions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

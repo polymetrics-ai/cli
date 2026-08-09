@@ -1,0 +1,224 @@
+{
+  "operations": [
+    {
+      "id": "google-tasks.post.tasks-v1-lists-tasklist-clear",
+      "kind": "rest_write",
+      "summary": "POST /tasks/v1/lists/{tasklist}/clear",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/v1/lists/{tasklist}/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.get.tasks-v1-lists-tasklist-tasks",
+      "kind": "rest_read",
+      "summary": "GET /tasks/v1/lists/{tasklist}/tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/v1/lists/{tasklist}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.post.tasks-v1-lists-tasklist-tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks/v1/lists/{tasklist}/tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/v1/lists/{tasklist}/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.get.tasks-v1-lists-tasklist-tasks-task",
+      "kind": "rest_read",
+      "summary": "GET /tasks/v1/lists/{tasklist}/tasks/{task}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/v1/lists/{tasklist}/tasks/{task}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.put.tasks-v1-lists-tasklist-tasks-task",
+      "kind": "rest_write",
+      "summary": "PUT /tasks/v1/lists/{tasklist}/tasks/{task}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tasks/v1/lists/{tasklist}/tasks/{task}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.patch.tasks-v1-lists-tasklist-tasks-task",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/v1/lists/{tasklist}/tasks/{task}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/v1/lists/{tasklist}/tasks/{task}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.delete.tasks-v1-lists-tasklist-tasks-task",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/v1/lists/{tasklist}/tasks/{task}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/v1/lists/{tasklist}/tasks/{task}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.post.tasks-v1-lists-tasklist-tasks-task-move",
+      "kind": "rest_write",
+      "summary": "POST /tasks/v1/lists/{tasklist}/tasks/{task}/move",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/v1/lists/{tasklist}/tasks/{task}/move",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.get.tasks-v1-users-me-lists",
+      "kind": "rest_read",
+      "summary": "GET /tasks/v1/users/@me/lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/v1/users/@me/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.post.tasks-v1-users-me-lists",
+      "kind": "rest_write",
+      "summary": "POST /tasks/v1/users/@me/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/v1/users/@me/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.get.tasks-v1-users-me-lists-tasklist",
+      "kind": "rest_read",
+      "summary": "GET /tasks/v1/users/@me/lists/{tasklist}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/v1/users/@me/lists/{tasklist}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.put.tasks-v1-users-me-lists-tasklist",
+      "kind": "rest_write",
+      "summary": "PUT /tasks/v1/users/@me/lists/{tasklist}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tasks/v1/users/@me/lists/{tasklist}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.patch.tasks-v1-users-me-lists-tasklist",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/v1/users/@me/lists/{tasklist}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/v1/users/@me/lists/{tasklist}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "google-tasks.delete.tasks-v1-users-me-lists-tasklist",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/v1/users/@me/lists/{tasklist}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/tasks/v1/rest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/v1/users/@me/lists/{tasklist}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

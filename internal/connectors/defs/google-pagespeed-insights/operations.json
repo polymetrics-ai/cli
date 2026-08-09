@@ -1,0 +1,19 @@
+{
+  "operations": [
+    {
+      "id": "google-pagespeed-insights.get.pagespeedonline-v5-runpagespeed",
+      "kind": "rest_read",
+      "summary": "GET /pagespeedonline/v5/runPagespeed",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://pagespeedonline.googleapis.com/$discovery/rest?version=v5",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pagespeedonline/v5/runPagespeed",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

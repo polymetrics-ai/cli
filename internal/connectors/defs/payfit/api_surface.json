@@ -1,33 +1,32 @@
 {
-  "api": "PayFit Partner API (https://partner-api.payfit.com) plus legacy customer /v1 endpoints retained for migration parity",
+  "api": "PayFit Partner API (https://partner-api.payfit.com) plus legacy customer /v1 endpoints retained for migration parity; provider artifact version: PayFit Partner API v1.0; OpenAPI 3.0.0",
   "docs": "https://developers.payfit.io/llms.txt (merged official per-endpoint OpenAPI blocks from /reference/*.md)",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion: preserves the 3 legacy /v1 read streams and covers PayFit's current reference surface from llms.txt. JSON list/detail endpoints become streams, JSON customer-key mutations become writes, binary/PDF/CSV/multipart and partner/auth helper endpoints are explicitly excluded with closed categories.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (31 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "payfit-artifact-2026-08-09",
+      "url": "https://developers.payfit.io/openapi/partner-api.json",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v1/employees",
-      "covered_by": {
-        "stream": "employees"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/contracts",
-      "covered_by": {
-        "stream": "contracts"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/companies",
-      "covered_by": {
-        "stream": "companies"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/companies-fr/{companyId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies-fr/{companyId}\"].get"
+      },
       "covered_by": {
         "stream": "company_fr"
       }
@@ -35,14 +34,36 @@
     {
       "method": "POST",
       "path": "/companies-fr/{companyId}/health-insurance-setup-sheets",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "multipart/form-data upload is not expressible by declarative JSON writes"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies-fr/{companyId}/health-insurance-setup-sheets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "multipart/form-data upload is not expressible by declarative JSON writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}\"].get"
+      },
       "covered_by": {
         "stream": "company"
       }
@@ -50,6 +71,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/absences",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/absences\"].get"
+      },
       "covered_by": {
         "stream": "absences"
       }
@@ -57,6 +87,15 @@
     {
       "method": "POST",
       "path": "/companies/{companyId}/absences",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/absences\"].post"
+      },
       "covered_by": {
         "write": "create_absence"
       }
@@ -64,6 +103,15 @@
     {
       "method": "DELETE",
       "path": "/companies/{companyId}/absences/{absenceId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/absences/{absenceId}\"].delete"
+      },
       "covered_by": {
         "write": "cancel_absence"
       }
@@ -71,14 +119,36 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/accounting",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/accounting\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}/accounting-v2",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/accounting-v2\"].get"
+      },
       "covered_by": {
         "stream": "accounting_v2_entries"
       }
@@ -86,6 +156,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/auto-enrolment-documents",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/auto-enrolment-documents\"].get"
+      },
       "covered_by": {
         "stream": "auto_enrolment_documents"
       }
@@ -93,14 +172,36 @@
     {
       "method": "POST",
       "path": "/companies/{companyId}/billing-declarations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "partner-only billing declaration endpoint; the migrated connector authenticates with a customer API key, not partner-only credentials"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/billing-declarations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "partner-only billing declaration endpoint; the migrated connector authenticates with a customer API key, not partner-only credentials",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}/collaborators",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators\"].get"
+      },
       "covered_by": {
         "stream": "collaborators"
       }
@@ -108,6 +209,15 @@
     {
       "method": "POST",
       "path": "/companies/{companyId}/collaborators",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators\"].post"
+      },
       "covered_by": {
         "write": "create_collaborator"
       }
@@ -115,6 +225,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/collaborators/meal-vouchers",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators/meal-vouchers\"].get"
+      },
       "covered_by": {
         "stream": "collaborator_meal_vouchers"
       }
@@ -122,6 +241,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/collaborators/{collaboratorId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators/{collaboratorId}\"].get"
+      },
       "covered_by": {
         "stream": "collaborator"
       }
@@ -129,6 +257,15 @@
     {
       "method": "POST",
       "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators/{collaboratorId}/contracts\"].post"
+      },
       "covered_by": {
         "write": "create_contract"
       }
@@ -136,14 +273,36 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators/{collaboratorId}/contracts/{contractId}/payslips/{payslipId}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}/collaborators/{collaboratorId}/payslips",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/collaborators/{collaboratorId}/payslips\"].get"
+      },
       "covered_by": {
         "stream": "collaborator_payslips"
       }
@@ -151,6 +310,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/contracts",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts\"].get"
+      },
       "covered_by": {
         "stream": "company_contracts"
       }
@@ -158,6 +326,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/contracts-fr",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts-fr\"].get"
+      },
       "covered_by": {
         "stream": "company_contracts_fr"
       }
@@ -165,6 +342,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/contracts-fr/{contractId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts-fr/{contractId}\"].get"
+      },
       "covered_by": {
         "stream": "company_contract_fr"
       }
@@ -172,6 +358,15 @@
     {
       "method": "PUT",
       "path": "/companies/{companyId}/contracts-fr/{contractId}/health-insurance",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts-fr/{contractId}/health-insurance\"].put"
+      },
       "covered_by": {
         "write": "update_contract_health_insurance"
       }
@@ -179,6 +374,15 @@
     {
       "method": "PUT",
       "path": "/companies/{companyId}/contracts-fr/{contractId}/provident-fund",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts-fr/{contractId}/provident-fund\"].put"
+      },
       "covered_by": {
         "write": "update_contract_provident_fund"
       }
@@ -186,6 +390,15 @@
     {
       "method": "POST",
       "path": "/companies/{companyId}/contracts-fr/{contractId}/regularization",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts-fr/{contractId}/regularization\"].post"
+      },
       "covered_by": {
         "write": "request_health_insurance_regularization"
       }
@@ -193,6 +406,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/contracts/time",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts/time\"].get"
+      },
       "covered_by": {
         "stream": "worked_time_by_contract"
       }
@@ -200,6 +422,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/contracts/{contractId}",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/contracts/{contractId}\"].get"
+      },
       "covered_by": {
         "stream": "company_contract"
       }
@@ -207,14 +438,36 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/documents/{documentId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/documents/{documentId}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}/health-insurance-contracts",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/health-insurance-contracts\"].get"
+      },
       "covered_by": {
         "stream": "health_insurance_contracts"
       }
@@ -222,6 +475,15 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/income-taxes-documents",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/income-taxes-documents\"].get"
+      },
       "covered_by": {
         "stream": "income_tax_documents"
       }
@@ -229,14 +491,36 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/payment-files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream"
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/payment-files\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns PDF, CSV, or octet-stream document content rather than JSON records expressible as a stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{companyId}/payroll-status",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/payroll-status\"].get"
+      },
       "covered_by": {
         "stream": "payroll_status"
       }
@@ -244,24 +528,112 @@
     {
       "method": "GET",
       "path": "/companies/{companyId}/provident-fund-contracts",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "paths[\"/companies/{companyId}/provident-fund-contracts\"].get"
+      },
       "covered_by": {
         "stream": "provident_fund_contracts"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/companies",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "existing-surface[GET /v1/companies]"
+      },
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/contracts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "existing-surface[GET /v1/contracts]"
+      },
+      "covered_by": {
+        "stream": "contracts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/employees",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "existing-surface[GET /v1/employees]"
+      },
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
       "method": "POST",
       "path": "https://oauth.payfit.com/introspect",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "API-key/OAuth introspection helper used to discover company_id; not a syncable resource or reverse-ETL mutation"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "existing-surface[POST https://oauth.payfit.com/introspect]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "API-key/OAuth introspection helper used to discover company_id; not a syncable resource or reverse-ETL mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "https://oauth.payfit.com/webhooks",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "returns a webhook dashboard URL using OAuth client credentials; webhook setup is an operational configuration helper, not a data stream"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "payfit-artifact-2026-08-09",
+        "source_url": "https://developers.payfit.io/openapi/partner-api.json",
+        "source_kind": "openapi",
+        "version": "PayFit Partner API v1.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5bdff912254416c2238dc825e0643451ca4e5a32d935eca4d3bd680c25ea7543",
+        "coordinate": "existing-surface[GET https://oauth.payfit.com/webhooks]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns a webhook dashboard URL using OAuth client credentials; webhook setup is an operational configuration helper, not a data stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

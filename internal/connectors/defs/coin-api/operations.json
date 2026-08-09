@@ -1,0 +1,634 @@
+{
+  "operations": [
+    {
+      "id": "coin-api.get.v1-assets-icons-size",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets/icons/{size}",
+      "description": "returns branding icon image binaries (PNG), not structured market data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets/icons/{size}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-assets-asset-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets/{asset_id}",
+      "description": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets/{asset_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-chains",
+      "kind": "rest_read",
+      "summary": "GET /v1/chains",
+      "description": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/chains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-chains-chain-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/chains/{chain_id}",
+      "description": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/chains/{chain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-exchangerate-history-periods",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchangerate/history/periods",
+      "description": "static enumeration of valid timeseries period identifiers for the exchange-rate history endpoint, not itself market data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchangerate/history/periods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-exchangerate-asset-id-base-asset-id-quote",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchangerate/{asset_id_base}/{asset_id_quote}",
+      "description": "single quote-asset exchange rate is a strict subset of the covered all-current-rates stream for the same base asset (same fields, client-side filterable)",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-exchangerate-asset-id-base-asset-id-quote-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchangerate/{asset_id_base}/{asset_id_quote}/history",
+      "description": "historical exchange-rate timeseries for one base/quote pair; Pass B full-surface expansion covers the current-rate snapshot only",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-exchanges-icons-size",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchanges/icons/{size}",
+      "description": "returns branding icon image binaries (PNG), not structured market data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchanges/icons/{size}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-exchanges-exchange-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/exchanges/{exchange_id}",
+      "description": "single-exchange detail is a strict subset of the covered exchanges list stream (same fields, client-side filterable); not implemented as a separate stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exchanges/{exchange_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-asset-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/asset/current",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/asset/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-asset-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/asset/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/asset/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-asset-listing",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/asset/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/asset/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-exchange-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/exchange/current",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/exchange/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-exchange-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/exchange/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/exchange/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-exchange-listing",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/exchange/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/exchange/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-symbol-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/symbol/current",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/symbol/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-symbol-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/symbol/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/symbol/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-metrics-symbol-listing",
+      "kind": "rest_read",
+      "summary": "GET /v1/metrics/symbol/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/metrics/symbol/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-ohlcv-exchanges-exchange-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/ohlcv/exchanges/{exchange_id}/history",
+      "description": "exchange-wide aggregated OHLCV history (a distinct resource from the covered per-symbol ohlcv_historical_data stream); out of scope for this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ohlcv/exchanges/{exchange_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-ohlcv-periods",
+      "kind": "rest_read",
+      "summary": "GET /v1/ohlcv/periods",
+      "description": "static enumeration of valid OHLCV period identifiers, not itself market data",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ohlcv/periods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-ohlcv-symbol-id-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/ohlcv/{symbol_id}/latest",
+      "description": "latest OHLCV bars are a strict subset of the covered historical OHLCV stream (same fields, most-recent window); not implemented as a separate stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/ohlcv/{symbol_id}/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-options-exchange-id-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/options/{exchange_id}/current",
+      "description": "options-chain current data, a distinct instrument-type surface from this connector's spot/futures-oriented streams",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/options/{exchange_id}/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-orderbooks-symbol-id-depth-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/orderbooks/{symbol_id}/depth/current",
+      "description": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/orderbooks/{symbol_id}/depth/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-orderbooks-symbol-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/orderbooks/{symbol_id}/history",
+      "description": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/orderbooks/{symbol_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-orderbooks3-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/orderbooks3/current",
+      "description": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/orderbooks3/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-orderbooks3-symbol-id-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/orderbooks3/{symbol_id}/current",
+      "description": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/orderbooks3/{symbol_id}/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-quotes-current",
+      "kind": "rest_read",
+      "summary": "GET /v1/quotes/current",
+      "description": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/quotes/current",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-quotes-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/quotes/latest",
+      "description": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/quotes/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-quotes-symbol-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/quotes/{symbol_id}/history",
+      "description": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/quotes/{symbol_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-quotes-symbol-id-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/quotes/{symbol_id}/latest",
+      "description": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/quotes/{symbol_id}/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-symbols-map-exchange-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/symbols/map/{exchange_id}",
+      "description": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/symbols/map/{exchange_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-symbols-exchange-id-active",
+      "kind": "rest_read",
+      "summary": "GET /v1/symbols/{exchange_id}/active",
+      "description": "per-exchange active-symbol subset of the covered legacy all-symbols stream; using it as the primary symbols stream would narrow legacy's emitted dataset",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/symbols/{exchange_id}/active",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-symbols-exchange-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v1/symbols/{exchange_id}/history",
+      "description": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/symbols/{exchange_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-trades-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/trades/latest",
+      "description": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trades/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v1-trades-symbol-id-latest",
+      "kind": "rest_read",
+      "summary": "GET /v1/trades/{symbol_id}/latest",
+      "description": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trades/{symbol_id}/latest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-asset-history",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/asset/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/asset/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-asset-listing",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/asset/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/asset/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-chain-history",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/chain/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/chain/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-chain-listing",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/chain/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/chain/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-exchange-history",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/exchange/history",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/exchange/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-exchange-listing",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/exchange/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/exchange/listing",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "coin-api.get.v2-metrics-listing",
+      "kind": "rest_read",
+      "summary": "GET /v2/metrics/listing",
+      "description": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+      "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/listing",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

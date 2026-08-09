@@ -1,0 +1,34 @@
+{
+  "operations": [
+    {
+      "id": "exchange-rates.get.symbols",
+      "kind": "rest_read",
+      "summary": "GET /symbols",
+      "description": "the response is a {code: display_name} map that legacy explodes into one record per currency code; evaluated against the engine's records.keyed_object/key_field flatten (S4 engine mini-wave item 3) and confirmed NOT applicable -- recordsAtKeyed (read.go) requires every map value to itself decode as a JSON object and silently skips scalar values, so a code-\u003estring map would emit zero records. An ENGINE_GAP distinct from (narrower than) the one keyed_object already closes for appfigures' map-of-objects shape.",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/symbols",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "exchange-rates.get.date",
+      "kind": "rest_read",
+      "summary": "GET /{date}",
+      "description": "date-by-date iteration over a start_date..end_date window within a single Read call has no declarative pagination/looping equivalent (not a body-token/page-number/offset shape, and fan_out's ids_from varies a discovered id list, not a computed date range); requires a StreamHook, forbidden in this JSON-only wave",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/{date}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

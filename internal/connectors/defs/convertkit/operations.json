@@ -1,0 +1,187 @@
+{
+  "operations": [
+    {
+      "id": "convertkit.get.v3-account",
+      "kind": "rest_read",
+      "summary": "GET /v3/account",
+      "description": "account metadata snapshot (name, primary email), not a syncable object stream",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/account",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-broadcasts-broadcast-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/broadcasts/{broadcast_id}",
+      "description": "single-broadcast detail; identical record shape to the broadcasts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/broadcasts/{broadcast_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-broadcasts-broadcast-id-stats",
+      "kind": "rest_read",
+      "summary": "GET /v3/broadcasts/{broadcast_id}/stats",
+      "description": "engagement-metrics snapshot (opens/clicks/unsubscribes) for one broadcast, not a syncable object list",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/broadcasts/{broadcast_id}/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.delete.v3-custom-fields-custom-field-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/custom_fields/{custom_field_id}",
+      "description": "permanently removes the field AND all associated subscriber data for every subscriber (per Kit's own docs), no reverse-ETL use case for this port",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/custom_fields/{custom_field_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-forms-form-id-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /v3/forms/{form_id}/subscriptions",
+      "description": "per-form subscriber list; identical record shape to the global subscribers stream, just filtered to one form",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/forms/{form_id}/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-purchases-purchase-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/purchases/{purchase_id}",
+      "description": "single-purchase detail; identical record shape to the purchases list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/purchases/{purchase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-sequences-sequence-id-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /v3/sequences/{sequence_id}/subscriptions",
+      "description": "per-sequence subscriber list; identical record shape to the global subscribers stream, just filtered to one sequence",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/sequences/{sequence_id}/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-subscribers-subscriber-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/subscribers/{subscriber_id}",
+      "description": "single-subscriber detail; identical record shape to the subscribers list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/subscribers/{subscriber_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-subscribers-subscriber-id-tags",
+      "kind": "rest_read",
+      "summary": "GET /v3/subscribers/{subscriber_id}/tags",
+      "description": "per-subscriber tag list; identical record shape to the global tags stream, just filtered to one subscriber",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/subscribers/{subscriber_id}/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.get.v3-tags-tag-id-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /v3/tags/{tag_id}/subscriptions",
+      "description": "per-tag subscriber list; identical record shape to the global subscribers stream, just filtered to one tag",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/tags/{tag_id}/subscriptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.post.v3-tags-tag-id-unsubscribe",
+      "kind": "rest_write",
+      "summary": "POST /v3/tags/{tag_id}/unsubscribe",
+      "description": "breadth-vs-cost triage: remove_tag_from_subscriber (the ID-addressed DELETE variant) already covers tag removal; this email-addressed POST variant is a duplicate mutation path, not a distinct capability",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/tags/{tag_id}/unsubscribe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "convertkit.put.v3-unsubscribe",
+      "kind": "rest_write",
+      "summary": "PUT /v3/unsubscribe",
+      "description": "globally unsubscribes an email address from every form/sequence/tag in the account at once; irreversible-in-effect (Kit requires manual resubscribe) marketing-consent action, no reverse-ETL use case for this port",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/unsubscribe",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}
