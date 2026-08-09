@@ -64,6 +64,34 @@ func TestConnectorCommandMaxBytesRejectsNegative(t *testing.T) {
 	}
 }
 
+// TestConnectorCommandExplicitReservedFlags preserves the fact that a caller
+// selected a generic CLI option before runConnectorCommand removes it from the
+// connector-specific flag map. Closed operation kinds can then reject a
+// selected control rather than accepting and ignoring it.
+func TestConnectorCommandExplicitReservedFlags(t *testing.T) {
+	selected := connectorCommandExplicitReservedFlags(parseFlags([]string{
+		"live", "scribe",
+		"--limit", "1",
+		"--max-bytes", "0",
+		"--preview",
+		"--dest-root", "out",
+		"--file-name", "result.pcm",
+		"--connection", "zoom-fixture",
+		"--config", "region=fixture",
+	}))
+	want := map[string]bool{
+		"limit": true, "max-bytes": true, "preview": true, "dest-root": true, "file-name": true,
+	}
+	if len(selected) != len(want) {
+		t.Fatalf("explicit reserved flags = %#v, want %#v", selected, want)
+	}
+	for name := range want {
+		if !selected[name] {
+			t.Fatalf("explicit reserved flags = %#v, missing %q", selected, name)
+		}
+	}
+}
+
 // TestConnectorDownloadFlagsMatchTheSharedDeclaration guards the parity the
 // shared declaration exists for: runtime help must document exactly the flags
 // the generated manual, skill and website docs document.

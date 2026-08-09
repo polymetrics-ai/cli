@@ -322,6 +322,45 @@ $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
 
+## Reserved-controls and static-conformance RED — captured 2026-08-10
+
+The completed command route exposed two remaining foundation gaps before its consumer can ship:
+
+1. `runConnectorCommand` strips generic CLI controls such as `--limit`, `--preview`, and
+   `--dest-root` before passing the command-specific flag map. A closed session must know that a
+   caller selected one and refuse it, rather than silently accepting a control for another executor.
+2. The shared static conformance checker still sees `covered_by.websocket_session` as no classifier,
+   even though the engine and `connectorgen validate` recognize it. A consumer would therefore pass
+   generation checks but fail `surface_complete`.
+
+The following tests were added and run before their production code. They use only a temporary
+PCM16 fixture and synthetic `acme` metadata.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestRunImplementedWebSocketSessionCommandRejectsReservedControls$'
+# polymetrics.ai/internal/connectors/commandrunner [polymetrics.ai/internal/connectors/commandrunner.test]
+internal/connectors/commandrunner/runner_test.go:2000:5: unknown field ExplicitReservedFlags in struct literal of type Request
+FAIL	polymetrics.ai/internal/connectors/commandrunner [build failed]
+FAIL
+
+$ go test -count=1 -timeout 20m ./internal/cli -run '^TestConnectorCommandExplicitReservedFlags$'
+# polymetrics.ai/internal/cli [polymetrics.ai/internal/cli.test]
+internal/cli/connector_command_limits_test.go:72:14: undefined: connectorCommandExplicitReservedFlags
+FAIL	polymetrics.ai/internal/cli [build failed]
+FAIL
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance -run '^TestCheckSurfaceComplete_WebSocketSessionCoverage$'
+--- FAIL: TestCheckSurfaceComplete_WebSocketSessionCoverage (0.00s)
+    static_test.go:206: checkSurfaceComplete rejected implemented websocket session coverage: endpoint 0 (GET /live) has no classifier
+FAIL
+FAIL	polymetrics.ai/internal/connectors/conformance	0.424s
+FAIL
+```
+
+The next green slice must preserve the selected-reserved-flag bit through the CLI boundary, reject
+every such WebSocket control before any file read or session dispatch, and make static conformance
+validate a GET coverage operation ID against an implemented `websocket_session` command.
+
 All fixtures are local and synthetic. The command test writes four PCM16 bytes under `t.TempDir()`;
 it does not open a provider connection or reveal a credential, token-derived value, transcript,
 signed URL, raw authorization header, or audio recording.

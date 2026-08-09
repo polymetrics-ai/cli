@@ -175,6 +175,43 @@ func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testi
 	}
 }
 
+// TestCheckSurfaceComplete_WebSocketSessionCoverage follows the same rule as
+// the runtime preflight: a WebSocket endpoint is executable only when its
+// covered_by operation ID resolves to an implemented closed session command.
+func TestCheckSurfaceComplete_WebSocketSessionCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/live",
+				CoveredBy: &engine.SurfaceCoverage{WebSocketSession: "acme.live"},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "live scribe",
+				Intent:       "websocket_session",
+				Availability: "implemented",
+				Operation:    "acme.live",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete rejected implemented websocket session coverage: %v", err)
+	}
+
+	b.CLISurface.Commands[0].Availability = "planned"
+	if err := checkSurfaceComplete(b); err == nil || !strings.Contains(err.Error(), "websocket_session") {
+		t.Fatalf("planned websocket session coverage error = %v, want operation coverage rejection", err)
+	}
+}
+
 func TestCheckSurfaceComplete_DirectWriteCoverageRequiresWriteCapability(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

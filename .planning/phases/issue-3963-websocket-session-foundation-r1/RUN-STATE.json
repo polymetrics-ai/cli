@@ -3,7 +3,7 @@
   "issue": 3963,
   "parent_issue": 3915,
   "consumer_issue": 3935,
-  "status": "command-boundary-green",
+  "status": "reserved-controls-and-conformance-red",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "The official phase runtime has no registered issue-3963 phase and the parent contract forbids role spawning.",
@@ -23,6 +23,7 @@
   "green": "2026-08-10: closed schema/loader, authenticated 101 upgrade transport, bounded PCM16 frame/session executor, and closed command/generator boundary green; generic CLI-control refusal, full verification, and consumer handoff remain pending",
   "command_boundary_red": "2026-08-10: typed session capability, closed command route, generator derivation, and min-close-frame validation are absent; focused red output is recorded in TDD-LEDGER.md",
   "command_boundary_green": "2026-08-10: focused engine, connsdk, commandrunner, and connectorgen tests green; full internal/cli package reports only inherited Zoom CRC golden drift documented in TDD-LEDGER.md",
+  "reserved_controls_and_conformance_red": "2026-08-10: commandrunner lacks an explicit-reserved-flag channel, CLI lacks its preservation helper, and static conformance treats covered_by.websocket_session as unclassified; exact RED output is recorded in TDD-LEDGER.md",
   "verification": "2026-08-10: focused packages, go vet, pm build, connectorgen validate, and surface-sync --check green; full internal/cli has inherited Zoom CRC golden drift",
   "review": "pending"
 }

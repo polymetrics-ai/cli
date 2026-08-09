@@ -1965,6 +1965,50 @@ func TestRunImplementedWebSocketSessionCommand(t *testing.T) {
 	}
 }
 
+// TestRunImplementedWebSocketSessionCommandRejectsReservedControls ensures a
+// closed session cannot accept CLI options that belong to other executor
+// kinds. In particular, an explicitly supplied --limit must not silently
+// become the ETL default and then disappear before the session is dispatched.
+func TestRunImplementedWebSocketSessionCommandRejectsReservedControls(t *testing.T) {
+	projectDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(projectDir, "fixture.pcm"), []byte{0x00, 0x00}, 0o600); err != nil {
+		t.Fatalf("write fixture PCM16: %v", err)
+	}
+
+	for _, reserved := range []string{"limit", "max-bytes", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
+		t.Run(reserved, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "live scribe",
+				Intent:       "websocket_session",
+				Availability: "implemented",
+				Operation:    "acme.live_scribe",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/live"}},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "session-update", Type: "json_object", MapsTo: "body", Required: true},
+					{Name: "audio-file", Type: "string", MapsTo: "input.pcm16_file", Required: true},
+				},
+			}}}}
+
+			_, err := Run(context.Background(), connector, Request{
+				Path: []string{"live", "scribe"},
+				Flags: map[string][]string{
+					"session-update": {`{"type":"session.update","input_audio_format":"pcm16"}`},
+					"audio-file":     {"fixture.pcm"},
+				},
+				Config:                connectors.RuntimeConfig{ProjectDir: projectDir},
+				ExplicitReservedFlags: map[string]bool{reserved: true},
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "does not accept --"+reserved) {
+				t.Fatalf("reserved --%s error = %v, want closed-session refusal", reserved, err)
+			}
+			if connector.webSocketSessionReq.Operation != "" {
+				t.Fatalf("reserved --%s dispatched websocket session: %+v", reserved, connector.webSocketSessionReq)
+			}
+		})
+	}
+}
+
 func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *testing.T) {
 	connector := &fakeConnector{
 		directWriteMetadata: connectors.OperationDirectWriteMetadata{
