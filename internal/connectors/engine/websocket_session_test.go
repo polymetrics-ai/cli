@@ -87,6 +87,13 @@ func TestBundleRejectsUnsafeWebSocketSessionContracts(t *testing.T) {
 			want: "websocket_session max_frame_bytes must be positive",
 		},
 		{
+			name: "frame_cannot_hold_required_close_code",
+			mutate: func(operation string) string {
+				return strings.Replace(operation, `"max_frame_bytes": 4096`, `"max_frame_bytes": 1`, 1)
+			},
+			want: "websocket_session max_frame_bytes must allow the required close code",
+		},
+		{
 			name: "frame_larger_than_session_bound",
 			mutate: func(operation string) string {
 				return strings.Replace(operation, `"max_frame_bytes": 4096`, `"max_frame_bytes": 65537`, 1)

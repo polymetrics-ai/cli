@@ -62,10 +62,11 @@
    limits, redaction, close/control frames, malformed frames, redirects, and context cancellation
    against loopback only.
 3. **Command boundary GREEN.** Add a dedicated command/preflight route that accepts only an
-   implemented operation declaration and one matching GET surface endpoint. Reuse typed flag/body
-   mappings where appropriate, but reject arbitrary transport controls and preserve the normal
-   connector auth/rate-limit boundary. Add runtime/help generator support only if a declared
-   operation needs it; no standalone generic command is added.
+   implemented operation declaration and one matching GET surface endpoint. Its only derived inputs
+   are a required closed JSON `session-update` body and a required project-confined `audio-file`
+   PCM16 source; arbitrary transport controls remain invalid flags. Add schema, surface-sync,
+   validation, endpoint-coverage, and reconciliation support so these derivable command fields are
+   never hand-authored. No standalone generic command is added.
 4. **Consumer handoff.** Verify the foundation's tests and built binary preflight behavior, record
    the exact files/commit that #3935 must consume, push the green foundation slice, and update the
    parent and consumer issues.

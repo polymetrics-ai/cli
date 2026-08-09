@@ -209,6 +209,61 @@ ok  	polymetrics.ai/internal/connectors/engine	4.640s
 The next slice begins with command/preflight RED coverage. The runner currently has no connector
 interface, command intent, file-path adapter, generated help route, or provider bundle consumer.
 
+## Command boundary and generated-surface RED — captured 2026-08-10
+
+Before adding any production command, connector interface, schema, generator, or validation code,
+the foundation added three focused contracts:
+
+1. `TestRunImplementedWebSocketSessionCommand` asks the real command runner to pass only a required
+   JSON `session-update` and a project-confined PCM16 file to a typed operation. It also asserts that
+   a caller-selected `--subprotocol` remains an unknown flag.
+2. `TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage` requires the checker to
+   recognize `covered_by.websocket_session` by its operation ID and an implemented closed session
+   command.
+3. `TestSyncBundleDerivesClosedWebSocketSessionCommand` requires `surface-sync` to derive the
+   operation endpoint, exact redacted policy, and the only two session inputs, rather than relying
+   on hand-authored metadata.
+
+The frame-boundary test was also extended before code: `max_frame_bytes: 1` must be rejected because
+the fixed runner sends the two-byte normal-close code.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestRunImplementedWebSocketSessionCommand$'
+# polymetrics.ai/internal/connectors/commandrunner [polymetrics.ai/internal/connectors/commandrunner.test]
+internal/connectors/commandrunner/runner_test.go:36:42: undefined: connectors.OperationWebSocketSessionRequest
+internal/connectors/commandrunner/runner_test.go:38:42: undefined: connectors.OperationWebSocketSessionMetadata
+internal/connectors/commandrunner/runner_test.go:193:85: undefined: connectors.OperationWebSocketSessionRequest
+internal/connectors/commandrunner/runner_test.go:193:131: undefined: connectors.OperationWebSocketSessionResult
+internal/connectors/commandrunner/runner_test.go:196:21: undefined: connectors.OperationWebSocketSessionResult
+internal/connectors/commandrunner/runner_test.go:198:20: undefined: connectors.OperationWebSocketSessionResult
+internal/connectors/commandrunner/runner_test.go:216:89: undefined: connectors.OperationWebSocketSessionMetadata
+internal/connectors/commandrunner/runner_test.go:218:21: undefined: connectors.OperationWebSocketSessionMetadata
+internal/connectors/commandrunner/runner_test.go:1933:12: result.WebSocketSession undefined (type Result has no field or method WebSocketSession)
+FAIL	polymetrics.ai/internal/connectors/commandrunner [build failed]
+FAIL
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleRejectsUnsafeWebSocketSessionContracts/frame_cannot_hold_required_close_code$'
+--- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts (0.00s)
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/frame_cannot_hold_required_close_code (0.00s)
+        websocket_session_test.go:124: Load unsafe websocket session contract = <nil>, want error containing "websocket_session max_frame_bytes must allow the required close code"
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.702s
+FAIL
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage|TestSyncBundleDerivesClosedWebSocketSessionCommand)$'
+--- FAIL: TestSyncBundleDerivesClosedWebSocketSessionCommand (0.00s)
+    surfacesync_test.go:424: sync stats = {Filled:api_surface=0 output_policy=0 flag_maps_to=0 flag_derived=0 rest.max_bytes=0 Corrected:api_surface=0 output_policy=0 flag_maps_to=0 flag_derived=0 rest.max_bytes=0}, want endpoint/policy/two closed flags
+--- FAIL: TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage (0.00s)
+    validate_surface_test.go:87: checkAPISurface rejected closed websocket-session coverage: [{Connector:acme File:api_surface.json Rule:surface_coverage Message:endpoint 0 (GET /live) has no classifier}]
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.700s
+FAIL
+```
+
+All fixtures are local and synthetic. The command test writes four PCM16 bytes under `t.TempDir()`;
+it does not open a provider connection or reveal a credential, token-derived value, transcript,
+signed URL, raw authorization header, or audio recording.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or

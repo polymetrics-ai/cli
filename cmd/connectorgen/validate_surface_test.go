@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -32,6 +33,62 @@ func TestCheckAPISurface_POSTDirectReadDoesNotRequireWriteCapability(t *testing.
 
 	if findings := checkAPISurface(b); len(findings) != 0 {
 		t.Fatalf("checkAPISurface rejected POST direct read with write disabled: %+v", findings)
+	}
+}
+
+func TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true, Write: false},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/live",
+				CoveredBy: &engine.SurfaceCoverage{WebSocketSession: "acme.live_scribe"},
+			}},
+		},
+		Operations: []engine.OperationSpec{{
+			ID:           "acme.live_scribe",
+			Kind:         "websocket_session",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			WebSocket: &engine.WebSocketSessionSpec{
+				Method:         "GET",
+				Path:           "/live",
+				Subprotocol:    "fixture-live",
+				MaxInputBytes:  1024,
+				MaxOutputBytes: 1024,
+				MaxFrameBytes:  128,
+				SessionUpdateSchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["type"],
+					"properties":{"type":{"type":"string","enum":["session.update"]}}
+				}`),
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "live scribe",
+			Intent:       "websocket_session",
+			Availability: "implemented",
+			Operation:    "acme.live_scribe",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/live"}},
+			OutputPolicy: "json_redacted",
+			Flags: []engine.CLIFlag{
+				{Name: "session-update", Type: "json_object", MapsTo: "body", Required: true},
+				{Name: "audio-file", Type: "string", MapsTo: "input.pcm16_file", Required: true},
+			},
+		}}},
+	}
+
+	if findings := checkAPISurface(b); len(findings) != 0 {
+		t.Fatalf("checkAPISurface rejected closed websocket-session coverage: %+v", findings)
+	}
+	if findings := checkCLISurface(b); len(findings) != 0 {
+		t.Fatalf("checkCLISurface rejected closed websocket-session command: %+v", findings)
 	}
 }
 

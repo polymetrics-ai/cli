@@ -387,6 +387,69 @@ func TestSyncBundleRemovesOutputPolicyFromBinaryDownload(t *testing.T) {
 	}
 }
 
+// A websocket session's fixed endpoint, redacted policy, and only two inputs
+// are declaration-owned. surface-sync must derive all of them so an author
+// cannot hand-copy a generic transport control into cli_surface.json.
+func TestSyncBundleDerivesClosedWebSocketSessionCommand(t *testing.T) {
+	cli := map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
+		"path":         "live scribe",
+		"intent":       "websocket_session",
+		"availability": "implemented",
+		"operation":    "acme.live_scribe",
+	}}}
+	ops := map[string]any{"operations": []any{map[string]any{
+		"id":            "acme.live_scribe",
+		"kind":          "websocket_session",
+		"output_policy": "json_redacted",
+		"websocket": map[string]any{
+			"method":           "GET",
+			"path":             "/live",
+			"subprotocol":      "fixture-live",
+			"max_input_bytes":  1024,
+			"max_output_bytes": 1024,
+			"max_frame_bytes":  128,
+			"session_update_schema": map[string]any{
+				"type": "object", "additionalProperties": false,
+				"properties": map[string]any{"type": map[string]any{"type": "string"}},
+			},
+		},
+	}}}
+	dir := writeSyncBundle(t, cli, ops)
+
+	stats, err := syncBundle(dir, false)
+	if err != nil {
+		t.Fatalf("syncBundle: %v", err)
+	}
+	if stats.Filled.APISurface != 1 || stats.Filled.OutputPolicy != 1 || stats.Filled.FlagDerived != 2 {
+		t.Fatalf("sync stats = %+v, want endpoint/policy/two closed flags", stats)
+	}
+	command := readSyncedCommand(t, dir)
+	if got := command["output_policy"]; got != "json_redacted" {
+		t.Fatalf("output_policy = %v, want json_redacted", got)
+	}
+	if got := command["api_surface"]; !endpointPathIs(got, "/live") {
+		t.Fatalf("api_surface = %v, want GET /live", got)
+	}
+	flags, ok := command["flags"].([]any)
+	if !ok || len(flags) != 2 {
+		t.Fatalf("flags = %#v, want two closed session inputs", command["flags"])
+	}
+	seen := map[string]map[string]any{}
+	for _, raw := range flags {
+		flag, ok := raw.(map[string]any)
+		if !ok {
+			t.Fatalf("flag = %#v, want object", raw)
+		}
+		seen[flag["name"].(string)] = flag
+	}
+	if got := seen["session-update"]; got["type"] != "json_object" || got["maps_to"] != "body" || got["required"] != true {
+		t.Fatalf("session-update flag = %#v, want required root JSON object", got)
+	}
+	if got := seen["audio-file"]; got["type"] != "string" || got["maps_to"] != "input.pcm16_file" || got["required"] != true {
+		t.Fatalf("audio-file flag = %#v, want required bounded PCM16 file", got)
+	}
+}
+
 // A present but non-positive rest.max_bytes is unusable, so it is corrected; a
 // positive one is the operation's own declaration and is left alone.
 func TestSyncBundleMaxBytesFillsAndCorrects(t *testing.T) {
