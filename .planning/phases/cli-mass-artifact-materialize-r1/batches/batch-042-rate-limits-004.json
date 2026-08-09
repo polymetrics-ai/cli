@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 120,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "feishu",
+      "state": "unknown",
+      "file": "internal/connectors/defs/feishu/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fillout",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fillout/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "finage",
+      "state": "unknown",
+      "file": "internal/connectors/defs/finage/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "finnhub",
+      "state": "unknown",
+      "file": "internal/connectors/defs/finnhub/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "finnworlds",
+      "state": "unknown",
+      "file": "internal/connectors/defs/finnworlds/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "firehydrant",
+      "state": "unknown",
+      "file": "internal/connectors/defs/firehydrant/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fleetio",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fleetio/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "flexmail",
+      "state": "unknown",
+      "file": "internal/connectors/defs/flexmail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "flexport",
+      "state": "unknown",
+      "file": "internal/connectors/defs/flexport/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "float",
+      "state": "unknown",
+      "file": "internal/connectors/defs/float/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "flowlu",
+      "state": "unknown",
+      "file": "internal/connectors/defs/flowlu/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "formbricks",
+      "state": "unknown",
+      "file": "internal/connectors/defs/formbricks/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "free-agent-connector",
+      "state": "unknown",
+      "file": "internal/connectors/defs/free-agent-connector/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshbooks",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshbooks/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshcaller",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshcaller/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshchat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshchat/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshdesk",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshdesk/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshsales",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshsales/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "freshservice",
+      "state": "unknown",
+      "file": "internal/connectors/defs/freshservice/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "front",
+      "state": "unknown",
+      "file": "internal/connectors/defs/front/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fulcrum",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fulcrum/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fullstory",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fullstory/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "genesys",
+      "state": "unknown",
+      "file": "internal/connectors/defs/genesys/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "getgist",
+      "state": "unknown",
+      "file": "internal/connectors/defs/getgist/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "getlago",
+      "state": "unknown",
+      "file": "internal/connectors/defs/getlago/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "giphy",
+      "state": "unknown",
+      "file": "internal/connectors/defs/giphy/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gitbook",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gitbook/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "github",
+      "state": "unknown",
+      "file": "internal/connectors/defs/github/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gitlab",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gitlab/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "glassfrog",
+      "state": "unknown",
+      "file": "internal/connectors/defs/glassfrog/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gmail",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gmail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gnews",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gnews/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gocardless",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gocardless/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gologin",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gologin/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gong",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gong/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-ads",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-ads/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-analytics-data-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-analytics-data-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-calendar",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-calendar/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-classroom",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-classroom/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-directory",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-directory/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider operation source https://developers.insightful.io/api/collections/10755095/Szzq4Eoa?environment=10754747-cee77158-1d26-446e-a4ab-fe597277f032\u0026segregateAuth=true\u0026versionTag=latest (retrieved 2026-08-06) does not publish a complete enforceable rate-limit policy in the retained source: selector, non-secret scope, budget, and replenishment model are not all documented. No numeric rate or bucket model is declared."
+}

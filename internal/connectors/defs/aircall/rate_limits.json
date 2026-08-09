@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.aircall.io/api-references (retrieved 2026-08-06): Aircall documents 120 requests per minute per company, but this bundle has no non-secret company scope property."
+}

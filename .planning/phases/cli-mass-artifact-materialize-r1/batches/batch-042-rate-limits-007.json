@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 240,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "newsdata",
+      "state": "unknown",
+      "file": "internal/connectors/defs/newsdata/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "newsdata-io",
+      "state": "unknown",
+      "file": "internal/connectors/defs/newsdata-io/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nexiopay",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nexiopay/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nocrm",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nocrm/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "northpass-lms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/northpass-lms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "notion",
+      "state": "unknown",
+      "file": "internal/connectors/defs/notion/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nutshell",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nutshell/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nylas",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nylas/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "nytimes",
+      "state": "unknown",
+      "file": "internal/connectors/defs/nytimes/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "okta",
+      "state": "unknown",
+      "file": "internal/connectors/defs/okta/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "omnisend",
+      "state": "unknown",
+      "file": "internal/connectors/defs/omnisend/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "oncehub",
+      "state": "unknown",
+      "file": "internal/connectors/defs/oncehub/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "onepagecrm",
+      "state": "unknown",
+      "file": "internal/connectors/defs/onepagecrm/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "onesignal",
+      "state": "unknown",
+      "file": "internal/connectors/defs/onesignal/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "open-exchange-rates",
+      "state": "unknown",
+      "file": "internal/connectors/defs/open-exchange-rates/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "openaq",
+      "state": "unknown",
+      "file": "internal/connectors/defs/openaq/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "openweather",
+      "state": "unknown",
+      "file": "internal/connectors/defs/openweather/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "opinion-stage",
+      "state": "unknown",
+      "file": "internal/connectors/defs/opinion-stage/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "orb",
+      "state": "unknown",
+      "file": "internal/connectors/defs/orb/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "oura",
+      "state": "unknown",
+      "file": "internal/connectors/defs/oura/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "outbrain-amplify",
+      "state": "unknown",
+      "file": "internal/connectors/defs/outbrain-amplify/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "outreach",
+      "state": "unknown",
+      "file": "internal/connectors/defs/outreach/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "oveit",
+      "state": "unknown",
+      "file": "internal/connectors/defs/oveit/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pabbly-subscriptions-billing",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pabbly-subscriptions-billing/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "paddle",
+      "state": "unknown",
+      "file": "internal/connectors/defs/paddle/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pagerduty",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pagerduty/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pandadoc",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pandadoc/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "papersign",
+      "state": "unknown",
+      "file": "internal/connectors/defs/papersign/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pardot",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pardot/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "partnerize",
+      "state": "unknown",
+      "file": "internal/connectors/defs/partnerize/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "payfit",
+      "state": "unknown",
+      "file": "internal/connectors/defs/payfit/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "paypal-transaction",
+      "state": "unknown",
+      "file": "internal/connectors/defs/paypal-transaction/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "paystack",
+      "state": "unknown",
+      "file": "internal/connectors/defs/paystack/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pendo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pendo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pennylane",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pennylane/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "perigon",
+      "state": "unknown",
+      "file": "internal/connectors/defs/perigon/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "perk",
+      "state": "unknown",
+      "file": "internal/connectors/defs/perk/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "persistiq",
+      "state": "unknown",
+      "file": "internal/connectors/defs/persistiq/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "persona",
+      "state": "unknown",
+      "file": "internal/connectors/defs/persona/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pexels-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pexels-api/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

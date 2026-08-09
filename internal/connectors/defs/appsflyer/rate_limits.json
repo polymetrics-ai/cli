@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://support.appsflyer.com/hc/en-us/articles/207034366-Report-generation-quotas-rate-limitations (retrieved 2026-08-06): AppsFlyer quotas vary by subscription, report type, app, account, agency or advertiser role, and date-range shape beyond the available selectors."
+}

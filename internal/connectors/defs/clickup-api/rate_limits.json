@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.clickup.com/docs/rate-limits (retrieved 2026-08-06): ClickUp applies token-scoped limits that vary by workspace plan; the bundle has no non-secret token or workspace-plan selector."
+}

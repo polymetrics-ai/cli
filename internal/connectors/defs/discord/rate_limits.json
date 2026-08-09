@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.discord.com/developers/topics/rate-limits (retrieved 2026-08-06): Discord requires response-derived route buckets and uses credential- and resource-scoped limits that this bundle cannot represent safely."
+}

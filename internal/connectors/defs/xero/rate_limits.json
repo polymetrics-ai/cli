@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.xero.com/documentation/best-practices/api-call-efficiencies/rate-limits (retrieved 2026-08-06): Xero's published tenant limits require the tenant identifier, but tenant_id is secret and the bundle has no non-secret equivalent scope property."
+}

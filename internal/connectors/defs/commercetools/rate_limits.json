@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.commercetools.com/api/limits (retrieved 2026-08-06): commercetools documents project resource limits but does not publish an enumerable HTTP request-rate policy for this API bundle."
+}

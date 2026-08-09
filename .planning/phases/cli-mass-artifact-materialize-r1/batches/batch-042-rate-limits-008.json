@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 280,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "picqer",
+      "state": "unknown",
+      "file": "internal/connectors/defs/picqer/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pingdom",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pingdom/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pinterest",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pinterest/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pipedrive",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pipedrive/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pipeliner",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pipeliner/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "plaid",
+      "state": "unknown",
+      "file": "internal/connectors/defs/plaid/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "planhat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/planhat/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "plausible",
+      "state": "unknown",
+      "file": "internal/connectors/defs/plausible/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pokeapi",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pokeapi/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "polygon-stock-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/polygon-stock-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "poplar",
+      "state": "unknown",
+      "file": "internal/connectors/defs/poplar/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "postmarkapp",
+      "state": "unknown",
+      "file": "internal/connectors/defs/postmarkapp/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "prestashop",
+      "state": "unknown",
+      "file": "internal/connectors/defs/prestashop/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pretix",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pretix/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "printify",
+      "state": "unknown",
+      "file": "internal/connectors/defs/printify/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "productboard",
+      "state": "unknown",
+      "file": "internal/connectors/defs/productboard/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "productive",
+      "state": "unknown",
+      "file": "internal/connectors/defs/productive/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pylon",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pylon/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "pypi",
+      "state": "unknown",
+      "file": "internal/connectors/defs/pypi/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "qualaroo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/qualaroo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "railz",
+      "state": "unknown",
+      "file": "internal/connectors/defs/railz/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rd-station-marketing",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rd-station-marketing/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "recharge",
+      "state": "unknown",
+      "file": "internal/connectors/defs/recharge/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "recreation",
+      "state": "unknown",
+      "file": "internal/connectors/defs/recreation/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "recruitee",
+      "state": "unknown",
+      "file": "internal/connectors/defs/recruitee/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "recurly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/recurly/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "reddit",
+      "state": "unknown",
+      "file": "internal/connectors/defs/reddit/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "referralhero",
+      "state": "unknown",
+      "file": "internal/connectors/defs/referralhero/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rentcast",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rentcast/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "repairshopr",
+      "state": "unknown",
+      "file": "internal/connectors/defs/repairshopr/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "reply-io",
+      "state": "unknown",
+      "file": "internal/connectors/defs/reply-io/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "retailexpress-by-maropost",
+      "state": "unknown",
+      "file": "internal/connectors/defs/retailexpress-by-maropost/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "retently",
+      "state": "unknown",
+      "file": "internal/connectors/defs/retently/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "revenuecat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/revenuecat/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "revolut-merchant",
+      "state": "unknown",
+      "file": "internal/connectors/defs/revolut-merchant/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ringcentral",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ringcentral/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rki-covid",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rki-covid/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rocketlane",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rocketlane/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rollbar",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rollbar/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "rootly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/rootly/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

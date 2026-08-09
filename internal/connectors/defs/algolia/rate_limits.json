@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://www.algolia.com/doc/guides/security/api-keys/in-depth/api-key-restrictions (retrieved 2026-08-06): Algolia rate limits are optional values configured on individual API keys and can be unlimited, so there is no provider-default budget to declare."
+}

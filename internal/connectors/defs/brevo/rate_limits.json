@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.brevo.com/docs/api-limits (retrieved 2026-08-06): Brevo publishes endpoint- and account-tier-specific limits, but this bundle has no tier selector and no safe universal budget."
+}

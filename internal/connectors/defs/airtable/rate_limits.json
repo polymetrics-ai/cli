@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://support.airtable.com/v1/docs/airtable-api-common-troubleshooting (retrieved 2026-08-06): Airtable's documented budget is per base, which the declaration scope vocabulary cannot express."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.okta.com/docs/reference/rl-global-mgmt/ (retrieved 2026-08-06): Okta publishes organization and endpoint-specific buckets whose applicable values are exposed by the rate-limit dashboard; the bundle has no enumerable endpoint policy mapping."
+}

@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -396,6 +397,46 @@ func TestProductionDefinitionsEmbedEveryRateLimitDeclaration(t *testing.T) {
 		}
 		if _, err := fs.ReadFile(defs.FS, name); err != nil {
 			t.Errorf("production defs.FS omits %s: add it to defs.go's embed pattern with this declaration: %v", name, err)
+		}
+	}
+}
+
+func TestEverySweepTargetLoadsRateLimitDeclaration(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller: locate bundle test source")
+	}
+	targetPath := filepath.Clean(filepath.Join(
+		filepath.Dir(thisFile), "..", "..", "..",
+		".planning", "phases", "cli-mass-artifact-materialize-r1", "TARGET-LEDGER.json",
+	))
+	raw, err := os.ReadFile(targetPath)
+	if err != nil {
+		t.Fatalf("read 426 target ledger: %v", err)
+	}
+	var ledger struct {
+		Targets []struct {
+			Connector string `json:"connector"`
+		} `json:"targets"`
+	}
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode 426 target ledger: %v", err)
+	}
+	if got, want := len(ledger.Targets), 426; got != want {
+		t.Fatalf("target ledger count = %d, want %d", got, want)
+	}
+	seen := make(map[string]bool, len(ledger.Targets))
+	for _, target := range ledger.Targets {
+		if target.Connector == "" || seen[target.Connector] {
+			t.Fatalf("target ledger has an invalid or duplicate connector %q", target.Connector)
+		}
+		seen[target.Connector] = true
+		bundle, err := Load(defs.FS, target.Connector)
+		if err != nil {
+			t.Fatalf("production bundle %q must load with its rate-limit declaration: %v", target.Connector, err)
+		}
+		if bundle.RateLimits == nil {
+			t.Fatalf("production bundle %q has no rate_limits.json declaration", target.Connector)
 		}
 	}
 }

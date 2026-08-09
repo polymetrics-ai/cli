@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "policies": [
+    {
+      "id": "general-account",
+      "source": {
+        "url": "https://help.getharvest.com/api-v2/introduction/overview/general/",
+        "retrieved_at": "2026-08-06"
+      },
+      "selector": {
+        "all": true
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "account_id"
+      },
+      "budgets": [
+        {
+          "model": "sliding_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 100,
+          "window_seconds": 15
+        }
+      ]
+    }
+  ]
+}

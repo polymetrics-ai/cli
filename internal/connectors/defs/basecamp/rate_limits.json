@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://github.com/basecamp/bc3-api (retrieved 2026-08-06): Basecamp documents dynamic limits keyed by client IP, but the bundle has no non-secret IP scope property."
+}

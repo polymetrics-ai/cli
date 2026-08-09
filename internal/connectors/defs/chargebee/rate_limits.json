@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://apidocs.chargebee.com/docs/api/error-handling (retrieved 2026-08-06): Chargebee limits vary by site plan and can be customized, while the bundle has no non-secret plan selector."
+}

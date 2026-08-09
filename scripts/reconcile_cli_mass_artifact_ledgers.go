@@ -83,6 +83,28 @@ type SurfaceProvenance struct {
 	SourceURL string `json:"source_url"`
 }
 
+// RateLimitDeclaration is deliberately the compact ledger-facing projection
+// of the schema-loaded bundle declaration. The engine remains the authority
+// for full schema and policy validation; this reconciler accounts for the
+// required one-file-per-target partition and retains the provider citations.
+type RateLimitDeclaration struct {
+	SchemaVersion int                     `json:"schema_version"`
+	State         string                  `json:"state"`
+	Reason        string                  `json:"reason"`
+	Policies      []RateLimitLedgerPolicy `json:"policies"`
+}
+
+type RateLimitLedgerPolicy struct {
+	ID     string                `json:"id"`
+	Source RateLimitLedgerSource `json:"source"`
+}
+
+type RateLimitLedgerSource struct {
+	URL         string `json:"url"`
+	RetrievedAt string `json:"retrieved_at"`
+	Version     string `json:"version"`
+}
+
 type BatchEvent struct {
 	Connector         string `json:"connector"`
 	State             string `json:"state"`
@@ -188,6 +210,7 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 	}
 
 	surfaces := make(map[string]Surface, len(targets.Targets))
+	rateLimits := make(map[string]RateLimitDeclaration, len(targets.Targets))
 	v2 := make(map[string]bool, len(targets.Targets))
 	for _, target := range targets.Targets {
 		var surface Surface
@@ -196,6 +219,15 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 			return buildResult{}, fmt.Errorf("read current surface for %q: %w", target.Connector, err)
 		}
 		surfaces[target.Connector] = surface
+		var declaration RateLimitDeclaration
+		rateLimitPath := filepath.Join(opts.DefsRoot, target.Connector, "rate_limits.json")
+		if err := readJSON(rateLimitPath, &declaration); err != nil {
+			return buildResult{}, fmt.Errorf("read rate-limit declaration for %q: %w", target.Connector, err)
+		}
+		if err := validateRateLimitDeclarationForLedger(declaration); err != nil {
+			return buildResult{}, fmt.Errorf("rate-limit declaration for %q: %w", target.Connector, err)
+		}
+		rateLimits[target.Connector] = declaration
 		if surface.OperationLedgerVersion == 2 {
 			v2[target.Connector] = true
 		}
@@ -221,21 +253,27 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 	queued := make([]map[string]any, 0, len(targets.Targets)-len(materialized))
 	resolved := make([]map[string]any, 0, len(materialized))
 	counts := map[string]int{
-		"already_complete":   0,
-		"recovered_pilot":    0,
-		"recovered_seven":    0,
-		"newly_materialized": 0,
-		"materialized_total": 0,
-		"reachable":          0,
-		"foundation_pending": 0,
-		"genuinely_blocked":  0,
-		"retry_pending":      0,
-		"remaining":          0,
-		"target_total":       len(targets.Targets),
+		"already_complete":           0,
+		"recovered_pilot":            0,
+		"recovered_seven":            0,
+		"newly_materialized":         0,
+		"materialized_total":         0,
+		"reachable":                  0,
+		"foundation_pending":         0,
+		"genuinely_blocked":          0,
+		"retry_pending":              0,
+		"remaining":                  0,
+		"rate_limits_declared":       0,
+		"rate_limits_unknown":        0,
+		"rate_limits_not_applicable": 0,
+		"rate_limits_file_total":     0,
+		"target_total":               len(targets.Targets),
 	}
 
 	for _, target := range sortedTargets(targets.Targets) {
 		source := targetSource(target)
+		rateLimit := rateLimitLedgerEvidence(target.Connector, rateLimits[target.Connector])
+		incrementRateLimitCounts(counts, rateLimits[target.Connector].State)
 		connectorEvents := eventsByName[target.Connector]
 		reports := uniqueEventEvidence(connectorEvents)
 		if materialized[target.Connector] {
@@ -262,6 +300,7 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 				"foundation_pending": foundationPending,
 				"evidence":           evidence,
 				"source":             source,
+				"rate_limits":        rateLimit,
 				"provenance_reports": reports,
 			}
 			if v2[target.Connector] {
@@ -277,6 +316,7 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 			resolved = append(resolved, map[string]any{
 				"connector":          target.Connector,
 				"primary_source":     source,
+				"rate_limits":        rateLimit,
 				"provenance_reports": reports,
 				"resolved_by": map[string]any{
 					"state":    state,
@@ -300,6 +340,7 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 		queueEntry := map[string]any{
 			"connector":          target.Connector,
 			"primary_source":     source,
+			"rate_limits":        rateLimit,
 			"primary_attempt":    primaryAttempt,
 			"official_routes":    retryRoutes(attempts),
 			"retry_attempts":     attempts,
@@ -315,6 +356,7 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 			"stage":              primaryAttempt["stage"],
 			"reason":             primaryAttempt["reason"],
 			"source":             source,
+			"rate_limits":        rateLimit,
 			"provenance_reports": reports,
 		})
 	}
@@ -327,38 +369,43 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 	}
 
 	materialization := map[string]any{
-		"schema_version":        1,
-		"target_manifest":       "TARGET-LEDGER.json",
-		"target_total":          len(targets.Targets),
-		"reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
-		"counts":                withoutTargetTotal(counts),
-		"entries":               entries,
+		"schema_version":           1,
+		"target_manifest":          "TARGET-LEDGER.json",
+		"rate_limit_source_ledger": "RATE-LIMIT-SOURCE-LEDGER.json",
+		"target_total":             len(targets.Targets),
+		"reconstruction_report":    "LEDGER-RECONSTRUCTION-20260809.json",
+		"counts":                   withoutTargetTotal(counts),
+		"entries":                  entries,
 	}
 	retryQueue := map[string]any{
-		"schema_version":        1,
-		"authority":             authority,
-		"target_manifest":       "TARGET-LEDGER.json",
-		"reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
-		"queue":                 queued,
-		"resolved":              resolved,
+		"schema_version":           1,
+		"authority":                authority,
+		"target_manifest":          "TARGET-LEDGER.json",
+		"rate_limit_source_ledger": "RATE-LIMIT-SOURCE-LEDGER.json",
+		"reconstruction_report":    "LEDGER-RECONSTRUCTION-20260809.json",
+		"queue":                    queued,
+		"resolved":                 resolved,
 	}
 	runState := map[string]any{
-		"phase":                 "cli-mass-artifact-materialize-r1",
-		"authority":             authority,
-		"execution_mode":        "inline_manual_gsd_fallback_single_worker",
-		"state":                 "materializing",
-		"target_total":          len(targets.Targets),
-		"counts":                withoutTargetTotal(counts),
-		"reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
+		"phase":                    "cli-mass-artifact-materialize-r1",
+		"authority":                authority,
+		"execution_mode":           "inline_manual_gsd_fallback_single_worker",
+		"state":                    "materializing",
+		"target_total":             len(targets.Targets),
+		"counts":                   withoutTargetTotal(counts),
+		"rate_limit_source_ledger": "RATE-LIMIT-SOURCE-LEDGER.json",
+		"reconstruction_report":    "LEDGER-RECONSTRUCTION-20260809.json",
 	}
 	report := map[string]any{
 		"schema_version": 1,
 		"authority":      authority,
 		"inputs": map[string]any{
-			"target_manifest":         "TARGET-LEDGER.json",
-			"reconciliation_outcomes": "reconciled-complete-outcomes.json",
-			"batch_report_files":      eventFiles,
-			"current_defs_root":       filepath.ToSlash(opts.DefsRoot),
+			"target_manifest":          "TARGET-LEDGER.json",
+			"rate_limit_source_ledger": "RATE-LIMIT-SOURCE-LEDGER.json",
+			"rate_limit_file_pattern":  "internal/connectors/defs/<connector>/rate_limits.json",
+			"reconciliation_outcomes":  "reconciled-complete-outcomes.json",
+			"batch_report_files":       eventFiles,
+			"current_defs_root":        filepath.ToSlash(opts.DefsRoot),
 		},
 		"v2_bundle_count": len(v2),
 		"recovered_seven": sortedRecoveredSeven(),
@@ -370,6 +417,8 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 			"queue_entries":                                len(queued),
 			"resolved_entries":                             len(resolved),
 			"lost_provenance":                              false,
+			"rate_limits_file_total":                       counts["rate_limits_file_total"],
+			"rate_limits_declared_plus_unknown_plus_not_applicable": counts["rate_limits_declared"] + counts["rate_limits_unknown"] + counts["rate_limits_not_applicable"],
 		},
 	}
 	return buildResult{Materialization: materialization, RetryQueue: retryQueue, RunState: runState, Report: report, Counts: counts}, nil
@@ -563,6 +612,73 @@ func reachabilityFromEvents(events []BatchEvent) string {
 	return "pending_static_gate"
 }
 
+func validateRateLimitDeclarationForLedger(declaration RateLimitDeclaration) error {
+	if declaration.SchemaVersion != 1 {
+		return fmt.Errorf("schema_version = %d, want 1", declaration.SchemaVersion)
+	}
+	switch declaration.State {
+	case "declared":
+		if len(declaration.Policies) == 0 {
+			return errors.New("declared state has no policies")
+		}
+		for index, policy := range declaration.Policies {
+			if strings.TrimSpace(policy.ID) == "" {
+				return fmt.Errorf("declared policy %d has no id", index)
+			}
+			if strings.TrimSpace(policy.Source.URL) == "" || strings.TrimSpace(policy.Source.RetrievedAt) == "" {
+				return fmt.Errorf("declared policy %q has no provider source citation", policy.ID)
+			}
+		}
+	case "unknown", "not_applicable":
+		if strings.TrimSpace(declaration.Reason) == "" {
+			return fmt.Errorf("%s state has no precise reason", declaration.State)
+		}
+		if len(declaration.Policies) != 0 {
+			return fmt.Errorf("%s state must not carry policies", declaration.State)
+		}
+	default:
+		return fmt.Errorf("state %q is not declared, unknown, or not_applicable", declaration.State)
+	}
+	return nil
+}
+
+func rateLimitLedgerEvidence(connector string, declaration RateLimitDeclaration) map[string]any {
+	evidence := map[string]any{
+		"file":  filepath.ToSlash(filepath.Join("internal/connectors/defs", connector, "rate_limits.json")),
+		"state": declaration.State,
+	}
+	if declaration.Reason != "" {
+		evidence["reason"] = declaration.Reason
+	}
+	if len(declaration.Policies) != 0 {
+		policies := make([]map[string]any, 0, len(declaration.Policies))
+		for _, policy := range declaration.Policies {
+			policies = append(policies, map[string]any{
+				"id": policy.ID,
+				"source": map[string]string{
+					"url":          policy.Source.URL,
+					"retrieved_at": policy.Source.RetrievedAt,
+					"version":      policy.Source.Version,
+				},
+			})
+		}
+		evidence["policy_sources"] = policies
+	}
+	return evidence
+}
+
+func incrementRateLimitCounts(counts map[string]int, state string) {
+	counts["rate_limits_file_total"]++
+	switch state {
+	case "declared":
+		counts["rate_limits_declared"]++
+	case "unknown":
+		counts["rate_limits_unknown"]++
+	case "not_applicable":
+		counts["rate_limits_not_applicable"]++
+	}
+}
+
 func assertCounts(counts map[string]int) error {
 	if counts["materialized_total"] != counts["already_complete"]+counts["recovered_pilot"]+counts["recovered_seven"]+counts["newly_materialized"] {
 		return errors.New("materialized count components do not sum to materialized_total")
@@ -572,6 +688,12 @@ func assertCounts(counts map[string]int) error {
 	}
 	if counts["remaining"] != counts["retry_pending"] {
 		return errors.New("remaining must equal retry_pending while genuinely_blocked is zero")
+	}
+	if counts["rate_limits_file_total"] != counts["target_total"] {
+		return fmt.Errorf("rate-limit file total failed: %d files != %d targets", counts["rate_limits_file_total"], counts["target_total"])
+	}
+	if counts["rate_limits_declared"]+counts["rate_limits_unknown"]+counts["rate_limits_not_applicable"] != counts["target_total"] {
+		return fmt.Errorf("rate-limit state conservation failed: %d declared + %d unknown + %d not_applicable != %d targets", counts["rate_limits_declared"], counts["rate_limits_unknown"], counts["rate_limits_not_applicable"], counts["target_total"])
 	}
 	return nil
 }

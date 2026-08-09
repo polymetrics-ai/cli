@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.cisco.com/meraki/api-v1/rate-limit/ (retrieved 2026-08-06): Cisco Meraki documents organization and source-IP limits, but this bundle has neither a non-secret organization identifier nor a source-IP subject."
+}
