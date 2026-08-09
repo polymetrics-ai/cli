@@ -10,6 +10,10 @@ Every reconciled target retains one provider-cited `rate_limits.json`. The exist
 
 Required skills loaded: `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, and `golang-structs-interfaces`.
 
+## Recovered pipeline checkpoint reconciliation (2026-08-10)
+
+Before replay, the pipeline-only head was preserved at `origin/preserve/cli-mass-artifact-materialize-pipeline-20260810` (`858b72e0`). Its checkpoint commits `358d0632` and `318f3638` describe the same 194-target checkpoint and final 426-target ledger partition already represented by `ba950a91` and `620d509a` on the remote branch. Their conflicts are limited to an older copy of the reconciliation code and phase record; the retained branch carries the later rate-limit accounting, bounded reference parsing, and promoted-native command-surface repair. The final aggregate indexes are regenerated from the reconciled bundle set, while the preservation branch remains the durable source for the original pipeline history.
+
 ## Slices
 
 1. Build a deterministic 426-target ledger by reconciling `main`, this recovered branch, the four pilots, and the seven-connector extraction branch. Preserve exact source/provenance and one accounting state per target; primary-source drops enter the explicit retry queue rather than becoming terminal.
