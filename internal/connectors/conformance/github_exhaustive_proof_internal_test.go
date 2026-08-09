@@ -21,7 +21,10 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-var githubProviderPathParam = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+var (
+	githubProviderPathParam   = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+	githubProviderGraphQLRoot = regexp.MustCompile(`\{\s*([A-Za-z_][A-Za-z0-9_]*)`)
+)
 
 type githubProviderDoubleReport struct {
 	SchemaVersion  int                             `json:"schema_version"`
@@ -224,6 +227,28 @@ func runGitHubExhaustiveProviderDouble(t *testing.T) (githubProviderDoubleReport
 		}
 	}
 	return report, nil
+}
+
+func githubSourceLockedGraphQLRootCount(t *testing.T) int {
+	t.Helper()
+	raw, err := os.ReadFile("../defs/github/sources/github-operation-source-lock.json")
+	if err != nil {
+		t.Fatalf("read GitHub source lock: %v", err)
+	}
+	var lock struct {
+		Counts struct {
+			Query    int `json:"graphql_query"`
+			Mutation int `json:"graphql_mutation"`
+		} `json:"counts"`
+	}
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatalf("decode GitHub source lock: %v", err)
+	}
+	count := lock.Counts.Query + lock.Counts.Mutation
+	if count <= 0 {
+		t.Fatalf("GitHub source lock GraphQL root count = %d, want positive", count)
+	}
+	return count
 }
 
 func githubStreamHasCommand(b engine.Bundle, name string) bool {
@@ -451,6 +476,93 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 	}
 }
 
+// syntheticGraphQLVariables materializes only declaration-owned values for a
+// fixed GraphQL operation.  It deliberately omits the cursor variable: the
+// direct-read executor alone owns that opaque value through page-cursor.
+func syntheticGraphQLVariables(operation engine.OperationSpec) (map[string]any, error) {
+	if operation.GraphQL == nil {
+		return nil, fmt.Errorf("GraphQL operation has no declaration")
+	}
+	var root struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(operation.GraphQL.VariablesSchema, &root); err != nil {
+		return nil, fmt.Errorf("decode fixed GraphQL variables schema: %w", err)
+	}
+	variables := make(map[string]any, len(root.Properties))
+	names := make([]string, 0, len(root.Properties))
+	for name := range root.Properties {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if operation.GraphQL.Pagination != nil && name == operation.GraphQL.Pagination.CursorVariable {
+			continue
+		}
+		variables[name] = syntheticGraphQLSchemaValue(root.Properties[name], name)
+	}
+	return variables, nil
+}
+
+// syntheticGraphQLSchemaValue differs from the older write-fixture helper in
+// one important way: an empty closed object stays empty.  Adding a fallback
+// "name" property would be an undeclared input and must fail the exact schema
+// which this provider-double path is meant to exercise.
+func syntheticGraphQLSchemaValue(raw json.RawMessage, field string) any {
+	var schema map[string]json.RawMessage
+	if json.Unmarshal(raw, &schema) != nil {
+		return syntheticFieldValue(field)
+	}
+	var enum []any
+	if json.Unmarshal(schema["enum"], &enum) == nil && len(enum) > 0 {
+		return enum[0]
+	}
+	var union []json.RawMessage
+	for _, key := range []string{"oneOf", "anyOf"} {
+		if json.Unmarshal(schema[key], &union) == nil && len(union) > 0 {
+			return syntheticGraphQLSchemaValue(union[0], field)
+		}
+	}
+	var kind string
+	_ = json.Unmarshal(schema["type"], &kind)
+	var format string
+	_ = json.Unmarshal(schema["format"], &format)
+	switch kind {
+	case "integer":
+		return 1
+	case "number":
+		return 1
+	case "boolean":
+		return true
+	case "string":
+		if format == "uri" {
+			return "https://provider-double.invalid/resource"
+		}
+		return "provider-double"
+	case "array":
+		var items json.RawMessage
+		if json.Unmarshal(schema["items"], &items) == nil && len(items) > 0 {
+			return []any{syntheticGraphQLSchemaValue(items, field)}
+		}
+		return []any{}
+	case "object":
+		var properties map[string]json.RawMessage
+		_ = json.Unmarshal(schema["properties"], &properties)
+		out := make(map[string]any, len(properties))
+		names := make([]string, 0, len(properties))
+		for name := range properties {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			out[name] = syntheticGraphQLSchemaValue(properties[name], name)
+		}
+		return out
+	default:
+		return syntheticFieldValue(field)
+	}
+}
+
 func syntheticFieldValue(field string) any {
 	lower := strings.ToLower(field)
 	if strings.Contains(lower, "force") || lower == "archived" {
@@ -517,6 +629,9 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 	}
 	switch operation.Kind {
 	case "graphql_query":
+		if strings.HasPrefix(operation.ID, "github.graphql.query.") {
+			return runGitHubGraphQLQueryProviderDouble(t, b, operation)
+		}
 		for _, stream := range streams {
 			if stream.GraphQL != nil && stream.GraphQL.OperationName == operation.GraphQL.OperationName {
 				if streamRows[stream.Name].State == "exercised" {
@@ -531,8 +646,17 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 		row.Reason = "no declared GraphQL stream binds operation " + operation.ID
 		return row
 	case "graphql_mutation":
+		if isGitHubIssueDeleteOperation(operation) {
+			row.State = "blocked"
+			row.Route = "PM command safety policy"
+			row.Reason = "issue delete remains explicitly non-executable under the recorded provider/product decision"
+			return row
+		}
+		if strings.HasPrefix(operation.ID, "github.graphql.mutation.") {
+			return runGitHubGraphQLMutationProviderDouble(t, b, operation)
+		}
 		row.State = "untestable"
-		row.Reason = "GraphQL mutation executor is not implemented; issue delete remains explicitly blocked"
+		row.Reason = "GraphQL mutation has no fixed generated operation contract"
 		return row
 	case "local_git":
 		row.State = "untestable"
@@ -559,6 +683,173 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 		row.Reason = "operation kind has no declared provider-double executor"
 		return row
 	}
+}
+
+func isGitHubIssueDeleteOperation(operation engine.OperationSpec) bool {
+	return operation.ID == "github.issue.delete" || operation.ID == "github.graphql.mutation.delete-issue"
+}
+
+func githubGraphQLProviderDoubleResponse(operation engine.OperationSpec) ([]byte, error) {
+	if operation.GraphQL == nil {
+		return nil, fmt.Errorf("GraphQL operation has no declaration")
+	}
+	match := githubProviderGraphQLRoot.FindStringSubmatch(operation.GraphQL.Document)
+	if len(match) != 2 {
+		return nil, fmt.Errorf("fixed GraphQL document has no root field")
+	}
+	root := match[1]
+	value := any(map[string]any{"__typename": "ProviderDouble"})
+	if operation.GraphQL.Pagination != nil {
+		value = map[string]any{
+			"__typename": "ProviderDoubleConnection",
+			"nodes":      []any{},
+			"pageInfo":   map[string]any{"hasNextPage": false, "endCursor": nil},
+		}
+	}
+	if root == "rateLimit" {
+		value = map[string]any{"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-09T00:00:00Z"}
+	}
+	data := map[string]any{root: value}
+	if operation.Kind == "graphql_query" && root != "rateLimit" {
+		data["rateLimit"] = map[string]any{"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-09T00:00:00Z"}
+	}
+	return json.Marshal(map[string]any{"data": data})
+}
+
+func runGitHubGraphQLQueryProviderDouble(t *testing.T, b engine.Bundle, operation engine.OperationSpec) githubProviderDoubleReportRow {
+	t.Helper()
+	row := githubProviderDoubleReportRow{Kind: "operation", Name: operation.ID, Route: "engine.OperationDirectRead fixed GraphQL query", State: "failed"}
+	variables, err := syntheticGraphQLVariables(operation)
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	responseBody, err := githubGraphQLProviderDoubleResponse(operation)
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) {
+		return http.StatusOK, "application/json", responseBody
+	})
+	defer capture.Close()
+	doubleBundle := githubProviderDoubleBundle(b, capture.URL)
+	result, err := engine.OperationDirectRead(context.Background(), doubleBundle, connectors.OperationDirectReadRequest{
+		Operation: operation.ID, Config: githubProviderDoubleConfig(doubleBundle), Body: variables,
+		MaxBytes: operation.GraphQL.MaxBytes, OutputPolicy: operation.OutputPolicy,
+	}, engine.HooksFor(doubleBundle.Name))
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	if result.GraphQL == nil || result.GraphQL.RateLimit == nil {
+		row.Reason = "fixed GraphQL query did not report rate-limit metadata"
+		return row
+	}
+	requests := capture.captured()
+	if len(requests) != 1 {
+		row.Reason = fmt.Sprintf("fixed GraphQL query made %d provider-double requests, want 1", len(requests))
+		return row
+	}
+	row.State = "exercised"
+	row.RequestCount = len(requests)
+	row.Requests = githubProviderRequestProofs(requests)
+	row.Response = &githubProviderDoubleResponseProof{Status: http.StatusOK, Bytes: len(responseBody), BodySHA256: hashBytes(responseBody)}
+	return row
+}
+
+func approvedGitHubGraphQLMutationRequest(ctx context.Context, t *testing.T, b engine.Bundle, operation engine.OperationSpec, cfg connectors.RuntimeConfig, variables map[string]any) (connectors.OperationDirectWriteRequest, error) {
+	t.Helper()
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("conformance:"+b.Name, cfg.Secrets)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("conformance:"+b.Name, cfg.Config)
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	cfg.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+	req := connectors.OperationDirectWriteRequest{Operation: operation.ID, Config: cfg, Body: variables, OutputPolicy: operation.OutputPolicy}
+	preview, err := engine.PreviewOperationDirectWrite(ctx, b, req, engine.HooksFor(b.Name))
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.PreviewDigest = preview.Digest
+	if preview.ApprovalTarget.Confirmation.Kind == "" {
+		return req, nil
+	}
+	const approvalToken = "conformance-graphql-fixture-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_conformance_graphql_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: approvalToken,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: approvalToken,
+		Target:        grant.Target,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		return connectors.OperationDirectWriteRequest{}, err
+	}
+	return req, nil
+}
+
+func runGitHubGraphQLMutationProviderDouble(t *testing.T, b engine.Bundle, operation engine.OperationSpec) githubProviderDoubleReportRow {
+	t.Helper()
+	row := githubProviderDoubleReportRow{Kind: "operation", Name: operation.ID, Route: "engine.PreviewOperationDirectWrite and OperationDirectWrite fixed GraphQL mutation", State: "failed"}
+	variables, err := syntheticGraphQLVariables(operation)
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	responseBody, err := githubGraphQLProviderDoubleResponse(operation)
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	capture := newGitHubProviderCapture(func(_ *http.Request) (int, string, []byte) {
+		return http.StatusOK, "application/json", responseBody
+	})
+	defer capture.Close()
+	doubleBundle := githubProviderDoubleBundle(b, capture.URL)
+	req, err := approvedGitHubGraphQLMutationRequest(context.Background(), t, doubleBundle, operation, githubProviderDoubleConfig(doubleBundle), variables)
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	result, err := engine.OperationDirectWrite(context.Background(), doubleBundle, req, engine.HooksFor(doubleBundle.Name))
+	if err != nil {
+		row.Reason = err.Error()
+		return row
+	}
+	if result.GraphQL == nil || len(result.GraphQL.Errors) != 0 {
+		row.Reason = "fixed GraphQL mutation did not return a clean GraphQL result"
+		return row
+	}
+	requests := capture.captured()
+	if len(requests) != 1 {
+		row.Reason = fmt.Sprintf("fixed GraphQL mutation made %d provider-double requests, want 1", len(requests))
+		return row
+	}
+	row.State = "exercised"
+	row.RequestCount = len(requests)
+	row.Requests = githubProviderRequestProofs(requests)
+	row.Response = &githubProviderDoubleResponseProof{Status: http.StatusOK, Bytes: len(responseBody), BodySHA256: hashBytes(responseBody)}
+	return row
 }
 
 func operationPathParams(path string) map[string]string {

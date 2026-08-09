@@ -683,6 +683,11 @@ type SurfaceCoverage struct {
 	Writes      []string `json:"writes,omitempty"`
 	DirectRead  string   `json:"direct_read,omitempty"`
 	DirectReads []string `json:"direct_reads,omitempty"`
+	// Operations names fixed operation contracts sharing one provider
+	// transport endpoint. It is intentionally distinct from direct_read:
+	// GraphQL's physical POST /graphql path is not an OpenAPI read endpoint,
+	// so an operation ID is the only unambiguous executable binding.
+	Operations []string `json:"operations,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and
@@ -697,6 +702,16 @@ func (c *SurfaceCoverage) WriteTargets() []string {
 	}
 	targets = append(targets, c.Writes...)
 	return targets
+}
+
+// OperationTargets returns the fixed operation IDs a shared physical endpoint
+// covers. Keeping this enumerable lets runtime preflight reject a GraphQL
+// operation that merely happens to use the same POST path as a listed one.
+func (c *SurfaceCoverage) OperationTargets() []string {
+	if c == nil {
+		return nil
+	}
+	return append([]string(nil), c.Operations...)
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.
@@ -1335,9 +1350,12 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 // deriveDirectWriteSurface builds the shipped runtime endpoint check solely
 // from rest_write and fixed graphql_mutation declarations. It verifies
 // internal declaration consistency, not provider documented-surface
-// provenance; #3773 owns that evidence model.
+// provenance; #3773 owns that evidence model. GraphQL operations that share a
+// physical POST path retain their individual IDs so a generated source root
+// cannot borrow another root's transport binding.
 func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
 	endpoints := make([]SurfaceEndpoint, 0)
+	graphQLByPath := make(map[string]int)
 	for _, op := range operations {
 		switch op.Kind {
 		case "rest_write":
@@ -1353,10 +1371,18 @@ func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
 			if op.GraphQL == nil || strings.TrimSpace(op.GraphQL.Path) == "" {
 				continue
 			}
+			key := http.MethodPost + ":" + op.GraphQL.Path
+			if index, ok := graphQLByPath[key]; ok {
+				endpoints[index].CoveredBy.Operations = append(endpoints[index].CoveredBy.Operations, op.ID)
+				continue
+			}
+			graphQLByPath[key] = len(endpoints)
 			endpoints = append(endpoints, SurfaceEndpoint{
-				Method:    http.MethodPost,
-				Path:      op.GraphQL.Path,
-				Operation: &SurfaceOperation{},
+				Method: http.MethodPost,
+				Path:   op.GraphQL.Path,
+				CoveredBy: &SurfaceCoverage{
+					Operations: []string{op.ID},
+				},
 			})
 		}
 	}

@@ -29,6 +29,8 @@ type fakeConnector struct {
 	operationDirectReadReq     connectors.OperationDirectReadRequest
 	operationReadPreflight     operationDirectReadPreflightCall
 	operationReadPreflightErr  error
+	operationJSONVariable      operationStructuredJSONVariablePreflightCall
+	operationJSONVariableErr   error
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
 	operationWritePreflight    operationDirectWritePreflightCall
 	operationWritePreflightErr error
@@ -57,6 +59,11 @@ type operationDirectReadPreflightCall struct {
 	path         string
 	maxBytes     int
 	outputPolicy string
+}
+
+type operationStructuredJSONVariablePreflightCall struct {
+	operation string
+	variable  string
 }
 
 type operationDirectWritePreflightCall struct {
@@ -149,6 +156,10 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 		outputPolicy: outputPolicy,
 	}
 	return f.operationReadPreflightErr
+}
+func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
+	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
+	return f.operationJSONVariableErr
 }
 func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
 	f.operationWritePreflight = operationDirectWritePreflightCall{
@@ -1832,6 +1843,51 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 	if len(connector.operationDirectReadReq.RedactFields) != 0 {
 		t.Fatalf("operation direct read RedactFields = %#v, want empty", connector.operationDirectReadReq.RedactFields)
+	}
+}
+
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "graphql query widgets",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "github.graphql.query.widgets",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "input", Type: "json", Required: true, MapsTo: "body.input"},
+		},
+	}}}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"graphql", "query", "widgets"},
+		Flags: map[string][]string{"input": {`{"ids":["widget-1"]}`}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got, want := connector.operationJSONVariable, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
+		t.Fatalf("structured JSON preflight = %#v, want %#v", got, want)
+	}
+	input, ok := connector.operationDirectReadReq.Body["input"].(map[string]any)
+	if !ok {
+		t.Fatalf("typed GraphQL input = %#v, want object", connector.operationDirectReadReq.Body["input"])
+	}
+	ids, ok := input["ids"].([]any)
+	if !ok || len(ids) != 1 || ids[0] != "widget-1" {
+		t.Fatalf("typed GraphQL ids = %#v, want one declared item", input["ids"])
+	}
+
+	connector.operationJSONVariableErr = errors.New("variable is not a closed object or array")
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"graphql", "query", "widgets"},
+		Flags: map[string][]string{"input": {`{"ids":["widget-2"]}`}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "closed object or array") {
+		t.Fatalf("Run rejected GraphQL variable = %v, want declaration-owned preflight rejection", err)
 	}
 }
 

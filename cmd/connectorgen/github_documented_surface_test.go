@@ -52,7 +52,7 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 	restByMethod := map[string]int{}
 	seen := map[string]bool{}
 	var blank, synthetic []string
-	rest, legacyGraphQLBindings, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0
+	rest, legacyGraphQLBindings, generatedGraphQLTransports, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0, 0
 	lockedREST := githubRESTOperationKeys(lock)
 
 	for _, ep := range surface.Endpoints {
@@ -62,12 +62,16 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 		}
 		seen[key] = true
 
-		switch ep.Method {
-		case "GRAPHQL":
+		switch {
+		case ep.Method == "GRAPHQL":
 			// api_surface retains only legacy fixed-document bindings. The authoritative
 			// GraphQL denominator is the source lock's Query/Mutation root inventory.
 			legacyGraphQLBindings++
-		case "WEBHOOK":
+		case githubGeneratedGraphQLTransport(ep.Method, ep.Path, ep.CoveredBy):
+			// The generated roots share one physical POST transport. Treat it as
+			// GraphQL coverage rather than inventing a REST OpenAPI operation.
+			generatedGraphQLTransports++
+		case ep.Method == "WEBHOOK":
 			// Webhook EVENTS are excluded from the operation surface by the counting policy.
 			// GitHub documents githubWebhookEvents of them under `x-webhooks`; its 28 webhook
 			// MANAGEMENT operations are ordinary `paths` entries and are part of the 1220.
@@ -145,6 +149,9 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 	}
 	if legacyGraphQLBindings == 0 {
 		t.Error("api_surface has no legacy fixed GraphQL bindings; root inventory lives in the source lock")
+	}
+	if generatedGraphQLTransports != 1 {
+		t.Errorf("generated GraphQL transports = %d, want one shared POST /graphql binding", generatedGraphQLTransports)
 	}
 	if covered+blocked != len(surface.Endpoints) {
 		t.Errorf("covered(%d)+blocked(%d) = %d, want %d declared bundle bindings", covered, blocked, covered+blocked, len(surface.Endpoints))

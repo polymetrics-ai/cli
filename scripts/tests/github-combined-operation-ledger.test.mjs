@@ -256,28 +256,54 @@ test("rejects a GraphQL source lock without createEnterpriseOrganization", async
   );
 });
 
-test("records generic node projections and the disabled deleteIssue mutation from the real GitHub bundle", async () => {
+test("records source-wide fixed typename node projections and GraphQL mutation safety from the real GitHub bundle", async () => {
   const ledger = await currentGitHubLedger();
   assert.deepEqual(ledger.counts, { rest: 1220, graphql_query: 31, graphql_mutation: 274, total: 1525 });
   const node = ledger.rows.find((row) => row.id === "github.graphql.query.node")?.projection_matrix;
   const nodes = ledger.rows.find((row) => row.id === "github.graphql.query.nodes")?.projection_matrix;
-  assert.deepEqual(node?.supported_object_types, ["DraftIssue", "Issue", "ProjectV2", "PullRequest"]);
-  assert.deepEqual(nodes?.supported_object_types, []);
   assert.ok(Array.isArray(node?.possible_object_types) && node.possible_object_types.length > 0);
   assert.ok(Array.isArray(nodes?.possible_object_types) && nodes.possible_object_types.length > 0);
-  for (const typeName of node.supported_object_types) {
-    assert.ok(node.possible_object_types.includes(typeName), `node support ${typeName} is not in the source-derived possible types`);
-  }
+  assert.deepEqual(node?.supported_object_types, node?.possible_object_types);
+  assert.deepEqual(nodes?.supported_object_types, nodes?.possible_object_types);
   assert.deepEqual(nodes.possible_object_types, node.possible_object_types);
   assert.equal(node?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
   assert.equal(nodes?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
-  assert.equal(node?.state, "fixed_projection_only");
-  assert.equal(nodes?.state, "no_supported_projection");
+  assert.equal(node?.state, "fixed_typename_projection");
+  assert.equal(nodes?.state, "fixed_typename_projection");
   const deleteIssue = ledger.rows.find((row) => row.id === "github.graphql.mutation.deleteIssue");
   assert.equal(deleteIssue?.implementation.state, "declared_not_executable");
   assert.equal(deleteIssue?.blocker?.category, "mapped_command_not_executable");
   assert.match(deleteIssue?.blocker?.reason || "", /issue delete \(unsafe_or_disallowed\)/i);
-  assert.equal(ledger.rows.find((row) => row.id === "github.graphql.mutation.createEnterpriseOrganization")?.implementation.state, "not_implemented");
+  assert.equal(ledger.rows.find((row) => row.id === "github.graphql.mutation.createEnterpriseOrganization")?.implementation.state, "implemented");
+});
+
+test("publishes separate inventory, implementation, and live-proof progress from ledger rows", async () => {
+  const ledger = await currentGitHubLedger();
+  const implemented = ledger.rows.filter((row) => row.implementation.state === "implemented").length;
+  const proven = ledger.rows.filter((row) => row.terminal_evidence.state === "PROVEN").length;
+  assert.deepEqual(ledger.progress.inventory, {
+    classified: ledger.counts.total,
+    total: ledger.counts.total,
+    percent: 100,
+  });
+  assert.deepEqual(ledger.progress.implementation, {
+    implemented,
+    total: ledger.counts.total,
+    percent: Number(((implemented / ledger.counts.total) * 100).toFixed(2)),
+  });
+  assert.deepEqual(ledger.progress.live_proof, {
+    proven,
+    total: ledger.counts.total,
+    percent: Number(((proven / ledger.counts.total) * 100).toFixed(2)),
+  });
+
+  const tampered = structuredClone(ledger);
+  tampered.progress.live_proof.proven += 1;
+  const lock = await (async () => {
+    const projectRoot = path.resolve(scriptsDir, "..");
+    return JSON.parse(await readFile(path.join(projectRoot, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), "utf8"));
+  })();
+  assert.throws(() => validateCombinedOperationLedger({ lock, ledger: tampered }), /progress does not match ledger rows/u);
 });
 
 test("permanent source-inventory gates do not retain the fixed four-operation GraphQL denominator", async () => {

@@ -140,6 +140,18 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+// PreflightOperationStructuredJSONVariable lets commandrunner admit a JSON
+// flag only after the fixed GraphQL operation's own closed variables schema
+// has accepted that exact top-level variable. It resolves no credential and
+// makes no request.
+func (c *Connector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
+	op, err := findOperation(c.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return ValidateGraphQLOperationStructuredJSONVariable(op, variable)
+}
+
 // PreflightOperationDirectWrite proves a command's declared binding can reach
 // this connector's typed write executor without resolving credentials or
 // making a network request.

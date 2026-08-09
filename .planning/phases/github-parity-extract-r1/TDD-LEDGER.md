@@ -2368,3 +2368,141 @@ connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 fie
 and read inline in this single-worker lane; no GSD role may be spawned.  Skills: `golang-how-to`,
 `golang-cli`, `golang-graphql`, `golang-testing`, `golang-error-handling`, `golang-security`,
 `golang-safety`, `golang-design-patterns`, and `golang-structs-interfaces`.
+
+---
+
+## Cycle 31 — generated fixed GraphQL root contracts
+
+**Scope:** local generated-contract work only.  The deploy-key regression, generic DELETE handling,
+PM-only lab boundary, and PM read-back tests were re-run green before this cycle.  No provider
+request, fixture creation, cleanup retry, browser action, or credential use is permitted here.
+
+**Red 31a — a closed GraphQL input variable is still rejected as generic JSON.**
+The first focused test will instantiate a fixed GraphQL operation with a closed object `input`
+variable, invoke the real command preflight/shaper, and prove that only the source-declared
+top-level `body.input` can parse one bounded JSON object/array.  The existing reverse-ETL-only
+placement rule must reject it before the narrow GraphQL-variable validator is added.  The same test
+will retain the refusal for ordinary REST direct operations, nested `body.input.field`, scalar
+variables, unknown variables, malformed JSON, and raw documents.
+
+The initial engine boundary test is red because no declaration-owned validator exists yet:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine \
+  -run TestValidateGraphQLOperationStructuredJSONVariableRequiresClosedTopLevelContainer -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/graphql_operation_test.go: undefined: ValidateGraphQLOperationStructuredJSONVariable
+FAIL
+```
+
+The runner-level counterpart then reproduces the exact closed-placement symptom with a fixed
+`POST /graphql` operation:
+
+```
+$ go test -timeout 20m ./internal/connectors/commandrunner \
+  -run TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable -count=1
+--- FAIL: TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable
+    Run: connector command "graphql query widgets" is blocked: intent=direct_read:
+    availability=implemented: structured JSON flag --input is allowed only on a declared
+    reverse-ETL record field
+FAIL
+```
+
+**Red 31b — source graph facts are not yet a command catalog.**
+The generator test will use the mini typed SDL to demand exactly one fixed operation/command/physical
+transport mapping for every source root, including the typed `createEnterpriseOrganization` canary
+and an explicit non-executable `deleteIssue`.  It must reject missing roots, unbounded input arrays,
+duplicate operation IDs/paths, and any caller-controlled document or selection field.  Before the
+new generator exists there is no generated all-root catalog, so this test is expected to fail by
+missing module/contract rather than passing on the legacy four bindings.
+
+```
+$ node --test scripts/tests/gen-github-graphql-parity.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'scripts/gen-github-graphql-parity.mjs'
+FAIL
+```
+
+**Green 31 — every pinned root now has one fixed, typed PM contract.**
+`scripts/gen-github-graphql-parity.mjs` consumes only the checked-in v2 source lock and writes one
+operation, one CLI command, and one exact `POST /graphql` operation binding for each of the 31
+`Query` plus 274 `Mutation` roots.  The transport is not counted as a REST endpoint: the runtime
+ledger binds every query by its operation ID, and the write preflight binds every mutation to that
+same named transport list.  All generated documents, operation names, paths, selections, variable
+schemas, input-depth/array bounds, and cursor handling are declaration-owned; no raw document,
+selection, endpoint, header, or cursor flag exists.
+
+The deterministic source inventory is now `1,220 REST + 31 GraphQL Query + 274 GraphQL Mutation =
+1,525`.  The combined ledger reports these separate facts rather than translating local generation
+into live acceptance: inventory `1525/1525 (100%)`, exact executable implementation
+`1345/1525 (88.2%)`, and current-head live proof `0/1525 (0%)`.  `createEnterpriseOrganization`
+is present as the typed source canary; `deleteIssue` remains `unsafe_or_disallowed`.  The scheduled
+source-drift workflow is read-only and checks the independently pinned REST and GraphQL source
+inventories without altering generated artifacts.
+
+**Red 31c — GraphQL non-2xx responses bypassed the envelope sanitizer.**
+The loopback safety tests initially showed that a failed fixed GraphQL mutation, and then a failed
+fixed GraphQL query, could include the synthetic provider error-body fixture verbatim.  Both tests
+were red before the fix:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine \
+  -run 'TestOperationDirect(Read|Write)RedactsGraphQLHTTPErrorBody' -count=1
+FAIL: raw GraphQL HTTP error body reached the returned error
+```
+
+**Green 31c — all fixed GraphQL failure paths use the same redaction boundary.**
+The query and mutation HTTP-error paths now apply `safety.RedactErrorText`; successful GraphQL
+responses continue to expose only bounded/sanitized `errors[]` metadata.  The loopback tests prove
+both paths retain a redaction marker without retaining the fixture value.
+
+**Red/Green 31d — a nominal query could select an appended mutation.**
+`TestPreflightOperationDirectReadRejectsMixedFixedGraphQLDocument` was red when a document beginning
+with a query appended a named mutation and set `operationName` to that mutation.  Prefix-only
+validation accepted the document as a direct read.  The fixed-operation admission check now uses a
+small comment/string-aware top-level scanner and requires exactly one named operation of the
+declared kind with the declared operation name.  It accepts ordinary fixed fragments and
+argument/default syntax, but refuses extra operations, subscriptions, anonymous operations, name
+mismatches, and malformed top-level syntax before any credential or request is resolved.
+
+`cmd/connectorgen` now also treats a fixed GraphQL query as an executable read although its physical
+transport is POST, matching conformance's capability accounting.  The new regression first failed
+with `capabilities.read=false` and no finding, then passed after the shared surface rule was fixed.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine -count=1
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner -count=1
+ok  polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./cmd/connectorgen -count=1
+ok  polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./internal/connectors/conformance ./internal/connectors/certify -count=1
+ok  polymetrics.ai/internal/connectors/conformance
+ok  polymetrics.ai/internal/connectors/certify
+
+$ make github-parity-artifacts-check
+github graphql parity artifacts: ok
+github combined operation ledger: ok rest=1220 graphql_query=31 graphql_mutation=274 total=1525
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ node --test scripts/tests/github-live-lab.test.mjs
+✔ 23 tests passed
+
+$ node scripts/github-live-lab.mjs --check-boundary \
+  --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+```
+
+Help/manual/site artifacts were regenerated and representative help verified locally for the GraphQL
+namespace, `query viewer`, the typed `create-enterprise-organization` mutation, and the blocked
+`delete-issue` mutation.  `go vet` for the changed packages, `go build ./cmd/pm`, the full
+`internal/app` and `internal/cli` package suites, and the website script suite all passed.  This
+cycle made no `pm` provider invocation, browser action, credential read, fixture creation, cleanup,
+or provider write.

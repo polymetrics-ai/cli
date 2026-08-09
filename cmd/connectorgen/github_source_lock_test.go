@@ -72,3 +72,15 @@ func githubRESTOperationKeys(lock githubSourceLock) map[string]bool {
 	}
 	return keys
 }
+
+// githubGeneratedGraphQLTransport is the one physical GraphQL endpoint that
+// maps every fixed generated root operation. It is not a REST OpenAPI row, so
+// REST source-count assertions must keep it in the GraphQL column even though
+// its wire method is POST.
+func githubGeneratedGraphQLTransport(method, path string, coveredBy map[string]any) bool {
+	if method != "POST" || path != "/graphql" {
+		return false
+	}
+	operations, ok := coveredBy["operations"].([]any)
+	return ok && len(operations) > 0
+}

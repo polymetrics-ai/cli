@@ -104,7 +104,7 @@ func deriveOperationDirectReadEndpointLedger(operations []OperationSpec, surface
 			if (method != "GET" && method != "POST") || operation.REST.Path == "" || operation.REST.MaxBytes <= 0 {
 				continue
 			}
-			if !hasOperationDirectReadSurfaceEndpoint(surface, method, operation.REST.Path) {
+			if !hasOperationDirectReadSurfaceEndpoint(surface, method, operation.REST.Path, "") {
 				continue
 			}
 			entry = OperationEndpointLedgerEntry{Method: method, Path: operation.REST.Path, Kind: operation.Kind, MaxBytes: operation.REST.MaxBytes}
@@ -112,7 +112,7 @@ func deriveOperationDirectReadEndpointLedger(operations []OperationSpec, surface
 			if operation.GraphQL == nil || operation.GraphQL.Path == "" || operation.GraphQL.MaxBytes <= 0 {
 				continue
 			}
-			if !hasOperationDirectReadSurfaceEndpoint(surface, "POST", operation.GraphQL.Path) {
+			if !hasOperationDirectReadSurfaceEndpoint(surface, "POST", operation.GraphQL.Path, operation.ID) {
 				continue
 			}
 			entry = OperationEndpointLedgerEntry{Method: "POST", Path: operation.GraphQL.Path, Kind: operation.Kind, Operation: operation.ID, MaxBytes: operation.GraphQL.MaxBytes}
@@ -144,9 +144,17 @@ func deriveOperationDirectReadEndpointLedger(operations []OperationSpec, surface
 	return &operationEndpointLedger{entries: entries}
 }
 
-func hasOperationDirectReadSurfaceEndpoint(surface *APISurface, method, endpointPath string) bool {
+func hasOperationDirectReadSurfaceEndpoint(surface *APISurface, method, endpointPath, operation string) bool {
 	for _, endpoint := range surface.Endpoints {
 		if !strings.EqualFold(endpoint.Method, method) || endpoint.Path != endpointPath {
+			continue
+		}
+		if operation != "" {
+			for _, target := range endpoint.CoveredBy.OperationTargets() {
+				if target == operation {
+					return true
+				}
+			}
 			continue
 		}
 		if endpoint.Operation != nil && endpoint.Operation.Model == "direct_read" {

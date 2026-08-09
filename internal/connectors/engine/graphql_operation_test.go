@@ -91,6 +91,9 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
 			Method: http.MethodPost,
 			Path:   "/graphql",
+			CoveredBy: &SurfaceCoverage{
+				Operations: []string{"acme.widgets." + strings.TrimPrefix(kind, "graphql_")},
+			},
 			Operation: &SurfaceOperation{
 				Model:            "direct_read",
 				Status:           "blocked",
@@ -99,6 +102,36 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 				Reason:           "fixed GraphQL operation fixture",
 			},
 		}}},
+	}
+}
+
+// A structured CLI value is safe for a fixed GraphQL operation only when the
+// declaration's own closed variables schema admits that exact top-level
+// variable as an object or array.  This is intentionally a narrower question
+// than "can this operation accept a JSON body": the latter would recreate a
+// generic GraphQL transport through command flags.
+func TestValidateGraphQLOperationStructuredJSONVariableRequiresClosedTopLevelContainer(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_query")
+	op := bundle.Operations[0]
+
+	if err := ValidateGraphQLOperationStructuredJSONVariable(op, "filter"); err != nil {
+		t.Fatalf("closed object variable: %v", err)
+	}
+	for variable, want := range map[string]string{
+		"id":            "object or array",
+		"missing":       "not declared",
+		"filter.status": "top-level",
+	} {
+		t.Run(variable, func(t *testing.T) {
+			if err := ValidateGraphQLOperationStructuredJSONVariable(op, variable); err == nil || !strings.Contains(err.Error(), want) {
+				t.Fatalf("ValidateGraphQLOperationStructuredJSONVariable(%q) = %v, want %q", variable, err, want)
+			}
+		})
+	}
+
+	mutation := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation").Operations[0]
+	if err := ValidateGraphQLOperationStructuredJSONVariable(mutation, "id"); err == nil || !strings.Contains(err.Error(), "object or array") {
+		t.Fatalf("scalar mutation variable = %v, want closed container rejection", err)
 	}
 }
 
@@ -247,6 +280,30 @@ func TestOperationGraphQLRejectsUnboundVariableSchemaBeforeNetwork(t *testing.T)
 	}
 }
 
+func TestOperationDirectReadRedactsGraphQLHTTPErrorBody(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"message":"access_token=fake-test-value"}`))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_query")
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.query",
+		Body:      map[string]any{"id": "widget-1"},
+		MaxBytes:  4096,
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want redacted GraphQL HTTP error")
+	}
+	if strings.Contains(err.Error(), "fake-test-value") {
+		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
+	}
+	if !strings.Contains(err.Error(), "[redacted]") {
+		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	}
+}
+
 func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -365,6 +422,46 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWriteRedactsGraphQLHTTPErrorBody(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"message":"access_token=fake-test-value"}`))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want redacted GraphQL HTTP error")
+	}
+	if strings.Contains(err.Error(), "fake-test-value") {
+		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
+	}
+	if !strings.Contains(err.Error(), "[redacted]") {
+		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL HTTP error calls = %d, want exactly one approved request", calls)
+	}
+}
+
 func TestOperationDirectWriteFailsClosedOnMissingGraphQLData(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -421,5 +518,28 @@ func TestPreflightOperationDirectWriteRequiresExactFixedGraphQLBinding(t *testin
 	unsafePath.Operations[0].GraphQL.Path = "/graphql/../raw"
 	if err := PreflightOperationDirectWrite(unsafePath, "acme.widgets.mutation", http.MethodPost, "/graphql/../raw", "json_redacted"); err == nil || !strings.Contains(err.Error(), "traversal") {
 		t.Fatalf("PreflightOperationDirectWrite unsafe GraphQL path = %v, want declaration-path rejection", err)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresNamedGraphQLTransportCoverage(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation")
+	bundle.Surface.Endpoints[0].CoveredBy.Operations = nil
+
+	err := PreflightOperationDirectWrite(bundle, "acme.widgets.mutation", http.MethodPost, "/graphql", "json_redacted")
+	if err == nil || !strings.Contains(err.Error(), "does not cover GraphQL operation") {
+		t.Fatalf("PreflightOperationDirectWrite missing named GraphQL transport coverage = %v, want fail-closed coverage rejection", err)
+	}
+}
+
+func TestPreflightOperationDirectReadRejectsMixedFixedGraphQLDocument(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_query")
+	// A document that starts as a query but selects a separately named mutation
+	// through operationName would turn a direct_read command into a write.
+	bundle.Operations[0].GraphQL.Document += " mutation DeleteWidget($id: ID!) { deleteWidget(input: { id: $id }) { deletedId } }"
+	bundle.Operations[0].GraphQL.OperationName = "DeleteWidget"
+
+	err := PreflightOperationDirectRead(bundle, "acme.widgets.query", http.MethodPost, "/graphql", 4096, "json_redacted")
+	if err == nil || !strings.Contains(err.Error(), "exactly one named query") {
+		t.Fatalf("PreflightOperationDirectRead mixed GraphQL document = %v, want fixed query-only rejection", err)
 	}
 }

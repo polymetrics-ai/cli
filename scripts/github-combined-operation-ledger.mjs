@@ -865,8 +865,9 @@ function buildBundleIndexes(bundleCandidate) {
     if (root === "") continue;
     const protocol = operation.kind === "graphql_mutation" ? "Mutation" : "Query";
     const key = `${protocol}.${root}`;
-    const bindings = graphQLBindings.get(key) || { operations: [], commands: [], documents: [] };
+    const bindings = graphQLBindings.get(key) || { operations: [], operationSpecs: [], commands: [], documents: [] };
     bindings.operations.push(operation.id);
+    bindings.operationSpecs.push(operation);
     bindings.documents.push(operation.graphql?.document || "");
     bindings.commands.push(...(commandsByOperation.get(operation.id) || []));
     const operationName = operation.graphql?.operation_name;
@@ -911,10 +912,40 @@ function restBindings(operation, indexes) {
   return { endpoint, commands: [...new Map(commands.map((command) => [command.path, command])).values()] };
 }
 
-function implementationState({ protocol, commands, endpoint }) {
+function closedBoundedGraphQLSchema(node) {
+  if (!isPlainObject(node)) return false;
+  if (node.type === "array") {
+    return Number.isInteger(node.maxItems) && node.maxItems > 0 && closedBoundedGraphQLSchema(node.items);
+  }
+  if (node.type !== "object") return typeof node.type === "string";
+  if (node.additionalProperties !== false || !isPlainObject(node.properties)) return false;
+  return Object.values(node.properties).every((child) => closedBoundedGraphQLSchema(child));
+}
+
+function executableFixedGraphQLBinding(protocol, operation, commands) {
+  if (!isPlainObject(operation) || operation.kind !== protocol || !isPlainObject(operation.graphql)) return false;
+  const graphql = operation.graphql;
+  if (graphql.path !== "/graphql" || !Number.isInteger(graphql.max_bytes) || graphql.max_bytes <= 0) return false;
+  if (typeof graphql.document !== "string" || graphql.document.trim() === "" || typeof graphql.operation_name !== "string" || graphql.operation_name.trim() === "") return false;
+  if (!closedBoundedGraphQLSchema(graphql.variables_schema)) return false;
+  const intent = protocol === "graphql_query" ? "direct_read" : "direct_write";
+  return commands.some((command) =>
+    command.operation === operation.id &&
+    command.availability === "implemented" &&
+    command.intent === intent &&
+    command.output_policy === operation.output_policy &&
+    Array.isArray(command.api_surface) &&
+    command.api_surface.length === 1 &&
+    command.api_surface[0]?.method === "POST" &&
+    command.api_surface[0]?.path === "/graphql",
+  );
+}
+
+function implementationState({ protocol, commands, endpoint, graphQLOperations = [] }) {
   const availabilities = commands.map((command) => command.availability).filter(Boolean);
   if (availabilities.length > 0) {
     if (protocol.startsWith("graphql")) {
+      if (graphQLOperations.some((operation) => executableFixedGraphQLBinding(protocol, operation, commands))) return "implemented";
       if (availabilities.some((availability) => availability === "implemented" || availability === "partial")) return "partially_implemented";
       return "declared_not_executable";
     }
@@ -983,9 +1014,9 @@ function possibleObjectTypesForGraphQLRoot(field, typeSystem) {
 function graphQLRow(field, lock, indexes) {
   const protocol = field.root === "Mutation" ? "graphql_mutation" : "graphql_query";
   const key = `${field.root}.${field.name}`;
-  const bindings = indexes.graphQLBindings.get(key) || { operations: [], commands: [], documents: [] };
+  const bindings = indexes.graphQLBindings.get(key) || { operations: [], operationSpecs: [], commands: [], documents: [] };
   const commands = [...new Map(bindings.commands.map((command) => [command.path, command])).values()];
-  const state = implementationState({ protocol, commands });
+  const state = implementationState({ protocol, commands, graphQLOperations: bindings.operationSpecs });
   const row = {
     id: `github.graphql.${field.root.toLowerCase()}.${field.name}`,
     protocol,
@@ -1011,15 +1042,22 @@ function graphQLRow(field, lock, indexes) {
   const blocker = blockerFor({ state, protocol, commands });
   if (blocker) row.blocker = blocker;
   if (field.name === "node" || field.name === "nodes") {
-    const supportedObjectTypes = uniqueSorted(bindings.documents.flatMap((document) =>
-      [...String(document || "").matchAll(/\.\.\.\s+on\s+([_A-Za-z][_0-9A-Za-z]*)/gu)].map((match) => match[1]),
-    ));
+    const sourcePossibleTypes = possibleObjectTypesForGraphQLRoot(field, lock.graphql.type_system);
+    const fixedTypenameProjection = bindings.documents.some((document) => {
+      const expression = new RegExp("\\b" + field.name + "\\s*(?:\\([^)]*\\))?\\s*\\{\\s*__typename\\s*\\}", "u");
+      return expression.test(String(document || ""));
+    });
+    const supportedObjectTypes = fixedTypenameProjection
+      ? sourcePossibleTypes
+      : uniqueSorted(bindings.documents.flatMap((document) =>
+          [...String(document || "").matchAll(/\.\.\.\s+on\s+([_A-Za-z][_0-9A-Za-z]*)/gu)].map((match) => match[1]),
+        ));
     row.projection_matrix = {
       root_field: field.name,
       policy: "fixed declared documents only; no caller-supplied GraphQL selection",
-      possible_object_types: possibleObjectTypesForGraphQLRoot(field, lock.graphql.type_system),
+      possible_object_types: sourcePossibleTypes,
       supported_object_types: supportedObjectTypes,
-      state: supportedObjectTypes.length > 0 ? "fixed_projection_only" : "no_supported_projection",
+      state: fixedTypenameProjection ? "fixed_typename_projection" : supportedObjectTypes.length > 0 ? "fixed_projection_only" : "no_supported_projection",
     };
   }
   return row;
@@ -1056,6 +1094,40 @@ function restRow(operation, lock, indexes) {
   return row;
 }
 
+function percent(numerator, denominator) {
+  if (!Number.isInteger(numerator) || !Number.isInteger(denominator) || denominator <= 0) {
+    throw new Error("ledger progress requires a positive integer denominator");
+  }
+  return Number(((numerator / denominator) * 100).toFixed(2));
+}
+
+// Keep these three measures deliberately separate. A source row is inventoried
+// when it has a generated row and an explicit implementation state; it is
+// implemented only by the exact executable state (not generic or partial
+// coverage); it is live-proven only by a terminal current-head PROVEN record.
+function progressForRows(rows, total) {
+  const classified = rows.filter((row) => typeof row?.implementation?.state === "string" && row.implementation.state.trim() !== "").length;
+  const implemented = rows.filter((row) => row?.implementation?.state === "implemented").length;
+  const proven = rows.filter((row) => row?.terminal_evidence?.state === "PROVEN").length;
+  return {
+    inventory: {
+      classified,
+      total,
+      percent: percent(classified, total),
+    },
+    implementation: {
+      implemented,
+      total,
+      percent: percent(implemented, total),
+    },
+    live_proof: {
+      proven,
+      total,
+      percent: percent(proven, total),
+    },
+  };
+}
+
 /** Generate a protocol-separated operation ledger from a source lock and current bundle bindings. */
 export function buildCombinedOperationLedger({ lock: lockCandidate, bundle: bundleCandidate }) {
   const lock = validateSourceLock(lockCandidate);
@@ -1077,6 +1149,7 @@ export function buildCombinedOperationLedger({ lock: lockCandidate, bundle: bund
       graphql: { source_url: lock.graphql.source_url, sha256: lock.graphql.sha256, bytes: lock.graphql.bytes },
     },
     counts: lock.counts,
+    progress: progressForRows(rows, lock.counts.total),
     rows,
   };
 }
@@ -1120,6 +1193,10 @@ export function validateCombinedOperationLedger({ lock: lockCandidate, ledger: l
   }
   const canary = ledger.rows.find((row) => row.id === "github.graphql.mutation.createEnterpriseOrganization");
   if (!canary || !canary.implementation?.state) throw new Error("combined ledger is missing classified createEnterpriseOrganization canary");
+  const expectedProgress = progressForRows(ledger.rows, lock.counts.total);
+  if (JSON.stringify(ledger.progress) !== JSON.stringify(expectedProgress)) {
+    throw new Error("combined ledger progress does not match ledger rows");
+  }
   return true;
 }
 
@@ -1136,7 +1213,7 @@ function parseArgs(args) {
   const options = {};
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
-    if (argument === "--write" || argument === "--check") {
+    if (argument === "--write" || argument === "--refresh" || argument === "--check") {
       options.mode = argument.slice(2);
       continue;
     }
@@ -1158,6 +1235,7 @@ function usage() {
   return [
     "usage:",
     "  github-combined-operation-ledger --write --rest <openapi.json> --graphql <schema.graphql> [--lock <path>] [--ledger <path>] [--captured-at YYYY-MM-DD]",
+    "  github-combined-operation-ledger --refresh [--lock <path>] [--ledger <path>]",
     "  github-combined-operation-ledger --check [--lock <path>] [--ledger <path>]",
   ].join("\n");
 }
@@ -1191,6 +1269,14 @@ async function main() {
     validateCombinedOperationLedger({ lock, ledger });
     await Promise.all([writeJSON(lockPath, lock), writeJSON(ledgerPath, ledger)]);
     process.stdout.write(`github combined operation ledger: rest=${lock.counts.rest} graphql_query=${lock.counts.graphql_query} graphql_mutation=${lock.counts.graphql_mutation} total=${lock.counts.total}\n`);
+    return;
+  }
+  if (options.mode === "refresh") {
+    const lock = JSON.parse(await readFile(lockPath, "utf8"));
+    const ledger = buildCombinedOperationLedger({ lock, bundle });
+    validateCombinedOperationLedger({ lock, ledger });
+    await writeJSON(ledgerPath, ledger);
+    process.stdout.write(`github combined operation ledger: refreshed rest=${lock.counts.rest} graphql_query=${lock.counts.graphql_query} graphql_mutation=${lock.counts.graphql_mutation} total=${lock.counts.total}\n`);
     return;
   }
   if (options.mode === "check") {

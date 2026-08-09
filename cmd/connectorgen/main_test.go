@@ -551,6 +551,56 @@ func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelCont
 	}
 }
 
+func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVariable(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "cli-surface",
+		Operations: []engine.OperationSpec{{
+			ID:           "cli-surface.widgets.query",
+			Kind:         "graphql_query",
+			Summary:      "Read one widget",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			GraphQL: &engine.GraphQLOperationSpec{
+				OperationName:   "QueryWidget",
+				Document:        "query QueryWidget($input: WidgetInput!) { widget(input: $input) { __typename } }",
+				Path:            "/graphql",
+				MaxBytes:        1024,
+				VariablesSchema: json.RawMessage("{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"input\"],\"properties\":{\"input\":{\"type\":\"object\",\"additionalProperties\":false,\"required\":[\"id\"],\"properties\":{\"id\":{\"type\":\"string\"}}}}}"),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "POST",
+			Path:   "/graphql",
+			CoveredBy: &engine.SurfaceCoverage{
+				Operations: []string{"cli-surface.widgets.query"},
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "graphql query widget",
+			Summary:      "Read one widget",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "cli-surface.widgets.query",
+			OutputPolicy: "json_redacted",
+			Flags: []engine.CLIFlag{{
+				Name: "input", Type: "json", Required: true, MapsTo: "body.input",
+			}},
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/graphql"}},
+		}}},
+	}
+
+	if findings := checkCLISurface(bundle); len(findings) != 0 {
+		t.Fatalf("fixed GraphQL command findings = %+v, want none", findings)
+	}
+
+	bundle.CLISurface.Commands[0].Flags[0].MapsTo = "body.input.id"
+	findings := checkCLISurface(bundle)
+	if len(findings) == 0 || !strings.Contains(findings[0].Message, "top-level") {
+		t.Fatalf("nested fixed GraphQL JSON flag findings = %+v, want top-level rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))

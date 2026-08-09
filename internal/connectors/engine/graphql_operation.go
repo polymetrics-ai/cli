@@ -46,6 +46,9 @@ func validateGraphQLOperationDirectContract(op OperationSpec, kind string) error
 	if err := validateGraphQLOperationDeclaration(op, kind); err != nil {
 		return err
 	}
+	if err := validateSingleNamedFixedGraphQLOperation(op.GraphQL.Document, kind, op.GraphQL.OperationName); err != nil {
+		return err
+	}
 	if err := validateFixedGraphQLOperationPath(op.GraphQL.Path); err != nil {
 		return err
 	}
@@ -64,6 +67,230 @@ func validateGraphQLOperationDirectContract(op OperationSpec, kind string) error
 		return err
 	}
 	return nil
+}
+
+type graphQLFixedOperationDefinition struct {
+	kind string
+	name string
+}
+
+// validateSingleNamedFixedGraphQLOperation makes the fixed-document promise
+// executable rather than merely descriptive. validateGraphQLSpec deliberately
+// supports legacy metadata bindings and only checks a document prefix; a
+// direct_read must additionally prove that operationName cannot select a
+// second mutation embedded after an otherwise valid query.
+func validateSingleNamedFixedGraphQLOperation(document, wantKind, wantName string) error {
+	definitions, err := graphQLFixedOperationDefinitions(document)
+	if err != nil {
+		return fmt.Errorf("fixed GraphQL document: %w", err)
+	}
+	if len(definitions) != 1 || definitions[0].kind != wantKind || definitions[0].name != wantName {
+		return fmt.Errorf("fixed GraphQL document must contain exactly one named %s operation %q", wantKind, wantName)
+	}
+	return nil
+}
+
+// graphQLFixedOperationDefinitions is a deliberately small lexical scanner,
+// not a general GraphQL parser. It only recognizes top-level executable
+// definitions, skips comments and string literals, and consumes each balanced
+// selection before looking for another definition. That is enough to reject a
+// query document whose operationName could select an appended mutation while
+// retaining fixed fragments and ordinary argument/default-value syntax.
+func graphQLFixedOperationDefinitions(document string) ([]graphQLFixedOperationDefinition, error) {
+	var definitions []graphQLFixedOperationDefinition
+	for offset := 0; ; {
+		var err error
+		offset, err = skipGraphQLIgnored(document, offset)
+		if err != nil {
+			return nil, err
+		}
+		if offset == len(document) {
+			return definitions, nil
+		}
+		keyword, next, ok := readGraphQLName(document, offset)
+		if !ok {
+			return nil, fmt.Errorf("expected a top-level definition at byte %d", offset)
+		}
+		offset, err = skipGraphQLIgnored(document, next)
+		if err != nil {
+			return nil, err
+		}
+		switch keyword {
+		case "query", "mutation", "subscription":
+			name, afterName, named := readGraphQLName(document, offset)
+			if !named {
+				return nil, fmt.Errorf("%s operation must be named", keyword)
+			}
+			offset, err = skipGraphQLDefinitionSelection(document, afterName)
+			if err != nil {
+				return nil, fmt.Errorf("%s operation %q: %w", keyword, name, err)
+			}
+			definitions = append(definitions, graphQLFixedOperationDefinition{kind: keyword, name: name})
+		case "fragment":
+			offset, err = skipGraphQLDefinitionSelection(document, offset)
+			if err != nil {
+				return nil, fmt.Errorf("fragment definition: %w", err)
+			}
+		default:
+			return nil, fmt.Errorf("unsupported top-level definition %q", keyword)
+		}
+	}
+}
+
+func skipGraphQLDefinitionSelection(document string, offset int) (int, error) {
+	parenDepth, bracketDepth := 0, 0
+	for offset < len(document) {
+		var err error
+		offset, err = skipGraphQLIgnored(document, offset)
+		if err != nil {
+			return 0, err
+		}
+		if offset == len(document) {
+			break
+		}
+		switch document[offset] {
+		case '"':
+			offset, err = skipGraphQLString(document, offset)
+			if err != nil {
+				return 0, err
+			}
+			continue
+		case '(':
+			parenDepth++
+		case ')':
+			parenDepth--
+			if parenDepth < 0 {
+				return 0, fmt.Errorf("unmatched closing parenthesis")
+			}
+		case '[':
+			bracketDepth++
+		case ']':
+			bracketDepth--
+			if bracketDepth < 0 {
+				return 0, fmt.Errorf("unmatched closing bracket")
+			}
+		case '{':
+			if parenDepth == 0 && bracketDepth == 0 {
+				return skipGraphQLBalancedBraces(document, offset)
+			}
+			// Input object literals can appear in a variable default or directive
+			// argument. They are not the operation selection and must be skipped
+			// as a complete unit before continuing the header scan.
+			offset, err = skipGraphQLBalancedBraces(document, offset)
+			if err != nil {
+				return 0, err
+			}
+			continue
+		case '}':
+			return 0, fmt.Errorf("unexpected closing brace before selection")
+		}
+		offset++
+	}
+	return 0, fmt.Errorf("has no selection set")
+}
+
+func skipGraphQLBalancedBraces(document string, offset int) (int, error) {
+	if offset >= len(document) || document[offset] != '{' {
+		return 0, fmt.Errorf("expected opening brace")
+	}
+	depth := 0
+	for offset < len(document) {
+		switch document[offset] {
+		case '"':
+			next, err := skipGraphQLString(document, offset)
+			if err != nil {
+				return 0, err
+			}
+			offset = next
+			continue
+		case '#':
+			offset = skipGraphQLComment(document, offset)
+			continue
+		case '{':
+			depth++
+		case '}':
+			depth--
+			if depth == 0 {
+				return offset + 1, nil
+			}
+		}
+		offset++
+	}
+	return 0, fmt.Errorf("unclosed selection set")
+}
+
+func skipGraphQLIgnored(document string, offset int) (int, error) {
+	for offset < len(document) {
+		switch document[offset] {
+		case ' ', '\t', '\n', '\r', ',':
+			offset++
+		case '#':
+			offset = skipGraphQLComment(document, offset)
+		default:
+			return offset, nil
+		}
+	}
+	return offset, nil
+}
+
+func skipGraphQLComment(document string, offset int) int {
+	for offset < len(document) && document[offset] != '\n' && document[offset] != '\r' {
+		offset++
+	}
+	return offset
+}
+
+func skipGraphQLString(document string, offset int) (int, error) {
+	if offset >= len(document) || document[offset] != '"' {
+		return 0, fmt.Errorf("expected opening string quote")
+	}
+	if strings.HasPrefix(document[offset:], `"""`) {
+		offset += 3
+		for offset+2 < len(document) {
+			if document[offset] == '\\' {
+				offset += 2
+				continue
+			}
+			if strings.HasPrefix(document[offset:], `"""`) {
+				return offset + 3, nil
+			}
+			offset++
+		}
+		return 0, fmt.Errorf("unterminated block string")
+	}
+	offset++
+	for offset < len(document) {
+		switch document[offset] {
+		case '\\':
+			offset += 2
+		case '"':
+			return offset + 1, nil
+		case '\n', '\r':
+			return 0, fmt.Errorf("unterminated string")
+		default:
+			offset++
+		}
+	}
+	return 0, fmt.Errorf("unterminated string")
+}
+
+func readGraphQLName(document string, offset int) (string, int, bool) {
+	if offset >= len(document) || !isGraphQLNameStart(document[offset]) {
+		return "", offset, false
+	}
+	end := offset + 1
+	for end < len(document) && isGraphQLNameContinue(document[end]) {
+		end++
+	}
+	return document[offset:end], end, true
+}
+
+func isGraphQLNameStart(value byte) bool {
+	return (value >= 'A' && value <= 'Z') || (value >= 'a' && value <= 'z') || value == '_'
+}
+
+func isGraphQLNameContinue(value byte) bool {
+	return isGraphQLNameStart(value) || (value >= '0' && value <= '9')
 }
 
 func validateFixedGraphQLOperationPath(raw string) error {
@@ -115,6 +342,49 @@ func graphQLOperationVariablesSchema(op OperationSpec) (*Schema, map[string]any,
 		return nil, nil, err
 	}
 	return sch, node, nil
+}
+
+// ValidateGraphQLOperationStructuredJSONVariable is the declaration-owned
+// admission check for the one place a connector command may parse structured
+// JSON for a fixed GraphQL operation. It deliberately proves only a named,
+// top-level closed object/array variable from the operation's own schema; it
+// is not a generic GraphQL request-body validator.
+//
+// Commandrunner and connectorgen both call this exact function. That keeps a
+// hand-authored `json` CLI flag from becoming executable merely because one
+// layer remembered the GraphQL contract while the other did not.
+func ValidateGraphQLOperationStructuredJSONVariable(op OperationSpec, variable string) error {
+	kind := strings.TrimPrefix(op.Kind, "graphql_")
+	if kind != "query" && kind != "mutation" {
+		return fmt.Errorf("operation %q structured JSON variables require a fixed GraphQL operation, got %q", op.ID, op.Kind)
+	}
+	if err := validateGraphQLOperationDirectContract(op, kind); err != nil {
+		return fmt.Errorf("operation %q structured JSON variable contract: %w", op.ID, err)
+	}
+	variable = strings.TrimSpace(variable)
+	if !graphQLNamePattern.MatchString(variable) {
+		return fmt.Errorf("operation %q structured JSON variable %q must be a top-level GraphQL variable", op.ID, variable)
+	}
+	_, schema, err := graphQLOperationVariablesSchema(op)
+	if err != nil {
+		return err
+	}
+	properties, ok := schema["properties"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("operation %q structured JSON variable %q is not declared", op.ID, variable)
+	}
+	raw, ok := properties[variable]
+	if !ok {
+		return fmt.Errorf("operation %q structured JSON variable %q is not declared", op.ID, variable)
+	}
+	node, ok := raw.(map[string]any)
+	if !ok || (!isObjectType(node) && !isArrayType(node)) {
+		return fmt.Errorf("operation %q structured JSON variable %q must be a closed object or array", op.ID, variable)
+	}
+	if err := requireClosedBoundedGraphQLVariables(op.ID, node, "variables_schema/"+variable); err != nil {
+		return err
+	}
+	return nil
 }
 
 // requireGraphQLVariablesSchemaReferences makes the typed variables schema a
@@ -355,7 +625,11 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		message := completeEngineErrorText(err)
+		// Fixed GraphQL calls expose only the bounded, sanitized GraphQL error
+		// metadata on their successful HTTP path. A non-2xx response has no
+		// GraphQL envelope to sanitize, so do not let its raw provider body
+		// bypass that same redaction boundary.
+		message := safety.RedactErrorText(completeEngineErrorText(err))
 		if hint != "" {
 			message += ": " + hint
 		}

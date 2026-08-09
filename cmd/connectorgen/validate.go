@@ -615,6 +615,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	operationSpecs := map[string]engine.OperationSpec{}
+	for _, operation := range b.Operations {
+		operationSpecs[operation.ID] = operation
+	}
 	directReads := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
@@ -635,7 +639,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(ep.CoveredBy.OperationTargets()) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -707,6 +711,37 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 			}
+			for _, operationID := range ep.CoveredBy.OperationTargets() {
+				operation, ok := operationSpecs[operationID]
+				if !ok {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.operations %q is not a declared operation", i, ep.Method, ep.Path, operationID),
+					})
+					continue
+				}
+				if operation.Kind != "graphql_query" && operation.Kind != "graphql_mutation" {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.operations %q must be a fixed GraphQL operation, got %q", i, ep.Method, ep.Path, operationID, operation.Kind),
+					})
+					continue
+				}
+				if !strings.EqualFold(ep.Method, "POST") || operation.GraphQL == nil || operation.GraphQL.Path != ep.Path {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.operations %q does not match its declared fixed GraphQL transport", i, ep.Method, ep.Path, operationID),
+					})
+				}
+				switch operation.Kind {
+				case "graphql_query":
+					// GraphQL queries use the shared POST transport, but they
+					// are still executable reads for the capability contract.
+					hasNonExcludedGET = true
+				case "graphql_mutation":
+					hasNonExcludedMutation = true
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
@@ -751,7 +786,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	if !b.Metadata.Capabilities.Read && hasNonExcludedGET {
 		findings = append(findings, Finding{
 			Connector: b.Name, File: "metadata.json", Rule: ruleSurfaceFailFirstRun,
-			Message: "capabilities.read is false but api_surface.json has a non-excluded GET endpoint",
+			Message: "capabilities.read is false but api_surface.json has a non-excluded executable read surface",
 		})
 	}
 
@@ -844,17 +879,118 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 	if cmd.Availability != "implemented" {
 		return nil
 	}
+	operations := make(map[string]engine.OperationSpec, len(b.Operations))
+	for _, operation := range b.Operations {
+		operations[operation.ID] = operation
+	}
 	var findings []Finding
 	for _, flag := range cmd.Flags {
 		if flag.Type != "json" {
 			continue
 		}
-		if cmd.Intent != "reverse_etl" || strings.TrimSpace(cmd.Write) == "" || !strings.HasPrefix(flag.MapsTo, "record.") {
+		switch {
+		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
+			continue
+		case (cmd.Intent == "direct_read" || cmd.Intent == "direct_write") && strings.TrimSpace(cmd.Operation) != "":
+			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
+			operation, found := operations[cmd.Operation]
+			if ok && variable != "" && !strings.Contains(variable, ".") && found {
+				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
+					continue
+				} else {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("implemented command %d (%q) fixed GraphQL variable --%s is not declared safely: %v", i, cmd.Path, flag.Name, err),
+					})
+					continue
+				}
+			}
+		}
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field or fixed GraphQL variable", i, cmd.Path, flag.Name),
+		})
+	}
+	return findings
+}
+
+func checkCLISurfaceGraphQLOperationSafety(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	op engine.OperationSpec,
+) []Finding {
+	var findings []Finding
+	if len(cmd.APISurface) != 1 {
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented GraphQL command %d (%q) requires exactly one api_surface endpoint", i, cmd.Path),
+		}}
+	}
+	endpoint := cmd.APISurface[0]
+	switch op.Kind {
+	case "graphql_query":
+		if cmd.Intent != "direct_read" {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field", i, cmd.Path, flag.Name),
+				Message:   fmt.Sprintf("implemented GraphQL query command %d (%q) must use direct_read intent", i, cmd.Path),
+			})
+			return findings
+		}
+		maxBytes := 1
+		if op.GraphQL != nil {
+			maxBytes = op.GraphQL.MaxBytes
+		}
+		if err := engine.PreflightOperationDirectRead(b, cmd.Operation, endpoint.Method, endpoint.Path, maxBytes, cmd.OutputPolicy); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL query command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err),
+			})
+		}
+	case "graphql_mutation":
+		if cmd.Intent != "direct_write" {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) must use direct_write intent", i, cmd.Path),
+			})
+			return findings
+		}
+		if err := engine.PreflightOperationDirectWrite(b, cmd.Operation, endpoint.Method, endpoint.Path, cmd.OutputPolicy); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL mutation command %d (%q) operation %q is not executable: %v", i, cmd.Path, cmd.Operation, err),
+			})
+		}
+	default:
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented GraphQL command %d (%q) operation %q has unsupported kind %q", i, cmd.Path, cmd.Operation, op.Kind),
+		}}
+	}
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "body.")
+		if !ok || target == "" || strings.Contains(target, ".") {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented GraphQL command %d (%q) flag --%s must map to one top-level body.<variable>", i, cmd.Path, flag.Name),
 			})
 		}
 	}
@@ -937,6 +1073,9 @@ func checkCLISurfaceOperationSafety(
 	}
 	if cmd.Intent == "binary_download" {
 		return checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)
+	}
+	if op.Kind == "graphql_query" || op.Kind == "graphql_mutation" {
+		return checkCLISurfaceGraphQLOperationSafety(b, i, cmd, op)
 	}
 	if cmd.Intent == "direct_write" {
 		return checkCLISurfaceDirectWriteOperationSafety(b, i, cmd, op)
@@ -1896,6 +2035,9 @@ func checkCLISurfaceEndpointCoverage(
 				Rule:      ruleCLISurfaceUnknownTarget,
 				Message:   fmt.Sprintf("command %d (%q) references unknown api_surface endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
 			})
+			continue
+		}
+		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
 			continue
 		}
 		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && len(state.coveredBy.WriteTargets()) == 0) {

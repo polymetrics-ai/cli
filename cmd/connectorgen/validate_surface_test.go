@@ -35,6 +35,37 @@ func TestCheckAPISurface_POSTDirectReadDoesNotRequireWriteCapability(t *testing.
 	}
 }
 
+// A fixed GraphQL query is a read even though its shared transport is POST.
+// The executable source root must therefore not let a connector claim
+// capabilities.read=false merely because the REST-specific check only looked
+// for GET endpoints.
+func TestCheckAPISurface_FixedGraphQLQueryRequiresReadCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: false, Write: false},
+		},
+		Operations: []engine.OperationSpec{{
+			ID:      "acme.graphql.query.viewer",
+			Kind:    "graphql_query",
+			GraphQL: &engine.GraphQLOperationSpec{Path: "/graphql"},
+		}},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/graphql",
+				CoveredBy: &engine.SurfaceCoverage{Operations: []string{"acme.graphql.query.viewer"}},
+			}},
+		},
+	}
+
+	findings := checkAPISurface(b)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "capabilities.read") {
+		t.Fatalf("checkAPISurface GraphQL read-capability findings = %+v, want one read-capability finding", findings)
+	}
+}
+
 // One endpoint can back more than one write action, and covered_by.write is a
 // single string. github ships three actions on PATCH /repos/{owner}/{repo}/issues/
 // {issue_number} -- update_issue, close_issue and reopen_issue -- because the

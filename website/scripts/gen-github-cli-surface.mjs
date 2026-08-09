@@ -16,6 +16,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BUNDLE = resolve(__dirname, '../../internal/connectors/defs/github');
 const PAGE = resolve(__dirname, '../content/docs/github-cli-surface.mdx');
+const SOURCE_LOCK = resolve(BUNDLE, 'sources/github-operation-source-lock.json');
+const COMBINED_LEDGER = resolve(__dirname, '../../.planning/phases/github-parity-extract-r1/GITHUB-COMBINED-OPERATION-LEDGER.json');
 
 // Runtime rules are editorial, not derivable, so they live here rather than in
 // the bundle. An intent with no rule is a hard error: a silently blank rule
@@ -31,7 +33,10 @@ const INTENT_RULES = [
     'binary_download',
     'Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered.',
   ],
-  ['direct_write', 'Blocked unless a safe reverse-ETL execution model is designed.'],
+  [
+    'direct_write',
+    'Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation.',
+  ],
   ['local_workflow', 'Browser, git, shell, extension, completion, or local config behavior.'],
   ['auth', 'Credential lifecycle commands; never print token material.'],
   ['config', 'Local config behavior, not connector data extraction.'],
@@ -48,6 +53,52 @@ const AVAILABILITY_ROWS = [
 ];
 
 const readJSON = (name) => JSON.parse(readFileSync(resolve(BUNDLE, name), 'utf8'));
+
+function sourceCounts(sourceLock) {
+  const counts = sourceLock?.counts;
+  const names = ['rest', 'graphql_query', 'graphql_mutation', 'total'];
+  if (!counts || names.some((name) => !Number.isInteger(counts[name]) || counts[name] < 0)) {
+    throw new Error('GitHub source lock has no complete non-negative operation counts');
+  }
+  if (counts.rest + counts.graphql_query + counts.graphql_mutation !== counts.total) {
+    throw new Error('GitHub source lock operation counts do not sum to total');
+  }
+  return counts;
+}
+
+function isLegacyGraphQLBinding(endpoint) {
+  return endpoint?.method === 'GRAPHQL';
+}
+
+function isFixedGraphQLTransport(endpoint) {
+  return endpoint?.method === 'POST'
+    && endpoint?.path === '/graphql'
+    && Array.isArray(endpoint?.covered_by?.operations);
+}
+
+function sourceProgress(ledger, source) {
+  if (!ledger || JSON.stringify(ledger.counts) !== JSON.stringify(source)) {
+    throw new Error('GitHub combined ledger counts do not match the source lock');
+  }
+  const metrics = [
+    ['inventory', 'classified'],
+    ['implementation', 'implemented'],
+    ['live_proof', 'proven'],
+  ];
+  const progress = {};
+  for (const [name, numeratorName] of metrics) {
+    const metric = ledger.progress?.[name];
+    if (!metric || !Number.isInteger(metric[numeratorName]) || metric[numeratorName] < 0 || metric[numeratorName] > source.total || metric.total !== source.total) {
+      throw new Error(`GitHub combined ledger ${name} progress is incomplete`);
+    }
+    const expectedPercent = Number(((metric[numeratorName] / source.total) * 100).toFixed(2));
+    if (metric.percent !== expectedPercent) {
+      throw new Error(`GitHub combined ledger ${name} percentage does not match its numerator`);
+    }
+    progress[name] = metric;
+  }
+  return progress;
+}
 
 function countBy(items, key) {
   const counts = new Map();
@@ -69,11 +120,9 @@ function assertAccountedFor(label, counts, known, total) {
   }
 }
 
-function currentSurfaceTable() {
-  const commands = readJSON('cli_surface.json').commands ?? [];
-  const endpoints = readJSON('api_surface.json').endpoints ?? [];
-  const streams = readJSON('streams.json').streams ?? [];
-  const writes = readJSON('writes.json').actions ?? [];
+export function currentSurfaceTable({ commands, endpoints, streams, writes, sourceLock, ledger }) {
+  const source = sourceCounts(sourceLock);
+  const progress = sourceProgress(ledger, source);
 
   const availability = countBy(commands, 'availability');
   assertAccountedFor(
@@ -83,19 +132,53 @@ function currentSurfaceTable() {
     commands.length,
   );
 
-  // An api_surface row is either joined to a command/stream/write by covered_by
-  // or is a blocked ledger-only row; it is never both.
-  const covered = endpoints.filter((endpoint) => endpoint?.covered_by).length;
-  const excluded = endpoints.filter((endpoint) => !endpoint?.covered_by).length;
+  // GraphQL shares one physical POST /graphql transport, which is intentionally
+  // not a REST OpenAPI operation. Keep that row separate so a future source
+  // change cannot silently inflate the REST denominator in the website.
+  const restEndpoints = endpoints.filter(
+    (endpoint) => !isLegacyGraphQLBinding(endpoint) && !isFixedGraphQLTransport(endpoint),
+  );
+  const fixedGraphQLTransports = endpoints.filter(isFixedGraphQLTransport);
+  const legacyGraphQLBindings = endpoints.filter(isLegacyGraphQLBinding);
+  if (restEndpoints.length !== source.rest) {
+    throw new Error(`GitHub REST endpoint count = ${restEndpoints.length}, source lock declares ${source.rest}`);
+  }
+  if (fixedGraphQLTransports.length !== 1) {
+    throw new Error(`GitHub fixed GraphQL transport count = ${fixedGraphQLTransports.length}, want 1`);
+  }
+  const fixedGraphQLOperations = fixedGraphQLTransports[0].covered_by.operations;
+  const expectedGraphQLRoots = source.graphql_query + source.graphql_mutation;
+  if (
+    fixedGraphQLOperations.length !== expectedGraphQLRoots
+    || new Set(fixedGraphQLOperations).size !== expectedGraphQLRoots
+    || fixedGraphQLOperations.some((operation) => typeof operation !== 'string' || operation.trim() === '')
+  ) {
+    throw new Error(
+      `GitHub fixed GraphQL root-operation bindings = ${fixedGraphQLOperations.length}, source lock declares ${expectedGraphQLRoots}`,
+    );
+  }
+
+  const coveredREST = restEndpoints.filter((endpoint) => endpoint?.covered_by).length;
+  const blockedREST = restEndpoints.filter((endpoint) => !endpoint?.covered_by).length;
 
   const rows = [
     ['Declared command entries', commands.length],
     ...AVAILABILITY_ROWS.map(([label, value]) => [label, availability.get(value) ?? 0]),
     ['GitHub read streams', streams.length],
     ['GitHub write actions', writes.length],
-    ['Tracked REST endpoints', endpoints.length],
-    ['Covered REST endpoints', covered],
-    ['Excluded REST endpoints', excluded],
+    ['Pinned REST operations', source.rest],
+    ['Pinned GraphQL Query roots', source.graphql_query],
+    ['Pinned GraphQL Mutation roots', source.graphql_mutation],
+    ['Pinned source operations', source.total],
+    ['Source inventory classification', `${progress.inventory.classified}/${progress.inventory.total} (${progress.inventory.percent}%)`],
+    ['Executable implementation', `${progress.implementation.implemented}/${progress.implementation.total} (${progress.implementation.percent}%)`],
+    ['Current-head live proof', `${progress.live_proof.proven}/${progress.live_proof.total} (${progress.live_proof.percent}%)`],
+    ['Tracked REST endpoints', restEndpoints.length],
+    ['Covered REST endpoints', coveredREST],
+    ['Blocked REST endpoints', blockedREST],
+    ['Fixed GraphQL transport endpoints', fixedGraphQLTransports.length],
+    ['Fixed GraphQL root-operation bindings', fixedGraphQLOperations.length],
+    ['Legacy GraphQL compatibility bindings', legacyGraphQLBindings.length],
   ];
 
   return [
@@ -137,8 +220,21 @@ function replaceBlock(page, id, body) {
   return `${page.slice(0, start)}${open}\n\n${body}\n\n${page.slice(end)}`;
 }
 
-let page = readFileSync(PAGE, 'utf8');
-page = replaceBlock(page, 'current-surface', currentSurfaceTable());
-page = replaceBlock(page, 'execution-model', executionModelTable());
-writeFileSync(PAGE, page);
-console.log(`wrote ${PAGE}`);
+function main() {
+  const commands = readJSON('cli_surface.json').commands ?? [];
+  const endpoints = readJSON('api_surface.json').endpoints ?? [];
+  const streams = readJSON('streams.json').streams ?? [];
+  const writes = readJSON('writes.json').actions ?? [];
+  const sourceLock = JSON.parse(readFileSync(SOURCE_LOCK, 'utf8'));
+  const ledger = JSON.parse(readFileSync(COMBINED_LEDGER, 'utf8'));
+
+  let page = readFileSync(PAGE, 'utf8');
+  page = replaceBlock(page, 'current-surface', currentSurfaceTable({ commands, endpoints, streams, writes, sourceLock, ledger }));
+  page = replaceBlock(page, 'execution-model', executionModelTable());
+  writeFileSync(PAGE, page);
+  console.log(`wrote ${PAGE}`);
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main();
+}

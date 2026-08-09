@@ -26,6 +26,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
 			Method    string           `json:"method"`
+			Path      string           `json:"path"`
 			CoveredBy map[string]any   `json:"covered_by"`
 			Excluded  map[string]any   `json:"excluded"`
 			Operation *githubOperation `json:"operation"`
@@ -45,16 +46,22 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	models := map[string]int{}
 	risks := map[string]int{}
 	statuses := map[string]int{}
-	covered, excluded, operations, restEndpoints, legacyGraphQLBindings := 0, 0, 0, 0, 0
+	covered, excluded, operations, restEndpoints, graphQLBindings, generatedGraphQLTransports := 0, 0, 0, 0, 0, 0
 
 	for i, ep := range surface.Endpoints {
+		generatedTransport := githubGeneratedGraphQLTransport(ep.Method, ep.Path, ep.CoveredBy)
 		if ep.Method == "GRAPHQL" {
-			legacyGraphQLBindings++
+			graphQLBindings++
+		} else if generatedTransport {
+			graphQLBindings++
+			generatedGraphQLTransports++
 		} else {
 			restEndpoints++
 		}
-		totalByMethod[ep.Method]++
-		if len(ep.CoveredBy) > 0 {
+		if !generatedTransport {
+			totalByMethod[ep.Method]++
+		}
+		if len(ep.CoveredBy) > 0 && !generatedTransport {
 			covered++
 			coveredByMethod[ep.Method]++
 		}
@@ -88,8 +95,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if restEndpoints != lock.Counts.REST {
 		t.Fatalf("REST endpoint bindings = %d, want %d from source lock", restEndpoints, lock.Counts.REST)
 	}
-	if legacyGraphQLBindings == 0 {
-		t.Fatal("legacy fixed GraphQL bindings = 0, want at least one bundle binding")
+	if graphQLBindings == 0 {
+		t.Fatal("fixed GraphQL bindings = 0, want at least one bundle binding")
+	}
+	if generatedGraphQLTransports != 1 {
+		t.Fatalf("generated GraphQL transports = %d, want one shared POST /graphql binding", generatedGraphQLTransports)
 	}
 	if covered != 1147 {
 		t.Fatalf("covered endpoints = %d, want 1147", covered)

@@ -16,12 +16,19 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Result != "pass" {
 		t.Fatalf("Result = %q reason=%q", result.Result, result.Reason)
 	}
-	wantEndpoints := githubSourceLockedRESTCount(t) + githubLegacyGraphQLBindingCount(t)
-	if result.Endpoints != wantEndpoints {
-		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy fixed GraphQL bindings %d", result.Endpoints, wantEndpoints)
+	transportEndpoints, transportOperations := githubFixedGraphQLTransportCoverage(t)
+	if transportEndpoints != 1 {
+		t.Fatalf("Fixed GraphQL transport endpoints = %d, want exactly one shared POST /graphql endpoint", transportEndpoints)
 	}
-	if result.Covered != 1147 {
-		t.Fatalf("Covered = %d, want 1147", result.Covered)
+	if transportOperations != githubSourceLockedGraphQLRootCount(t) {
+		t.Fatalf("Fixed GraphQL transport operations = %d, want every source-locked GraphQL root %d", transportOperations, githubSourceLockedGraphQLRootCount(t))
+	}
+	wantEndpoints := githubSourceLockedRESTCount(t) + githubLegacyGraphQLBindingCount(t) + transportEndpoints
+	if result.Endpoints != wantEndpoints {
+		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy bindings plus fixed GraphQL transport %d", result.Endpoints, wantEndpoints)
+	}
+	if result.Covered != 1147+transportEndpoints {
+		t.Fatalf("Covered = %d, want legacy coverage plus fixed GraphQL transport %d", result.Covered, 1147+transportEndpoints)
 	}
 	if result.Blocked != 77 {
 		t.Fatalf("Blocked = %d, want 77", result.Blocked)
@@ -41,6 +48,9 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	}
 	if result.CoveredBy["direct_reads"] != 186 {
 		t.Fatalf("CoveredBy[direct_reads] = %d, want 186", result.CoveredBy["direct_reads"])
+	}
+	if result.CoveredBy["operation"] != transportOperations {
+		t.Fatalf("CoveredBy[operation] = %d, want every source-locked GraphQL root %d", result.CoveredBy["operation"], transportOperations)
 	}
 	if result.BlockedByModel["duplicate"] != 67 {
 		t.Fatalf("BlockedByModel[duplicate] = %d, want 67", result.BlockedByModel["duplicate"])
@@ -191,6 +201,31 @@ func TestSurfaceInventoryCountsPluralWriteCoverage(t *testing.T) {
 	}
 	if result.CoveredBy["write"] != 3 {
 		t.Fatalf("CoveredBy[write] = %d, want all 3 plural targets counted", result.CoveredBy["write"])
+	}
+}
+
+func TestSurfaceInventoryCountsFixedGraphQLOperationCoverage(t *testing.T) {
+	raw := `{
+		"api": "test API",
+		"endpoints": [{
+			"method": "POST",
+			"path": "/graphql",
+			"covered_by": {"operations": ["acme.graphql.query.viewer", "acme.graphql.mutation.close_widget"]}
+		}]
+	}`
+
+	result, err := surfaceInventoryFromRaw([]byte(raw))
+	if err != nil {
+		t.Fatalf("surfaceInventoryFromRaw: %v", err)
+	}
+	if result.Result != "pass" {
+		t.Fatalf("Result = %q reason = %q, want pass", result.Result, result.Reason)
+	}
+	if result.Covered != 1 {
+		t.Fatalf("Covered = %d, want one physical transport endpoint", result.Covered)
+	}
+	if result.CoveredBy["operation"] != 2 {
+		t.Fatalf("CoveredBy[operation] = %d, want both fixed operation IDs", result.CoveredBy["operation"])
 	}
 }
 

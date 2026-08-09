@@ -10,7 +10,7 @@ export GOTOOLCHAIN ?= auto
 # produces a pm that can read or write a warehouse table.
 export CGO_ENABLED ?= 1
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing github-parity-artifacts-check
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
@@ -105,6 +105,15 @@ connectorgen-validate:
 connectorgen-surface-sync:
 	go run ./cmd/connectorgen surface-sync --check
 
+# The GitHub source lock is the shared REST + GraphQL denominator. These
+# hermetic checks reject a stale generated root contract, a stale combined
+# ledger, a missing operation classification, or a disappearance of the
+# organization-create canary before a connector surface change reaches CI.
+github-parity-artifacts-check:
+	node --test scripts/tests/github-combined-operation-ledger.test.mjs scripts/tests/gen-github-graphql-parity.test.mjs scripts/tests/github-source-drift.test.mjs
+	node scripts/gen-github-graphql-parity.mjs --check
+	node scripts/github-combined-operation-ledger.mjs --check
+
 connector-boundary:
 	go run ./cmd/connectorgen boundary . --json
 
@@ -112,12 +121,12 @@ release-workflow-check:
 	./scripts/tests/homebrew-release-notify.sh
 	./scripts/tests/release-target-parity.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connector-boundary release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync github-parity-artifacts-check connector-boundary release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 perf-free: build

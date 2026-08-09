@@ -15,6 +15,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/transportpolicy"
+	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -127,7 +128,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err)
+			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation")
 			if hint != "" {
 				message += ": " + hint
 			}
@@ -189,20 +190,26 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 	return result, nil
 }
 
-// operationDirectWriteErrorText deliberately renders the captured HTTP error
-// directly instead of using HTTPError.Error, whose shared read-safe rendering
-// removes response content. rest_write output is complete by captain policy;
-// the requester's existing capture bound still limits the amount retained.
-func operationDirectWriteErrorText(err error) string {
+// operationDirectWriteErrorText preserves the established complete REST write
+// diagnostics, but a fixed GraphQL mutation must redact its HTTP error body:
+// unlike a successful GraphQL response it has no errors[] envelope sanitizer
+// and can otherwise echo a caller value in its raw provider body.
+func operationDirectWriteErrorText(err error, redact bool) string {
+	var output string
 	var httpErr *connsdk.HTTPError
 	if errors.As(err, &httpErr) {
 		message := strings.TrimSpace(httpErr.Body)
 		if message == "" {
 			message = http.StatusText(httpErr.Status)
 		}
-		return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+		output = fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+	} else {
+		output = err.Error()
 	}
-	return err.Error()
+	if redact {
+		return safety.RedactErrorText(output)
+	}
+	return output
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -530,7 +537,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if isAbsoluteHTTPURL(op.REST.Path) {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
 		}
-		if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
+		if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path, ""); err != nil {
 			return OperationSpec{}, "", err
 		}
 		return op, method, nil
@@ -538,7 +545,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
 			return OperationSpec{}, "", err
 		}
-		if err := requireOperationDirectWriteEndpoint(b, http.MethodPost, op.GraphQL.Path); err != nil {
+		if err := requireOperationDirectWriteEndpoint(b, http.MethodPost, op.GraphQL.Path, op.ID); err != nil {
 			return OperationSpec{}, "", err
 		}
 		return op, http.MethodPost, nil
@@ -556,7 +563,7 @@ func isOperationDirectWriteMethod(method string) bool {
 	}
 }
 
-func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) error {
+func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath, operation string) error {
 	surface := b.Surface
 	if surface == nil {
 		// defs.FS omits api_surface.json. The runtime fallback is the endpoint
@@ -568,6 +575,14 @@ func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) 
 	}
 	for _, endpoint := range surface.Endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
+			if operation != "" {
+				for _, target := range endpoint.CoveredBy.OperationTargets() {
+					if target == operation {
+						return nil
+					}
+				}
+				return fmt.Errorf("api_surface endpoint %s %s does not cover GraphQL operation %q", method, endpointPath, operation)
+			}
 			if endpoint.Operation == nil {
 				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
 			}

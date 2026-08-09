@@ -451,6 +451,15 @@ type OperationDirectReadPreflighter interface {
 	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
 }
 
+// OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
+// admission check for a structured CLI value in a fixed GraphQL operation.
+// The operation declaration remains the only authority for which one
+// top-level variable may receive an object/array; this interface must never be
+// generalized into a request-body or raw-GraphQL parser.
+type OperationStructuredJSONVariablePreflighter interface {
+	PreflightOperationStructuredJSONVariable(operation, variable string) error
+}
+
 // OperationDirectWriteRequest is one declared, typed rest_write invocation.
 //
 // A caller must obtain PreviewDigest from PreviewOperationDirectWrite before

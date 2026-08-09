@@ -51,3 +51,61 @@ func githubLegacyGraphQLBindingCount(t *testing.T) int {
 	}
 	return count
 }
+
+// githubSourceLockedGraphQLRootCount is the authoritative generated-operation
+// denominator.  The fixed POST /graphql transport is one physical endpoint,
+// but it must enumerate every pinned Query and Mutation root rather than
+// preserve the former four-operation compatibility count.
+func githubSourceLockedGraphQLRootCount(t *testing.T) int {
+	t.Helper()
+	raw, err := os.ReadFile("../defs/github/sources/github-operation-source-lock.json")
+	if err != nil {
+		t.Fatalf("read GitHub source lock: %v", err)
+	}
+	var lock struct {
+		Counts struct {
+			GraphQLQuery    int `json:"graphql_query"`
+			GraphQLMutation int `json:"graphql_mutation"`
+		} `json:"counts"`
+	}
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatalf("unmarshal GitHub source lock: %v", err)
+	}
+	total := lock.Counts.GraphQLQuery + lock.Counts.GraphQLMutation
+	if total <= 0 {
+		t.Fatalf("GitHub source lock GraphQL root count = %d, want positive source-derived count", total)
+	}
+	return total
+}
+
+// githubFixedGraphQLTransportCoverage reports the physical shared transport
+// and the exact fixed root-operation bindings it carries.  Legacy GRAPHQL
+// pseudo-endpoints are intentionally excluded: they remain compatibility
+// metadata, not the executable POST transport.
+func githubFixedGraphQLTransportCoverage(t *testing.T) (endpoints, operations int) {
+	t.Helper()
+	raw, err := os.ReadFile("../defs/github/api_surface.json")
+	if err != nil {
+		t.Fatalf("read GitHub api surface: %v", err)
+	}
+	var surface struct {
+		Endpoints []struct {
+			Method    string `json:"method"`
+			Path      string `json:"path"`
+			CoveredBy struct {
+				Operations []string `json:"operations"`
+			} `json:"covered_by"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("unmarshal GitHub api surface: %v", err)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Method != "POST" || endpoint.Path != "/graphql" || len(endpoint.CoveredBy.Operations) == 0 {
+			continue
+		}
+		endpoints++
+		operations += len(endpoint.CoveredBy.Operations)
+	}
+	return endpoints, operations
+}
