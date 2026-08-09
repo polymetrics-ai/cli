@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.ashbyhq.com/reference (retrieved 2026-08-06): Ashby's provider reference does not publish an enumerable rate-limit policy for this API."
+}

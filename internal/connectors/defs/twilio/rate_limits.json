@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://www.twilio.com/docs/usage/api (retrieved 2026-08-06): Twilio applies provider limits to individual accounts, senders, services, and resource types rather than one enumerable API policy."
+}

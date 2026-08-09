@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api (retrieved 2026-08-06): Published REST limits vary by authentication flow and installation scaling, which this bundle cannot select with a non-secret scope."
+}

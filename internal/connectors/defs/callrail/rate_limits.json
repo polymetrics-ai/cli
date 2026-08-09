@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "state": "declared",
+  "policies": [
+    {
+      "id": "general-account-hourly",
+      "source": {
+        "url": "https://apidocs.callrail.com/",
+        "retrieved_at": "2026-08-06"
+      },
+      "selector": {
+        "all": true
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "account_id"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 1000,
+          "window_seconds": 3600
+        }
+      ]
+    },
+    {
+      "id": "general-account-daily",
+      "source": {
+        "url": "https://apidocs.callrail.com/",
+        "retrieved_at": "2026-08-06"
+      },
+      "selector": {
+        "all": true
+      },
+      "scope": {
+        "subject_kind": "account",
+        "subject_config": "account_id"
+      },
+      "budgets": [
+        {
+          "model": "fixed_window",
+          "dimension": "sustained",
+          "unit": "requests",
+          "limit": 10000,
+          "window_seconds": 86400
+        }
+      ]
+    }
+  ]
+}

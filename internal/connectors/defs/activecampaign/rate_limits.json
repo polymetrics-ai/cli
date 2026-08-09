@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.activecampaign.com/reference/rate-limits (retrieved 2026-08-06): ActiveCampaign publishes a 5-requests-per-second account limit but not a replenishment model that can be declared without inference."
+}

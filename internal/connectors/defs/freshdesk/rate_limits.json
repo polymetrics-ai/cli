@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.freshdesk.com/api/#rate-limit (retrieved 2026-08-06): Freshdesk publishes account-wide and endpoint limits that vary by plan and purchased capacity, but the bundle has no non-secret plan selector."
+}

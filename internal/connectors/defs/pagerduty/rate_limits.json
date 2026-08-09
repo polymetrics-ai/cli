@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.pagerduty.com/api-reference/ (retrieved 2026-08-06): PagerDuty's provider reference does not publish an enumerable request-rate policy compatible with this bundle."
+}

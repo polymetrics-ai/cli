@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.monday.com/api-reference/docs/rate-limits (retrieved 2026-08-06): monday.com limits are per account and app, vary by plan and request complexity, and the bundle has no non-secret app or plan selector."
+}

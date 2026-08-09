@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 80,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "confluence",
+      "state": "unknown",
+      "file": "internal/connectors/defs/confluence/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "convertkit",
+      "state": "unknown",
+      "file": "internal/connectors/defs/convertkit/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "copper",
+      "state": "unknown",
+      "file": "internal/connectors/defs/copper/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "countercyclical",
+      "state": "unknown",
+      "file": "internal/connectors/defs/countercyclical/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "criteo-marketing",
+      "state": "unknown",
+      "file": "internal/connectors/defs/criteo-marketing/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "customer-io",
+      "state": "unknown",
+      "file": "internal/connectors/defs/customer-io/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "customerly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/customerly/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "datadog",
+      "state": "unknown",
+      "file": "internal/connectors/defs/datadog/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "datascope",
+      "state": "unknown",
+      "file": "internal/connectors/defs/datascope/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dbt",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dbt/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "defillama",
+      "state": "unknown",
+      "file": "internal/connectors/defs/defillama/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "devin-ai",
+      "state": "unknown",
+      "file": "internal/connectors/defs/devin-ai/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ding-connect",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ding-connect/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "discord",
+      "state": "unknown",
+      "file": "internal/connectors/defs/discord/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dixa",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dixa/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dockerhub",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dockerhub/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "docuseal",
+      "state": "unknown",
+      "file": "internal/connectors/defs/docuseal/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dremio",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dremio/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "drift",
+      "state": "unknown",
+      "file": "internal/connectors/defs/drift/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "drip",
+      "state": "unknown",
+      "file": "internal/connectors/defs/drip/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dropbox-sign",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dropbox-sign/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "dynamodb",
+      "state": "unknown",
+      "file": "internal/connectors/defs/dynamodb/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "e-conomic",
+      "state": "unknown",
+      "file": "internal/connectors/defs/e-conomic/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "easypost",
+      "state": "unknown",
+      "file": "internal/connectors/defs/easypost/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "easypromos",
+      "state": "unknown",
+      "file": "internal/connectors/defs/easypromos/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ebay-finance",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ebay-finance/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ebay-fulfillment/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "elasticemail",
+      "state": "unknown",
+      "file": "internal/connectors/defs/elasticemail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "emailoctopus",
+      "state": "unknown",
+      "file": "internal/connectors/defs/emailoctopus/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "employment-hero",
+      "state": "unknown",
+      "file": "internal/connectors/defs/employment-hero/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "eventbrite",
+      "state": "unknown",
+      "file": "internal/connectors/defs/eventbrite/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "eventee",
+      "state": "unknown",
+      "file": "internal/connectors/defs/eventee/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "eventzilla",
+      "state": "unknown",
+      "file": "internal/connectors/defs/eventzilla/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "everhour",
+      "state": "unknown",
+      "file": "internal/connectors/defs/everhour/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "exchange-rates",
+      "state": "unknown",
+      "file": "internal/connectors/defs/exchange-rates/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ezofficeinventory",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ezofficeinventory/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "factorial",
+      "state": "unknown",
+      "file": "internal/connectors/defs/factorial/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "faker",
+      "state": "not_applicable",
+      "file": "internal/connectors/defs/faker/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fastbill",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fastbill/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "fastly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/fastly/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 39,
+    "not_applicable": 1,
+    "file_total": 40
+  }
+}

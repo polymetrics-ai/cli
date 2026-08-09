@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 360,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "statsig",
+      "state": "unknown",
+      "file": "internal/connectors/defs/statsig/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "statuspage",
+      "state": "unknown",
+      "file": "internal/connectors/defs/statuspage/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "stigg",
+      "state": "unknown",
+      "file": "internal/connectors/defs/stigg/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "stockdata",
+      "state": "unknown",
+      "file": "internal/connectors/defs/stockdata/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "strava",
+      "state": "unknown",
+      "file": "internal/connectors/defs/strava/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "stripe",
+      "state": "unknown",
+      "file": "internal/connectors/defs/stripe/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "survey-sparrow",
+      "state": "unknown",
+      "file": "internal/connectors/defs/survey-sparrow/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "surveycto",
+      "state": "unknown",
+      "file": "internal/connectors/defs/surveycto/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "surveymonkey",
+      "state": "unknown",
+      "file": "internal/connectors/defs/surveymonkey/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "survicate",
+      "state": "unknown",
+      "file": "internal/connectors/defs/survicate/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "svix",
+      "state": "unknown",
+      "file": "internal/connectors/defs/svix/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "systeme",
+      "state": "unknown",
+      "file": "internal/connectors/defs/systeme/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "taboola",
+      "state": "unknown",
+      "file": "internal/connectors/defs/taboola/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tally",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tally/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tavus",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tavus/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "teamtailor",
+      "state": "unknown",
+      "file": "internal/connectors/defs/teamtailor/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "teamwork",
+      "state": "unknown",
+      "file": "internal/connectors/defs/teamwork/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tempo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tempo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "the-guardian-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/the-guardian-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "thinkific",
+      "state": "unknown",
+      "file": "internal/connectors/defs/thinkific/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "thinkific-courses",
+      "state": "unknown",
+      "file": "internal/connectors/defs/thinkific-courses/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "thrive-learning",
+      "state": "unknown",
+      "file": "internal/connectors/defs/thrive-learning/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ticketmaster",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ticketmaster/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tickettailor",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tickettailor/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "timely",
+      "state": "unknown",
+      "file": "internal/connectors/defs/timely/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tmdb",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tmdb/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "todoist",
+      "state": "unknown",
+      "file": "internal/connectors/defs/todoist/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "toggl",
+      "state": "unknown",
+      "file": "internal/connectors/defs/toggl/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "track-pms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/track-pms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "trello",
+      "state": "unknown",
+      "file": "internal/connectors/defs/trello/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tremendous",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tremendous/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "trustpilot",
+      "state": "unknown",
+      "file": "internal/connectors/defs/trustpilot/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tvmaze-schedule",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tvmaze-schedule/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "twelve-data",
+      "state": "unknown",
+      "file": "internal/connectors/defs/twelve-data/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "twilio",
+      "state": "unknown",
+      "file": "internal/connectors/defs/twilio/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "twilio-taskrouter",
+      "state": "unknown",
+      "file": "internal/connectors/defs/twilio-taskrouter/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "twitter",
+      "state": "unknown",
+      "file": "internal/connectors/defs/twitter/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "tyntec-sms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/tyntec-sms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "typeform",
+      "state": "unknown",
+      "file": "internal/connectors/defs/typeform/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "unleash",
+      "state": "unknown",
+      "file": "internal/connectors/defs/unleash/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

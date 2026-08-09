@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider operation source https://api-explorer.shutterstock.com/openapi.json (retrieved 2026-08-06) does not publish a complete enforceable rate-limit policy in the retained source: selector, non-secret scope, budget, and replenishment model are not all documented. No numeric rate or bucket model is declared."
+}

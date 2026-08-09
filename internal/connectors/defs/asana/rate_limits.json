@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.asana.com/docs/rate-limits (retrieved 2026-08-06): Asana applies token-scoped quotas that vary by domain plan and endpoint, including separate concurrency and cost limits; the bundle has no non-secret token or plan selector."
+}

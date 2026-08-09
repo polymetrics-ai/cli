@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developers.hubspot.com/docs/developer-tooling/platform/usage-guidelines (retrieved 2026-08-06): HubSpot limits vary by private-app versus OAuth traffic, marketplace status, and subscription tier; the bundle has no matching selector."
+}

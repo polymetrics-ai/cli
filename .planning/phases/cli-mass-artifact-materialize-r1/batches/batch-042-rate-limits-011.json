@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 400,
+  "requested_size": 26,
+  "entries": [
+    {
+      "connector": "uppromote",
+      "state": "unknown",
+      "file": "internal/connectors/defs/uppromote/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "uservoice",
+      "state": "unknown",
+      "file": "internal/connectors/defs/uservoice/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "vantage",
+      "state": "unknown",
+      "file": "internal/connectors/defs/vantage/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "veeqo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/veeqo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "vercel",
+      "state": "unknown",
+      "file": "internal/connectors/defs/vercel/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "visma-economic",
+      "state": "unknown",
+      "file": "internal/connectors/defs/visma-economic/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "vitally",
+      "state": "unknown",
+      "file": "internal/connectors/defs/vitally/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "vwo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/vwo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "waiteraid",
+      "state": "unknown",
+      "file": "internal/connectors/defs/waiteraid/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "wasabi-stats-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/wasabi-stats-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "watchmode",
+      "state": "unknown",
+      "file": "internal/connectors/defs/watchmode/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "weatherstack",
+      "state": "unknown",
+      "file": "internal/connectors/defs/weatherstack/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "web-scrapper",
+      "state": "unknown",
+      "file": "internal/connectors/defs/web-scrapper/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "webflow",
+      "state": "unknown",
+      "file": "internal/connectors/defs/webflow/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "when-i-work",
+      "state": "unknown",
+      "file": "internal/connectors/defs/when-i-work/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "whisky-hunter",
+      "state": "unknown",
+      "file": "internal/connectors/defs/whisky-hunter/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "wikipedia-pageviews",
+      "state": "unknown",
+      "file": "internal/connectors/defs/wikipedia-pageviews/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "woocommerce",
+      "state": "unknown",
+      "file": "internal/connectors/defs/woocommerce/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "wordpress",
+      "state": "unknown",
+      "file": "internal/connectors/defs/wordpress/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "workable",
+      "state": "unknown",
+      "file": "internal/connectors/defs/workable/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "workday-rest",
+      "state": "unknown",
+      "file": "internal/connectors/defs/workday-rest/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "workramp",
+      "state": "unknown",
+      "file": "internal/connectors/defs/workramp/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "xero",
+      "state": "unknown",
+      "file": "internal/connectors/defs/xero/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "youtube-analytics",
+      "state": "unknown",
+      "file": "internal/connectors/defs/youtube-analytics/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "zendesk-support",
+      "state": "unknown",
+      "file": "internal/connectors/defs/zendesk-support/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "zoom",
+      "state": "unknown",
+      "file": "internal/connectors/defs/zoom/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 26,
+    "not_applicable": 0,
+    "file_total": 26
+  }
+}

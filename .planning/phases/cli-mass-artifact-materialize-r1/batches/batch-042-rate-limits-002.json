@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 40,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "brevo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/brevo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "brex",
+      "state": "unknown",
+      "file": "internal/connectors/defs/brex/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "buildkite",
+      "state": "unknown",
+      "file": "internal/connectors/defs/buildkite/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "bunny-inc",
+      "state": "unknown",
+      "file": "internal/connectors/defs/bunny-inc/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "buzzsprout",
+      "state": "unknown",
+      "file": "internal/connectors/defs/buzzsprout/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "cal-com",
+      "state": "unknown",
+      "file": "internal/connectors/defs/cal-com/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "callrail",
+      "state": "declared",
+      "file": "internal/connectors/defs/callrail/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "campaign-monitor",
+      "state": "unknown",
+      "file": "internal/connectors/defs/campaign-monitor/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "campayn",
+      "state": "unknown",
+      "file": "internal/connectors/defs/campayn/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "canny",
+      "state": "unknown",
+      "file": "internal/connectors/defs/canny/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "capsule-crm",
+      "state": "unknown",
+      "file": "internal/connectors/defs/capsule-crm/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "care-quality-commission",
+      "state": "unknown",
+      "file": "internal/connectors/defs/care-quality-commission/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "castor-edc",
+      "state": "unknown",
+      "file": "internal/connectors/defs/castor-edc/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chameleon",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chameleon/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chargebee",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chargebee/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chargedesk",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chargedesk/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chargify",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chargify/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chartmogul",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chartmogul/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chatwoot",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chatwoot/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "chift",
+      "state": "unknown",
+      "file": "internal/connectors/defs/chift/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "churnkey",
+      "state": "unknown",
+      "file": "internal/connectors/defs/churnkey/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "cimis",
+      "state": "unknown",
+      "file": "internal/connectors/defs/cimis/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "circa",
+      "state": "unknown",
+      "file": "internal/connectors/defs/circa/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "circleci",
+      "state": "unknown",
+      "file": "internal/connectors/defs/circleci/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "cisco-meraki",
+      "state": "unknown",
+      "file": "internal/connectors/defs/cisco-meraki/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "clarif-ai",
+      "state": "unknown",
+      "file": "internal/connectors/defs/clarif-ai/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "clazar",
+      "state": "unknown",
+      "file": "internal/connectors/defs/clazar/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "clickup-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/clickup-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "clockify",
+      "state": "unknown",
+      "file": "internal/connectors/defs/clockify/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "clockodo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/clockodo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "close-com",
+      "state": "unknown",
+      "file": "internal/connectors/defs/close-com/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "coassemble",
+      "state": "unknown",
+      "file": "internal/connectors/defs/coassemble/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "coda",
+      "state": "unknown",
+      "file": "internal/connectors/defs/coda/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "codefresh",
+      "state": "unknown",
+      "file": "internal/connectors/defs/codefresh/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "coin-api",
+      "state": "unknown",
+      "file": "internal/connectors/defs/coin-api/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "coingecko-coins",
+      "state": "unknown",
+      "file": "internal/connectors/defs/coingecko-coins/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "coinmarketcap",
+      "state": "unknown",
+      "file": "internal/connectors/defs/coinmarketcap/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "commercetools",
+      "state": "unknown",
+      "file": "internal/connectors/defs/commercetools/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "concord",
+      "state": "unknown",
+      "file": "internal/connectors/defs/concord/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "configcat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/configcat/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 1,
+    "unknown": 39,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

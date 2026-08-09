@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.datadoghq.com/api/latest/rate-limits/ (retrieved 2026-08-06): Datadog endpoint-specific organization, user, and API-key buckets may be increased; the bundle has no enumerable endpoint mapping or non-secret subject for every bucket."
+}

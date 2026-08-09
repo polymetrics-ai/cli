@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://clockify.me/help/getting-started/webhook-and-api-limitations (retrieved 2026-08-06): Clockify publishes different workspace limits for free and paid plans, but the bundle has no non-secret plan selector."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.atlassian.com/cloud/bitbucket/rest/ (retrieved 2026-08-06): Bitbucket's provider reference does not publish a stable, enumerable REST rate-limit policy for this bundle."
+}
