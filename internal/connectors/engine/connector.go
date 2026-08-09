@@ -140,6 +140,40 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+// OperationWebSocketSession satisfies connectors.OperationWebSocketSessioner
+// while keeping the engine executor's closed request type private to engine.
+func (c *Connector) OperationWebSocketSession(ctx context.Context, req connectors.OperationWebSocketSessionRequest) (connectors.OperationWebSocketSessionResult, error) {
+	result, err := OperationWebSocketSession(ctx, c.bundle, WebSocketSessionRequest{
+		Operation:     req.Operation,
+		Config:        req.Config,
+		SessionUpdate: req.SessionUpdate,
+		PCM16:         req.PCM16,
+	}, c.hooks)
+	if err != nil {
+		return connectors.OperationWebSocketSessionResult{}, err
+	}
+	return connectors.OperationWebSocketSessionResult{
+		Connector:     result.Connector,
+		Operation:     result.Operation,
+		Method:        result.Method,
+		Path:          result.Path,
+		Status:        result.Status,
+		BytesSent:     result.BytesSent,
+		BytesReceived: result.BytesReceived,
+		Events:        result.Events,
+	}, nil
+}
+
+func (c *Connector) OperationWebSocketSessionMetadata(operation string) (connectors.OperationWebSocketSessionMetadata, error) {
+	return OperationWebSocketSessionMetadata(c.bundle, operation)
+}
+
+// PreflightOperationWebSocketSession proves a command's fixed session binding
+// without resolving credentials or opening a network connection.
+func (c *Connector) PreflightOperationWebSocketSession(operation, method, path, outputPolicy string) error {
+	return PreflightOperationWebSocketSession(c.bundle, operation, method, path, outputPolicy)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
 }
@@ -272,6 +306,17 @@ func (b Base) CommandSurface() *connectors.CommandSurface {
 // operation direct-read binding without resolving credentials or network I/O.
 func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// OperationWebSocketSessionMetadata and PreflightOperationWebSocketSession
+// let a Tier-3 native connector reuse the same closed command admission when
+// it elects to implement the session executor itself.
+func (b Base) OperationWebSocketSessionMetadata(operation string) (connectors.OperationWebSocketSessionMetadata, error) {
+	return OperationWebSocketSessionMetadata(b.bundle, operation)
+}
+
+func (b Base) PreflightOperationWebSocketSession(operation, method, path, outputPolicy string) error {
+	return PreflightOperationWebSocketSession(b.bundle, operation, method, path, outputPolicy)
 }
 
 // PreflightOperationDirectWrite validates a native connector's declared

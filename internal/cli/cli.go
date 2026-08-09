@@ -1254,6 +1254,25 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		writeDirectReadPageNotice(stderr, result.DirectRead.Page)
 		return nil
 	}
+	if result.WebSocketSession != nil {
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":           "ConnectorCommandWebSocketSession",
+				"connector":      result.Connector,
+				"command":        result.Command,
+				"operation":      result.WebSocketSession.Operation,
+				"method":         result.WebSocketSession.Method,
+				"path":           result.WebSocketSession.Path,
+				"status":         result.WebSocketSession.Status,
+				"bytes_sent":     result.WebSocketSession.BytesSent,
+				"bytes_received": result.WebSocketSession.BytesReceived,
+				"events":         result.WebSocketSession.Events,
+			})
+		}
+		b, _ := json.MarshalIndent(result.WebSocketSession.Events, "", "  ")
+		_, _ = fmt.Fprintln(stdout, string(b))
+		return nil
+	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{
 			"kind":      "ConnectorCommandRead",

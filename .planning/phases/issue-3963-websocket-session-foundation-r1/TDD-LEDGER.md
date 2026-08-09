@@ -260,6 +260,68 @@ FAIL	polymetrics.ai/cmd/connectorgen	0.700s
 FAIL
 ```
 
+## Command boundary and generated-surface GREEN — captured 2026-08-10
+
+The green slice adds a typed connector capability plus a closed commandrunner route. It admits only
+an implemented `websocket_session` operation with one matching connector-relative `GET` endpoint,
+`json_redacted` output, and exactly the two generated inputs: a required `--session-update` JSON
+object mapped to `body`, and a required `--audio-file` PCM16 source mapped to
+`input.pcm16_file`. The runner validates the declared session binding before reading the file,
+confines the file to the project root through `os.Root`, checks its actual size against the declared
+maximum, and passes finite bytes only to the typed executor. Caller-selected protocols and all
+undeclared command flags are rejected. The CLI renders only the bounded redacted event collection and
+accounting; it exposes no socket, header, transcript, or raw-frame control.
+
+`surface-sync`, `validate`, and `surface-reconcile` now derive/check the closed command contract by
+operation ID, rather than accepting hand-authored API surface, flags, policy, or coverage. The
+loader also refuses a `max_frame_bytes` value below the fixed two-byte normal-close code.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestBundleRejectsUnsafeWebSocketSessionContracts/frame_cannot_hold_required_close_code$'
+ok  	polymetrics.ai/internal/connectors/engine	0.701s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestRunImplementedWebSocketSessionCommand$'
+ok  	polymetrics.ai/internal/connectors/commandrunner	0.736s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage|TestSyncBundleDerivesClosedWebSocketSessionCommand)$'
+ok  	polymetrics.ai/cmd/connectorgen	0.706s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  	polymetrics.ai/internal/connectors/engine	4.614s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk
+ok  	polymetrics.ai/internal/connectors/connsdk	0.938s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner
+ok  	polymetrics.ai/internal/connectors/commandrunner	7.412s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen	9.511s
+```
+
+The full `internal/cli` package was also run. It failed only in the inherited
+`TestGoldenTranscripts` root-help cases because the expected Zoom sentence predates a previously
+committed CRC wording update, while the actual output includes `CRC`. The deterministic
+predecessor check `git diff --name-status ae43c153c..HEAD --
+internal/cli/testdata/golden_transcripts.json` is empty, so this foundation neither introduced nor
+rewrote that generated golden drift. No current bundle declares a `websocket_session` command yet,
+so that package run cannot exercise this new route; #3935 must run the built binary after it authors
+the consumer bundle and regenerates the applicable generated artifacts.
+
+The non-test local gates are green without modifying generated bundle data:
+
+```text
+$ go build ./cmd/pm
+
+$ go vet ./internal/connectors ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/cli ./cmd/connectorgen
+
+$ go run ./cmd/connectorgen validate
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
 All fixtures are local and synthetic. The command test writes four PCM16 bytes under `t.TempDir()`;
 it does not open a provider connection or reveal a credential, token-derived value, transcript,
 signed URL, raw authorization header, or audio recording.

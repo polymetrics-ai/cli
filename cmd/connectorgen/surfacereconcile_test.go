@@ -99,7 +99,7 @@ func TestRunSurfaceReconcileHelp(t *testing.T) {
 	if code := run([]string{"surface-reconcile", "--help"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("surface-reconcile --help exit = %d, want 0; stderr=%s", code, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), "Derive direct-read, direct-write, and binary-download api_surface coverage") {
+	if !strings.Contains(stdout.String(), "Derive direct-read, direct-write, binary-download, and websocket-session api_surface coverage") {
 		t.Fatalf("surface-reconcile --help stdout = %q, want command description", stdout.String())
 	}
 }

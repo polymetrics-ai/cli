@@ -978,7 +978,7 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 		}
 		switch {
 		case endpoint.CoveredBy != nil:
-			if endpoint.CoveredBy.Stream == "" && len(endpoint.CoveredBy.WriteTargets()) == 0 && endpoint.CoveredBy.DirectRead == "" && len(endpoint.CoveredBy.DirectReads) == 0 {
+			if endpoint.CoveredBy.Stream == "" && len(endpoint.CoveredBy.WriteTargets()) == 0 && endpoint.CoveredBy.DirectRead == "" && len(endpoint.CoveredBy.DirectReads) == 0 && len(coveredDirectWriteTargets(endpoint.CoveredBy)) == 0 && endpoint.CoveredBy.WebSocketSession == "" {
 				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) has an empty covered_by classifier", i, endpoint.Method, endpoint.Path)
 			}
 			split.Executable++

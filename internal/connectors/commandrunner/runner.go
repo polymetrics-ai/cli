@@ -8,6 +8,8 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -43,12 +45,13 @@ type Request struct {
 }
 
 type Result struct {
-	Connector      string                                    `json:"connector"`
-	Command        string                                    `json:"command"`
-	Stream         string                                    `json:"stream,omitempty"`
-	Count          int                                       `json:"count,omitempty"`
-	DirectRead     *connectors.DirectReadResult              `json:"direct_read,omitempty"`
-	BinaryDownload *connectors.OperationBinaryDownloadResult `json:"binary_download,omitempty"`
+	Connector        string                                      `json:"connector"`
+	Command          string                                      `json:"command"`
+	Stream           string                                      `json:"stream,omitempty"`
+	Count            int                                         `json:"count,omitempty"`
+	DirectRead       *connectors.DirectReadResult                `json:"direct_read,omitempty"`
+	BinaryDownload   *connectors.OperationBinaryDownloadResult   `json:"binary_download,omitempty"`
+	WebSocketSession *connectors.OperationWebSocketSessionResult `json:"websocket_session,omitempty"`
 }
 
 type WriteCommand struct {
@@ -261,6 +264,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if cmd.Intent == "binary_download" {
 		return runBinaryDownload(ctx, connector, cmd, req)
 	}
+	if cmd.Intent == "websocket_session" {
+		return runWebSocketSession(ctx, connector, cmd, req)
+	}
 	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
 		return Result{}, &BlockedCommandError{
 			Connector:    connector.Name(),
@@ -313,6 +319,9 @@ func resolveRunnableCommand(connector connectors.Connector, path []string) (conn
 	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
 		return cmd, command, nil
 	}
+	if cmd.Intent == "websocket_session" && cmd.Availability == "implemented" {
+		return cmd, command, nil
+	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 		Connector:    connector.Name(),
 		Command:      command,
@@ -340,7 +349,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" && cmd.Intent != "binary_download" &&
+	if cmd.Operation != "" && cmd.Intent != "binary_download" && cmd.Intent != "websocket_session" &&
 		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
 		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -353,6 +362,12 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
 		if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
+	}
+	if cmd.Intent == "websocket_session" && cmd.Availability == "implemented" {
+		if err := validateOperationWebSocketSessionCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
 		return cmd, command, nil
@@ -540,6 +555,45 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
 
+// runWebSocketSession adapts the closed command surface to the typed session
+// executor. It reads one bounded project-confined PCM16 file before opening a
+// network connection; it cannot turn a connector command into an arbitrary
+// WebSocket client or an unbounded audio stream.
+func runWebSocketSession(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	sessioner, ok := connector.(connectors.OperationWebSocketSessioner)
+	if !ok {
+		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support websocket sessions"}
+	}
+	metadata, err := operationWebSocketSessionCommandMetadata(connector, cmd)
+	if err != nil {
+		return Result{}, err
+	}
+	if req.MaxBytes != 0 {
+		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands do not accept --max-bytes; the declared session bound is fixed"}
+	}
+	update, audioPath, err := websocketSessionOverrides(cmd, req.Flags)
+	if err != nil {
+		return Result{}, err
+	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Body: update}); err != nil {
+		return Result{}, err
+	}
+	pcm16, err := readBoundedWebSocketSessionPCM16(req.Config.ProjectDir, audioPath, metadata.MaxInputBytes)
+	if err != nil {
+		return Result{}, err
+	}
+	result, err := sessioner.OperationWebSocketSession(ctx, connectors.OperationWebSocketSessionRequest{
+		Operation:     cmd.Operation,
+		Config:        req.Config,
+		SessionUpdate: update,
+		PCM16:         pcm16,
+	})
+	if err != nil {
+		return Result{}, err
+	}
+	return Result{Connector: connector.Name(), Command: cmd.Path, WebSocketSession: &result}, nil
+}
+
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	if _, ok := connector.(connectors.DirectReader); !ok {
 		return &BlockedCommandError{
@@ -617,6 +671,92 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	}
 	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
+	}
+	return nil
+}
+
+// validateOperationWebSocketSessionCommand admits only the closed command
+// shape that the bounded session executor can honour. This is intentionally
+// narrower than an HTTP upgrade: the provider owns the endpoint, protocol,
+// framing, and response policy; callers own only a schema-bound update and a
+// confined finite PCM16 file.
+func validateOperationWebSocketSessionCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	_, err := operationWebSocketSessionCommandMetadata(connector, cmd)
+	return err
+}
+
+func operationWebSocketSessionCommandMetadata(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (connectors.OperationWebSocketSessionMetadata, error) {
+	if _, ok := connector.(connectors.OperationWebSocketSessioner); !ok {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support websocket sessions"}
+	}
+	metadataProvider, ok := connector.(connectors.OperationWebSocketSessionMetadataProvider)
+	if !ok {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose websocket session metadata"}
+	}
+	preflighter, ok := connector.(connectors.OperationWebSocketSessionPreflighter)
+	if !ok {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose websocket session preflight"}
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands require operation"}
+	}
+	if len(cmd.APISurface) != 1 {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands require exactly one api_surface endpoint"}
+	}
+	endpoint := cmd.APISurface[0]
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	if method != http.MethodGet {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("websocket_session commands require GET api_surface endpoints, got %s", method)}
+	}
+	if isAbsoluteHTTPURL(endpoint.Path) {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands must not reference an absolute URL"}
+	}
+	if cmd.OutputPolicy != "json_redacted" {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands require json_redacted output_policy"}
+	}
+	if err := validateWebSocketSessionCommandFlags(cmd); err != nil {
+		return connectors.OperationWebSocketSessionMetadata{}, err
+	}
+	if err := preflighter.PreflightOperationWebSocketSession(cmd.Operation, method, endpoint.Path, cmd.OutputPolicy); err != nil {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("websocket session metadata is not executable: %v", err)}
+	}
+	metadata, err := metadataProvider.OperationWebSocketSessionMetadata(cmd.Operation)
+	if err != nil {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("websocket session operation metadata is not executable: %v", err)}
+	}
+	if metadata.Operation != cmd.Operation {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket session operation metadata did not match command operation"}
+	}
+	if metadata.OutputPolicy != cmd.OutputPolicy {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket session command output_policy does not match declared operation"}
+	}
+	if metadata.MaxInputBytes <= 0 {
+		return connectors.OperationWebSocketSessionMetadata{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket session operation metadata requires positive max_input_bytes"}
+	}
+	return metadata, nil
+}
+
+func validateWebSocketSessionCommandFlags(cmd connectors.CommandSurfaceCommand) error {
+	if len(cmd.Flags) != 2 {
+		return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands require exactly --session-update and --audio-file flags"}
+	}
+	flags := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return err
+		}
+		if _, exists := flags[flag.Name]; exists {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("websocket_session command declares --%s more than once", flag.Name)}
+		}
+		flags[flag.Name] = flag
+	}
+	update, ok := flags["session-update"]
+	if !ok || update.Type != "json_object" || update.MapsTo != "body" || !update.Required {
+		return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session command requires --session-update as a required json_object body"}
+	}
+	audio, ok := flags["audio-file"]
+	if !ok || audio.Type != "string" || audio.MapsTo != "input.pcm16_file" || !audio.Required {
+		return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session command requires --audio-file as a required PCM16 project file"}
 	}
 	return nil
 }
@@ -1252,6 +1392,127 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		}
 	}
 	return pathParams, query, body, nil
+}
+
+// websocketSessionOverrides accepts exactly the two flag declarations that
+// validateWebSocketSessionCommandFlags admits. It deliberately does not share
+// the broader REST operation mapper: allowing query/path/body fields here
+// would create caller-controlled transport or raw-frame controls.
+func websocketSessionOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]any, string, error) {
+	if err := validateWebSocketSessionCommandFlags(cmd); err != nil {
+		return nil, "", err
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, "", err
+	}
+
+	declared := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		declared[flag.Name] = flag
+	}
+	var update map[string]any
+	var audioPath string
+	for name, values := range flags {
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, "", err
+		}
+		flag, ok := declared[name]
+		if !ok {
+			return nil, "", fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		if len(values) != 1 {
+			return nil, "", fmt.Errorf("flag --%s for command %q accepts exactly one value", name, cmd.Path)
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return nil, "", err
+		}
+		switch name {
+		case "session-update":
+			parsed, ok := value.(map[string]any)
+			if !ok || parsed == nil {
+				return nil, "", &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "--session-update must be one JSON object"}
+			}
+			update = parsed
+		case "audio-file":
+			parsed, ok := value.(string)
+			if !ok {
+				return nil, "", &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "--audio-file must be one PCM16 file path"}
+			}
+			audioPath = parsed
+		default:
+			return nil, "", &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s is not a websocket session input", name)}
+		}
+	}
+	if update == nil || strings.TrimSpace(audioPath) == "" {
+		return nil, "", &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session command is missing closed session inputs"}
+	}
+	return update, audioPath, nil
+}
+
+// readBoundedWebSocketSessionPCM16 confines a source to the connector project
+// root and rejects growth past the declaration's bound. os.Root remains the
+// load-bearing containment mechanism: it refuses a traversal or symlink escape
+// at open time rather than trusting a prior lexical check.
+func readBoundedWebSocketSessionPCM16(projectDir, raw string, maxBytes int) ([]byte, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		return nil, errors.New("websocket session audio file requires a project directory")
+	}
+	if maxBytes <= 0 {
+		return nil, errors.New("websocket session audio file requires positive max_input_bytes")
+	}
+	if err := safety.ValidateLocalWritePath(projectDir, raw, "websocket session audio file", false); err != nil {
+		return nil, err
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return nil, fmt.Errorf("resolve websocket session project root: %w", err)
+	}
+	rel := filepath.Clean(filepath.FromSlash(raw))
+	if filepath.IsAbs(rel) {
+		rel, err = filepath.Rel(rootAbs, rel)
+		if err != nil {
+			return nil, fmt.Errorf("compare websocket session audio file to project root: %w", err)
+		}
+	}
+	if !filepath.IsLocal(rel) {
+		return nil, errors.New("websocket session audio file must stay inside the project root")
+	}
+
+	root, err := os.OpenRoot(rootAbs)
+	if err != nil {
+		return nil, fmt.Errorf("open websocket session project root: %w", err)
+	}
+	defer func() { _ = root.Close() }()
+	file, err := root.Open(rel)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = file.Close() }()
+	info, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	if !info.Mode().IsRegular() {
+		return nil, errors.New("websocket session audio file must be a regular file")
+	}
+	if info.Size() > int64(maxBytes) {
+		return nil, fmt.Errorf("websocket session audio file too large: %d bytes exceeds declared max_input_bytes %d", info.Size(), maxBytes)
+	}
+	payload, err := io.ReadAll(io.LimitReader(file, int64(maxBytes)))
+	if err != nil {
+		return nil, err
+	}
+	var extra [1]byte
+	if n, readErr := file.Read(extra[:]); n > 0 {
+		return nil, fmt.Errorf("websocket session audio file too large: exceeds declared max_input_bytes %d", maxBytes)
+	} else if readErr != nil && !errors.Is(readErr, io.EOF) {
+		return nil, readErr
+	}
+	return payload, nil
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {

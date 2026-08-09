@@ -2699,6 +2699,9 @@ func validateWebSocketSessionSemantics(i int, op OperationSpec) error {
 	if spec.MaxFrameBytes <= 0 {
 		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must be positive", i, op.ID)
 	}
+	if spec.MaxFrameBytes < 2 {
+		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must allow the required close code", i, op.ID)
+	}
 	if spec.MaxFrameBytes > spec.MaxInputBytes || spec.MaxFrameBytes > spec.MaxOutputBytes {
 		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must not exceed max_input_bytes or max_output_bytes", i, op.ID)
 	}

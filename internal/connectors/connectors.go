@@ -414,6 +414,58 @@ type OperationDirectReadPreflighter interface {
 	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
 }
 
+// OperationWebSocketSessionRequest is one closed, declared live PCM16 session.
+// It deliberately exposes no URL, header, subprotocol, frame, or raw socket
+// control: those are provider-owned operation declaration facts.
+type OperationWebSocketSessionRequest struct {
+	Operation     string
+	Config        RuntimeConfig
+	SessionUpdate map[string]any
+	PCM16         []byte
+}
+
+// OperationWebSocketSessionResult contains only bounded, redacted JSON events
+// and transport accounting. It never exposes a socket, response header, raw
+// transcript frame, or provider-controlled transport setting.
+type OperationWebSocketSessionResult struct {
+	Connector     string `json:"connector"`
+	Operation     string `json:"operation"`
+	Method        string `json:"method"`
+	Path          string `json:"path"`
+	Status        int    `json:"status"`
+	BytesSent     int    `json:"bytes_sent"`
+	BytesReceived int    `json:"bytes_received"`
+	Events        []any  `json:"events"`
+}
+
+// OperationWebSocketSessioner is implemented by connectors that can execute
+// one declared, bounded WebSocket session through the connector's existing
+// auth, rate-limit, and request transport boundary.
+type OperationWebSocketSessioner interface {
+	OperationWebSocketSession(context.Context, OperationWebSocketSessionRequest) (OperationWebSocketSessionResult, error)
+}
+
+// OperationWebSocketSessionMetadata is the small no-network summary the
+// command runner needs to bound a local PCM16 file before it opens a session.
+// It is intentionally not a raw operation definition.
+type OperationWebSocketSessionMetadata struct {
+	Operation     string
+	OutputPolicy  string
+	MaxInputBytes int
+}
+
+// OperationWebSocketSessionMetadataProvider exposes the fixed session bound
+// without resolving credentials or making a network request.
+type OperationWebSocketSessionMetadataProvider interface {
+	OperationWebSocketSessionMetadata(operation string) (OperationWebSocketSessionMetadata, error)
+}
+
+// OperationWebSocketSessionPreflighter proves a command's exact GET endpoint
+// and redacted output binding can reach one declared WebSocket session.
+type OperationWebSocketSessionPreflighter interface {
+	PreflightOperationWebSocketSession(operation, method, path, outputPolicy string) error
+}
+
 // OperationDirectWriteRequest is one declared, typed rest_write invocation.
 //
 // A caller must obtain PreviewDigest from PreviewOperationDirectWrite before

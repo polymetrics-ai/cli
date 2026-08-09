@@ -16,8 +16,8 @@ import (
 )
 
 // surfaceSync derives the command-surface metadata that operation-backed
-// direct_read, direct_write, and binary_download commands need in order to
-// actually execute, from the bundle's own operations.json.
+// direct_read, direct_write, binary_download, and websocket_session commands
+// need in order to actually execute, from the bundle's own operations.json.
 //
 // It exists because the same facts previously had to be hand-copied into
 // cli_surface.json, and hand-copying is what let 174 commands claim
@@ -35,7 +35,7 @@ import (
 //
 //   - api_surface  <- the operation's endpoint method + path, taken from the
 //     block its kind declares (rest for direct_read and direct_write, binary
-//     for binary_download). The endpoint is already tracked in
+//     for binary_download, websocket for websocket_session). The endpoint is already tracked in
 //     api_surface.json, so this is a join across consistent files, never an
 //     invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's conventional kebab-case
@@ -54,13 +54,16 @@ import (
 //     not a display preference.
 //   - a binary_download carries no output policy at all: the response becomes
 //     a file, not a JSON body.
+//   - websocket_session output_policy <- operations[].output_policy exactly,
+//     and its only two flags are the fixed session-update JSON object and
+//     project-confined PCM16 source file.
 //   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset or
 //     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
 //
 // It never touches a command that is not an implemented operation-backed
-// direct_read, direct_write, or binary_download, and never invents an endpoint
-// for an operation that does not declare one.
+// direct_read, direct_write, binary_download, or websocket_session, and never
+// invents an endpoint for an operation that does not declare one.
 const (
 	// defaultDirectReadOutputPolicy mirrors engine.directReadPolicyJSONRedacted.
 	defaultDirectReadOutputPolicy = "json_redacted"
@@ -303,7 +306,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 		intent := stringField(cmd, "intent")
-		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
+		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" && intent != "websocket_session" {
 			continue
 		}
 		if stringField(cmd, "availability") != "implemented" {
@@ -335,12 +338,16 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		// left untouched for the validator to report.
 		kind := stringField(op, "kind")
 		blockName := "rest"
-		if intent == "binary_download" {
+		switch intent {
+		case "binary_download":
 			blockName = "binary"
+		case "websocket_session":
+			blockName = "websocket"
 		}
 		if (intent == "direct_read" && kind != "rest_read") ||
 			(intent == "direct_write" && kind != "rest_write") ||
-			(intent == "binary_download" && kind != "binary_download") {
+			(intent == "binary_download" && kind != "binary_download") ||
+			(intent == "websocket_session" && kind != "websocket_session") {
 			continue
 		}
 		blockRaw, _ := op.get(blockName)
@@ -376,7 +383,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			if cmd.remove("output_policy") {
 				stats.Corrected.OutputPolicy++
 			}
-		case intent == "direct_write":
+		case intent == "direct_write" || intent == "websocket_session":
 			want := stringField(op, "output_policy")
 			switch {
 			case policy == "":
@@ -430,6 +437,11 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		// connector whose parameters have not been imported yet is unaffected.
 		if intent == "direct_read" {
 			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
+		}
+		if intent == "websocket_session" {
+			filled, corrected := deriveWebSocketSessionCommandFlags(cmd)
+			stats.Filled.FlagDerived += filled
+			stats.Corrected.FlagDerived += corrected
 		}
 
 		// DEFAULTED for REST direct operations: a binary_download operation
@@ -556,6 +568,58 @@ func isLegacyDirectReadCursorFlag(flag *orderedObject) bool {
 	default:
 		return false
 	}
+}
+
+// deriveWebSocketSessionCommandFlags owns the full closed flag set rather than
+// merely adding missing entries. A websocket_session is not a generic request
+// shape, so retaining an author-supplied URL, protocol, header, cursor, or raw
+// frame flag would create an unverified second transport API.
+func deriveWebSocketSessionCommandFlags(cmd *orderedObject) (filled, corrected int) {
+	existing := arrayField(cmd, "flags")
+	if closedWebSocketSessionFlagsMatch(existing) {
+		return 0, 0
+	}
+	cmd.set("flags", derivedWebSocketSessionFlags())
+	if len(existing) == 0 {
+		return 2, 0
+	}
+	return 0, 2
+}
+
+func derivedWebSocketSessionFlags() []any {
+	return []any{
+		derivedWebSocketSessionFlag("session-update", "json_object", "body"),
+		derivedWebSocketSessionFlag("audio-file", "string", "input.pcm16_file"),
+	}
+}
+
+func derivedWebSocketSessionFlag(name, flagType, mapsTo string) *orderedObject {
+	flag := newOrderedObject()
+	flag.set("name", name)
+	flag.set("type", flagType)
+	flag.set("maps_to", mapsTo)
+	flag.set("required", true)
+	return flag
+}
+
+func closedWebSocketSessionFlagsMatch(flags []any) bool {
+	if len(flags) != 2 {
+		return false
+	}
+	return closedWebSocketSessionFlagMatches(flags[0], "session-update", "json_object", "body") &&
+		closedWebSocketSessionFlagMatches(flags[1], "audio-file", "string", "input.pcm16_file")
+}
+
+func closedWebSocketSessionFlagMatches(raw any, name, flagType, mapsTo string) bool {
+	flag, ok := raw.(*orderedObject)
+	if !ok || len(flag.keys) != 4 {
+		return false
+	}
+	if stringField(flag, "name") != name || stringField(flag, "type") != flagType || stringField(flag, "maps_to") != mapsTo {
+		return false
+	}
+	required, ok := flag.get("required")
+	return ok && required == true
 }
 
 // derivedAPISurface builds the single-endpoint api_surface an operation-backed

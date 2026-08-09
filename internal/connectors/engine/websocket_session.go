@@ -155,6 +155,41 @@ func operationWebSocketSessionSpec(b Bundle, id string) (OperationSpec, error) {
 	return op, nil
 }
 
+// OperationWebSocketSessionMetadata returns only the file-bound needed by the
+// command boundary. The raw WebSocket declaration remains engine-private so it
+// cannot become a generic transport configuration surface.
+func OperationWebSocketSessionMetadata(b Bundle, id string) (connectors.OperationWebSocketSessionMetadata, error) {
+	op, err := operationWebSocketSessionSpec(b, id)
+	if err != nil {
+		return connectors.OperationWebSocketSessionMetadata{}, err
+	}
+	return connectors.OperationWebSocketSessionMetadata{
+		Operation:     op.ID,
+		OutputPolicy:  op.OutputPolicy,
+		MaxInputBytes: op.WebSocket.MaxInputBytes,
+	}, nil
+}
+
+// PreflightOperationWebSocketSession proves the command's fixed binding
+// agrees with the declaration before credentials, local files, or a network
+// connection are touched.
+func PreflightOperationWebSocketSession(b Bundle, id, method, path, outputPolicy string) error {
+	op, err := operationWebSocketSessionSpec(b, id)
+	if err != nil {
+		return err
+	}
+	if got := strings.ToUpper(strings.TrimSpace(method)); got != http.MethodGet {
+		return fmt.Errorf("websocket session %q command method must be GET, got %s", op.ID, got)
+	}
+	if path != op.WebSocket.Path {
+		return fmt.Errorf("websocket session %q command path %q does not match declared path %q", op.ID, path, op.WebSocket.Path)
+	}
+	if outputPolicy != op.OutputPolicy {
+		return fmt.Errorf("websocket session %q command output_policy %q does not match declared policy %q", op.ID, outputPolicy, op.OutputPolicy)
+	}
+	return nil
+}
+
 func requireOperationWebSocketSessionEndpoint(b Bundle, op OperationSpec) error {
 	if b.Surface == nil {
 		return nil

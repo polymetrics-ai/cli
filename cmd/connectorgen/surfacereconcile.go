@@ -19,9 +19,9 @@ import (
 // runtime preflight that guards `availability: implemented`. It deliberately
 // does not infer coverage from a command declaration: only a command that
 // matches the endpoint and passes commandrunner.Preflight can replace an
-// operation row with covered_by.direct_read or covered_by.direct_write. A
-// binary_download shares direct-read coverage bookkeeping because the tracked
-// endpoint is consumed by the command even though its response is a file.
+// operation row with a matching covered_by classifier. A binary_download
+// shares direct-read coverage bookkeeping because the tracked endpoint is
+// consumed by the command even though its response is a file.
 //
 // A row without such a command is still a known blocked fact, so the tool
 // derives its reason from the current command state. Unknown operation models,
@@ -154,7 +154,7 @@ func runSurfaceReconcile(args []string, stdout, stderr io.Writer) int {
 func surfaceReconcileUsage() string {
 	return `usage: connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text] [--notes-contains text]
 
-Derive direct-read, direct-write, and binary-download api_surface coverage and
+Derive direct-read, direct-write, binary-download, and websocket-session api_surface coverage and
 blocked reasons from real command runtime preflight. The optional reason/notes selectors are
 conjunctive and scope which operation rows are considered. In --check mode,
 report pending reclassifications without writing files and exit 1 when a row
@@ -264,6 +264,10 @@ func reconcileBundle(dir string, check bool, reasonContains, notesContains strin
 			passing, reasons = directWriteCandidates(connector, bundle.CLISurface.Commands, method, path)
 			coverage = directWriteCoverage(passing)
 			blockedReason = blockedDirectWriteReason
+		case "websocket_session":
+			passing, reasons = websocketSessionCandidates(connector, bundle.CLISurface.Commands, method, path)
+			coverage = websocketSessionCoverage(passing)
+			blockedReason = blockedWebSocketSessionReason
 		default:
 			stats.Refused++
 			continue
@@ -327,6 +331,30 @@ func directWriteCandidates(connector connectors.Connector, commands []engine.CLI
 // invoked while reconciling source metadata.
 func binaryDownloadCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
 	return operationCommandCandidates(connector, commands, "binary_download", method, path)
+}
+
+// websocketSessionCandidates returns operation IDs, rather than command
+// paths, because covered_by.websocket_session is the declaration-bound
+// operation identifier checked by the engine before an upgrade can occur.
+func websocketSessionCandidates(connector connectors.Connector, commands []engine.CLICommand, method, path string) ([]string, []string) {
+	paths, reasons := operationCommandCandidates(connector, commands, "websocket_session", method, path)
+	operations := make([]string, 0, len(paths))
+	seen := map[string]bool{}
+	for _, commandPath := range paths {
+		for _, command := range commands {
+			if command.Path != commandPath || command.Operation == "" || seen[command.Operation] {
+				continue
+			}
+			operations = append(operations, command.Operation)
+			seen[command.Operation] = true
+			break
+		}
+	}
+	if len(operations) > 1 {
+		reasons = append(reasons, fmt.Sprintf("multiple reachable websocket-session operations declare %s %s", method, path))
+		return nil, reasons
+	}
+	return operations, reasons
 }
 
 func operationCommandCandidates(connector connectors.Connector, commands []engine.CLICommand, intent, method, path string) ([]string, []string) {
@@ -410,6 +438,14 @@ func directWriteCoverage(commands []string) *orderedObject {
 	return coverage
 }
 
+func websocketSessionCoverage(operations []string) *orderedObject {
+	coverage := newOrderedObject()
+	if len(operations) == 1 {
+		coverage.set("websocket_session", operations[0])
+	}
+	return coverage
+}
+
 func blockedDirectReadReason(method, path string, reasons []string) string {
 	if len(reasons) == 0 {
 		return fmt.Sprintf("No reachable direct-read command declares %s %s.", method, path)
@@ -429,4 +465,11 @@ func blockedBinaryDownloadReason(method, path string, reasons []string) string {
 		return fmt.Sprintf("No reachable binary-download command declares %s %s.", method, path)
 	}
 	return "No reachable binary-download command: " + strings.Join(reasons, "; ") + "."
+}
+
+func blockedWebSocketSessionReason(method, path string, reasons []string) string {
+	if len(reasons) == 0 {
+		return fmt.Sprintf("No reachable websocket-session command declares %s %s.", method, path)
+	}
+	return "No reachable websocket-session command: " + strings.Join(reasons, "; ") + "."
 }
