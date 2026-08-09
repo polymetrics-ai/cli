@@ -29,9 +29,9 @@ Required skills loaded: `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`,
 `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`,
 `golang-concurrency`, `golang-database`, `golang-dependency-management`, and
-`golang-documentation`. The CLI/help/docs/website parity reference was also
-read: no command, help, manual, or website page is added, while the existing
-connector docs and capability tests are updated.
+`golang-documentation`, and `golang-lint`. The CLI/help/docs/website parity
+reference was also read: no command, help, manual, or website page is added,
+while the existing connector docs and capability tests are updated.
 
 ## Design decisions
 
@@ -41,9 +41,10 @@ connector docs and capability tests are updated.
 2. A replication connection sets `replication=database`, calls
    `IDENTIFY_SYSTEM`, and uses the server system identifier plus database and
    requested stream as the `synccontract.SourceIdentity`. The server timeline
-   is the source generation. A previous `CheckpointEnvelope` is validated with
-   `ValidateResume` before replication begins; a scalar `State["lsn"]` is not
-   accepted as a parallel checkpoint store.
+   plus validated publication name is the source generation. A previous
+   `CheckpointEnvelope` is validated with `ValidateResume` before replication
+   begins; a scalar `State["lsn"]` is not accepted as a parallel checkpoint
+   store.
 3. The generated, source-bound slot name is `pm_cdc_<hash>` and cannot be
    caller-selected. It is stable across restarts for the same server/database/
    stream, creating once and reusing only a compatible inactive `pgoutput`
