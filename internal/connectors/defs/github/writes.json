@@ -20366,6 +20366,1628 @@
         }
       },
       "risk": "low"
+    },
+    {
+      "name": "app_installations_installation_id_access_tokens",
+      "kind": "create",
+      "method": "POST",
+      "path": "/app/installations/{{ record.installation_id }}/access_tokens",
+      "path_fields": [
+        "installation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "installation_id"
+        ],
+        "properties": {
+          "installation_id": {
+            "type": "integer"
+          },
+          "repositories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "repository_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "permissions": {
+            "type": "object",
+            "properties": {
+              "actions": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "administration": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "artifact_metadata": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "attestations": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "checks": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "code_quality": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "codespaces": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "contents": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "dependabot_secrets": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "deployments": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "discussions": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "environments": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "issues": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "merge_queues": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "metadata": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "packages": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "pages": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "pull_requests": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "repository_custom_properties": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "repository_hooks": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "repository_projects": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write",
+                  "admin"
+                ]
+              },
+              "secret_scanning_alerts": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "secrets": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "security_events": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "single_file": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "statuses": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "vulnerability_alerts": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "workflows": {
+                "type": "string",
+                "enum": [
+                  "write"
+                ]
+              },
+              "custom_properties_for_organizations": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "members": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_administration": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_custom_roles": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_custom_org_roles": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_custom_properties": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write",
+                  "admin"
+                ]
+              },
+              "organization_copilot_seat_management": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_copilot_agent_settings": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_announcement_banners": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_events": {
+                "type": "string",
+                "enum": [
+                  "read"
+                ]
+              },
+              "organization_hooks": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_personal_access_tokens": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_personal_access_token_requests": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_plan": {
+                "type": "string",
+                "enum": [
+                  "read"
+                ]
+              },
+              "organization_projects": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write",
+                  "admin"
+                ]
+              },
+              "organization_packages": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_secrets": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_self_hosted_runners": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "organization_user_blocking": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "email_addresses": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "followers": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "git_ssh_keys": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "gpg_keys": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "interaction_limits": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "profile": {
+                "type": "string",
+                "enum": [
+                  "write"
+                ]
+              },
+              "starring": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "enterprise_custom_properties_for_organizations": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write",
+                  "admin"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "actions_artifacts_artifact_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts/{{ record.artifact_id }}",
+      "path_fields": [
+        "artifact_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "artifact_id"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "actions_runs_run_id_force_cancel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/force-cancel",
+      "path_fields": [
+        "run_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low"
+    },
+    {
+      "name": "actions_runs_run_id_rerun_failed_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/rerun-failed-jobs",
+      "path_fields": [
+        "run_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "integer"
+          },
+          "enable_debug_logging": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "agents_secrets_secret_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+      "path_fields": [
+        "secret_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "secret_name"
+        ],
+        "properties": {
+          "secret_name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agents_secrets_secret_name3",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+      "path_fields": [
+        "secret_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "secret_name",
+          "encrypted_value",
+          "key_id"
+        ],
+        "properties": {
+          "secret_name": {
+            "type": "string"
+          },
+          "encrypted_value": {
+            "type": "string",
+            "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$"
+          },
+          "key_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low",
+      "redact_fields": [
+        "encrypted_value"
+      ],
+      "hook": "github"
+    },
+    {
+      "name": "agents_variables2",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "agents_variables_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+      "path_fields": [
+        "name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agents_variables_name3",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+      "path_fields": [
+        "name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "git_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/tags",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tag",
+          "message",
+          "object",
+          "type"
+        ],
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "commit",
+              "tree",
+              "blob"
+            ]
+          },
+          "tagger": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "name",
+              "email"
+            ]
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "hooks_hook_id_config2",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/config",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "hook_id"
+        ],
+        "properties": {
+          "hook_id": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "content_type": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "string"
+          },
+          "insecure_ssl": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "redact_fields": [
+        "secret"
+      ]
+    },
+    {
+      "name": "issues_issue_number_labels",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
+      "path_fields": [
+        "issue_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_number"
+        ],
+        "properties": {
+          "issue_number": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "pulls_pull_number_comments_comment_id_replies",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments/{{ record.comment_id }}/replies",
+      "path_fields": [
+        "pull_number",
+        "comment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_number",
+          "comment_id",
+          "body"
+        ],
+        "properties": {
+          "pull_number": {
+            "type": "integer"
+          },
+          "comment_id": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "pulls_pull_number_reviews_review_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+      "path_fields": [
+        "pull_number",
+        "review_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_number",
+          "review_id"
+        ],
+        "properties": {
+          "pull_number": {
+            "type": "integer"
+          },
+          "review_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "pulls_pull_number_reviews_review_id3",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+      "path_fields": [
+        "pull_number",
+        "review_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_number",
+          "review_id",
+          "body"
+        ],
+        "properties": {
+          "pull_number": {
+            "type": "integer"
+          },
+          "review_id": {
+            "type": "integer"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "applications_client_id_grant",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/applications/{{ record.client_id }}/grant",
+      "path_fields": [
+        "client_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "client_id",
+          "access_token"
+        ],
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low",
+      "redact_fields": [
+        "access_token"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "applications_client_id_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/applications/{{ record.client_id }}/token",
+      "path_fields": [
+        "client_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "client_id",
+          "access_token"
+        ],
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low",
+      "redact_fields": [
+        "access_token"
+      ]
+    },
+    {
+      "name": "applications_client_id_token2",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/applications/{{ record.client_id }}/token",
+      "path_fields": [
+        "client_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "client_id",
+          "access_token"
+        ],
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low",
+      "redact_fields": [
+        "access_token"
+      ]
+    },
+    {
+      "name": "applications_client_id_token3",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/applications/{{ record.client_id }}/token",
+      "path_fields": [
+        "client_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "client_id",
+          "access_token"
+        ],
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "access_token": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low",
+      "redact_fields": [
+        "access_token"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "org_custom_pattern_update_pattern",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "org",
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org",
+          "pattern_id",
+          "custom_pattern_version",
+          "pattern"
+        ],
+        "properties": {
+          "org": {
+            "type": "string"
+          },
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "org_custom_pattern_update_start_delimiter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "org",
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org",
+          "pattern_id",
+          "custom_pattern_version",
+          "start_delimiter"
+        ],
+        "properties": {
+          "org": {
+            "type": "string"
+          },
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "org_custom_pattern_update_end_delimiter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "org",
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org",
+          "pattern_id",
+          "custom_pattern_version",
+          "end_delimiter"
+        ],
+        "properties": {
+          "org": {
+            "type": "string"
+          },
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "org_custom_pattern_update_must_match",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "org",
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org",
+          "pattern_id",
+          "custom_pattern_version",
+          "must_match"
+        ],
+        "properties": {
+          "org": {
+            "type": "string"
+          },
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "org_custom_pattern_update_must_not_match",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "org",
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org",
+          "pattern_id",
+          "custom_pattern_version",
+          "must_not_match"
+        ],
+        "properties": {
+          "org": {
+            "type": "string"
+          },
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "repo_custom_pattern_update_pattern",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "custom_pattern_version",
+          "pattern"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "repo_custom_pattern_update_start_delimiter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "custom_pattern_version",
+          "start_delimiter"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "repo_custom_pattern_update_end_delimiter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "custom_pattern_version",
+          "end_delimiter"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "repo_custom_pattern_update_must_match",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "custom_pattern_version",
+          "must_match"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "repo_custom_pattern_update_must_not_match",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+      "path_fields": [
+        "pattern_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pattern_id",
+          "custom_pattern_version",
+          "must_not_match"
+        ],
+        "properties": {
+          "pattern_id": {
+            "type": "integer"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "start_delimiter": {
+            "type": "string"
+          },
+          "end_delimiter": {
+            "type": "string"
+          },
+          "must_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "must_not_match": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_pattern_version": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "user_emails_add_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/user/emails",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "emails"
+        ],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "risk": "low"
+    },
+    {
+      "name": "user_emails_add_array",
+      "kind": "create",
+      "method": "POST",
+      "path": "/user/emails",
+      "path_fields": [],
+      "body_type": "json_array",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "emails"
+        ],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "risk": "low",
+      "body_field": "emails",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      }
+    },
+    {
+      "name": "user_emails_delete_object",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/user/emails",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "emails"
+        ],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "risk": "low",
+      "confirm": "destructive"
+    },
+    {
+      "name": "user_emails_delete_array",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/user/emails",
+      "path_fields": [],
+      "body_type": "json_array",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "emails"
+        ],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "risk": "low",
+      "body_field": "emails",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      },
+      "confirm": "destructive"
     }
   ]
 }

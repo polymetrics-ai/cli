@@ -7,14 +7,8 @@
     {
       "method": "POST",
       "path": "/app/installations/{installation_id}/access_tokens",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "auth token-exchange endpoint used internally by the github_app AuthHook, not a syncable data stream or a directly caller-invoked write action",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint. Named dependency: the github_app AuthHook owns this exchange (spec.json app_id + installation_id + private_key); a command form would emit a live installation access token as command output, and this CLI never prints a secret."
+      "covered_by": {
+        "write": "app_installations_installation_id_access_tokens"
       }
     },
     {
@@ -52,29 +46,17 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass"
+      "covered_by": {
+        "write": "actions_artifacts_artifact_id"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass"
+      "covered_by": {
+        "direct_reads": [
+          "artifact download-2"
+        ]
       }
     },
     {
@@ -448,15 +430,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single workflow-run detail is already covered in aggregate by the workflow_runs stream (list); a per-id detail GET adds no data the list page doesn't already include",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single workflow-run detail is already covered in aggregate by the workflow_runs stream (list); a per-id detail GET adds no data the list page doesn't already include"
+      "covered_by": {
+        "direct_reads": [
+          "actions runs view"
+        ]
       }
     },
     {
@@ -478,15 +455,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-run artifact listing is already covered in aggregate by the workflow_artifacts stream (workflow_run_id computed field ties artifacts back to their run)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-run artifact listing is already covered in aggregate by the workflow_artifacts stream (workflow_run_id computed field ties artifacts back to their run)"
+      "covered_by": {
+        "direct_reads": [
+          "artifact download-3"
+        ]
       }
     },
     {
@@ -542,15 +514,8 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "cancel_workflow_run write already covers the ordinary cancel path; force-cancel is a narrow escalation of the same action for runs that failed to stop, not independently exposed",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "cancel_workflow_run write already covers the ordinary cancel path; force-cancel is a narrow escalation of the same action for runs that failed to stop, not independently exposed"
+      "covered_by": {
+        "write": "actions_runs_run_id_force_cancel"
       }
     },
     {
@@ -604,15 +569,8 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "rerun_workflow_run write already covers re-running a run; rerunning only failed jobs is a narrower variant of the same action, not independently exposed",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "rerun_workflow_run write already covers re-running a run; rerunning only failed jobs is a narrower variant of the same action, not independently exposed"
+      "covered_by": {
+        "write": "actions_runs_run_id_rerun_failed_jobs"
       }
     },
     {
@@ -714,15 +672,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single workflow detail is already covered in aggregate by the workflows stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single workflow detail is already covered in aggregate by the workflows stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "actions workflows view"
+        ]
       }
     },
     {
@@ -749,15 +702,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-workflow run listing is already covered in aggregate by the workflow_runs stream (every run carries its own workflow_id)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-workflow run listing is already covered in aggregate by the workflow_runs stream (every run carries its own workflow_id)"
+      "covered_by": {
+        "direct_reads": [
+          "actions runs view-2"
+        ]
       }
     },
     {
@@ -772,197 +720,117 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/activity",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the repository activity feed (pushes/merges/force-pushes) overlaps with data already covered by the commits and pull_requests streams; not modeled as its own separate untyped stream",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the repository activity feed (pushes/merges/force-pushes) overlaps with data already covered by the commits and pull_requests streams; not modeled as its own separate untyped stream"
+      "covered_by": {
+        "direct_reads": [
+          "activity view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/organization-secrets",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents organization-secrets view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/organization-variables",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents organization-variables view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents secrets view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents public-key view"
+        ]
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "write": "agents_secrets_secret_name"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents secrets view-2"
+        ]
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "write": "agents_secrets_secret_name3"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/variables",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents variables view"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/agents/variables",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "write": "agents_variables2"
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/agents/variables/{name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "write": "agents_variables_name"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/agents/variables/{name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "direct_reads": [
+          "agents variables view-2"
+        ]
       }
     },
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/agents/variables/{name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource"
+      "covered_by": {
+        "write": "agents_variables_name3"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/assignees",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the assignable-user list is derivable from the collaborators stream (assignees are always a subset of collaborators); not modeled as its own stream to avoid a near-duplicate record set",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the assignable-user list is derivable from the collaborators stream (assignees are always a subset of collaborators); not modeled as its own stream to avoid a near-duplicate record set"
+      "covered_by": {
+        "direct_reads": [
+          "assignees view-2"
+        ]
       }
     },
     {
@@ -1014,15 +882,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single autolink detail is already covered in aggregate by the autolinks stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single autolink detail is already covered in aggregate by the autolinks stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "autolinks view"
+        ]
       }
     },
     {
@@ -1058,15 +921,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/branches/{branch}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single branch detail is already covered in aggregate by the branches stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single branch detail is already covered in aggregate by the branches stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "branches view"
+        ]
       }
     },
     {
@@ -1449,15 +1307,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single alert detail is already covered in aggregate by the code_scanning_alerts stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single alert detail is already covered in aggregate by the code_scanning_alerts stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "code-scanning alerts view"
+        ]
       }
     },
     {
@@ -1734,15 +1587,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "a boolean collaborator-membership check; membership data is already covered in aggregate by the collaborators stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "a boolean collaborator-membership check; membership data is already covered in aggregate by the collaborators stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "collaborators view"
+        ]
       }
     },
     {
@@ -1755,15 +1603,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-user permission level is already present as a field on each record of the collaborators stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-user permission level is already present as a field on each record of the collaborators stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "collaborators permission view"
+        ]
       }
     },
     {
@@ -1783,15 +1626,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/comments/{comment_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single commit-comment detail is already covered in aggregate by the commit_comments stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single commit-comment detail is already covered in aggregate by the commit_comments stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "comments view"
+        ]
       }
     },
     {
@@ -1843,15 +1681,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-commit comment listing is already covered in aggregate by the commit_comments stream (every comment carries its own commit_id)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-commit comment listing is already covered in aggregate by the commit_comments stream (every comment carries its own commit_id)"
+      "covered_by": {
+        "direct_reads": [
+          "commits comments view"
+        ]
       }
     },
     {
@@ -1873,15 +1706,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/commits/{ref}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single commit detail is already covered in aggregate by the commits stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single commit detail is already covered in aggregate by the commits stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "commits view"
+        ]
       }
     },
     {
@@ -1988,15 +1816,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single alert detail is already covered in aggregate by the dependabot_alerts stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single alert detail is already covered in aggregate by the dependabot_alerts stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "dependabot alerts view"
+        ]
       }
     },
     {
@@ -2114,15 +1937,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single deployment detail is already covered in aggregate by the deployments stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single deployment detail is already covered in aggregate by the deployments stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "deployments view"
+        ]
       }
     },
     {
@@ -2144,15 +1962,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single deployment-status detail; see the statuses list exclusion above",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single deployment-status detail; see the statuses list exclusion above"
+      "covered_by": {
+        "direct_reads": [
+          "deployments statuses view-2"
+        ]
       }
     },
     {
@@ -2179,15 +1992,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single environment detail is already covered in aggregate by the environments stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single environment detail is already covered in aggregate by the environments stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "environments view"
+        ]
       }
     },
     {
@@ -2360,14 +2168,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/events",
-      "operation": {
-        "model": "deprecated",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "GitHub's public repository timeline events feed is a legacy/deprecated activity API GitHub recommends against relying on for new integrations; issue_events/commits/pull_requests streams already cover the underlying activity with typed, stable shapes",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: deprecated"
+      "covered_by": {
+        "direct_reads": [
+          "events view"
+        ]
       }
     },
     {
@@ -2410,29 +2214,19 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "raw git commit-object detail duplicates the richer commits stream's per-commit record (same underlying commit, GitHub API-decorated shape)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "raw git commit-object detail duplicates the richer commits stream's per-commit record (same underlying commit, GitHub API-decorated shape)"
+      "covered_by": {
+        "direct_reads": [
+          "git commits view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "ref-prefix matching duplicates data already covered by the branches and tags streams (refs/heads/* and refs/tags/* respectively)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "ref-prefix matching duplicates data already covered by the branches and tags streams (refs/heads/* and refs/tags/* respectively)"
+      "covered_by": {
+        "direct_reads": [
+          "git matching-refs view"
+        ]
       }
     },
     {
@@ -2468,15 +2262,8 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/git/tags",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "low-level annotated-tag-object creation; create_ref already covers creating the refs/tags/* pointer reverse-ETL callers need",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "low-level annotated-tag-object creation; create_ref already covers creating the refs/tags/* pointer reverse-ETL callers need"
+      "covered_by": {
+        "write": "git_tags"
       }
     },
     {
@@ -2537,15 +2324,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single webhook detail is already covered in aggregate by the webhooks stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single webhook detail is already covered in aggregate by the webhooks stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "hooks view"
+        ]
       }
     },
     {
@@ -2558,29 +2340,17 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers"
+      "covered_by": {
+        "direct_reads": [
+          "hooks config view"
+        ]
       }
     },
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers"
+      "covered_by": {
+        "write": "hooks_hook_id_config2"
       }
     },
     {
@@ -2823,15 +2593,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single issue-comment detail is already covered in aggregate by the issue_comments stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single issue-comment detail is already covered in aggregate by the issue_comments stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "issues comments view"
+        ]
       }
     },
     {
@@ -2888,29 +2653,19 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single issue-event detail is already covered in aggregate by the issue_events stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single issue-event detail is already covered in aggregate by the issue_events stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "issues events view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single issue detail is already covered in aggregate by the issues stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single issue detail is already covered in aggregate by the issues stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "issues view"
+        ]
       }
     },
     {
@@ -2950,15 +2705,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-issue comment listing is already covered in aggregate by the issue_comments stream (every comment carries its own issue reference)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-issue comment listing is already covered in aggregate by the issue_comments stream (every comment carries its own issue reference)"
+      "covered_by": {
+        "direct_reads": [
+          "issues comments view-2"
+        ]
       }
     },
     {
@@ -3003,15 +2753,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/events",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-issue event listing is already covered in aggregate by the issue_events stream (every event carries its own issue reference)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-issue event listing is already covered in aggregate by the issue_events stream (every event carries its own issue reference)"
+      "covered_by": {
+        "direct_reads": [
+          "issues events view-2"
+        ]
       }
     },
     {
@@ -3047,29 +2792,17 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "\"remove all labels\" is equivalent to set_issue_labels with an empty labels array; not independently exposed",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "\"remove all labels\" is equivalent to set_issue_labels with an empty labels array; not independently exposed"
+      "covered_by": {
+        "write": "issues_issue_number_labels"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "an issue's labels are already present as the labels field on each record of the issues stream",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "an issue's labels are already present as the labels field on each record of the issues stream"
+      "covered_by": {
+        "direct_reads": [
+          "issues labels view"
+        ]
       }
     },
     {
@@ -3172,15 +2905,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the issue timeline is a combined view over issue_events + issue_comments + cross-referenced commits, all already available as separate typed streams; not modeled as its own merged/untyped stream",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the issue timeline is a combined view over issue_events + issue_comments + cross-referenced commits, all already available as separate typed streams; not modeled as its own merged/untyped stream"
+      "covered_by": {
+        "direct_reads": [
+          "issues timeline view"
+        ]
       }
     },
     {
@@ -3207,15 +2935,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/keys/{key_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single deploy-key detail is already covered in aggregate by the deploy_keys stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single deploy-key detail is already covered in aggregate by the deploy_keys stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "keys view"
+        ]
       }
     },
     {
@@ -3242,15 +2965,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/labels/{name}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single label detail is already covered in aggregate by the labels stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single label detail is already covered in aggregate by the labels stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "labels view"
+        ]
       }
     },
     {
@@ -3314,15 +3032,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single milestone detail is already covered in aggregate by the milestones stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single milestone detail is already covered in aggregate by the milestones stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "milestones view"
+        ]
       }
     },
     {
@@ -3523,15 +3236,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single review-comment detail is already covered in aggregate by the pull_request_review_comments stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single review-comment detail is already covered in aggregate by the pull_request_review_comments stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "pulls comments view-2"
+        ]
       }
     },
     {
@@ -3567,15 +3275,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single pull request detail is already covered in aggregate by the pull_requests stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single pull request detail is already covered in aggregate by the pull_requests stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "pulls view"
+        ]
       }
     },
     {
@@ -3599,15 +3302,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "per-PR review-comment listing is already covered in aggregate by the pull_request_review_comments stream (every comment carries its own pull_request_url)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "per-PR review-comment listing is already covered in aggregate by the pull_request_review_comments stream (every comment carries its own pull_request_url)"
+      "covered_by": {
+        "direct_reads": [
+          "pulls comments view-3"
+        ]
       }
     },
     {
@@ -3620,15 +3318,8 @@
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "a threaded reply is create_review_comment with in_reply_to set; not an independently modeled action",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "a threaded reply is create_review_comment with in_reply_to set; not an independently modeled action"
+      "covered_by": {
+        "write": "pulls_pull_number_comments_comment_id_replies"
       }
     },
     {
@@ -3675,15 +3366,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "requested reviewers are already present as a field on the pull_requests stream's own record (requested_reviewers/requested_teams)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "requested reviewers are already present as a field on the pull_requests stream's own record (requested_reviewers/requested_teams)"
+      "covered_by": {
+        "direct_reads": [
+          "pulls requested_reviewers view"
+        ]
       }
     },
     {
@@ -3712,43 +3398,24 @@
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      "covered_by": {
+        "write": "pulls_pull_number_reviews_review_id"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      "covered_by": {
+        "direct_reads": [
+          "pulls reviews view-2"
+        ]
       }
     },
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)"
+      "covered_by": {
+        "write": "pulls_pull_number_reviews_review_id3"
       }
     },
     {
@@ -3846,29 +3513,19 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/latest",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "\"most recent release\" is derivable from the releases stream (list) by sorting on published_at/created_at",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "\"most recent release\" is derivable from the releases stream (list) by sorting on published_at/created_at"
+      "covered_by": {
+        "direct_reads": [
+          "releases latest view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "release lookup by tag name is already covered in aggregate by the releases stream (list); every record carries its own tag_name",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "release lookup by tag name is already covered in aggregate by the releases stream (list); every record carries its own tag_name"
+      "covered_by": {
+        "direct_reads": [
+          "releases tags view"
+        ]
       }
     },
     {
@@ -3881,15 +3538,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/releases/{release_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single release detail is already covered in aggregate by the releases stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single release detail is already covered in aggregate by the releases stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "releases view"
+        ]
       }
     },
     {
@@ -3941,15 +3593,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rules/branches/{branch}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the effective-rules-for-a-branch view is a derived evaluation over the same rulesets the repo_rulesets stream already syncs",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "the effective-rules-for-a-branch view is a derived evaluation over the same rulesets the repo_rulesets stream already syncs"
+      "covered_by": {
+        "direct_reads": [
+          "rules branches view"
+        ]
       }
     },
     {
@@ -3994,15 +3641,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single ruleset detail is already covered in aggregate by the repo_rulesets stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single ruleset detail is already covered in aggregate by the repo_rulesets stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "rulesets view"
+        ]
       }
     },
     {
@@ -4040,15 +3682,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single alert detail is already covered in aggregate by the secret_scanning_alerts stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single alert detail is already covered in aggregate by the secret_scanning_alerts stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "secret-scanning alerts view"
+        ]
       }
     },
     {
@@ -4107,15 +3744,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "single advisory detail is already covered in aggregate by the security_advisories stream (list)",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "single advisory detail is already covered in aggregate by the security_advisories stream (list)"
+      "covered_by": {
+        "direct_reads": [
+          "security-advisories view"
+        ]
       }
     },
     {
@@ -4256,15 +3888,10 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/topics",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "topics are already present as the topics field on the repository stream's own record; replace_repo_topics covers the write side",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: duplicate_of",
-        "duplicate_of": "topics are already present as the topics field on the repository stream's own record; replace_repo_topics covers the write side"
+      "covered_by": {
+        "direct_reads": [
+          "topics view"
+        ]
       }
     },
     {
@@ -7090,53 +6717,29 @@
     {
       "method": "DELETE",
       "path": "/applications/{client_id}/grant",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the documented request body carries an OAuth access_token",
-        "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-authorization",
-        "notes": "Named dependency: AGENTS.md forbids accepting credentials as command arguments (add credentials from environment variables or stdin), and a record/body flag is a command argument"
+      "covered_by": {
+        "write": "applications_client_id_grant"
       }
     },
     {
       "method": "POST",
       "path": "/applications/{client_id}/token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the documented request body carries an OAuth access_token",
-        "source_url": "https://docs.github.com/rest/apps/oauth-applications#check-a-token",
-        "notes": "Named dependency: AGENTS.md forbids accepting credentials as command arguments (add credentials from environment variables or stdin), and a record/body flag is a command argument"
+      "covered_by": {
+        "write": "applications_client_id_token"
       }
     },
     {
       "method": "PATCH",
       "path": "/applications/{client_id}/token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the documented request body carries an OAuth access_token",
-        "source_url": "https://docs.github.com/rest/apps/oauth-applications#reset-a-token",
-        "notes": "Named dependency: AGENTS.md forbids accepting credentials as command arguments (add credentials from environment variables or stdin), and a record/body flag is a command argument"
+      "covered_by": {
+        "write": "applications_client_id_token2"
       }
     },
     {
       "method": "DELETE",
       "path": "/applications/{client_id}/token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "the documented request body carries an OAuth access_token",
-        "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-token",
-        "notes": "Named dependency: AGENTS.md forbids accepting credentials as command arguments (add credentials from environment variables or stdin), and a record/body flag is a command argument"
+      "covered_by": {
+        "write": "applications_client_id_token3"
       }
     },
     {
@@ -8735,14 +8338,14 @@
     {
       "method": "PATCH",
       "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at anyOf with 5 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands anyOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "org_custom_pattern_update_pattern",
+          "org_custom_pattern_update_start_delimiter",
+          "org_custom_pattern_update_end_delimiter",
+          "org_custom_pattern_update_must_match",
+          "org_custom_pattern_update_must_not_match"
+        ]
       }
     },
     {
@@ -8916,14 +8519,14 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at anyOf with 5 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands anyOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "repo_custom_pattern_update_pattern",
+          "repo_custom_pattern_update_start_delimiter",
+          "repo_custom_pattern_update_end_delimiter",
+          "repo_custom_pattern_update_must_match",
+          "repo_custom_pattern_update_must_not_match"
+        ]
       }
     },
     {
@@ -9128,27 +8731,21 @@
     {
       "method": "POST",
       "path": "/user/emails",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 3 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "user_emails_add_object",
+          "user_emails_add_array"
+        ]
       }
     },
     {
       "method": "DELETE",
       "path": "/user/emails",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 3 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "user_emails_delete_object",
+          "user_emails_delete_array"
+        ]
       }
     },
     {

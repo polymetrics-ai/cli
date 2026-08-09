@@ -42176,6 +42176,2769 @@
       "output_policy": "json_redacted",
       "risk": "critical",
       "approval": "plan, preview, approval, execute (typed destructive confirmation)"
+    },
+    {
+      "path": "app access_tokens create",
+      "summary": "POST /app/installations/{installation_id}/access_tokens",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "app_installations_installation_id_access_tokens",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "installation-id",
+          "type": "integer",
+          "maps_to": "record.installation_id",
+          "required": true,
+          "summary": "The unique identifier of the installation."
+        },
+        {
+          "name": "permissions",
+          "type": "json",
+          "maps_to": "record.permissions",
+          "summary": "Optional permissions record field."
+        },
+        {
+          "name": "repositories",
+          "type": "string_array",
+          "maps_to": "record.repositories",
+          "summary": "Optional repositories record field."
+        },
+        {
+          "name": "repository-ids",
+          "type": "json",
+          "maps_to": "record.repository_ids",
+          "summary": "Optional repository ids record field."
+        }
+      ]
+    },
+    {
+      "path": "actions artifacts delete",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_artifacts_artifact_id",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "artifact-id",
+          "type": "integer",
+          "maps_to": "record.artifact_id",
+          "required": true,
+          "summary": "The unique identifier of the artifact."
+        }
+      ]
+    },
+    {
+      "path": "artifact download-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_artifacts_artifact_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "artifact-id",
+          "type": "integer",
+          "maps_to": "path.artifact_id",
+          "required": true,
+          "summary": "The unique identifier of the artifact."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
+        }
+      ]
+    },
+    {
+      "path": "actions runs view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "maps_to": "path.run_id",
+          "required": true,
+          "summary": "The unique identifier of the workflow run."
+        },
+        {
+          "name": "exclude-pull-requests",
+          "type": "boolean",
+          "maps_to": "query.exclude_pull_requests",
+          "summary": "If `true` pull requests are omitted from the response (empty array)."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
+        }
+      ]
+    },
+    {
+      "path": "artifact download-3",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_artifacts",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "maps_to": "path.run_id",
+          "required": true,
+          "summary": "The unique identifier of the workflow run."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "query.name",
+          "summary": "The name field of an artifact. When specified, only artifacts with this name will be returned."
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "maps_to": "query.direction",
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "summary": "The direction to sort the results by."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"
+        }
+      ]
+    },
+    {
+      "path": "actions force-cancel create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_force_cancel",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true,
+          "summary": "The unique identifier of the workflow run."
+        }
+      ]
+    },
+    {
+      "path": "actions rerun-failed-jobs create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_rerun_failed_jobs",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "maps_to": "record.run_id",
+          "required": true,
+          "summary": "The unique identifier of the workflow run."
+        },
+        {
+          "name": "enable-debug-logging",
+          "type": "boolean",
+          "maps_to": "record.enable_debug_logging",
+          "summary": "Optional enable debug logging record field."
+        }
+      ]
+    },
+    {
+      "path": "actions workflows view",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_workflows_workflow_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "maps_to": "path.workflow_id",
+          "required": true,
+          "summary": "The ID of the workflow. You can also pass the workflow file name as a string."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}"
+        }
+      ]
+    },
+    {
+      "path": "actions runs view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_workflows_workflow_id_runs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "maps_to": "path.workflow_id",
+          "required": true,
+          "summary": "The ID of the workflow. You can also pass the workflow file name as a string."
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "maps_to": "query.actor",
+          "summary": "Returns someone's workflow runs. Use the login for the user who created the `push` associated with the check suite or workflow run."
+        },
+        {
+          "name": "branch",
+          "type": "string",
+          "maps_to": "query.branch",
+          "summary": "Returns workflow runs associated with a branch. Use the name of the branch of the `push`."
+        },
+        {
+          "name": "event",
+          "type": "string",
+          "maps_to": "query.event",
+          "summary": "Returns workflow run triggered by the event you specify. For example, `push`, `pull_request` or `issue`. For more information, see \"[Events that trigger workflows](https://docs.github.com/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows).\""
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "maps_to": "query.status",
+          "values": [
+            "completed",
+            "action_required",
+            "cancelled",
+            "failure",
+            "neutral",
+            "skipped",
+            "stale",
+            "success",
+            "timed_out",
+            "in_progress",
+            "queued",
+            "requested",
+            "waiting",
+            "pending"
+          ],
+          "summary": "Returns workflow runs with the check run `status` or `conclusion` that you specify. For example, a conclusion can be `success` or a status can be `in_progress`. Only GitHub Actions can set a status of `waiting`, `pending`, or `requested`."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "created",
+          "type": "string",
+          "maps_to": "query.created",
+          "summary": "Returns workflow runs created within the given date-time range. For more information on the syntax, see \"[Understanding the search syntax](https://docs.github.com/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates).\""
+        },
+        {
+          "name": "exclude-pull-requests",
+          "type": "boolean",
+          "maps_to": "query.exclude_pull_requests",
+          "summary": "If `true` pull requests are omitted from the response (empty array)."
+        },
+        {
+          "name": "check-suite-id",
+          "type": "integer",
+          "maps_to": "query.check_suite_id",
+          "summary": "Returns workflow runs with the `check_suite_id` that you specify."
+        },
+        {
+          "name": "head-sha",
+          "type": "string",
+          "maps_to": "query.head_sha",
+          "summary": "Only returns workflow runs that are associated with the specified `head_sha`."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"
+        }
+      ]
+    },
+    {
+      "path": "activity view",
+      "summary": "Read /repos/{owner}/{repo}/activity",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.activity",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "enum",
+          "maps_to": "query.direction",
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "summary": "The direction to sort the results by."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "query.ref",
+          "summary": "The Git reference for the activities you want to list.\n\nThe `ref` for a branch can be formatted either as `refs/heads/BRANCH_NAME` or `BRANCH_NAME`, where `BRANCH_NAME` is the name of your branch."
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "maps_to": "query.actor",
+          "summary": "The GitHub username to use to filter by the actor who performed the activity."
+        },
+        {
+          "name": "time-period",
+          "type": "enum",
+          "maps_to": "query.time_period",
+          "values": [
+            "day",
+            "week",
+            "month",
+            "quarter",
+            "year"
+          ],
+          "summary": "The time period to filter by.\n\nFor example, `day` will filter for activity that occurred in the past 24 hours, and `week` will filter for activity that occurred in the past 7 days (168 hours)."
+        },
+        {
+          "name": "activity-type",
+          "type": "enum",
+          "maps_to": "query.activity_type",
+          "values": [
+            "push",
+            "force_push",
+            "branch_creation",
+            "branch_deletion",
+            "pr_merge",
+            "merge_queue_merge"
+          ],
+          "summary": "The activity type to filter by.\n\nFor example, you can choose to filter by \"force_push\", to see all force pushes to the repository."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/activity"
+        }
+      ]
+    },
+    {
+      "path": "agents organization-secrets view",
+      "summary": "Read /repos/{owner}/{repo}/agents/organization-secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_organization_secrets",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/organization-secrets"
+        }
+      ]
+    },
+    {
+      "path": "agents organization-variables view",
+      "summary": "Read /repos/{owner}/{repo}/agents/organization-variables",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_organization_variables",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 30). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/organization-variables"
+        }
+      ]
+    },
+    {
+      "path": "agents secrets view",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_secrets",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/secrets"
+        }
+      ]
+    },
+    {
+      "path": "agents public-key view",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets/public-key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_secrets_public_key",
+      "source_cli_path": "",
+      "flags": [],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/secrets/public-key"
+        }
+      ]
+    },
+    {
+      "path": "secret delete-6",
+      "summary": "DELETE /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agents_secrets_secret_name",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "summary": "The name of the secret."
+        }
+      ]
+    },
+    {
+      "path": "agents secrets view-2",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_secrets_secret_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "maps_to": "path.secret_name",
+          "required": true,
+          "summary": "The name of the secret."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+        }
+      ]
+    },
+    {
+      "path": "secret set-6",
+      "summary": "PUT /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agents_secrets_secret_name3",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "maps_to": "record.secret_name",
+          "required": true,
+          "summary": "The name of the secret."
+        },
+        {
+          "name": "encrypted-value",
+          "type": "string",
+          "maps_to": "record.encrypted_value",
+          "required": true,
+          "summary": "Required encrypted value record field."
+        },
+        {
+          "name": "key-id",
+          "type": "string",
+          "maps_to": "record.key_id",
+          "required": true,
+          "summary": "Required key id record field."
+        }
+      ]
+    },
+    {
+      "path": "agents variables view",
+      "summary": "Read /repos/{owner}/{repo}/agents/variables",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_variables",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 30). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/variables"
+        }
+      ]
+    },
+    {
+      "path": "variable create-3",
+      "summary": "POST /repos/{owner}/{repo}/agents/variables",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agents_variables2",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "summary": "Required name record field."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "maps_to": "record.value",
+          "required": true,
+          "summary": "Required value record field."
+        }
+      ]
+    },
+    {
+      "path": "variable delete-4",
+      "summary": "DELETE /repos/{owner}/{repo}/agents/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agents_variables_name",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "summary": "The name of the variable."
+        }
+      ]
+    },
+    {
+      "path": "agents variables view-2",
+      "summary": "Read /repos/{owner}/{repo}/agents/variables/{name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.agents_variables_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "path.name",
+          "required": true,
+          "summary": "The name of the variable."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/agents/variables/{name}"
+        }
+      ]
+    },
+    {
+      "path": "variable update-3",
+      "summary": "PATCH /repos/{owner}/{repo}/agents/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agents_variables_name3",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "summary": "The name of the variable."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "maps_to": "record.value",
+          "summary": "Optional value record field."
+        }
+      ]
+    },
+    {
+      "path": "assignees view-2",
+      "summary": "Read /repos/{owner}/{repo}/assignees",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.assignees",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/assignees"
+        }
+      ]
+    },
+    {
+      "path": "autolinks view",
+      "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.autolinks_autolink_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "autolink-id",
+          "type": "integer",
+          "maps_to": "path.autolink_id",
+          "required": true,
+          "summary": "The unique identifier of the autolink."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+        }
+      ]
+    },
+    {
+      "path": "branches view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "maps_to": "path.branch",
+          "required": true,
+          "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning alerts view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_alerts_alert_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "maps_to": "path.alert_number",
+          "required": true,
+          "summary": "The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
+        }
+      ]
+    },
+    {
+      "path": "collaborators view",
+      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.collaborators_username",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true,
+          "summary": "The handle for the GitHub user account."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/collaborators/{username}"
+        }
+      ]
+    },
+    {
+      "path": "collaborators permission view",
+      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.collaborators_username_permission",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "path.username",
+          "required": true,
+          "summary": "The handle for the GitHub user account."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/collaborators/{username}/permission"
+        }
+      ]
+    },
+    {
+      "path": "comments view",
+      "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.comments_comment_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "path.comment_id",
+          "required": true,
+          "summary": "The unique identifier of the comment."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}"
+        }
+      ]
+    },
+    {
+      "path": "commits comments view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_commit_sha_comments",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "maps_to": "path.commit_sha",
+          "required": true,
+          "summary": "The SHA of the commit."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments"
+        }
+      ]
+    },
+    {
+      "path": "commits view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_ref",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "path.ref",
+          "required": true,
+          "summary": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{ref}"
+        }
+      ]
+    },
+    {
+      "path": "dependabot alerts view",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependabot_alerts_alert_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "maps_to": "path.alert_number",
+          "required": true,
+          "summary": "The number that identifies a Dependabot alert in its repository.\nYou can find this at the end of the URL for a Dependabot alert within GitHub,\nor in `number` fields in the response from the\n`GET /repos/{owner}/{repo}/dependabot/alerts` operation."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}"
+        }
+      ]
+    },
+    {
+      "path": "deployments view",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.deployments_deployment_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "deployment-id",
+          "type": "integer",
+          "maps_to": "path.deployment_id",
+          "required": true,
+          "summary": "deployment_id parameter"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
+        }
+      ]
+    },
+    {
+      "path": "deployments statuses view-2",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.deployments_deployment_id_statuses_status_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "deployment-id",
+          "type": "integer",
+          "maps_to": "path.deployment_id",
+          "required": true,
+          "summary": "deployment_id parameter"
+        },
+        {
+          "name": "status-id",
+          "type": "integer",
+          "maps_to": "path.status_id",
+          "required": true
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"
+        }
+      ]
+    },
+    {
+      "path": "environments view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "maps_to": "path.environment_name",
+          "required": true,
+          "summary": "The name of the environment. The name must be URL encoded. For example, any slashes in the name must be replaced with `%2F`."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}"
+        }
+      ]
+    },
+    {
+      "path": "events view",
+      "summary": "Read /repos/{owner}/{repo}/events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.events",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/events"
+        }
+      ]
+    },
+    {
+      "path": "git commits view",
+      "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_commits_commit_sha",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "maps_to": "path.commit_sha",
+          "required": true,
+          "summary": "The SHA of the commit."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}"
+        }
+      ]
+    },
+    {
+      "path": "git matching-refs view",
+      "summary": "Read /repos/{owner}/{repo}/git/matching-refs/{ref}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_matching_refs_ref",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "path.ref",
+          "required": true,
+          "summary": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}"
+        }
+      ]
+    },
+    {
+      "path": "git tags create",
+      "summary": "POST /repos/{owner}/{repo}/git/tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_tags",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "message",
+          "type": "string",
+          "maps_to": "record.message",
+          "required": true,
+          "summary": "Required message record field."
+        },
+        {
+          "name": "object",
+          "type": "string",
+          "maps_to": "record.object",
+          "required": true,
+          "summary": "Required object record field."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "maps_to": "record.tag",
+          "required": true,
+          "summary": "Required tag record field."
+        },
+        {
+          "name": "tagger",
+          "type": "json",
+          "maps_to": "record.tagger",
+          "summary": "Optional tagger record field."
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "maps_to": "record.type",
+          "required": true,
+          "values": [
+            "commit",
+            "tree",
+            "blob"
+          ],
+          "summary": "Required type record field."
+        }
+      ]
+    },
+    {
+      "path": "hooks view",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.hooks_hook_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "maps_to": "path.hook_id",
+          "required": true,
+          "summary": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}"
+        }
+      ]
+    },
+    {
+      "path": "hooks config view",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.hooks_hook_id_config",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "maps_to": "path.hook_id",
+          "required": true,
+          "summary": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
+        }
+      ]
+    },
+    {
+      "path": "webhook update",
+      "summary": "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "hooks_hook_id_config2",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "maps_to": "record.hook_id",
+          "required": true,
+          "summary": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+        },
+        {
+          "name": "content-type",
+          "type": "string",
+          "maps_to": "record.content_type",
+          "summary": "Optional content type record field."
+        },
+        {
+          "name": "insecure-ssl",
+          "type": "json",
+          "maps_to": "record.insecure_ssl",
+          "summary": "Optional insecure ssl record field."
+        },
+        {
+          "name": "secret",
+          "type": "string",
+          "maps_to": "record.secret",
+          "summary": "Optional secret record field."
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "maps_to": "record.url",
+          "summary": "Optional url record field."
+        }
+      ]
+    },
+    {
+      "path": "issues comments view",
+      "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_comments_comment_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "path.comment_id",
+          "required": true,
+          "summary": "The unique identifier of the comment."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}"
+        }
+      ]
+    },
+    {
+      "path": "issues events view",
+      "summary": "Read /repos/{owner}/{repo}/issues/events/{event_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_events_event_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "event-id",
+          "type": "integer",
+          "maps_to": "path.event_id",
+          "required": true
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/events/{event_id}"
+        }
+      ]
+    },
+    {
+      "path": "issues view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "path.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}"
+        }
+      ]
+    },
+    {
+      "path": "issues comments view-2",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_comments",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "path.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        },
+        {
+          "name": "since",
+          "type": "string",
+          "maps_to": "query.since",
+          "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments"
+        }
+      ]
+    },
+    {
+      "path": "issues events view-2",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_events",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "path.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/events"
+        }
+      ]
+    },
+    {
+      "path": "issues labels delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_labels",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "record.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        }
+      ]
+    },
+    {
+      "path": "issues labels view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_labels2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "path.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels"
+        }
+      ]
+    },
+    {
+      "path": "issues timeline view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/timeline",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_timeline",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "maps_to": "path.issue_number",
+          "required": true,
+          "summary": "The number that identifies the issue."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "exclude",
+          "type": "string",
+          "maps_to": "query.exclude",
+          "summary": "A comma-separated list of timeline event names to exclude from the response."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline"
+        }
+      ]
+    },
+    {
+      "path": "keys view",
+      "summary": "Read /repos/{owner}/{repo}/keys/{key_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.keys_key_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "integer",
+          "maps_to": "path.key_id",
+          "required": true,
+          "summary": "The unique identifier of the key."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/keys/{key_id}"
+        }
+      ]
+    },
+    {
+      "path": "labels view",
+      "summary": "Read /repos/{owner}/{repo}/labels/{name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.labels_name",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "path.name",
+          "required": true
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/labels/{name}"
+        }
+      ]
+    },
+    {
+      "path": "milestones view",
+      "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.milestones_milestone_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "milestone-number",
+          "type": "integer",
+          "maps_to": "path.milestone_number",
+          "required": true,
+          "summary": "The number that identifies the milestone."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/milestones/{milestone_number}"
+        }
+      ]
+    },
+    {
+      "path": "pulls comments view-2",
+      "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_comments_comment_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "path.comment_id",
+          "required": true,
+          "summary": "The unique identifier of the comment."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}"
+        }
+      ]
+    },
+    {
+      "path": "pulls view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "path.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
+        }
+      ]
+    },
+    {
+      "path": "pulls comments view-3",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_comments",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "path.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        },
+        {
+          "name": "sort",
+          "type": "enum",
+          "maps_to": "query.sort",
+          "values": [
+            "created",
+            "updated"
+          ],
+          "summary": "The property to sort the results by."
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "maps_to": "query.direction",
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "summary": "The direction to sort results. Ignored without `sort` parameter."
+        },
+        {
+          "name": "since",
+          "type": "string",
+          "maps_to": "query.since",
+          "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments"
+        }
+      ]
+    },
+    {
+      "path": "pulls replies create",
+      "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_pull_number_comments_comment_id_replies",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "record.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        },
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true,
+          "summary": "The unique identifier of the comment."
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "maps_to": "record.body",
+          "required": true,
+          "summary": "Required body record field."
+        }
+      ]
+    },
+    {
+      "path": "pulls requested_reviewers view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_requested_reviewers2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "path.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+        }
+      ]
+    },
+    {
+      "path": "pulls reviews delete",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_pull_number_reviews_review_id",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "record.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        },
+        {
+          "name": "review-id",
+          "type": "integer",
+          "maps_to": "record.review_id",
+          "required": true,
+          "summary": "The unique identifier of the review."
+        }
+      ]
+    },
+    {
+      "path": "pulls reviews view-2",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_reviews_review_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "path.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        },
+        {
+          "name": "review-id",
+          "type": "integer",
+          "maps_to": "path.review_id",
+          "required": true,
+          "summary": "The unique identifier of the review."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+        }
+      ]
+    },
+    {
+      "path": "pulls reviews set",
+      "summary": "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_pull_number_reviews_review_id3",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "maps_to": "record.pull_number",
+          "required": true,
+          "summary": "The number that identifies the pull request."
+        },
+        {
+          "name": "review-id",
+          "type": "integer",
+          "maps_to": "record.review_id",
+          "required": true,
+          "summary": "The unique identifier of the review."
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "maps_to": "record.body",
+          "required": true,
+          "summary": "Required body record field."
+        }
+      ]
+    },
+    {
+      "path": "releases latest view",
+      "summary": "Read /repos/{owner}/{repo}/releases/latest",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_latest",
+      "source_cli_path": "",
+      "flags": [],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/latest"
+        }
+      ]
+    },
+    {
+      "path": "releases tags view",
+      "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_tags_tag",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "tag",
+          "type": "string",
+          "maps_to": "path.tag",
+          "required": true,
+          "summary": "tag parameter"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/tags/{tag}"
+        }
+      ]
+    },
+    {
+      "path": "releases view",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_release_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "maps_to": "path.release_id",
+          "required": true,
+          "summary": "The unique identifier of the release."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}"
+        }
+      ]
+    },
+    {
+      "path": "rules branches view",
+      "summary": "Read /repos/{owner}/{repo}/rules/branches/{branch}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rules_branches_branch",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "maps_to": "path.branch",
+          "required": true,
+          "summary": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/graphql)."
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rules/branches/{branch}"
+        }
+      ]
+    },
+    {
+      "path": "rulesets view",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rulesets_ruleset_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ruleset-id",
+          "type": "integer",
+          "maps_to": "path.ruleset_id",
+          "required": true,
+          "summary": "The ID of the ruleset."
+        },
+        {
+          "name": "includes-parents",
+          "type": "boolean",
+          "maps_to": "query.includes_parents",
+          "summary": "Include rulesets configured at higher levels that apply to this repository"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
+        }
+      ]
+    },
+    {
+      "path": "secret-scanning alerts view",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.secret_scanning_alerts_alert_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "maps_to": "path.alert_number",
+          "required": true,
+          "summary": "The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation."
+        },
+        {
+          "name": "hide-secret",
+          "type": "boolean",
+          "maps_to": "query.hide_secret",
+          "summary": "A boolean value representing whether or not to hide literal secrets in the results."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
+        }
+      ]
+    },
+    {
+      "path": "security-advisories view",
+      "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.security_advisories_ghsa_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ghsa-id",
+          "type": "string",
+          "maps_to": "path.ghsa_id",
+          "required": true,
+          "summary": "The GHSA (GitHub Security Advisory) identifier of the advisory."
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
+        }
+      ]
+    },
+    {
+      "path": "topics view",
+      "summary": "Read /repos/{owner}/{repo}/topics",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.topics",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "page",
+          "type": "integer",
+          "maps_to": "query.page",
+          "summary": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        },
+        {
+          "name": "per-page",
+          "type": "integer",
+          "maps_to": "query.per_page",
+          "summary": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+        }
+      ],
+      "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/topics"
+        }
+      ]
+    },
+    {
+      "path": "applications grant delete",
+      "summary": "DELETE /applications/{client_id}/grant",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "applications_client_id_grant",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "client-id",
+          "type": "string",
+          "maps_to": "record.client_id",
+          "required": true,
+          "summary": "The client ID of the GitHub app."
+        },
+        {
+          "name": "access-token",
+          "type": "string",
+          "maps_to": "record.access_token",
+          "required": true,
+          "summary": "Required access token record field."
+        }
+      ]
+    },
+    {
+      "path": "applications token create",
+      "summary": "POST /applications/{client_id}/token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "applications_client_id_token",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "client-id",
+          "type": "string",
+          "maps_to": "record.client_id",
+          "required": true,
+          "summary": "The client ID of the GitHub app."
+        },
+        {
+          "name": "access-token",
+          "type": "string",
+          "maps_to": "record.access_token",
+          "required": true,
+          "summary": "Required access token record field."
+        }
+      ]
+    },
+    {
+      "path": "applications token update",
+      "summary": "PATCH /applications/{client_id}/token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "applications_client_id_token2",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "client-id",
+          "type": "string",
+          "maps_to": "record.client_id",
+          "required": true,
+          "summary": "The client ID of the GitHub app."
+        },
+        {
+          "name": "access-token",
+          "type": "string",
+          "maps_to": "record.access_token",
+          "required": true,
+          "summary": "Required access token record field."
+        }
+      ]
+    },
+    {
+      "path": "applications token delete",
+      "summary": "DELETE /applications/{client_id}/token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "applications_client_id_token3",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "client-id",
+          "type": "string",
+          "maps_to": "record.client_id",
+          "required": true,
+          "summary": "The client ID of the GitHub app."
+        },
+        {
+          "name": "access-token",
+          "type": "string",
+          "maps_to": "record.access_token",
+          "required": true,
+          "summary": "Required access token record field."
+        }
+      ]
+    },
+    {
+      "path": "org secret-scanning custom-pattern update-pattern",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_pattern)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "org_custom_pattern_update_pattern",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern",
+          "required": true
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "org secret-scanning custom-pattern update-start-delimiter",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_start_delimiter)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "org_custom_pattern_update_start_delimiter",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter",
+          "required": true
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "org secret-scanning custom-pattern update-end-delimiter",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_end_delimiter)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "org_custom_pattern_update_end_delimiter",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter",
+          "required": true
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "org secret-scanning custom-pattern update-must-match",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_match)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "org_custom_pattern_update_must_match",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match",
+          "required": true
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "org secret-scanning custom-pattern update-must-not-match",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_not_match)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "org_custom_pattern_update_must_not_match",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match",
+          "required": true
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "repo secret-scanning custom-pattern update-pattern",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_pattern)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo_custom_pattern_update_pattern",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern",
+          "required": true
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "repo secret-scanning custom-pattern update-start-delimiter",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_start_delimiter)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo_custom_pattern_update_start_delimiter",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter",
+          "required": true
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "repo secret-scanning custom-pattern update-end-delimiter",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_end_delimiter)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo_custom_pattern_update_end_delimiter",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter",
+          "required": true
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "repo secret-scanning custom-pattern update-must-match",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_match)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo_custom_pattern_update_must_match",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match",
+          "required": true
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match"
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "repo secret-scanning custom-pattern update-must-not-match",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_not_match)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo_custom_pattern_update_must_not_match",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pattern-id",
+          "type": "integer",
+          "maps_to": "record.pattern_id",
+          "required": true
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "maps_to": "record.pattern"
+        },
+        {
+          "name": "start-delimiter",
+          "type": "string",
+          "maps_to": "record.start_delimiter"
+        },
+        {
+          "name": "end-delimiter",
+          "type": "string",
+          "maps_to": "record.end_delimiter"
+        },
+        {
+          "name": "must-match",
+          "type": "json",
+          "maps_to": "record.must_match"
+        },
+        {
+          "name": "must-not-match",
+          "type": "json",
+          "maps_to": "record.must_not_match",
+          "required": true
+        },
+        {
+          "name": "custom-pattern-version",
+          "type": "string",
+          "maps_to": "record.custom_pattern_version",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user emails add",
+      "summary": "POST /user/emails (user_emails_add_object)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_emails_add_object",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "emails",
+          "type": "json",
+          "maps_to": "record.emails",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user emails add-array",
+      "summary": "POST /user/emails (user_emails_add_array)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_emails_add_array",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "emails",
+          "type": "json",
+          "maps_to": "record.emails",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user emails delete",
+      "summary": "DELETE /user/emails (user_emails_delete_object)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_emails_delete_object",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "emails",
+          "type": "json",
+          "maps_to": "record.emails",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "user emails delete-array",
+      "summary": "DELETE /user/emails (user_emails_delete_array)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_emails_delete_array",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "emails",
+          "type": "json",
+          "maps_to": "record.emails",
+          "required": true
+        }
+      ]
     }
   ],
   "help_topics": [

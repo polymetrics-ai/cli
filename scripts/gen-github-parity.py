@@ -14,7 +14,7 @@ operation + (for writes) a write action + a CLI command with the correct gate.
 Flag mappings use path params; write bodies use the declarative fallback
 (buildJSONBody sends all non-path record fields as the JSON body).
 """
-import json, re, sys
+import hashlib, json, os, re, sys
 
 ROOT = "internal/connectors/defs/github"
 api = json.load(open(f"{ROOT}/api_surface.json"))
@@ -28,6 +28,274 @@ existing_cli_paths = {c["path"] for c in cli_doc["commands"]}
 
 PATH_PARAM_RE = re.compile(r"\{([^}]+)\}")
 ENGINE_PATH_PARAM_RE = re.compile(r"(?<!\{)\{([^{}]+)\}(?!\})")
+
+# The completion pass derives contracts only from this exact public artifact,
+# already pinned by github-operation-source-lock.json. The source is supplied
+# explicitly during regeneration rather than fetched implicitly: generated
+# connector artifacts remain reviewable and no developer command gains a
+# surprise network dependency.
+PINNED_OPENAPI_SHA256 = "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+openapi = None
+
+def load_pinned_openapi():
+    global openapi
+    if openapi is not None:
+        return openapi
+    source_path = os.environ.get("GITHUB_OPENAPI_PATH", "").strip()
+    if not source_path:
+        raise ValueError("GITHUB_OPENAPI_PATH is required to regenerate a newly unblocked GitHub REST contract")
+    with open(source_path, "rb") as source:
+        raw = source.read()
+    actual = hashlib.sha256(raw).hexdigest()
+    if actual != PINNED_OPENAPI_SHA256:
+        raise ValueError(f"GITHUB_OPENAPI_PATH sha256 {actual} does not match pinned source {PINNED_OPENAPI_SHA256}")
+    openapi = json.loads(raw)
+    return openapi
+
+def resolve_openapi_ref(value):
+    """Resolve a local OpenAPI reference without admitting another artifact."""
+    document = load_pinned_openapi()
+    seen = set()
+    while isinstance(value, dict) and "$ref" in value:
+        ref = value["$ref"]
+        if not isinstance(ref, str) or not ref.startswith("#/") or ref in seen:
+            raise ValueError(f"unsupported OpenAPI reference {ref!r}")
+        seen.add(ref)
+        target = document
+        for segment in ref[2:].split("/"):
+            target = target[segment.replace("~1", "/").replace("~0", "~")]
+        value = target
+    return value
+
+def merge_all_of(parts):
+    """Merge the narrow object shape used by GitHub's reusable body schemas."""
+    merged = {"type": "object", "properties": {}, "required": []}
+    for part in parts:
+        normalized = openapi_schema_to_engine(part)
+        if normalized is None:
+            return None
+        if normalized.get("type") not in (None, "object"):
+            return None
+        merged["properties"].update(normalized.get("properties", {}))
+        merged["required"].extend(normalized.get("required", []))
+        if normalized.get("additionalProperties") is False:
+            merged["additionalProperties"] = False
+    merged["required"] = sorted(set(merged["required"]))
+    if not merged["required"]:
+        merged.pop("required")
+    if not merged["properties"]:
+        merged.pop("properties")
+    return merged
+
+def openapi_schema_to_engine(schema):
+    """Reduce a resolved OpenAPI schema to the engine's closed draft-07 subset.
+
+    The output intentionally carries only validation facts the runtime knows.
+    A nested provider union stays a typed container supplied through a single
+    declaration-bound JSON flag; a ROOT union returns None so callers must
+    define separately named actions rather than flatten it into a generic body.
+    """
+    schema = resolve_openapi_ref(schema or {})
+    if "allOf" in schema:
+        return merge_all_of([resolve_openapi_ref(item) for item in schema["allOf"]])
+    if "oneOf" in schema or "anyOf" in schema:
+        return None
+    out = {}
+    value_type = schema.get("type")
+    if isinstance(value_type, str):
+        out["type"] = value_type
+    elif "properties" in schema:
+        out["type"] = "object"
+    elif "items" in schema:
+        out["type"] = "array"
+    if "enum" in schema:
+        out["enum"] = schema["enum"]
+    if "pattern" in schema:
+        out["pattern"] = schema["pattern"]
+    if "format" in schema:
+        out["format"] = schema["format"]
+    for key in ("minProperties", "minItems", "maxItems"):
+        if key in schema:
+            out[key] = schema[key]
+    if isinstance(schema.get("additionalProperties"), bool):
+        out["additionalProperties"] = schema["additionalProperties"]
+    if "properties" in schema:
+        properties = {}
+        for name, child in schema["properties"].items():
+            normalized = openapi_schema_to_engine(child)
+            # A nested union remains a bounded container, not an open body.
+            # The root union check above is the only place command promotion
+            # would otherwise blur distinct documented operations.
+            if normalized is None:
+                child = resolve_openapi_ref(child)
+                normalized = {"type": child.get("type", "object")}
+            properties[name] = normalized
+        out["properties"] = properties
+    if "required" in schema:
+        out["required"] = list(schema["required"])
+    if "items" in schema:
+        items = openapi_schema_to_engine(schema["items"])
+        if items is None:
+            items = {"type": "object"}
+        out["items"] = items
+    return out
+
+def openapi_operation(method, api_path):
+    document = load_pinned_openapi()
+    path_item = resolve_openapi_ref(document["paths"][api_path])
+    return path_item, resolve_openapi_ref(path_item[method.lower()])
+
+def openapi_parameters(method, api_path):
+    path_item, operation = openapi_operation(method, api_path)
+    values = []
+    seen = set()
+    for raw in list(path_item.get("parameters", [])) + list(operation.get("parameters", [])):
+        parameter = resolve_openapi_ref(raw)
+        name = parameter.get("name")
+        location = parameter.get("in")
+        if not name or location not in ("path", "query") or (location, name) in seen:
+            continue
+        seen.add((location, name))
+        schema = openapi_schema_to_engine(parameter.get("schema", {})) or {"type": "string"}
+        value_type = schema.get("type", "string")
+        if value_type == "array":
+            item_type = (schema.get("items") or {}).get("type")
+            value_type = "string_array" if item_type == "string" else "json"
+        elif value_type not in ("string", "integer", "number", "boolean"):
+            value_type = "string"
+        values.append({
+            "name": name,
+            "in": location,
+            "type": value_type,
+            "schema": schema,
+            "required": bool(parameter.get("required")),
+            "values": schema.get("enum", []),
+            "summary": parameter.get("description", ""),
+        })
+    return values
+
+def openapi_body_schema(method, api_path):
+    _, operation = openapi_operation(method, api_path)
+    request_body = operation.get("requestBody")
+    if not request_body:
+        return {"type": "object", "additionalProperties": False, "properties": {}}
+    request_body = resolve_openapi_ref(request_body)
+    content = request_body.get("content", {})
+    media = content.get("application/json")
+    if media is None:
+        raise ValueError(f"{method} {api_path} has no supported application/json request body")
+    return openapi_schema_to_engine(media.get("schema", {}))
+
+def source_contract_flags(parameters, schema, include_optional=True, write=False):
+    """Build command flags only from declared path/query/body parameters."""
+    flags = []
+    parameter_names = set()
+    for parameter in parameters:
+        if parameter["name"] in ("owner", "repo"):
+            continue
+        parameter_names.add(parameter["name"])
+        kind = parameter["type"]
+        values = parameter["values"]
+        if values and kind == "string":
+            kind = "enum"
+        target_scope = "record" if write else parameter["in"]
+        flag = contract_flag(parameter["name"].replace("_", "-"), kind, f"{target_scope}.{parameter['name']}", required=parameter["required"], values=values)
+        if parameter["summary"]:
+            flag["summary"] = parameter["summary"]
+        flags.append(flag)
+    if schema is not None:
+        for name, field in sorted((schema.get("properties") or {}).items()):
+            # A path/query parameter already owns this record field. Emitting
+            # a second body-derived flag would give one command two spellings
+            # for the same write value and make their types drift.
+            if write and name in parameter_names:
+                continue
+            required = name in set(schema.get("required") or [])
+            if not required and not include_optional:
+                continue
+            flag = materialized_record_flag(name, field, required=required)
+            flag["maps_to"] = "record." + name
+            flag["summary"] = ("Required " if required else "Optional ") + name.replace("_", " ") + " record field."
+            flags.append(flag)
+    return flags
+
+def normalize_reverse_etl_path_flags():
+    """A reverse-ETL action owns path values in its record, never path.*.
+
+    Operation reads/writes use `path.<name>` because their executor separates
+    request interpolation from body values. A declarative write action uses its
+    own `path_fields` to remove `record.<name>` from the JSON body after
+    interpolation. Normalize existing generated completion commands as well as
+    fresh ones, so rerunning the generator cannot retain an invalid first-pass
+    mapping.
+    """
+    actions = {action["name"]: action for action in writes_doc["actions"]}
+    changed = 0
+    for command in cli_doc["commands"]:
+        if command.get("intent") != "reverse_etl" or not command.get("write"):
+            continue
+        action = actions.get(command["write"])
+        if action is None:
+            continue
+        path_fields = set(action.get("path_fields") or [])
+        for flag in command.get("flags", []):
+            target = flag.get("maps_to", "")
+            if not target.startswith("path."):
+                continue
+            name = target[len("path."):]
+            if name in path_fields:
+                flag["maps_to"] = "record." + name
+                changed += 1
+        # An earlier completion generation made path fields twice: once from
+        # OpenAPI parameters and again from the temporary record schema. Keep
+        # the parameter flag (the first source-derived declaration), so a
+        # regeneration repairs an interrupted run rather than retaining an
+        # invalid duplicate mapping.
+        deduped = []
+        targets = set()
+        for flag in command.get("flags", []):
+            target = flag.get("maps_to")
+            if target and target in targets:
+                changed += 1
+                continue
+            if target:
+                targets.add(target)
+            deduped.append(flag)
+        command["flags"] = deduped
+        # The same interrupted generation used the legacy name heuristic for
+        # path-field schemas. When a duplicate revealed the mismatch, align
+        # the action with the surviving source-derived command flag. This is
+        # intentionally limited to scalar path fields; complex path values
+        # are not an executable URL contract.
+        props = (action.get("record_schema") or {}).get("properties") or {}
+        flags_by_target = {flag.get("maps_to"): flag for flag in deduped}
+        for name in path_fields:
+            flag = flags_by_target.get("record." + name)
+            if not flag or flag.get("type") not in ("string", "integer", "number", "boolean", "enum"):
+                continue
+            field = props.get(name)
+            if field is None:
+                continue
+            field["type"] = "string" if flag["type"] == "enum" else flag["type"]
+            if flag["type"] == "enum":
+                field["enum"] = flag.get("values", [])
+    return changed
+
+def completion_write_model(method, api_path):
+    if method == "DELETE":
+        return "destructive_action"
+    if "secret" in api_path or api_path.startswith("/applications/"):
+        return "sensitive_reverse_etl"
+    return "admin_reverse_etl"
+
+SENSITIVE_COMPLETION_FIELDS = {
+    ("DELETE", "/applications/{client_id}/grant"): ["access_token"],
+    ("POST", "/applications/{client_id}/token"): ["access_token"],
+    ("PATCH", "/applications/{client_id}/token"): ["access_token"],
+    ("DELETE", "/applications/{client_id}/token"): ["access_token"],
+    ("PUT", "/repos/{owner}/{repo}/agents/secrets/{secret_name}"): ["encrypted_value"],
+    ("PATCH", "/repos/{owner}/{repo}/hooks/{hook_id}/config"): ["secret"],
+}
 
 
 def engine_write_path(api_path):
@@ -208,19 +476,22 @@ EXPLICIT_DIRECT_READ_CONTRACTS = {
     },
 }
 
-# These eight documented POST endpoints put genuinely alternative request
+# These documented endpoints put genuinely alternative request
 # contracts at the root of a oneOf. A oneOf is not one executable command
 # contract: each arm gets a closed, separately named write action and command.
-# Do not broaden this table into a generic oneOf promotion. The 19 arms below
-# were taken from the GitHub OpenAPI artifact recorded in the parity plan, and
-# each is covered by a generator contract test through the real preflight.
-def one_of_arm(action, cli_path, required, properties, destructive=False):
+# Do not broaden this table into a generic oneOf promotion. Each arm below was
+# taken from the GitHub OpenAPI artifact recorded in the parity plan and is
+# covered by a generator contract test through the real preflight.
+def one_of_arm(action, cli_path, required, properties, destructive=False, body_type=None, body_field=None, body_schema=None):
     return {
         "action": action,
         "cli_path": cli_path,
         "required": required,
         "properties": properties,
         "destructive": destructive,
+        "body_type": body_type,
+        "body_field": body_field,
+        "body_schema": body_schema,
     }
 
 CAMPAIGN_COMMON_PROPERTIES = {
@@ -246,7 +517,87 @@ PROJECT_ITEM_PROPERTIES = {
     "number": {"type": "integer"},
 }
 
+EMAIL_ARRAY_SCHEMA = {
+    "type": "array",
+    "items": {"type": "string"},
+    "minItems": 1,
+}
+
+CUSTOM_PATTERN_PROPERTIES = {
+    "pattern": {"type": "string"},
+    "start_delimiter": {"type": "string"},
+    "end_delimiter": {"type": "string"},
+    "must_match": {"type": "array", "items": {"type": "string"}},
+    "must_not_match": {"type": "array", "items": {"type": "string"}},
+    # GitHub requires this optimistic-concurrency version. The published
+    # nullable marker does not make omitting it safe: the endpoint's required
+    # list and documented purpose require the current string version.
+    "custom_pattern_version": {"type": "string"},
+}
+
 EXPLICIT_ONE_OF_WRITE_CONTRACTS = {
+    # GitHub's object and array forms are both independently documented. A
+    # scalar email is the exact one-element case of the array form, so the
+    # typed array action retains the complete provider semantics without a
+    # raw scalar-body escape hatch.
+    ("POST", "/user/emails"): {
+        "arms": [
+            one_of_arm(
+                "user_emails_add_object",
+                "user emails add",
+                ["emails"],
+                {"emails": EMAIL_ARRAY_SCHEMA},
+            ),
+            one_of_arm(
+                "user_emails_add_array",
+                "user emails add-array",
+                ["emails"],
+                {"emails": EMAIL_ARRAY_SCHEMA},
+                body_type="json_array",
+                body_field="emails",
+                body_schema=EMAIL_ARRAY_SCHEMA,
+            ),
+        ],
+    },
+    ("DELETE", "/user/emails"): {
+        "arms": [
+            one_of_arm(
+                "user_emails_delete_object",
+                "user emails delete",
+                ["emails"],
+                {"emails": EMAIL_ARRAY_SCHEMA},
+                destructive=True,
+            ),
+            one_of_arm(
+                "user_emails_delete_array",
+                "user emails delete-array",
+                ["emails"],
+                {"emails": EMAIL_ARRAY_SCHEMA},
+                destructive=True,
+                body_type="json_array",
+                body_field="emails",
+                body_schema=EMAIL_ARRAY_SCHEMA,
+            ),
+        ],
+    },
+    ("PATCH", "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"): {
+        "arms": [
+            one_of_arm("org_custom_pattern_update_pattern", "org secret-scanning custom-pattern update-pattern", ["custom_pattern_version", "pattern"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("org_custom_pattern_update_start_delimiter", "org secret-scanning custom-pattern update-start-delimiter", ["custom_pattern_version", "start_delimiter"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("org_custom_pattern_update_end_delimiter", "org secret-scanning custom-pattern update-end-delimiter", ["custom_pattern_version", "end_delimiter"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("org_custom_pattern_update_must_match", "org secret-scanning custom-pattern update-must-match", ["custom_pattern_version", "must_match"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("org_custom_pattern_update_must_not_match", "org secret-scanning custom-pattern update-must-not-match", ["custom_pattern_version", "must_not_match"], CUSTOM_PATTERN_PROPERTIES),
+        ],
+    },
+    ("PATCH", "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"): {
+        "arms": [
+            one_of_arm("repo_custom_pattern_update_pattern", "repo secret-scanning custom-pattern update-pattern", ["custom_pattern_version", "pattern"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("repo_custom_pattern_update_start_delimiter", "repo secret-scanning custom-pattern update-start-delimiter", ["custom_pattern_version", "start_delimiter"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("repo_custom_pattern_update_end_delimiter", "repo secret-scanning custom-pattern update-end-delimiter", ["custom_pattern_version", "end_delimiter"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("repo_custom_pattern_update_must_match", "repo secret-scanning custom-pattern update-must-match", ["custom_pattern_version", "must_match"], CUSTOM_PATTERN_PROPERTIES),
+            one_of_arm("repo_custom_pattern_update_must_not_match", "repo secret-scanning custom-pattern update-must-not-match", ["custom_pattern_version", "must_not_match"], CUSTOM_PATTERN_PROPERTIES),
+        ],
+    },
     ("POST", "/orgs/{org}/attestations/delete-request"): {
         "arms": [
             one_of_arm(
@@ -599,7 +950,7 @@ def append_explicit_one_of_write_contract(endpoint, operation, contract):
         required = list(path_fields) + list(arm["required"])
         action = {
             "name": action_name,
-            "kind": "create",
+            "kind": {"POST": "create", "PATCH": "update", "PUT": "update", "DELETE": "delete"}[method],
             "method": method,
             "path": engine_write_path(api_path),
             "path_fields": path_fields,
@@ -613,6 +964,10 @@ def append_explicit_one_of_write_contract(endpoint, operation, contract):
             },
             "risk": operation.get("risk", "medium"),
         }
+        if arm.get("body_type"):
+            action["body_type"] = arm["body_type"]
+            action["body_field"] = arm["body_field"]
+            action["body_schema"] = arm["body_schema"]
         mutation_class = "admin"
         approval = SAFE_WRITE_APPROVAL
         operation_approval = "plan, approval, execute"
@@ -681,8 +1036,25 @@ for e in api["endpoints"]:
     api_path = e.get("path", "")
     explicit_read = EXPLICIT_DIRECT_READ_CONTRACTS.get((method, api_path))
     explicit_one_of_write = EXPLICIT_ONE_OF_WRITE_CONTRACTS.get((method, api_path))
-    if model in ("duplicate", "deprecated", "disallowed") and not explicit_read and not explicit_one_of_write:
-        continue
+    completion_params = None
+    completion_body = None
+    completion_contract = model in ("duplicate", "deprecated", "disallowed")
+    if completion_contract and not explicit_read and not explicit_one_of_write:
+        # Former exclusion labels are accounting metadata, not an execution
+        # contract. Re-open each pinned endpoint with its own method, path,
+        # declared parameters, and (for writes) closed request schema.
+        completion_params = openapi_parameters(method, api_path)
+        if method == "GET":
+            model = "direct_read"
+        else:
+            completion_body = openapi_body_schema(method, api_path)
+            # A root union cannot become one permissive action. Leave it for
+            # the explicit arm table below, where every arm has a stable name.
+            if completion_body is None:
+                continue
+            if completion_body.get("type") not in (None, "object"):
+                raise ValueError(f"{method} {api_path} body is not a concrete object contract")
+            model = completion_write_model(method, api_path)
     if e.get("covered_by"):
         continue  # already converted
     e.pop("operation", None)  # covered_by replaces the operation classifier
@@ -726,16 +1098,30 @@ for e in api["endpoints"]:
         path_fields = [p for p in params if p not in ("owner", "repo")]
         record_props = {}
         required = []
+        completion_params_by_name = {parameter["name"]: parameter for parameter in completion_params or []}
         for pf in path_fields:
-            record_props[pf] = {"type": "integer"} if "id" in pf or "number" in pf else {"type": "string"}
+            source_param = completion_params_by_name.get(pf)
+            record_props[pf] = dict(source_param["schema"]) if source_param else scalar_path_schema(pf)
             required.append(pf)
+        if completion_body is not None:
+            for name, field in (completion_body.get("properties") or {}).items():
+                record_props.setdefault(name, field)
+            required.extend(completion_body.get("required", []))
         wa = {
             "name": wname, "kind": {"POST": "create", "PATCH": "update", "PUT": "update", "DELETE": "delete"}[method],
             "method": method, "path": engine_write_path(api_path), "path_fields": path_fields, "body_type": "json",
             "record_schema": {"$schema": "http://json-schema.org/draft-07/schema#", "type": "object",
-                              "required": required, "properties": record_props},
+                              "required": sorted(set(required)), "properties": record_props},
             "risk": op.get("risk", "medium"),
         }
+        if completion_body is not None and completion_body.get("additionalProperties") is False:
+            wa["record_schema"]["additionalProperties"] = False
+        sensitive_fields = SENSITIVE_COMPLETION_FIELDS.get((method, api_path), [])
+        if sensitive_fields:
+            # The generic plan lifecycle withholds these exact declared fields
+            # from state, samples, previews, and run records. The source field
+            # list remains narrow rather than redacting an entire request.
+            wa["redact_fields"] = sensitive_fields
         mut_class = "admin"
         if model == "sensitive_reverse_etl":
             mut_class = "secret"
@@ -760,8 +1146,11 @@ for e in api["endpoints"]:
             oprec["destructive"] = True
         new_ops.append(oprec)
         # cli command
-        flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
-                  "summary": f"{p} path parameter", "maps_to": f"record.{p}"} for p in path_fields]
+        if completion_body is not None:
+            flags = source_contract_flags(completion_params, wa["record_schema"], write=True)
+        else:
+            flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
+                      "summary": f"{p} path parameter", "maps_to": f"record.{p}"} for p in path_fields]
         cmd = {"path": cli_path, "summary": f"{method} {api_path}", "intent": "reverse_etl",
                "availability": "implemented", "write": wname, "source_cli_path": "",
                "risk": op.get("risk", "medium"),
@@ -798,8 +1187,11 @@ for e in api["endpoints"]:
         else:
             rest = {"method": "GET", "path": api_path}
             output_policy = "json"
-            flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
-                      "summary": f"{p} path parameter"} for p in params if p not in ("owner", "repo")]
+            if completion_params is not None:
+                flags = source_contract_flags(completion_params, None)
+            else:
+                flags = [{"name": p.replace("_", "-"), "type": "integer" if ("id" in p or "number" in p) else "string",
+                          "summary": f"{p} path parameter"} for p in params if p not in ("owner", "repo")]
         new_ops.append({"id": op_id, "kind": "rest_read", "summary": f"Read {api_path}",
                         "source_url": op.get("source_url", ""), "risk": op.get("risk", "low"),
                         "approval": "none", "output_policy": output_policy, "rest": rest})
@@ -813,6 +1205,8 @@ for e in api["endpoints"]:
 ops_doc["operations"].extend(new_ops)
 writes_doc["actions"].extend(new_writes)
 cli_doc["commands"].extend(new_cmds)
+
+normalized_reverse_etl_path_flags = normalize_reverse_etl_path_flags()
 
 def write_generated_json(path, value):
     # Keep generated artifacts byte-stable when their semantic content did not
@@ -838,3 +1232,4 @@ print(f"  new operations: {len(new_ops)} (total {len(ops_doc['operations'])})")
 print(f"  new write actions: {len(new_writes)} (total {len(writes_doc['actions'])})")
 print(f"  new cli commands: {len(new_cmds)} (total {len(cli_doc['commands'])})")
 print(f"  promoted partial structured writes: {len(promoted_partial_write_commands)}")
+print(f"  normalized reverse-ETL path flags: {normalized_reverse_etl_path_flags}")

@@ -2692,3 +2692,58 @@ $ go test -timeout 20m ./internal/connectors/commandrunner \
   -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
 ok   polymetrics.ai/internal/connectors/commandrunner
 ```
+
+**Red/Green 33b — source-pinned REST closure.** The completion test initially
+reported 77 REST rows with no executable contract: 67 historical `duplicate`,
+9 `disallowed`, and one `deprecated` classifier. Those labels described a
+prior generator limitation; they were not runtime contracts. The initial
+source-derived generation correctly reduced the red output to the four root
+union endpoints below, proving that 73 independently typed REST contracts
+were added without weakening the completion test:
+
+```
+DELETE /user/emails
+POST /user/emails
+PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id}
+PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}
+```
+
+The generator reads only the explicitly supplied, SHA-256-pinned
+`github/rest-api-description` artifact
+`80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d`; it neither
+fetches a source nor accepts an unpinned substitution. Each ordinary GET
+receives its declared path/query flags and bounded direct-read operation. Each
+write receives a closed record schema derived from the source, declared
+top-level structured JSON fields where necessary, plan/approval execution,
+and destructive confirmation for DELETE. The rerun also repairs an
+interrupted generated state by deduplicating only identical `record.*` flag
+mappings and retaining the parameter-derived field type.
+
+The four remaining root unions are explicit named actions: object/array email
+forms (an array of one is the documented scalar email semantics) and five
+independently required custom-pattern update arms for each scope. No generic
+raw body was added. JSON-array actions use the existing declaration-bound
+`body_field`/`body_schema` executor, and the email deletion actions retain the
+typed destructive confirmation gate. After regeneration, the same completion
+test reported only the 22 remaining command classifications and **no REST
+endpoint finding**, while the real runtime preflight and static validator were
+green:
+
+```
+$ GITHUB_OPENAPI_PATH=/tmp/github-openapi-parity.4UTT85/api.github.com.json \
+    python3 scripts/gen-github-parity.py
+generated: 4 endpoints covered
+  new operations: 14 (total 769)
+  new write actions: 14 (total 607)
+  new cli commands: 14 (total 1571)
+
+$ go run ./cmd/connectorgen surface-sync internal/connectors/defs --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/github
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go test -timeout 20m ./internal/connectors/commandrunner \
+    -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+```
