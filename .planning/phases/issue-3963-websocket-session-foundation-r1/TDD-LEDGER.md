@@ -38,6 +38,33 @@ The failure confirms that `websocket` is rejected by the closed operations schem
 contains only the synthetic connector name and a schema property; no credential, provider response,
 or transcript was read or printed.
 
+## Schema/loader RED — captured 2026-08-09
+
+Before a production schema or loader edit, the foundation added specific unsafe-declaration cases
+and ran:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestBundle(LoadAcceptsClosedWebSocketSessionContract|RejectsUnsafeWebSocketSessionContracts)$'
+--- FAIL: TestBundleLoadAcceptsClosedWebSocketSessionContract (0.00s)
+    websocket_session_test.go:51: Load closed WebSocket session operation: load bundle acme: operations.json: /operations/0/websocket: additional property not allowed
+--- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts (0.00s)
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/non_get_upgrade (0.00s)
+        websocket_session_test.go:103: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session method must be GET"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/absolute_endpoint (0.00s)
+        websocket_session_test.go:103: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session path must be connector-relative"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/empty_subprotocol (0.00s)
+        websocket_session_test.go:103: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session requires subprotocol"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/unbounded_frame (0.00s)
+        websocket_session_test.go:103: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session max_frame_bytes must be positive"
+    --- FAIL: TestBundleRejectsUnsafeWebSocketSessionContracts/open_session_update (0.00s)
+        websocket_session_test.go:103: Load unsafe websocket session contract = load bundle acme: operations.json: /operations/0/websocket: additional property not allowed, want error containing "websocket_session session_update_schema must declare additionalProperties false"
+FAIL
+```
+
+This is deliberately red because the current closed schema rejects every `websocket` block before
+the loader can assess its method, path, subprotocol, bounds, or nested schema. The next GREEN
+change must make the valid declaration load while preserving each specific rejection.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
