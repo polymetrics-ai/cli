@@ -1,0 +1,1033 @@
+{
+  "operations": [
+    {
+      "id": "100ms.get.v2-active-rooms-room-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/active-rooms/{room_id}",
+      "description": "live in-memory active-room/session snapshot, not a syncable catalog object; equivalent information is available via the sessions stream's active filter once a session has been recorded",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/active-rooms/{room_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-active-rooms-room-id-end-room",
+      "kind": "rest_write",
+      "summary": "POST /v2/active-rooms/{room_id}/end-room",
+      "description": "forcibly terminates a live in-progress room session for all participants",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/active-rooms/{room_id}/end-room",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-active-rooms-room-id-peers",
+      "kind": "rest_read",
+      "summary": "GET /v2/active-rooms/{room_id}/peers",
+      "description": "ephemeral live-peer roster of a currently active room; ceases to exist once the room session ends",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/active-rooms/{room_id}/peers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-active-rooms-room-id-peers-peer-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/active-rooms/{room_id}/peers/{peer_id}",
+      "description": "single ephemeral live-peer detail; same reasoning as the peers list above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-active-rooms-room-id-peers-peer-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/active-rooms/{room_id}/peers/{peer_id}",
+      "description": "mutates a live participant's role/mute state in an in-progress call",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/active-rooms/{room_id}/peers/{peer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-active-rooms-room-id-remove-peers",
+      "kind": "rest_write",
+      "summary": "POST /v2/active-rooms/{room_id}/remove-peers",
+      "description": "forcibly disconnects live participants from an in-progress call",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/active-rooms/{room_id}/remove-peers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-active-rooms-room-id-send-message",
+      "kind": "rest_write",
+      "summary": "POST /v2/active-rooms/{room_id}/send-message",
+      "description": "sends a real-time broadcast/direct message into an active room; a live-interaction side-effect, not a data-object mutation with a record shape to validate",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/active-rooms/{room_id}/send-message",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-analytics-events",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/events",
+      "description": "raw track/recording/error telemetry event stream distinct from webhook-delivery history; a large, high-cardinality diagnostic firehose better suited to a dedicated observability pipeline than a warehouse sync catalog",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-analytics-events-webhooks-replay",
+      "kind": "rest_write",
+      "summary": "POST /v2/analytics/events/webhooks/replay",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/analytics/events/webhooks/replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-analytics-peer-stats",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/peer-stats",
+      "description": "per-peer call-quality telemetry (packet loss/jitter/bitrate time series); same high-cardinality diagnostic-data reasoning as analytics/events",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/peer-stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-analytics-webhooks-replay",
+      "kind": "rest_write",
+      "summary": "POST /v2/analytics/webhooks/replay",
+      "description": "re-triggers delivery of a historical webhook event to the configured endpoint; an operational replay action, not a data read/create",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/analytics/webhooks/replay",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-analytics-webhooks-replay-workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/analytics/webhooks/replay/{workflow_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/analytics/webhooks/replay/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-external-streams-room-room-id-start",
+      "kind": "rest_write",
+      "summary": "POST /v2/external-streams/room/{room_id}/start",
+      "description": "RTMP push-to-destination lifecycle start; deferred with the other streaming-control actions pending Pass B write review",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/external-streams/room/{room_id}/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-external-streams-room-room-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/external-streams/room/{room_id}/stop",
+      "description": "paired lifecycle-stop for the deferred external-stream start action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/external-streams/room/{room_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-external-streams-job-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/external-streams/{job_id}",
+      "description": "single-external-stream detail subsumed by the external_streams list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/external-streams/{job_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-external-streams-job-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/external-streams/{job_id}/stop",
+      "description": "single-id variant of the room-scoped stop action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/external-streams/{job_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-external-streams-stream-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/external-streams/{stream_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/external-streams/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-external-streams-stream-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/external-streams/{stream_id}/stop",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/external-streams/{stream_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-room-room-id-start",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/room/{room_id}/start",
+      "description": "HLS live-stream lifecycle start requires a real active room and destination config with no read-side parity gap; deferred until a Pass B write-review pass covers streaming-control actions",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/room/{room_id}/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-room-room-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/room/{room_id}/stop",
+      "description": "paired lifecycle-stop for the deferred live-stream start action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/room/{room_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-live-streams-stream-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/live-streams/{stream_id}",
+      "description": "single-live-stream detail subsumed by the live_streams list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/live-streams/{stream_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/pause",
+      "description": "live-stream recording pause; deferred with the other live-stream lifecycle actions",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-pause-recording",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/pause-recording",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/pause-recording",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-resume",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/resume",
+      "description": "live-stream recording resume; deferred with the other live-stream lifecycle actions",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/resume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-resume-recording",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/resume-recording",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/resume-recording",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/stop",
+      "description": "single-id variant of the room-scoped stop action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-live-streams-stream-id-timed-metadata",
+      "kind": "rest_write",
+      "summary": "POST /v2/live-streams/{stream_id}/timed-metadata",
+      "description": "injects timed metadata into an active HLS manifest; a real-time broadcast control action, not a syncable-record mutation",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/live-streams/{stream_id}/timed-metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-polls",
+      "kind": "rest_write",
+      "summary": "POST /v2/polls",
+      "description": "poll creation requires an active room's live poll-engine state; no corresponding read stream exists yet to establish parity against",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/polls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-polls-poll-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/polls/{poll_id}",
+      "description": "poll detail/results read; no poll-listing endpoint exists in the documented API to build a catalog stream from (polls are only retrievable by ID or via room linkage)",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/polls/{poll_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-polls-poll-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/polls/{poll_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/polls/{poll_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-polls-poll-id-questions-question-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/polls/{poll_id}/questions/{question_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/polls/{poll_id}/questions/{question_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.delete.v2-polls-poll-id-questions-question-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/polls/{poll_id}/questions/{question_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/polls/{poll_id}/questions/{question_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-polls-poll-id-questions-question-id-options-option-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.delete.v2-polls-poll-id-questions-question-id-options-option-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/polls/{poll_id}/questions/{question_id}/options/{option_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-polls-poll-id-responses",
+      "kind": "rest_read",
+      "summary": "GET /v2/polls/{poll_id}/responses",
+      "description": "individual poll response records; same reasoning as poll detail above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/polls/{poll_id}/responses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-polls-poll-id-responses-response-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/polls/{poll_id}/responses/{response_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/polls/{poll_id}/responses/{response_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-polls-poll-id-results",
+      "kind": "rest_read",
+      "summary": "GET /v2/polls/{poll_id}/results",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/polls/{poll_id}/results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-polls-poll-id-sessions",
+      "kind": "rest_read",
+      "summary": "GET /v2/polls/{poll_id}/sessions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/polls/{poll_id}/sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-recording-assets-asset-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/recording-assets/{asset_id}",
+      "description": "single-asset detail subsumed by the recording_assets list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/recording-assets/{asset_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-recording-assets-asset-id-presigned-url",
+      "kind": "rest_read",
+      "summary": "GET /v2/recording-assets/{asset_id}/presigned-url",
+      "description": "returns a signed URL for downloading the underlying recording media file, not syncable catalog/object data",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/recording-assets/{asset_id}/presigned-url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-recordings-room-room-id-pause",
+      "kind": "rest_write",
+      "summary": "POST /v2/recordings/room/{room_id}/pause",
+      "description": "recording-pause lifecycle control; deferred pending real usage demand for pause/resume beyond start/stop",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/recordings/room/{room_id}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-recordings-room-room-id-resume",
+      "kind": "rest_write",
+      "summary": "POST /v2/recordings/room/{room_id}/resume",
+      "description": "recording-resume lifecycle control; paired with the deferred pause action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/recordings/room/{room_id}/resume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-recordings-recording-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/recordings/{recording_id}",
+      "description": "single-recording detail subsumed by the recordings list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/recordings/{recording_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-recordings-recording-id-stop",
+      "kind": "rest_write",
+      "summary": "POST /v2/recordings/{recording_id}/stop",
+      "description": "single-recording-id variant of stop_recording (room-scoped stop is the covered, more commonly used shape); adding a second near-identical write action for the same mutation is not a distinct capability",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/recordings/{recording_id}/stop",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-room-codes-room-room-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/room-codes/room/{room_id}",
+      "description": "room-codes are per-room join-authentication credentials, not a general syncable object stream; listing them at scale would require fanning out over every room_id and expose active join secrets in warehouse-destined data",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/room-codes/room/{room_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-room-codes-room-room-id-role-role",
+      "kind": "rest_write",
+      "summary": "POST /v2/room-codes/room/{room_id}/role/{role}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/room-codes/room/{room_id}/role/{role}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-rooms-room-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/rooms/{room_id}",
+      "description": "single-room detail subsumed by the rooms list stream; no distinct fields beyond what /v2/rooms already returns per record",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/rooms/{room_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-rooms-room-id-polls",
+      "kind": "rest_write",
+      "summary": "POST /v2/rooms/{room_id}/polls",
+      "description": "links a poll to a room; a session-setup action tied to the deferred polls feature above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/rooms/{room_id}/polls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-sessions-session-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sessions/{session_id}",
+      "description": "single-session detail subsumed by the sessions list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sessions/{session_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-stream-keys-room-room-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/stream-keys/room/{room_id}",
+      "description": "retrieves the live RTMP ingest stream key/secret for a room; a credential value, not syncable catalog data",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/stream-keys/room/{room_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-stream-keys-room-room-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/stream-keys/room/{room_id}",
+      "description": "creates a fresh RTMP ingest stream key/secret for a room; a credential-issuance action out of scope for a reverse-ETL write surface",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stream-keys/room/{room_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-stream-keys-room-room-id-disable",
+      "kind": "rest_write",
+      "summary": "POST /v2/stream-keys/room/{room_id}/disable",
+      "description": "revokes an active RTMP ingest stream key, breaking any in-progress ingest using it",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stream-keys/room/{room_id}/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}",
+      "description": "single-template detail subsumed by the templates list stream",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}",
+      "description": "full template update (roles/settings/destinations sub-objects) is a large nested-object POST-as-PATCH surface; only template creation is covered, matching the create-first parity most connectors of this shape ship",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id-destinations",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}/destinations",
+      "description": "destinations sub-object is already embedded in each template list-stream record",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}/destinations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id-destinations",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}/destinations",
+      "description": "destinations sub-object mutation; deferred with the full template-update action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}/destinations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id-recordings",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}/recordings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}/recordings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id-recordings",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}/recordings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}/recordings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id-roles-role-name",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}/roles/{role_name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}/roles/{role_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id-roles-role-name",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}/roles/{role_name}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}/roles/{role_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.delete.v2-templates-template-id-roles-role-name",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/templates/{template_id}/roles/{role_name}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/templates/{template_id}/roles/{role_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id-roles-role",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}/roles/{role}",
+      "description": "role detail is already embedded in each template list-stream record's roles map",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}/roles/{role}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id-roles-role",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}/roles/{role}",
+      "description": "per-role policy sub-object mutation; deferred with the full template-update action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}/roles/{role}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.delete.v2-templates-template-id-roles-role",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/templates/{template_id}/roles/{role}",
+      "description": "deletes a role from a template's policy, potentially breaking any room still assigning peers that role",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/templates/{template_id}/roles/{role}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.get.v2-templates-template-id-settings",
+      "kind": "rest_read",
+      "summary": "GET /v2/templates/{template_id}/settings",
+      "description": "settings sub-object is already embedded in each template list-stream record",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/templates/{template_id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "100ms.post.v2-templates-template-id-settings",
+      "kind": "rest_write",
+      "summary": "POST /v2/templates/{template_id}/settings",
+      "description": "settings sub-object mutation; deferred with the full template-update action above",
+      "source_url": "https://www.100ms.live/docs/sitemap.xml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/templates/{template_id}/settings",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

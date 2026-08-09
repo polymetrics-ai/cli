@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_direct_sitemap_mdx",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "100ms provider-published sitemap was enumerated once and every listed v2 API-reference MDX source was fetched directly from the provider-owned documentation repository; no recursive documentation traversal was used."
+  },
+  "connectors": [
+    {
+      "connector": "100ms",
+      "operations_total": 73,
+      "operations_read": 33,
+      "operations_write": 40,
+      "artifact": {
+        "url": "https://www.100ms.live/docs/sitemap.xml",
+        "kind": "openapi",
+        "version": "server-side REST API v2",
+        "retrieved_at": "2026-08-09"
+      },
+      "provider_reference_url": "https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Provider-published 100ms documentation sitemap and provider-owned https://github.com/100mslive/100ms-docs raw MDX API-reference sources.",
+      "counting_note": "Provider sitemap enumerates 86 v2 API-reference pages. The direct MDX extraction preserves 73 unique documented operations: 33 GET reads and 40 POST/DELETE writes. V1 pages, endpoint-object pages, duplicate overview entries, and duplicate same-method/path badges are excluded under the immutable survey. One explicit POST /analytics/events/webhooks/replay curl example completes the documented 73-operation inventory where the provider page omits a visible request component.",
+      "processed_at": "2026-08-09T00:00:00Z",
+      "selection_reason": "direct provider source recovery after the primary sitemap parser and Postman/SDK route did not produce the complete immutable surface"
+    }
+  ]
+}

@@ -2,102 +2,6 @@
   "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
   "queue": [
     {
-      "connector": "100ms",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-037-100ms-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-037-100ms-outcomes.json",
-        "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
-        "route": "official Postman collection or SDK endpoint source",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://www.100ms.live/docs/sitemap.xml"
-      },
-      "provenance_reports": [
-        "batches/batch-006-materialize.json",
-        "batches/batch-023-gate.json",
-        "batches/batch-023-materialize.json",
-        "batches/batch-023-outcomes.json",
-        "batches/batch-023-source-materialize.json",
-        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
-        "batches/batch-037-100ms-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-006-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://www.100ms.live/docs/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-023-gate.json",
-          "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-023-validated-defs/100ms: no such file or directory",
-          "route": "retained batch source attempt",
-          "stage": "bundle_path",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-023-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://www.100ms.live/docs/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-023-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://www.100ms.live/docs/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-023-source-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://www.100ms.live/docs/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
-          "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route",
-          "route": "retained batch source attempt",
-          "stage": "reference_traversal_budget",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-037-100ms-outcomes.json",
-          "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
-          "route": "official Postman collection or SDK endpoint source",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
       "connector": "activecampaign",
       "official_routes": [
         {
@@ -16673,6 +16577,32 @@
   ],
   "reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
   "resolved": [
+    {
+      "connector": "100ms",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://www.100ms.live/docs/sitemap.xml"
+      },
+      "provenance_reports": [
+        "batches/batch-006-materialize.json",
+        "batches/batch-023-gate.json",
+        "batches/batch-023-materialize.json",
+        "batches/batch-023-outcomes.json",
+        "batches/batch-023-source-materialize.json",
+        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+        "batches/batch-037-100ms-outcomes.json",
+        "batches/batch-040-100ms-materialize.json",
+        "batches/batch-040-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-040-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
     {
       "connector": "7shifts",
       "primary_source": {
