@@ -1,0 +1,1209 @@
+{
+  "operations": [
+    {
+      "id": "brex.get.v1-budget-programs",
+      "kind": "rest_read",
+      "summary": "GET /v1/budget_programs",
+      "description": "v1 budget-program metadata list; superseded by the v2 Budgets surface this connector already targets, Pass B breadth-vs-cost triage on the legacy v1 variant",
+      "source_url": "https://developer.brex.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/budget_programs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-budget-programs-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/budget_programs/{id}",
+      "description": "single v1 budget-program detail; superseded v1 surface",
+      "source_url": "https://developer.brex.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/budget_programs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-budgets",
+      "kind": "rest_read",
+      "summary": "GET /v1/budgets",
+      "description": "v1 spend-limit list; superseded by the v2 budgets stream this connector already targets",
+      "source_url": "https://developer.brex.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/budgets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-budgets",
+      "kind": "rest_write",
+      "summary": "POST /v1/budgets",
+      "description": "creates a v1 spend limit; superseded legacy surface, and creation requires a mandatory Idempotency-Key header this engine cannot attach regardless",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/budgets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-budgets-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/budgets/{id}",
+      "description": "single v1 spend-limit detail; superseded v1 surface",
+      "source_url": "https://developer.brex.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/budgets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.put.v1-budgets-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/budgets/{id}",
+      "description": "updates a v1 spend limit; superseded legacy surface, and update requires a mandatory Idempotency-Key header this engine cannot attach regardless",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/budgets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-budgets-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /v1/budgets/{id}/archive",
+      "description": "archives a v1 spend limit; superseded legacy surface",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/budgets/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-expenses",
+      "kind": "rest_read",
+      "summary": "GET /v1/expenses",
+      "description": "all-expense-types list (card + reimbursement + travel); the expenses stream already covers card expenses, this connector's original scope, and the unfiltered variant returns a mixed-type union this dialect's single schema cannot cleanly project without losing type-specific fields",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-expenses-card-receipt-match",
+      "kind": "rest_write",
+      "summary": "POST /v1/expenses/card/receipt_match",
+      "description": "attempts to match an uploaded receipt to an existing expense; a matching/reconciliation action, not a plain record mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/expenses/card/receipt_match",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-expenses-card-expense-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/expenses/card/{expense_id}",
+      "description": "single card-expense detail; identical record shape to the expenses list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/expenses/card/{expense_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-expenses-card-expense-id-receipt-upload",
+      "kind": "rest_write",
+      "summary": "POST /v1/expenses/card/{expense_id}/receipt_upload",
+      "description": "uploads a binary receipt image/PDF (multipart), not a plain JSON/form data mutation this dialect can express",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/expenses/card/{expense_id}/receipt_upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-expenses-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/expenses/{id}",
+      "description": "generic (type-unaware) single-expense detail; same underlying record as GET /v1/expenses/card/{expense_id} for card expenses, already covered by the expenses stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/expenses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-fields",
+      "kind": "rest_read",
+      "summary": "GET /v1/fields",
+      "description": "custom-field schema/definition list, not record data itself; Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-fields",
+      "kind": "rest_write",
+      "summary": "POST /v1/fields",
+      "description": "creates a custom field definition (account schema mutation), not a record-level write",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-fields-field-id-values",
+      "kind": "rest_read",
+      "summary": "GET /v1/fields/{field_id}/values",
+      "description": "custom-field value list for one field definition; account-schema-adjacent surface, Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fields/{field_id}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-fields-field-id-values",
+      "kind": "rest_write",
+      "summary": "POST /v1/fields/{field_id}/values",
+      "description": "creates custom-field values; account-schema-adjacent surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/fields/{field_id}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.put.v1-fields-field-id-values",
+      "kind": "rest_write",
+      "summary": "PUT /v1/fields/{field_id}/values",
+      "description": "bulk-updates custom-field values; account-schema-adjacent surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/fields/{field_id}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.delete.v1-fields-field-id-values",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/fields/{field_id}/values",
+      "description": "deletes custom-field values; account-schema-adjacent surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/fields/{field_id}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-fields-field-id-values-brex-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/fields/{field_id}/values/{brex_id}",
+      "description": "single custom-field value; account-schema-adjacent surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fields/{field_id}/values/{brex_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/fields/{id}",
+      "description": "single custom-field definition; account-schema-adjacent surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.put.v1-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/fields/{id}",
+      "description": "updates a custom-field definition (account schema mutation), not a record-level write",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.delete.v1-fields-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/fields/{id}",
+      "description": "deletes a custom-field definition account-wide, wiping that field's stored value everywhere it's used; account-schema mutation, not a record-level operation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-incoming-transfers",
+      "kind": "rest_write",
+      "summary": "POST /v1/incoming_transfers",
+      "description": "creating an incoming transfer requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/incoming_transfers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-referrals",
+      "kind": "rest_read",
+      "summary": "GET /v1/referrals",
+      "description": "partner-referral list; a partner-onboarding surface unrelated to this connector's financial-data sync scope",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/referrals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-referrals",
+      "kind": "rest_write",
+      "summary": "POST /v1/referrals",
+      "description": "creates a partner referral; partner-onboarding surface out of scope",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/referrals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-referrals-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/referrals/{id}",
+      "description": "single referral detail; partner-onboarding surface out of scope",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/referrals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-referrals-id-document-upload",
+      "kind": "rest_write",
+      "summary": "POST /v1/referrals/{id}/document_upload",
+      "description": "uploads a binary onboarding document (multipart); partner-onboarding surface out of scope, also binary-payload-shaped",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/referrals/{id}/document_upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-referrals-id-process-ein-document",
+      "kind": "rest_write",
+      "summary": "POST /v1/referrals/{id}/process_ein_document",
+      "description": "processes a delayed EIN document after upload; partner-onboarding surface out of scope",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/referrals/{id}/process_ein_document",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-transfers",
+      "kind": "rest_write",
+      "summary": "POST /v1/transfers",
+      "description": "creating a money transfer requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; the highest-consequence write in the entire Brex surface, doubly appropriate to block rather than approximate",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/transfers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-transfers-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/transfers/{id}",
+      "description": "single-transfer detail; identical record shape to the transfers list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transfers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-trips",
+      "kind": "rest_read",
+      "summary": "GET /v1/trips",
+      "description": "corporate-travel trip list; a distinct Brex Travel product surface, Pass B breadth-vs-cost triage, no consuming stream this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trips",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-trips-trip-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/trips/{trip_id}",
+      "description": "single-trip detail; part of the travel surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-trips-trip-id-bookings",
+      "kind": "rest_read",
+      "summary": "GET /v1/trips/{trip_id}/bookings",
+      "description": "trip booking list; part of the travel surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}/bookings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-trips-trip-id-bookings-booking-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/trips/{trip_id}/bookings/{booking_id}",
+      "description": "single-booking detail; part of the travel surface excluded this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-vendors",
+      "kind": "rest_write",
+      "summary": "POST /v1/vendors",
+      "description": "creating a vendor requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; update_vendor/delete_vendor cover the rest of the vendor lifecycle since their Idempotency-Key is optional on Brex's own spec",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/vendors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-vendors-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/vendors/{id}",
+      "description": "single-vendor detail; identical record shape to the vendors list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/vendors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhooks",
+      "description": "creating a webhook subscription requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice; update_webhook/delete_webhook cover the rest of the webhook lifecycle since neither requires the header",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-webhooks-groups",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/groups",
+      "description": "webhook-group (partner multi-tenant fan-out) list; a partner-tier feature this connector's single-account scope does not use, Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-webhooks-groups",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhooks/groups",
+      "description": "creating a webhook group requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP; also a partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhooks/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-webhooks-groups-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/groups/{id}",
+      "description": "single webhook-group detail; partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.delete.v1-webhooks-groups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/webhooks/groups/{id}",
+      "description": "deletes a webhook group; partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/webhooks/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-webhooks-groups-id-add-members",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhooks/groups/{id}/add_members",
+      "description": "adds member accounts to a webhook group; partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhooks/groups/{id}/add_members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-webhooks-groups-id-members",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/groups/{id}/members",
+      "description": "lists webhook-group members; partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/groups/{id}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v1-webhooks-groups-id-remove-members",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhooks/groups/{id}/remove_members",
+      "description": "removes member accounts from a webhook group; partner-tier feature this connector's single-account scope does not use",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhooks/groups/{id}/remove_members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-webhooks-secrets",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/secrets",
+      "description": "returns the signing secret used to verify webhook payloads; a credential, never modeled as ordinary sync data",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/secrets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v1-webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/{id}",
+      "description": "single-webhook detail; identical record shape to the webhooks list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-accounts-cash-primary",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounts/cash/primary",
+      "description": "single primary-cash-account detail; identical record shape to the accounts_cash list stream's per-item object (primary=true row), already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounts/cash/primary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-accounts-cash-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounts/cash/{id}",
+      "description": "single cash-account detail by id; identical record shape to the accounts_cash list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounts/cash/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-accounts-cash-id-statements",
+      "kind": "rest_read",
+      "summary": "GET /v2/accounts/cash/{id}/statements",
+      "description": "cash-account statements scoped by id; same record shape as card_statements, and this connector's primary account is the card account, not cash — Pass B breadth-vs-cost triage, no consuming stream added for the cash variant this pass",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accounts/cash/{id}/statements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-budgets",
+      "kind": "rest_write",
+      "summary": "POST /v2/budgets",
+      "description": "creating a budget requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP (see /v2/cards POST's identical reasoning), not a scoping choice",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/budgets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-budgets-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/budgets/{id}",
+      "description": "single-budget detail; identical record shape to the budgets list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/budgets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.put.v2-budgets-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/budgets/{id}",
+      "description": "updating a budget requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/budgets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-budgets-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /v2/budgets/{id}/archive",
+      "description": "archives (soft-deletes) a budget and detaches every card/limit still assigned to it; not exposed as a write action this pass pending destructive-scope review",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/budgets/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-cards",
+      "kind": "rest_write",
+      "summary": "POST /v2/cards",
+      "description": "creating a new physical/virtual card requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) that this engine's declarative write dialect has no field to attach on ANY write request (engine.WriteAction has no headers field; write.go's executeWriteRecord calls Requester.Do/DoForm with a nil headers argument unconditionally) — a genuine ENGINE_GAP, not a scoping choice; update_card/lock_card/unlock_card/terminate_card cover the rest of the card lifecycle since their Idempotency-Key is optional on Brex's own spec",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-cards-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/cards/{id}",
+      "description": "single-card detail; identical record shape to the cards list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cards/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-cards-id-pan",
+      "kind": "rest_read",
+      "summary": "GET /v2/cards/{id}/pan",
+      "description": "returns the card's full unmasked PAN/CVV; PCI-scoped sensitive-data endpoint gated behind elevated card-data entitlement, never modeled as ordinary sync data",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/cards/{id}/pan",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-cards-id-secure-email",
+      "kind": "rest_write",
+      "summary": "POST /v2/cards/{id}/secure_email",
+      "description": "emails a secure link to view the card number; a notification/delivery action, not a data mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/cards/{id}/secure_email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-company",
+      "kind": "rest_read",
+      "summary": "GET /v2/company",
+      "description": "single company-identity snapshot for the authenticated account, not a syncable object list",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/company",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-departments-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/departments/{id}",
+      "description": "single-department detail; identical record shape to the departments list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-legal-entities-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/legal_entities/{id}",
+      "description": "single-legal-entity detail; identical record shape to the legal_entities list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/legal_entities/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-locations-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/locations/{id}",
+      "description": "single-location detail; identical record shape to the locations list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/locations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-spend-limits",
+      "kind": "rest_read",
+      "summary": "GET /v2/spend_limits",
+      "description": "v2 spend-limit list; Brex's v2 API models spend limits as budgets with limit_type=budget, same underlying record shape the budgets stream already reads",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/spend_limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-spend-limits",
+      "kind": "rest_write",
+      "summary": "POST /v2/spend_limits",
+      "description": "creating a spend limit requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/spend_limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-spend-limits-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/spend_limits/{id}",
+      "description": "single spend-limit detail; same underlying record shape as the budgets stream already covers",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/spend_limits/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.put.v2-spend-limits-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/spend_limits/{id}",
+      "description": "updating a spend limit requires a mandatory Idempotency-Key request header (Brex OpenAPI: required:true) this engine's declarative write dialect cannot attach to any write request — a genuine ENGINE_GAP, not a scoping choice",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/spend_limits/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-spend-limits-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /v2/spend_limits/{id}/archive",
+      "description": "archives (soft-deletes) a spend limit; not exposed as a write action this pass pending destructive-scope review",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/spend_limits/{id}/archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-titles-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/titles/{id}",
+      "description": "single-title detail; identical record shape to the titles list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/titles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-transactions-cash-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/transactions/cash/{id}",
+      "description": "cash-account transaction list scoped by account id; this connector's existing transactions stream targets the primary CARD account only (legacy parity), Pass B breadth-vs-cost triage for the cash-account variant",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/transactions/cash/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-users-me",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/me",
+      "description": "returns the identity of the currently-authenticated user/token, not a syncable object stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v2-users-id-limit",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}/limit",
+      "description": "a user's card-spend limit sub-resource; already embedded on the users/cards records' own limit-adjacent fields, not a distinct list-shaped resource",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}/limit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v2-users-id-limit",
+      "kind": "rest_write",
+      "summary": "POST /v2/users/{id}/limit",
+      "description": "sets a per-user card-spend limit; a narrow admin-console action, Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/{id}/limit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v3-accounting-integration",
+      "kind": "rest_write",
+      "summary": "POST /v3/accounting/integration",
+      "description": "connects a third-party accounting system (e.g. NetSuite/QuickBooks) integration; a one-time provisioning action, not a syncable data mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/accounting/integration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v3-accounting-integration-integration-id-disconnect",
+      "kind": "rest_write",
+      "summary": "POST /v3/accounting/integration/{integration_id}/disconnect",
+      "description": "disconnects an accounting integration; a provisioning action, not a syncable data mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/accounting/integration/{integration_id}/disconnect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v3-accounting-integration-integration-id-reactivate",
+      "kind": "rest_write",
+      "summary": "POST /v3/accounting/integration/{integration_id}/reactivate",
+      "description": "reactivates an accounting integration; a provisioning action, not a syncable data mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/accounting/integration/{integration_id}/reactivate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v3-accounting-records",
+      "kind": "rest_read",
+      "summary": "GET /v3/accounting/records",
+      "description": "accounting-sync record list (Brex's own outbound accounting-export queue); a distinct product surface from the card/expense/vendor data this connector targets",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/accounting/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.post.v3-accounting-records-export-results",
+      "kind": "rest_write",
+      "summary": "POST /v3/accounting/records/export-results",
+      "description": "reports back the result of an accounting export the CALLER performed; a callback/acknowledgment action, not a data mutation",
+      "source_url": "https://developer.brex.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/accounting/records/export-results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "brex.get.v3-accounting-records-record-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/accounting/records/{record_id}",
+      "description": "single accounting-sync record detail; accounting-integration surface out of scope for this connector, Pass B breadth-vs-cost triage",
+      "source_url": "https://developer.brex.com/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/accounting/records/{record_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

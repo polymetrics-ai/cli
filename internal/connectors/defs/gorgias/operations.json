@@ -612,8 +612,8 @@
       "rest": {
         "method": "POST",
         "path": "/api/search",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
           "properties": {
@@ -661,8 +661,11 @@
       "rest": {
         "method": "POST",
         "path": "/api/stats/{name}",
-        "max_bytes": 1048576,
         "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {
+          "filters": {}
+        },
         "body_schema": {
           "type": "object",
           "properties": {
@@ -675,9 +678,6 @@
             "filters"
           ],
           "additionalProperties": false
-        },
-        "body": {
-          "filters": {}
         }
       }
     },
@@ -694,9 +694,102 @@
         "method": "GET",
         "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
         "max_bytes": 104857600,
-        "allow_overwrite": false,
-        "extract_archives": false,
         "allow_cross_host": true
+      }
+    },
+    {
+      "id": "gorgias.put.api-customers-customer-id-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/customers/{customer_id}/custom-fields/{id}",
+      "description": "'Update customer field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-customer-custom-field-value",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "low",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.post.api-reporting-stats",
+      "kind": "rest_write",
+      "summary": "POST /api/reporting/stats",
+      "description": "'Retrieve a statistic' requires a top-level 'query' field whose schema is a 50-arm discriminated union implementing the Statistics API's recursive filter-expression grammar (and/or/comparison nodes), with no typed scalar leaf and no neutral empty default. This repository's authoring rule for an implemented direct-read POST command requires every required operations.json rest.body_schema path to be satisfied by a static rest.body or a required command flag mapped to body.*; no single flag or static literal can honestly stand in for an arbitrary filter tree. Source: https://developers.gorgias.com/reference/get-statistic",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/reporting/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.post.api-stats-name-download",
+      "kind": "rest_write",
+      "summary": "POST /api/stats/{name}/download",
+      "description": "'Download a statistic' returns text/csv from a POST request that carries a required JSON filter body. This repository's binary download executor (engine.OperationBinaryDownload / commandrunner.validateBinaryDownloadCommand) requires GET, so a POST-triggered CSV export cannot be wired through it. Source: https://developers.gorgias.com/reference/download-legacy-statistic",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/stats/{name}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.put.api-tickets-ticket-id-custom-fields-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/tickets/{ticket_id}/custom-fields/{id}",
+      "description": "'Update ticket field value' sends a bare top-level JSON scalar (string, integer, or boolean per its oneOf request schema) as the ENTIRE request body, not an object of record fields. This repository's write body_type dialect (json/form/json_array/multipart/base64_upload) always produces an object or array wrapper and has no mode for a bare scalar body. Source: https://developers.gorgias.com/reference/update-ticket-custom-field",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "low",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.get.api-tickets-ticket-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /api/tickets/{ticket_id}/messages",
+      "description": "Provider-deprecated 'List messages of a ticket' endpoint. The OpenAPI document marks it deprecated:true and its own description says 'Use list messages endpoint instead' (GET /api/messages, implemented here as the messages stream, which accepts a ticket_id filter). Source: https://developers.gorgias.com/reference/list-ticket-messages",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gorgias.put.api-views-view-id-items",
+      "kind": "rest_write",
+      "summary": "PUT /api/views/{view_id}/items",
+      "description": "'Search for view's items' takes its filter/order criteria in a request body but the provider requires PUT, not GET or POST. This repository's operation direct-read executor (commandrunner.validateOperationDirectReadCommand) accepts only GET or POST endpoints, so a PUT-bodied read cannot be wired through it. The common case (an unfiltered, cursor-paginated listing of a view's items) is already served by the GET sibling, implemented here as the 'views items list' direct read. Source: https://developers.gorgias.com/reference/update-view-items",
+      "source_url": "https://developers.gorgias.com/reference",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/views/{view_id}/items",
+        "max_bytes": 16777216
       }
     }
   ]

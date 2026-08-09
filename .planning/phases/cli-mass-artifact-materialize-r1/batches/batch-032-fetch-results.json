@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-032-fillout-unversioned-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "fillout",
+      "source_url": "https://www.fillout.com/help/fillout-rest-api",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-032-fillout-artifacts/fillout.html",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

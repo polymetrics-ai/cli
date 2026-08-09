@@ -235,6 +235,11 @@ func selectedManifestCandidates(manifest BatchManifest, names []string) ([]Batch
 }
 
 func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchManifestConnector) (BatchMaterializeIncluded, *BatchGateDrop) {
+	normalizedCandidate, err := materializeUnversionedOfficialReferenceCandidate(opts, candidate)
+	if err != nil {
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "existing_surface_evidence", err)
+	}
+	candidate = normalizedCandidate
 	sourceBundleDir, err := batchBundleDirectory(opts.sourceDefsRoot, candidate.Connector)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "source_bundle", err)
@@ -354,6 +359,22 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	}, nil
 }
 
+// materializeUnversionedOfficialReferenceCandidate keeps the manifest's
+// ordinary version requirement intact while giving a provider-published
+// unversioned HTML reference one constrained route. The direct-evidence path
+// below separately proves the source surface exactly equals the immutable
+// operation count before any generated JSON is written.
+func materializeUnversionedOfficialReferenceCandidate(opts batchMaterializeOptions, candidate BatchManifestConnector) (BatchManifestConnector, error) {
+	if !candidate.Artifact.UnversionedOfficialReference {
+		return candidate, nil
+	}
+	if !opts.existingSurfaceEvidence {
+		return BatchManifestConnector{}, errors.New("declared unversioned official reference requires --existing-surface-evidence")
+	}
+	candidate.Artifact.Version = batchNoVersionMarker
+	return candidate, nil
+}
+
 // existingSurfaceEvidenceInventory is the explicit direct-authoring route for
 // a connector whose preserved source surface has already been exhaustively
 // counted against the immutable provider survey. The cited official artifact
@@ -409,6 +430,9 @@ func existingSurfaceEvidenceInventory(bundle engine.Bundle, candidate BatchManif
 
 func existingSurfaceEvidenceScope(previous string, candidate BatchManifestConnector, operations int) string {
 	scope := fmt.Sprintf("Exact existing-surface evidence fallback: the preserved source inventory contains %d official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official %s artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl.", operations, candidate.Artifact.Kind)
+	if candidate.Artifact.UnversionedOfficialReference {
+		scope += " The provider publishes no version marker; provenance records that documented absence."
+	}
 	if prior := strings.TrimSpace(previous); prior != "" {
 		scope += " Prior source-surface scope: " + prior
 	}

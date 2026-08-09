@@ -1,0 +1,52 @@
+{
+  "operations": [
+    {
+      "id": "freshchat.post.files-upload",
+      "kind": "rest_write",
+      "summary": "POST /files/upload",
+      "description": "Freshchat file upload is multipart/form-data with local file input and a documented 25 MB single-file cap; the current Freshchat bundle has no connector-local binary/multipart execution contract without shared binary/file foundation or an approved hook.",
+      "source_url": "https://developers.freshchat.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshchat.post.images-upload",
+      "kind": "rest_write",
+      "summary": "POST /images/upload",
+      "description": "Freshchat image upload is multipart/form-data with local image input; the current Freshchat bundle has no connector-local binary/multipart execution contract without shared binary/file foundation or an approved hook.",
+      "source_url": "https://developers.freshchat.com/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/images/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "freshchat.post.users-fetch",
+      "kind": "rest_write",
+      "summary": "POST /users/fetch",
+      "description": "Freshchat subset user fetch is a fixed POST-body provider-search operation with ids[] bounded by the provider to 100 users, but executable provider_search/provider_query support is blocked on shared foundation #2985; no raw request body/query escape hatch is exposed.",
+      "source_url": "https://developers.freshchat.com/api/",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users/fetch",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

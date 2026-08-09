@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_unversioned_reference_exact_evidence",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "Fillout's provider-owned REST API reference publishes no artifact version marker; its preserved source surface has exactly the immutable 8-operation survey count."
+  },
+  "connectors": [
+    {
+      "connector": "fillout",
+      "operations_total": 8,
+      "operations_read": 4,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://www.fillout.com/help/fillout-rest-api",
+        "kind": "html_reference",
+        "version": "",
+        "unversioned_official_reference": true,
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.fillout.com/help/fillout-rest-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Fillout REST API overview, expanded endpoint navigation, and Authentication section",
+      "counting_note": "The provider's expanded REST API reference navigation enumerates eight callable actions: four GET retrievals (forms, form metadata, all submissions, and a submission by ID), one DELETE submission action, and three POST actions to create/remove webhooks and create submissions. GET actions are reads; the DELETE and all three POST actions mutate provider data/configuration and are writes. Webhook configuration operations are retained; no inbound webhook delivery type is counted.",
+      "processed_at": "2026-08-06T00:45:00Z",
+      "selection_reason": "official Fillout REST API reference exact-surface evidence fallback; provider publishes no artifact version marker"
+    }
+  ]
+}

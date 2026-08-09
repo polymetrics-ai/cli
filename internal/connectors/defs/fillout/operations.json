@@ -1,0 +1,65 @@
+{
+  "operations": [
+    {
+      "id": "fillout.post.forms-formid-submissions",
+      "kind": "rest_write",
+      "summary": "POST /forms/{formId}/submissions",
+      "description": "request body is a `submissions` array of nested objects (each with its own questions[]/urlParameters[]/scheduling[]/payments[] sub-arrays), not a flat record-minus-path_fields shape the write dialect's default body construction can express; would require a bespoke nested-array body builder the declarative dialect does not have",
+      "source_url": "https://www.fillout.com/help/fillout-rest-api",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/forms/{formId}/submissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fillout.get.forms-formid-submissions-submissionid",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/submissions/{submissionId}",
+      "description": "single-submission detail read is a narrower view of the still-blocked submissions list stream; implementing the detail alone without the list would not restore meaningful read parity",
+      "source_url": "https://www.fillout.com/help/fillout-rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/submissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fillout.get.forms-id",
+      "kind": "rest_read",
+      "summary": "GET /forms/{id}",
+      "description": "questions stream blocked: ENGINE_GAP, fan_out.ids_from has no config_key-else-request fallback mode; see docs/migration/quarantine.json and docs.md Known limits",
+      "source_url": "https://www.fillout.com/help/fillout-rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "fillout.get.forms-id-submissions",
+      "kind": "rest_read",
+      "summary": "GET /forms/{id}/submissions",
+      "description": "submissions LIST stream blocked: same ENGINE_GAP as questions (fan_out.ids_from config_key-else-request fallback); see docs.md Known limits",
+      "source_url": "https://www.fillout.com/help/fillout-rest-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{id}/submissions",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

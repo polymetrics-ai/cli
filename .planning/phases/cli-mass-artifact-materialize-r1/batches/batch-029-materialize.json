@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-machine-retry-manifest.json",
+  "candidates": 40,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "mailtrap",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "eventzilla",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "paypal-transaction",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "glassfrog",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "finnworlds",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 26: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "k6-cloud",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "productboard",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.productboard.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "jobnimbus",
+      "stage": "artifact_parse",
+      "reason": "decode Postman collection: invalid character '\u003c' looking for beginning of value"
+    },
+    {
+      "connector": "mendeley",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 16 operation(s), below the ledger's 67; official reference fallback \"https://api.mendeley.com/apidocs/openapi\" failed: artifact operation inventory is unknown: official reference \"https://api.mendeley.com/apidocs/openapi/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "gologin",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context), and official reference fallback \"https://api.gologin.com/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "mixmax",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.mixmax.com/reference/getting-started-with-the-api\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "activecampaign",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "rollbar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://docs.rollbar.com/reference/getting-started-1\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "lob",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token"
+    },
+    {
+      "connector": "brex",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "rocketlane",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "insightful",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 106 operation(s), below the ledger's 112"
+    },
+    {
+      "connector": "finnhub",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"highUsage\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "dixa",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "teamtailor",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 128 operation(s), below the ledger's 129"
+    },
+    {
+      "connector": "secoda",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "7shifts",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode Postman collection: invalid character '\u003c' looking for beginning of value), and official reference fallback \"https://www.freshbooks.com/api/postman-collection\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "lokalise",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected \u003cdocument start\u003e"
+    },
+    {
+      "connector": "castor-edc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: path item is not a mapping), and official reference fallback \"https://data.castoredc.com/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "clockify",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "recurly",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "kisi",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "confluence",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no confluence.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "guru",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developer.getguru.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "intercom",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 231 operation(s), below the ledger's 324; official reference fallback \"https://developers.intercom.com/docs/references/rest-api/api.intercom.io\" failed: artifact operation inventory is unknown: official reference \"https://developers.intercom.com/app-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact openapi field: must be a string; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "box",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components"
+    },
+    {
+      "connector": "box-data-extract",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference link \"https://developer.box.com/reference/resources/folder--full\" could not be fetched: fetch artifact: Get \"/reference/folders-resources#folder-full\": artifact request URL must not include query or fragment components"
+    },
+    {
+      "connector": "invoiceninja",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "reply-io",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 359 operation(s), below the ledger's 377; official reference fallback \"https://docs.reply.io/api-reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sendgrid",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sendpulse",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "fastly",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "genesys",
+      "stage": "artifact_fetch",
+      "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-029-artifacts/genesys.txt exceeds 16777216-byte artifact limit"
+    }
+  ]
+}
