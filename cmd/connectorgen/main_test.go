@@ -512,7 +512,7 @@ func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelCont
 		{
 			name:          "closed object field is accepted",
 			target:        "record.payload",
-			payloadSchema: `{"type":"object","properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
+			payloadSchema: `{"type":"object","required":["kind"],"properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
 		},
 		{
 			name:          "scalar field is rejected",

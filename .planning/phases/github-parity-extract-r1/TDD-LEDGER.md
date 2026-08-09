@@ -2644,3 +2644,29 @@ ok   polymetrics.ai/cmd/connectorgen
 The materializer still rejects unrepresentable scalar/union shapes; `json` is accepted only for
 a top-level object/array validated by `engine.ValidateStructuredJSONRecordField`, so this does
 not add an arbitrary request-body channel.
+
+**Red/Green 33b(2) — static validation recognizes the same JSON boundary as runtime.** Adding
+one required `payload.kind` child to the already-valid structured-json fixture first produced:
+
+```
+implemented reverse ETL command 1 ("widget create") for write "create_widget" lacks flag mappings
+for required record fields: payload.kind
+```
+
+The runtime had correctly accepted `--payload` after checking the action's schema, but the static
+validator treated it as an exact scalar mapping. It now lets a `json` flag satisfy descendants
+only when its top-level mapping is the declared container; scalar mappings keep the prior exact or
+child-construction behavior. Green evidence:
+
+```
+$ go test -timeout 20m ./cmd/connectorgen \
+  -run '^(TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelContainer|TestMaterializedWriteFlagsUseTopLevelStructuredJSONForRequiredContainers)$' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/github
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go test -timeout 20m ./internal/connectors/commandrunner \
+  -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+```

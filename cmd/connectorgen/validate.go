@@ -1479,7 +1479,7 @@ func checkCLISurfaceWriteFlags(
 		}
 	}
 
-	mapped := map[string]bool{}
+	mapped := map[string]engine.CLIFlag{}
 	mappedByFlag := map[string]string{}
 	var findings []Finding
 	for _, flag := range cmd.Flags {
@@ -1498,7 +1498,7 @@ func checkCLISurfaceWriteFlags(
 			}
 		}
 		mappedByFlag[target] = flag.Name
-		mapped[target] = true
+		mapped[target] = flag
 		if schema == nil {
 			continue
 		}
@@ -1548,9 +1548,17 @@ func checkCLISurfaceWriteFlags(
 	return findings
 }
 
-func mappedRecordPathSatisfies(mapped map[string]bool, required string) bool {
-	for target := range mapped {
-		if target == required || dottedPathPrefix(required, target) {
+func mappedRecordPathSatisfies(mapped map[string]engine.CLIFlag, required string) bool {
+	for target, flag := range mapped {
+		// A scalar/nested mapping satisfies its exact declared leaf (and the
+		// long-standing child-field case that constructs a required container).
+		// A structured JSON mapping has one additional, narrowly preflighted
+		// meaning: its top-level object/array value supplies every required
+		// descendant of that same declared container. Treating it as only an
+		// exact leaf is what made a runtime-valid `--payload` JSON flag fail the
+		// static command-surface validator.
+		if target == required || dottedPathPrefix(required, target) ||
+			(flag.Type == "json" && dottedPathPrefix(target, required)) {
 			return true
 		}
 	}
