@@ -68,6 +68,12 @@ func DestructiveTargetForOperation(connector string, operation OperationSpec) De
 	method := ""
 	if operation.REST != nil {
 		method = operation.REST.Method
+	} else if operation.Kind == "graphql_mutation" && operation.GraphQL != nil {
+		// A fixed GraphQL mutation is transported as POST, even though its
+		// safety class comes from the declared mutation metadata rather than
+		// HTTP DELETE. Recording the actual transport makes preview grants bind
+		// the request the executor will issue.
+		method = http.MethodPost
 	}
 	return DestructiveTarget{
 		Connector:     connector,

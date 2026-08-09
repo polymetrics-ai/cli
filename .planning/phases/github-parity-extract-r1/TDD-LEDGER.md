@@ -789,6 +789,114 @@ connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 fie
 
 ---
 
+## Cycle 29 — fixed-contract GraphQL operation runtime
+
+**Red 29a — a GraphQL root has no typed direct-operation contract.**
+The new loopback-only engine tests name the missing contract rather than using a generic GraphQL
+escape hatch: a fixed query/mutation document, connector-relative `/graphql` endpoint, positive
+response cap, closed variable schema, declared cursor map, partial-data/error metadata, rate-limit
+metadata, and the existing single-use destructive approval gate. They also require unrecognised
+variables, raw query overrides, and numeric page navigation to be rejected before a request. Before
+the runtime additions, the test is intentionally a compile-time red: `GraphQLOperationSpec` cannot
+describe a typed executable operation and neither result type can state partial GraphQL data.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine -run 'TestOperationDirect(ReadExecutesFixedGraphQLQueryAndPreservesPartialData|ReadRejectsUntypedGraphQLInputsBeforeNetwork|WriteUsesSharedApprovalForFixedGraphQLMutation|WriteFailsClosedOnGraphQLErrors)' -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/graphql_operation_test.go:50:5: unknown field Path in struct literal of type GraphQLOperationSpec
+internal/connectors/engine/graphql_operation_test.go:51:5: unknown field MaxBytes in struct literal of type GraphQLOperationSpec
+internal/connectors/engine/graphql_operation_test.go:52:5: unknown field VariablesSchema in struct literal of type GraphQLOperationSpec
+internal/connectors/engine/graphql_operation_test.go:62:18: undefined: GraphQLOperationPaginationSpec
+internal/connectors/engine/graphql_operation_test.go:139:12: result.GraphQL undefined (type connectors.DirectReadResult has no field or method GraphQL)
+internal/connectors/engine/graphql_operation_test.go:259:12: result.GraphQL undefined (type connectors.OperationDirectWriteResult has no field or method GraphQL)
+FAIL	polymetrics.ai/internal/connectors/engine [build failed]
+```
+
+The green implementation must remain provider-neutral and local-test-only: no caller may supply a
+document, selection, endpoint, or raw GraphQL transport; queries may retain bounded `data` with
+bounded redacted errors; mutations must fail closed on any `errors[]` after the exact preview,
+approval, and destructive-confirmation gate.
+
+**Green 29 — fixed documents become bounded, typed operations rather than a raw transport.**
+`graphql_operation.go` admits an executable GraphQL declaration only when it has a fixed named
+query/mutation document, a rooted canonical connector-relative path, a positive response cap, and
+a closed recursively bounded root variables schema whose properties are referenced by that fixed
+document. The caller cannot provide a document, selection, endpoint, raw body, query override,
+or a numeric page. Cursor navigation enters only through `--page-cursor` and a declared connection
+map; the response reports bounded partial-data/error/rate-limit metadata and applies the established
+redaction policy to `data`.
+
+`graphql_mutation` now prepares one literal `POST` payload through the existing prepared-write
+digest, rate limiter, no-retry transport policy, approval evidence, and typed destructive
+confirmation. A `data: null`, malformed GraphQL envelope, or any GraphQL `errors[]` makes the
+approved mutation fail rather than report completion. The command-runner received the matching
+no-network direct-write preflight seam: its one API surface method/path/output-policy tuple must
+match the operation's declaration exactly. This is a physical `POST /graphql` binding, not an
+invented `GRAPHQL` verb or a generic endpoint selector.
+
+The runtime read-endpoint ledger now carries a GraphQL operation ID in addition to `POST /graphql`,
+so sharing the one transport endpoint cannot authorize a different fixed query. Legacy
+`variables_path` metadata remains schema-compatible but is deliberately ignored by the executable
+path. `TestPreflightOperationDirectReadValidatesDeclaredContract` changed its old unsupported-kind
+fixture from `graphql_query` to `graphql_mutation`: queries are now intentionally supported by the
+direct-read executor, while mutations remain write-only. The test retains the same unsupported-read
+boundary; no test was removed, skipped, or weakened.
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine -run 'Test(OperationDirect(ReadExecutesFixedGraphQLQueryAndPreservesPartialData|ReadRejectsUntypedGraphQLInputsBeforeNetwork|GraphQLRejectsUnboundVariableSchemaBeforeNetwork|WriteUsesSharedApprovalForFixedGraphQLMutation|WriteFailsClosedOnGraphQLErrors|WriteFailsClosedOnMissingGraphQLData)|PreflightOperationDirectWriteRequiresExactFixedGraphQLBinding)' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner -run 'TestPreflightOperationDirectWrite(RejectsMismatchedOperationPolicy|RequiresRuntimeBinding)' -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./internal/app -run 'TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture|TestGitHubLabelDeleteKeepsNotFoundVisibleForTheSameScopedWritePath' -count=1
+ok   polymetrics.ai/internal/app
+
+$ node --test scripts/tests/github-live-lab.test.mjs
+23 passed
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+```
+
+**Red 29c — the full local app suite exposed a rate-limit fixture drift.** The first full run
+failed only in `TestGithubPullRequestsETLSupportsAllSyncModes`: its loopback GitHub credential
+selects the declared `authenticated-user` policy but omitted the required non-secret
+`rate_limit_account` subject key. Each of the five pre-existing sync-mode assertions stopped before
+its ETL request with `rate-limit policy "authenticated-user" requires non-secret config
+"rate_limit_account" for its declared scope`.
+
+**Green 29c — retain the policy and complete the fixture contract.** The test credential now
+provides the fixed synthetic cohort `rate_limit_account: fixture-account`; no secret, provider URL,
+or test assertion changed. The failing five-mode test and the full app package pass, alongside the
+complete local GraphQL and CLI gates:
+
+```text
+$ go test -timeout 20m ./internal/app -run '^TestGithubPullRequestsETLSupportsAllSyncModes$' -count=1
+ok   polymetrics.ai/internal/app
+$ go test -timeout 20m ./internal/app -count=1
+ok   polymetrics.ai/internal/app  223.438s
+$ go test -timeout 20m ./internal/connectors/engine -count=1
+ok   polymetrics.ai/internal/connectors/engine  4.988s
+$ go test -timeout 20m ./internal/connectors/commandrunner -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner  17.952s
+$ go vet ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/app ./cmd/connectorgen
+$ go build ./cmd/pm
+$ go test -timeout 20m ./cmd/connectorgen -count=1
+ok   polymetrics.ai/cmd/connectorgen
+$ go test -timeout 20m ./internal/cli -count=1
+ok   polymetrics.ai/internal/cli  563.781s
+```
+
+No PM, GitHub, browser, or provider invocation occurred in Cycle 29. The deploy-key regression,
+PM-only target boundary, immutable read-back, and cleanup-accounting tests above are the gate that
+must stay green before a later explicit live cohort resumes.
+
+---
+
 ## Cycle 18 — PM-only 957-case live-lab boundary
 
 **Red 18a — the captain-required lab manifest and fail-closed fixture boundary did not exist.**

@@ -669,12 +669,16 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 }
 
 // validateOperationDirectWriteCommand is deliberately limited to the shape
-// the rest_write engine executor can prove safe. Its result makes a command
-// eligible for the plan lifecycle only; resolveRunnableCommand still refuses
-// direct execution so every write traverses plan -> preview -> approval.
+// the REST/fixed-GraphQL engine executor can prove safe. Its result makes a
+// command eligible for the plan lifecycle only; resolveRunnableCommand still
+// refuses direct execution so every write traverses plan -> preview -> approval.
 func validateOperationDirectWriteCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	if _, ok := connector.(connectors.OperationDirectWriter); !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct writes"}
+	}
+	preflighter, ok := connector.(connectors.OperationDirectWritePreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
 	}
 	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
 	if !ok {
@@ -705,6 +709,9 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	}
 	if metadata.OutputPolicy != cmd.OutputPolicy {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
+	}
+	if err := preflighter.PreflightOperationDirectWrite(cmd.Operation, method, cmd.APISurface[0].Path, cmd.OutputPolicy); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct write metadata is not executable: %v", err)}
 	}
 	return nil
 }

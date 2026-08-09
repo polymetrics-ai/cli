@@ -22,31 +22,33 @@ import (
 )
 
 type fakeConnector struct {
-	surface                   *connectors.CommandSurface
-	manifest                  connectors.Manifest
-	readReq                   connectors.ReadRequest
-	directReadReq             connectors.DirectReadRequest
-	operationDirectReadReq    connectors.OperationDirectReadRequest
-	operationReadPreflight    operationDirectReadPreflightCall
-	operationReadPreflightErr error
-	operationDirectWriteReq   connectors.OperationDirectWriteRequest
-	directWriteMetadata       connectors.OperationDirectWriteMetadata
-	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
-	directReadErr             error
-	ignoresPageNavigation     bool
-	operationDirectReadErr    error
-	binaryDownloadErr         error
-	validateReq               connectors.WriteRequest
-	dryRunReq                 connectors.WriteRequest
-	writeReq                  connectors.WriteRequest
-	writeRecords              []connectors.Record
-	validateErr               error
-	dryRunErr                 error
-	readErr                   error
-	writeErr                  error
-	readRecords               []connectors.Record
-	preview                   connectors.WritePreview
-	writeResult               connectors.WriteResult
+	surface                    *connectors.CommandSurface
+	manifest                   connectors.Manifest
+	readReq                    connectors.ReadRequest
+	directReadReq              connectors.DirectReadRequest
+	operationDirectReadReq     connectors.OperationDirectReadRequest
+	operationReadPreflight     operationDirectReadPreflightCall
+	operationReadPreflightErr  error
+	operationDirectWriteReq    connectors.OperationDirectWriteRequest
+	operationWritePreflight    operationDirectWritePreflightCall
+	operationWritePreflightErr error
+	directWriteMetadata        connectors.OperationDirectWriteMetadata
+	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
+	directReadErr              error
+	ignoresPageNavigation      bool
+	operationDirectReadErr     error
+	binaryDownloadErr          error
+	validateReq                connectors.WriteRequest
+	dryRunReq                  connectors.WriteRequest
+	writeReq                   connectors.WriteRequest
+	writeRecords               []connectors.Record
+	validateErr                error
+	dryRunErr                  error
+	readErr                    error
+	writeErr                   error
+	readRecords                []connectors.Record
+	preview                    connectors.WritePreview
+	writeResult                connectors.WriteResult
 }
 
 type operationDirectReadPreflightCall struct {
@@ -54,6 +56,13 @@ type operationDirectReadPreflightCall struct {
 	method       string
 	path         string
 	maxBytes     int
+	outputPolicy string
+}
+
+type operationDirectWritePreflightCall struct {
+	operation    string
+	method       string
+	path         string
 	outputPolicy string
 }
 
@@ -140,6 +149,15 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 		outputPolicy: outputPolicy,
 	}
 	return f.operationReadPreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+	f.operationWritePreflight = operationDirectWritePreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationWritePreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2072,6 +2090,37 @@ func TestPreflightOperationDirectWriteRejectsMismatchedOperationPolicy(t *testin
 	err := Preflight(connector, []string{"vote"})
 	if err == nil || !strings.Contains(err.Error(), "output_policy") {
 		t.Fatalf("Preflight(direct_write) error = %v, want mismatched output_policy rejection", err)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresRuntimeBinding(t *testing.T) {
+	connector := &fakeConnector{
+		operationWritePreflightErr: errors.New("operation direct write path \"/graphql/raw\" does not match declared operation path \"/graphql\""),
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "github.delete_issue",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "issue delete",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "github.delete_issue",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/graphql/raw"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"issue", "delete"})
+	if err == nil || !strings.Contains(err.Error(), "operation direct write metadata is not executable") {
+		t.Fatalf("Preflight(direct_write) error = %v, want runtime binding rejection", err)
+	}
+	if got, want := connector.operationWritePreflight, (operationDirectWritePreflightCall{
+		operation:    "github.delete_issue",
+		method:       http.MethodPost,
+		path:         "/graphql/raw",
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation write preflight = %#v, want %#v", got, want)
 	}
 }
 

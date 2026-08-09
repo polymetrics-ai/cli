@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/fs"
 	"mime"
+	"net/http"
 	"regexp"
 	"sort"
 	"strconv"
@@ -829,10 +830,34 @@ type SensitivePolicySpec struct {
 }
 
 type GraphQLOperationSpec struct {
-	Document      string         `json:"document"`
-	OperationName string         `json:"operation_name"`
-	VariablesPath string         `json:"variables_path,omitempty"`
-	Pagination    map[string]any `json:"pagination,omitempty"`
+	// Document and OperationName are fixed bundle metadata. They are never
+	// caller input, which is what keeps an operation declaration from becoming
+	// a raw GraphQL transport escape hatch.
+	Document      string `json:"document"`
+	OperationName string `json:"operation_name"`
+	// Path, MaxBytes, and VariablesSchema are required by the executable
+	// direct-operation path. They remain optional here because legacy GraphQL
+	// stream bindings are metadata-only operations until a generated command
+	// supplies the complete closed contract.
+	Path            string          `json:"path,omitempty"`
+	MaxBytes        int             `json:"max_bytes,omitempty"`
+	VariablesSchema json.RawMessage `json:"variables_schema,omitempty"`
+	// VariablesPath is legacy metadata for non-executable GraphQL stream
+	// bindings. The fixed-operation executor deliberately ignores it: caller
+	// variables are admitted only through VariablesSchema at the root.
+	VariablesPath string                          `json:"variables_path,omitempty"`
+	Pagination    *GraphQLOperationPaginationSpec `json:"pagination,omitempty"`
+}
+
+// GraphQLOperationPaginationSpec is the closed cursor contract for a
+// fixed-document GraphQL query. The connection and variable names originate
+// in the declaration's fixed document; callers may only submit the next
+// cursor returned by the preceding result.
+type GraphQLOperationPaginationSpec struct {
+	ConnectionPath   string `json:"connection_path"`
+	CursorVariable   string `json:"cursor_variable"`
+	PageSizeVariable string `json:"page_size_variable,omitempty"`
+	MaxPageSize      int    `json:"max_page_size,omitempty"`
 }
 
 type XMLOperationSpec struct {
@@ -1308,19 +1333,32 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 }
 
 // deriveDirectWriteSurface builds the shipped runtime endpoint check solely
-// from rest_write declarations. It verifies internal declaration consistency,
-// not provider documented-surface provenance; #3773 owns that evidence model.
+// from rest_write and fixed graphql_mutation declarations. It verifies
+// internal declaration consistency, not provider documented-surface
+// provenance; #3773 owns that evidence model.
 func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
 	endpoints := make([]SurfaceEndpoint, 0)
 	for _, op := range operations {
-		if op.Kind != "rest_write" || op.REST == nil {
-			continue
+		switch op.Kind {
+		case "rest_write":
+			if op.REST == nil {
+				continue
+			}
+			endpoints = append(endpoints, SurfaceEndpoint{
+				Method:    strings.ToUpper(strings.TrimSpace(op.REST.Method)),
+				Path:      op.REST.Path,
+				Operation: &SurfaceOperation{},
+			})
+		case "graphql_mutation":
+			if op.GraphQL == nil || strings.TrimSpace(op.GraphQL.Path) == "" {
+				continue
+			}
+			endpoints = append(endpoints, SurfaceEndpoint{
+				Method:    http.MethodPost,
+				Path:      op.GraphQL.Path,
+				Operation: &SurfaceOperation{},
+			})
 		}
-		endpoints = append(endpoints, SurfaceEndpoint{
-			Method:    strings.ToUpper(strings.TrimSpace(op.REST.Method)),
-			Path:      op.REST.Path,
-			Operation: &SurfaceOperation{},
-		})
 	}
 	if len(endpoints) == 0 {
 		return nil
@@ -2264,6 +2302,10 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if err := validateProviderSearchSemantics(i, op); err != nil {
 			return err
 		}
+	case "graphql_query":
+		if err := validateGraphQLOperationDeclaration(op, "query"); err != nil {
+			return fmt.Errorf("operation %d (%q) graphql_query: %w", i, op.ID, err)
+		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 		if method == "GET" || method == "HEAD" || method == "" {
@@ -2275,7 +2317,17 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
 			return fmt.Errorf("operation %d (%q) rest_write must declare approval requirements", i, op.ID)
 		}
-	case "graphql_mutation", "xml_import":
+	case "graphql_mutation":
+		if err := validateGraphQLOperationDeclaration(op, "mutation"); err != nil {
+			return fmt.Errorf("operation %d (%q) graphql_mutation: %w", i, op.ID, err)
+		}
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare approval requirements", i, op.ID, op.Kind)
+		}
+	case "xml_import":
 		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
 			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
 		}

@@ -56,9 +56,10 @@ func (e *operationDirectWriteError) Error() string {
 
 func (e *operationDirectWriteError) Unwrap() error { return e.cause }
 
-// PreviewOperationDirectWrite prepares a declared rest_write operation without
-// constructing a runtime or issuing any network request. Its digest binds the
-// exact typed request that OperationDirectWrite may later dispatch.
+// PreviewOperationDirectWrite prepares a declared REST or fixed-document
+// GraphQL mutation without constructing a runtime or issuing any network
+// request. Its digest binds the exact typed request that OperationDirectWrite
+// may later dispatch.
 func PreviewOperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, h Hooks) (connectors.WritePreview, error) {
 	prepared, err := prepareOperationDirectWrite(ctx, b, req, h)
 	if err != nil {
@@ -67,10 +68,11 @@ func PreviewOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	return PreviewPreparedWrite(prepared.prepared)
 }
 
-// OperationDirectWrite dispatches exactly one typed, declared rest_write
-// operation after the preview-bound shared write gate authorizes it. It never
-// retries: rest_write definitions carry no idempotency proof in this executor,
-// so both transient retries and the requester’s auth-refresh retry are off.
+// OperationDirectWrite dispatches exactly one typed, declared REST or
+// fixed-document GraphQL mutation after the preview-bound shared write gate
+// authorizes it. It never retries: operation declarations carry no idempotency
+// proof in this executor, so both transient retries and the requester's
+// auth-refresh retry are off.
 func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, h Hooks) (connectors.OperationDirectWriteResult, error) {
 	prepared, err := prepareOperationDirectWrite(ctx, b, req, h)
 	if err != nil {
@@ -91,7 +93,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if err != nil {
 			return err
 		}
-		resolvedRequester, err := rt.requesterFor(prepared.method, prepared.op.REST.Path)
+		resolvedRequester, err := rt.requesterFor(prepared.method, prepared.path)
 		if err != nil {
 			return err
 		}
@@ -102,7 +104,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		switch prepared.format {
 		case "form":
 			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
-		case "json", "none":
+		case "json", "none", "graphql":
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
@@ -136,6 +138,36 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
+		}
+		if prepared.op.Kind == "graphql_mutation" {
+			data, metadata, parseErr := graphQLOperationResponse(response.Body, prepared.maxBytes)
+			if parseErr != nil {
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response: " + parseErr.Error(), cause: parseErr}
+			}
+			if len(metadata.Errors) != 0 {
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "graphql errors: " + graphQLErrorSummary(metadata)}
+			}
+			if data == nil {
+				return &operationDirectWriteError{operation: prepared.op.ID, message: "GraphQL response has no data"}
+			}
+			rawData, marshalErr := json.Marshal(data)
+			if marshalErr != nil {
+				return fmt.Errorf("operation %q encode GraphQL response data: %w", prepared.op.ID, marshalErr)
+			}
+			body, bodyErr := operationDirectWriteResponseBody(prepared.policy, rawData, prepared.maxBytes)
+			if bodyErr != nil {
+				return bodyErr
+			}
+			result = connectors.OperationDirectWriteResult{
+				Connector: b.Name,
+				Operation: prepared.op.ID,
+				Method:    prepared.method,
+				Path:      prepared.path,
+				Status:    response.Status,
+				Body:      body,
+				GraphQL:   metadata,
+			}
+			return nil
 		}
 		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
 		if err != nil {
@@ -182,8 +214,10 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 	if err != nil {
 		return connectors.OperationDirectWriteMetadata{}, err
 	}
-	if _, _, err := operationDirectWriteContentType(op, nil); err != nil {
-		return connectors.OperationDirectWriteMetadata{}, err
+	if op.Kind == "rest_write" {
+		if _, _, err := operationDirectWriteContentType(op, nil); err != nil {
+			return connectors.OperationDirectWriteMetadata{}, err
+		}
 	}
 	if err := validateOperationDirectWriteOutputPolicy(op.OutputPolicy); err != nil {
 		return connectors.OperationDirectWriteMetadata{}, err
@@ -204,6 +238,35 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
+}
+
+// PreflightOperationDirectWrite proves an implemented command's exact binding
+// can reach the closed REST or fixed-document GraphQL write executor. It is
+// deliberately no-network and shares operationDirectWriteSpec with execution,
+// so an api_surface row cannot point a command at a different endpoint than
+// the preview-bound request the runtime will actually dispatch.
+func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, outputPolicy string) error {
+	op, declaredMethod, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	method = strings.ToUpper(strings.TrimSpace(method))
+	if !strings.EqualFold(method, declaredMethod) {
+		return fmt.Errorf("operation direct write method %s does not match declared operation method %s", method, declaredMethod)
+	}
+	var declaredPath string
+	if op.Kind == "graphql_mutation" {
+		declaredPath = op.GraphQL.Path
+	} else {
+		declaredPath = op.REST.Path
+	}
+	if endpointPath != declaredPath {
+		return fmt.Errorf("operation direct write path %q does not match declared operation path %q", endpointPath, declaredPath)
+	}
+	if outputPolicy != op.OutputPolicy {
+		return fmt.Errorf("operation direct write output_policy %q does not match declared operation output_policy %q", outputPolicy, op.OutputPolicy)
+	}
+	return validateOperationDirectWriteOutputPolicy(outputPolicy)
 }
 
 func operationDirectWriteRedactFields(op OperationSpec) []string {
@@ -248,6 +311,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	op, method, err := operationDirectWriteSpec(b, req.Operation)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
+	}
+	if op.Kind == "graphql_mutation" {
+		return prepareOperationGraphQLDirectWrite(b, op, method, req)
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
@@ -367,25 +433,118 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	}, nil
 }
 
+// prepareOperationGraphQLDirectWrite binds one fixed GraphQL mutation to the
+// same PreparedWrite used by REST operations. The caller can supply only the
+// declaration's closed variables object: path, query, document, selection,
+// headers, and endpoint are all declaration-owned facts.
+func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method string, req connectors.OperationDirectWriteRequest) (preparedOperationDirectWrite, error) {
+	if len(req.PathParams) != 0 {
+		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept path parameters", op.ID)
+	}
+	if len(req.Query) != 0 {
+		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept query overrides", op.ID)
+	}
+	cfg := materializeConfigDefaults(b, req.Config)
+	policy := strings.TrimSpace(op.OutputPolicy)
+	if requested := strings.TrimSpace(req.OutputPolicy); requested != "" {
+		if requested != policy {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q output_policy must match declared policy %q", op.ID, policy)
+		}
+		policy = requested
+	}
+	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	variables, err := graphQLOperationVariables(op, req.Body, 0, "")
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	maxBytes := clampOperationDirectWriteMaxBytes(op.GraphQL.MaxBytes)
+	payload, encodedBody, err := buildGraphQLOperationPayload(op, variables, maxBytes)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
+	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, nil)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	target := DestructiveTargetForOperation(b.Name, op)
+	prepared := PreparedWrite{
+		Target:              target,
+		CredentialRevision:  cfg.CredentialRevision,
+		ConfigurationDigest: cfg.ConfigurationDigest,
+		ApprovalScope:       cfg.WriteApprovalScope,
+		Batchable:           op.IsBatchable(),
+		RecordsStaged:       1,
+		Action:              op.ID,
+		Warnings:            []string{fmt.Sprintf("prepared graphql_mutation operation %q (%s)", op.ID, method)},
+		Definition: map[string]any{
+			"kind":              op.Kind,
+			"operation":         op.ID,
+			"content_type":      "application/json",
+			"output_policy":     policy,
+			"graphql_operation": op.GraphQL.OperationName,
+		},
+		Requests: []PreparedRequest{{
+			Method:      method,
+			URL:         targetURL,
+			Target:      targetURL,
+			ContentType: "application/json",
+			BodyFormat:  "json",
+			Body:        encodedBody,
+		}},
+	}
+	return preparedOperationDirectWrite{
+		op:          op,
+		cfg:         cfg,
+		method:      method,
+		path:        op.GraphQL.Path,
+		requestPath: requestPath,
+		body:        payload,
+		format:      "graphql",
+		policy:      policy,
+		maxBytes:    maxBytes,
+		prepared:    prepared,
+	}, nil
+}
+
 func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error) {
 	op, err := findOperation(b, id)
 	if err != nil {
 		return OperationSpec{}, "", err
 	}
-	if op.Kind != "rest_write" || op.REST == nil {
-		return OperationSpec{}, "", fmt.Errorf("operation direct write requires rest_write operation, got %q", op.Kind)
+	switch op.Kind {
+	case "rest_write":
+		if op.REST == nil {
+			return OperationSpec{}, "", fmt.Errorf("operation direct write rest_write operation has no REST declaration")
+		}
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if !isOperationDirectWriteMethod(method) {
+			return OperationSpec{}, "", fmt.Errorf("operation direct write requires POST, PUT, PATCH, or DELETE, got %s", method)
+		}
+		if isAbsoluteHTTPURL(op.REST.Path) {
+			return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
+		}
+		if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
+			return OperationSpec{}, "", err
+		}
+		return op, method, nil
+	case "graphql_mutation":
+		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
+			return OperationSpec{}, "", err
+		}
+		if err := requireOperationDirectWriteEndpoint(b, http.MethodPost, op.GraphQL.Path); err != nil {
+			return OperationSpec{}, "", err
+		}
+		return op, http.MethodPost, nil
+	default:
+		return OperationSpec{}, "", fmt.Errorf("operation direct write requires rest_write or graphql_mutation operation, got %q", op.Kind)
 	}
-	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if !isOperationDirectWriteMethod(method) {
-		return OperationSpec{}, "", fmt.Errorf("operation direct write requires POST, PUT, PATCH, or DELETE, got %s", method)
-	}
-	if isAbsoluteHTTPURL(op.REST.Path) {
-		return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
-	}
-	if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
-		return OperationSpec{}, "", err
-	}
-	return op, method, nil
 }
 
 func isOperationDirectWriteMethod(method string) bool {

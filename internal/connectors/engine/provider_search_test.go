@@ -319,7 +319,10 @@ func TestPreflightOperationDirectReadValidatesDeclaredContract(t *testing.T) {
 		{
 			name: "unsupported operation kind",
 			mutate: func(b *Bundle) {
-				b.Operations[0].Kind = "graphql_query"
+				// graphql_query is now a supported fixed-document direct-read
+				// kind. graphql_mutation remains intentionally write-only, so it
+				// preserves this test's unsupported-read boundary.
+				b.Operations[0].Kind = "graphql_mutation"
 			},
 			method:   http.MethodPost,
 			path:     "/users/fetch",

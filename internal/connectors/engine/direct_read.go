@@ -66,6 +66,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if op.Kind == "graphql_query" {
+		return operationGraphQLDirectRead(ctx, b, op, req, h)
+	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	cfg := materializeConfigDefaults(b, req.Config)
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
@@ -165,6 +168,21 @@ func PreflightOperationDirectRead(b Bundle, operation, method, endpointPath stri
 	if err != nil {
 		return err
 	}
+	if op.Kind == "graphql_query" {
+		if !strings.EqualFold(strings.TrimSpace(method), http.MethodPost) {
+			return fmt.Errorf("operation direct read method %s does not match declared GraphQL method POST", strings.ToUpper(strings.TrimSpace(method)))
+		}
+		if endpointPath != op.GraphQL.Path {
+			return fmt.Errorf("operation direct read path %q does not match declared GraphQL path %q", endpointPath, op.GraphQL.Path)
+		}
+		if maxBytes <= 0 {
+			return fmt.Errorf("operation direct read command requires positive max_bytes")
+		}
+		if clampOperationDirectReadMaxBytes(maxBytes, op.GraphQL.MaxBytes) <= 0 {
+			return fmt.Errorf("operation direct read has no executable response cap")
+		}
+		return validateDirectReadOutputPolicy(outputPolicy, op.GraphQL.Path, nil, connectors.RuntimeConfig{})
+	}
 	if !strings.EqualFold(strings.TrimSpace(method), op.REST.Method) {
 		return fmt.Errorf("operation direct read method %s does not match declared operation method %s", strings.ToUpper(strings.TrimSpace(method)), strings.ToUpper(strings.TrimSpace(op.REST.Method)))
 	}
@@ -187,6 +205,15 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	op, err := findOperation(b, operation)
 	if err != nil {
 		return OperationSpec{}, err
+	}
+	if op.Kind == "graphql_query" {
+		if err := validateGraphQLOperationDirectContract(op, "query"); err != nil {
+			return OperationSpec{}, err
+		}
+		if err := requireOperationDirectReadLedgerEndpoint(b, op.ID, op.Kind, http.MethodPost, op.GraphQL.Path, op.GraphQL.MaxBytes); err != nil {
+			return OperationSpec{}, err
+		}
+		return op, nil
 	}
 	// provider_search shares this executor deliberately: its response bounding,
 	// clamping, redaction and output-policy handling are the same as any other
@@ -212,7 +239,7 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	if op.REST.MaxBytes <= 0 {
 		return OperationSpec{}, fmt.Errorf("operation direct read requires positive max_bytes")
 	}
-	if err := requireOperationDirectReadLedgerEndpoint(b, op.Kind, method, op.REST.Path, op.REST.MaxBytes); err != nil {
+	if err := requireOperationDirectReadLedgerEndpoint(b, "", op.Kind, method, op.REST.Path, op.REST.MaxBytes); err != nil {
 		return OperationSpec{}, err
 	}
 	return op, nil
@@ -333,15 +360,18 @@ func requireOperationSurfaceEndpoint(b Bundle, method, endpointPath string) erro
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
 }
 
-func requireOperationDirectReadLedgerEndpoint(b Bundle, kind, method, endpointPath string, maxBytes int) error {
+func requireOperationDirectReadLedgerEndpoint(b Bundle, operation, kind, method, endpointPath string, maxBytes int) error {
 	ledger := operationDirectReadEndpointLedger(b)
 	if ledger == nil {
 		return fmt.Errorf("runtime operation endpoint ledger is unavailable for bundle %q", b.Name)
 	}
 	for _, entry := range ledger.entries {
-		if strings.EqualFold(entry.Method, method) && entry.Path == endpointPath && entry.Kind == kind && entry.MaxBytes == maxBytes {
+		if strings.EqualFold(entry.Method, method) && entry.Path == endpointPath && entry.Kind == kind && entry.Operation == operation && entry.MaxBytes == maxBytes {
 			return nil
 		}
+	}
+	if operation != "" {
+		return fmt.Errorf("runtime operation endpoint ledger does not contain %s %s operation %q kind %q with max_bytes %d", method, endpointPath, operation, kind, maxBytes)
 	}
 	return fmt.Errorf("runtime operation endpoint ledger does not contain %s %s kind %q with max_bytes %d", method, endpointPath, kind, maxBytes)
 }
