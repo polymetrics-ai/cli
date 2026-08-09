@@ -397,6 +397,42 @@ $ go test -count=1 -timeout 20m ./cmd/connectorgen
 ok  	polymetrics.ai/cmd/connectorgen	11.026s
 ```
 
+## Rebased GREEN re-gate — captured 2026-08-10
+
+The foundation was rebased onto the regenerated Zoom parent at `3212be755`, itself based on
+`origin/main` `f96a47e80`. The conflict resolution retained all three compatible coverage forms:
+plural write actions, direct-write operations, and one closed WebSocket-session operation. The
+post-rebase gates were run again rather than trusting the pre-rebase results:
+
+```text
+$ go test -timeout 20m ./internal/connectors/engine ./internal/connectors/connsdk ./internal/connectors/commandrunner
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/connsdk
+ok   polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance ./cmd/connectorgen
+ok   polymetrics.ai/internal/connectors/conformance
+ok   polymetrics.ai/cmd/connectorgen
+
+$ go test -count=1 -timeout 20m ./internal/cli
+PASS (exit 0)
+
+$ go vet ./internal/connectors ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/cli ./cmd/connectorgen
+
+$ go build ./cmd/pm
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 552 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+The parent had already regenerated the affected manuals, website catalog, and golden transcripts
+after the `f96a47e80` rebase. Re-running the docs and website generators from this foundation
+produced no diff. The old inherited Zoom CRC golden failure is therefore closed; the new baseline
+passes. No provider connection or credential was used.
+
 All fixtures are local and synthetic. The command test writes four PCM16 bytes under `t.TempDir()`;
 it does not open a provider connection or reveal a credential, token-derived value, transcript,
 signed URL, raw authorization header, or audio recording.
