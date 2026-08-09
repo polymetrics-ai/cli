@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -136,17 +137,23 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 		DurableTransaction: secondTransaction,
 	}, secondEvents)
 	waitForCDCSlot(t, ctx, data, slot, true)
-	if _, err := data.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (2, 'resumed')"); err != nil {
+	const resumedValue = "Málaga 東京"
+	if _, err := data.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (2, $1)", resumedValue); err != nil {
 		t.Fatal("could not insert PostgreSQL CDC resume record")
 	}
 	resumed := nextCDCEvent(t, ctx, secondEvents)
 	if resumed.Operation != "insert" || resumed.Record["id"] != 2 {
 		t.Fatal("CDC restart did not resume at the next source transaction")
 	}
+	value, ok := resumed.Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(value), []byte(resumedValue)) {
+		t.Fatal("CDC restart did not preserve non-ASCII text exactly")
+	}
 	resumedCheckpoint := secondStore.wait(t, ctx)
 	if string(resumedCheckpoint.Position.Primary) == string(checkpoint.Position.Primary) {
 		t.Fatal("CDC restart did not advance the durable LSN")
 	}
+	assertDurableCDCEventValue(t, secondStore.eventsPath, resumedValue)
 	if _, err := data.Exec(ctx, "ALTER PUBLICATION "+quoteIdentifier(publication)+" SET (publish = 'insert, update')"); err != nil {
 		t.Fatal("could not change PostgreSQL CDC publication scope")
 	}
@@ -280,6 +287,27 @@ func assertCDCSlotRemoved(t *testing.T, ctx context.Context, data *pgx.Conn, slo
 	var exists bool
 	if err := data.QueryRow(ctx, "SELECT EXISTS (SELECT 1 FROM pg_replication_slots WHERE slot_name = $1)", slot).Scan(&exists); err != nil || exists {
 		t.Fatal("PostgreSQL CDC teardown left a replication slot behind")
+	}
+}
+
+func assertDurableCDCEventValue(t *testing.T, path, want string) {
+	t.Helper()
+	payload, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal("could not read durable PostgreSQL CDC event log")
+	}
+	var committed struct {
+		Events []connectors.CDCEvent `json:"events"`
+	}
+	if err := json.Unmarshal(payload, &committed); err != nil {
+		t.Fatal("could not decode durable PostgreSQL CDC event log")
+	}
+	if len(committed.Events) != 1 {
+		t.Fatal("durable PostgreSQL CDC event log has an unexpected event count")
+	}
+	got, ok := committed.Events[0].Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(got), []byte(want)) {
+		t.Fatal("durable PostgreSQL CDC event log did not preserve non-ASCII text exactly")
 	}
 }
 

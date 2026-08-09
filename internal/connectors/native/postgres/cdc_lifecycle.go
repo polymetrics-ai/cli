@@ -25,6 +25,7 @@ const (
 	cdcCheckpointSchema           = "postgres-cdc-v1"
 	cdcChangefeedMechanism        = "logical_replication"
 	cdcExecutorID                 = "postgres_logical_replication"
+	cdcClientEncoding             = "UTF8"
 	cdcSlotCleanupTimeout         = 5 * time.Second
 	cdcPublicationViaRootVersion  = 130000
 	cdcPublicationFeaturesVersion = 150000
@@ -40,6 +41,12 @@ var (
 	errCDCPublicationPublishesViaRoot  = errors.New("postgres CDC does not support publications that publish through partition roots")
 	errCDCPublicationHasRowFilter      = errors.New("postgres CDC does not support publication row filters")
 	errCDCPublicationHasColumnList     = errors.New("postgres CDC does not support publication column lists")
+	errCDCClientEncoding               = errors.New("postgres CDC replication connection did not negotiate UTF-8 client encoding")
+	errCDCReplicaIdentityDefault       = errors.New("postgres CDC requires a primary key when REPLICA IDENTITY is DEFAULT")
+	errCDCReplicaIdentityFull          = errors.New("postgres CDC does not support REPLICA IDENTITY FULL")
+	errCDCReplicaIdentityIndex         = errors.New("postgres CDC does not support REPLICA IDENTITY USING INDEX")
+	errCDCReplicaIdentityNothing       = errors.New("postgres CDC does not support REPLICA IDENTITY NOTHING")
+	errCDCReplicaIdentityUnknown       = errors.New("postgres CDC encountered an unknown replica identity mode")
 )
 
 type postgresCDCSource struct {
@@ -62,6 +69,8 @@ type postgresCDCPublicationScope struct {
 	relationOID                string
 	membershipVersion          string
 	namespaceMembershipVersion string
+	replicaIdentity            string
+	primaryKeyVersion          string
 	publicationAllTables       bool
 	publishesViaRoot           bool
 	hasDescendants             bool
@@ -92,15 +101,37 @@ func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: configure replication connection: %w", err)
 	}
-	if config.RuntimeParams == nil {
-		config.RuntimeParams = make(map[string]string)
-	}
-	config.RuntimeParams["replication"] = "database"
+	configureCDCReplicationConfig(config)
 	replication, err := pgconn.ConnectConfig(ctx, config)
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: connect replication: %w", err)
 	}
 	return replication, nil
+}
+
+func configureCDCReplicationConfig(config *pgconn.Config) {
+	if config.RuntimeParams == nil {
+		config.RuntimeParams = make(map[string]string)
+	}
+	config.RuntimeParams["replication"] = "database"
+	config.RuntimeParams["client_encoding"] = cdcClientEncoding
+	previousValidateConnect := config.ValidateConnect
+	config.ValidateConnect = func(ctx context.Context, replication *pgconn.PgConn) error {
+		if err := validateCDCClientEncoding(replication.ParameterStatus("client_encoding")); err != nil {
+			return err
+		}
+		if previousValidateConnect != nil {
+			return previousValidateConnect(ctx, replication)
+		}
+		return nil
+	}
+}
+
+func validateCDCClientEncoding(encoding string) error {
+	if !strings.EqualFold(strings.TrimSpace(encoding), cdcClientEncoding) {
+		return errCDCClientEncoding
+	}
+	return nil
 }
 
 func closeReplicationConnection(conn *pgconn.PgConn) {
@@ -311,6 +342,8 @@ func inspectCDCRelationScope(ctx context.Context, inspector *postgresCDCRelation
 		&scope.publishesTruncate,
 		&scope.hasRowFilter,
 		&scope.hasColumnList,
+		&scope.replicaIdentity,
+		&scope.primaryKeyVersion,
 	)
 	if err != nil {
 		return postgresCDCPublicationScope{}, fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
@@ -331,7 +364,7 @@ func cdcRelationScopeQuery(serverVersion int) string {
 const cdcRelationScopeLegacyQuery = `
 WITH
 	target_relation AS (
-		SELECT relation.oid, relation.relnamespace
+		SELECT relation.oid, relation.relnamespace, relation.relreplident
 		FROM pg_class relation
 		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
 		WHERE relation_schema.nspname = $1
@@ -358,6 +391,12 @@ WITH
 		FROM pg_publication_rel membership
 		JOIN selected_publication publication ON publication.oid = membership.prpubid
 		JOIN target_relation relation ON relation.oid = membership.prrelid
+	),
+	primary_key AS (
+		SELECT primary_index.xmin::text AS version
+		FROM pg_index primary_index
+		JOIN target_relation relation ON relation.oid = primary_index.indrelid
+		WHERE primary_index.indisprimary
 	)
 SELECT
 	COALESCE(selected_publication.oid::text, ''),
@@ -378,16 +417,19 @@ SELECT
 	COALESCE(selected_publication.pubdelete, false),
 	COALESCE(selected_publication.pubtruncate, false),
 	false,
-	false
+	false,
+	COALESCE(target_relation.relreplident::text, ''),
+	COALESCE(primary_key.version, '')
 FROM (VALUES (1)) AS anchor(value)
 LEFT JOIN target_relation ON true
 LEFT JOIN selected_publication ON true
-LEFT JOIN direct_membership ON true`
+LEFT JOIN direct_membership ON true
+LEFT JOIN primary_key ON true`
 
 const cdcRelationScopeViaRootQuery = `
 WITH
 	target_relation AS (
-		SELECT relation.oid, relation.relnamespace
+		SELECT relation.oid, relation.relnamespace, relation.relreplident
 		FROM pg_class relation
 		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
 		WHERE relation_schema.nspname = $1
@@ -415,6 +457,12 @@ WITH
 		FROM pg_publication_rel membership
 		JOIN selected_publication publication ON publication.oid = membership.prpubid
 		JOIN target_relation relation ON relation.oid = membership.prrelid
+	),
+	primary_key AS (
+		SELECT primary_index.xmin::text AS version
+		FROM pg_index primary_index
+		JOIN target_relation relation ON relation.oid = primary_index.indrelid
+		WHERE primary_index.indisprimary
 	)
 SELECT
 	COALESCE(selected_publication.oid::text, ''),
@@ -435,16 +483,19 @@ SELECT
 	COALESCE(selected_publication.pubdelete, false),
 	COALESCE(selected_publication.pubtruncate, false),
 	false,
-	false
+	false,
+	COALESCE(target_relation.relreplident::text, ''),
+	COALESCE(primary_key.version, '')
 FROM (VALUES (1)) AS anchor(value)
 LEFT JOIN target_relation ON true
 LEFT JOIN selected_publication ON true
-LEFT JOIN direct_membership ON true`
+LEFT JOIN direct_membership ON true
+LEFT JOIN primary_key ON true`
 
 const cdcRelationScopeModernQuery = `
 WITH
 	target_relation AS (
-		SELECT relation.oid, relation.relnamespace
+		SELECT relation.oid, relation.relnamespace, relation.relreplident
 		FROM pg_class relation
 		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
 		WHERE relation_schema.nspname = $1
@@ -482,6 +533,12 @@ WITH
 		FROM pg_publication_namespace membership
 		JOIN selected_publication publication ON publication.oid = membership.pnpubid
 		JOIN target_relation relation ON relation.relnamespace = membership.pnnspid
+	),
+	primary_key AS (
+		SELECT primary_index.xmin::text AS version
+		FROM pg_index primary_index
+		JOIN target_relation relation ON relation.oid = primary_index.indrelid
+		WHERE primary_index.indisprimary
 	)
 SELECT
 	COALESCE(selected_publication.oid::text, ''),
@@ -506,21 +563,26 @@ SELECT
 	COALESCE(selected_publication.pubdelete, false),
 	COALESCE(selected_publication.pubtruncate, false),
 	COALESCE(direct_membership.has_row_filter, false),
-	COALESCE(direct_membership.has_column_list, false)
+	COALESCE(direct_membership.has_column_list, false),
+	COALESCE(target_relation.relreplident::text, ''),
+	COALESCE(primary_key.version, '')
 FROM (VALUES (1)) AS anchor(value)
 LEFT JOIN target_relation ON true
 LEFT JOIN selected_publication ON true
 LEFT JOIN direct_membership ON true
-LEFT JOIN namespace_membership ON true`
+LEFT JOIN namespace_membership ON true
+LEFT JOIN primary_key ON true`
 
 func (scope postgresCDCPublicationScope) fingerprint() string {
 	parts := []string{
-		"postgres-cdc-publication-scope-v3",
+		"postgres-cdc-publication-scope-v4",
 		scope.publicationOID,
 		scope.publicationVersion,
 		scope.relationOID,
 		scope.membershipVersion,
 		scope.namespaceMembershipVersion,
+		scope.replicaIdentity,
+		scope.primaryKeyVersion,
 		strconv.FormatBool(scope.publicationAllTables),
 		strconv.FormatBool(scope.publishesViaRoot),
 		strconv.FormatBool(scope.hasDescendants),
@@ -544,6 +606,9 @@ func (scope postgresCDCPublicationScope) validate() error {
 		return err
 	}
 	if err := validateCDCRelationHierarchy(scope.hasDescendants); err != nil {
+		return err
+	}
+	if err := validateCDCReplicaIdentity(scope.replicaIdentity, scope.primaryKeyVersion); err != nil {
 		return err
 	}
 	if err := validateCDCPublicationTableShape(scope.hasRowFilter, scope.hasColumnList); err != nil {
@@ -589,6 +654,24 @@ func validateCDCRelationHierarchy(hasDescendants bool) error {
 		return errCDCRelationHasDescendants
 	}
 	return nil
+}
+
+func validateCDCReplicaIdentity(replicaIdentity, primaryKeyVersion string) error {
+	switch replicaIdentity {
+	case "d":
+		if strings.TrimSpace(primaryKeyVersion) == "" {
+			return errCDCReplicaIdentityDefault
+		}
+		return nil
+	case "f":
+		return errCDCReplicaIdentityFull
+	case "i":
+		return errCDCReplicaIdentityIndex
+	case "n":
+		return errCDCReplicaIdentityNothing
+	default:
+		return fmt.Errorf("%w: %q", errCDCReplicaIdentityUnknown, replicaIdentity)
+	}
 }
 
 func validateCDCPublicationTableShape(hasRowFilter, hasColumnList bool) error {

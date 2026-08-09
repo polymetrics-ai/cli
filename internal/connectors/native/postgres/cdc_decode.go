@@ -7,6 +7,7 @@ import (
 	"io"
 	"math"
 	"strconv"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -14,6 +15,7 @@ import (
 var (
 	errCDCReplicaIdentityUpdate     = errors.New("postgres CDC does not support updates that change replica-identity fields")
 	errCDCReplicaIdentityFullUpdate = errors.New("postgres CDC does not support updates from REPLICA IDENTITY FULL tables")
+	errCDCInvalidUTF8               = errors.New("postgres CDC logical replication payload is not valid UTF-8")
 )
 
 type pgoutputDecoder struct {
@@ -48,8 +50,17 @@ func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEv
 	}
 	r := pgoutputReader{buf: message[1:]}
 	switch message[0] {
-	case 'B', 'C', 'O', 'Y':
+	case 'B', 'C':
 		return nil, nil
+	case 'O':
+		_ = r.uint64()
+		_ = r.cstring()
+		return nil, r.done()
+	case 'Y':
+		_ = r.uint32()
+		_ = r.cstring()
+		_ = r.cstring()
+		return nil, r.done()
 	case 'R':
 		rel, err := r.relation()
 		if err != nil {
@@ -232,6 +243,19 @@ func (r *pgoutputReader) uint32() uint32 {
 	return v
 }
 
+func (r *pgoutputReader) uint64() uint64 {
+	if r.err != nil {
+		return 0
+	}
+	if len(r.buf) < 8 {
+		r.err = io.ErrUnexpectedEOF
+		return 0
+	}
+	v := binary.BigEndian.Uint64(r.buf[:8])
+	r.buf = r.buf[8:]
+	return v
+}
+
 func (r *pgoutputReader) int32() int32 {
 	return int32(r.uint32())
 }
@@ -242,9 +266,13 @@ func (r *pgoutputReader) cstring() string {
 	}
 	for i, b := range r.buf {
 		if b == 0 {
-			s := string(r.buf[:i])
+			raw := r.buf[:i]
 			r.buf = r.buf[i+1:]
-			return s
+			if !utf8.Valid(raw) {
+				r.err = errCDCInvalidUTF8
+				return ""
+			}
+			return string(raw)
 		}
 	}
 	r.err = io.ErrUnexpectedEOF
@@ -308,6 +336,9 @@ func (r *pgoutputReader) tuple(rel pgoutputRelation) (connectors.Record, error) 
 			raw := r.bytes(int(r.int32()))
 			if r.err != nil {
 				return nil, r.err
+			}
+			if !utf8.Valid(raw) {
+				return nil, fmt.Errorf("column %q: %w", col.name, errCDCInvalidUTF8)
 			}
 			rec[col.name] = decodeTextValue(col.typeID, string(raw))
 		default:

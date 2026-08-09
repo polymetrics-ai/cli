@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"bytes"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
@@ -169,6 +170,70 @@ func TestPGOutputDecoderEncodesNonFiniteFloatsAsJSONStrings(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPGOutputDecoderRoundTripsNonASCIITextExactly(t *testing.T) {
+	const want = "Málaga 東京"
+	dec := newPGOutputDecoder("public", "users")
+	if _, err := dec.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "value", typeID: 25}), ""); err != nil {
+		t.Fatalf("decode relation: %v", err)
+	}
+	events, err := dec.decode(insertMessage(testRelationID, textField(want)), "")
+	if err != nil {
+		t.Fatalf("decode insert: %v", err)
+	}
+	if len(events) != 1 {
+		t.Fatalf("decode emitted %d event(s), want 1", len(events))
+	}
+	got, ok := events[0].Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(got), []byte(want)) {
+		t.Fatalf("decoded value = %q, want byte-exact %q", got, want)
+	}
+	payload, err := json.Marshal(events[0])
+	if err != nil {
+		t.Fatalf("marshal CDC event: %v", err)
+	}
+	var roundTrip connectors.CDCEvent
+	if err := json.Unmarshal(payload, &roundTrip); err != nil {
+		t.Fatalf("unmarshal CDC event: %v", err)
+	}
+	got, ok = roundTrip.Record["value"].(string)
+	if !ok || !bytes.Equal([]byte(got), []byte(want)) {
+		t.Fatalf("round-trip value = %q, want byte-exact %q", got, want)
+	}
+}
+
+func TestPGOutputDecoderRejectsInvalidUTF8(t *testing.T) {
+	t.Run("tuple text", func(t *testing.T) {
+		dec := newPGOutputDecoder("public", "users")
+		if _, err := dec.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "value", typeID: 25}), ""); err != nil {
+			t.Fatalf("decode relation: %v", err)
+		}
+		if _, err := dec.decode(insertMessage(testRelationID, textField(string([]byte{0xff}))), ""); !errors.Is(err, errCDCInvalidUTF8) {
+			t.Fatalf("decode insert = %v, want invalid UTF-8 rejection", err)
+		}
+	})
+
+	t.Run("relation identifier", func(t *testing.T) {
+		dec := newPGOutputDecoder("public", "users")
+		if _, err := dec.decode(relationMessage(testRelationID, string([]byte{0xff}), "users", testColumn{name: "value", typeID: 25}), ""); !errors.Is(err, errCDCInvalidUTF8) {
+			t.Fatalf("decode relation = %v, want invalid UTF-8 rejection", err)
+		}
+	})
+
+	t.Run("origin metadata", func(t *testing.T) {
+		dec := newPGOutputDecoder("public", "users")
+		if _, err := dec.decode(originMessage(42, string([]byte{0xff})), ""); !errors.Is(err, errCDCInvalidUTF8) {
+			t.Fatalf("decode origin = %v, want invalid UTF-8 rejection", err)
+		}
+	})
+
+	t.Run("type metadata", func(t *testing.T) {
+		dec := newPGOutputDecoder("public", "users")
+		if _, err := dec.decode(typeMessage(23, string([]byte{0xff}), "custom_status"), ""); !errors.Is(err, errCDCInvalidUTF8) {
+			t.Fatalf("decode type = %v, want invalid UTF-8 rejection", err)
+		}
+	})
 }
 
 func TestPGOutputDecoderConsumesTypeMetadata(t *testing.T) {

@@ -187,12 +187,84 @@ func TestCDCLifecycleRejectsFixtureMode(t *testing.T) {
 	}
 }
 
+func TestCDCReplicationConfigForcesUTF8(t *testing.T) {
+	config, err := pgconn.ParseConfig("host=localhost user=postgres database=postgres client_encoding=LATIN1")
+	if err != nil {
+		t.Fatalf("ParseConfig: %v", err)
+	}
+	configureCDCReplicationConfig(config)
+	if got := config.RuntimeParams["replication"]; got != "database" {
+		t.Fatalf("replication runtime parameter = %q, want database", got)
+	}
+	if got := config.RuntimeParams["client_encoding"]; got != cdcClientEncoding {
+		t.Fatalf("client_encoding runtime parameter = %q, want %q", got, cdcClientEncoding)
+	}
+}
+
+func TestValidateCDCClientEncoding(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		encoding string
+		wantErr  bool
+	}{
+		{name: "UTF8", encoding: "UTF8"},
+		{name: "case insensitive", encoding: "utf8"},
+		{name: "Latin1", encoding: "LATIN1", wantErr: true},
+		{name: "missing", wantErr: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateCDCClientEncoding(tc.encoding)
+			if tc.wantErr {
+				if !errors.Is(err, errCDCClientEncoding) {
+					t.Fatalf("validateCDCClientEncoding(%q) = %v, want UTF-8 rejection", tc.encoding, err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("validateCDCClientEncoding(%q) = %v, want nil", tc.encoding, err)
+			}
+		})
+	}
+}
+
 func TestCDCRelationHierarchyRejectsDescendants(t *testing.T) {
 	if err := validateCDCRelationHierarchy(false); err != nil {
 		t.Fatalf("validateCDCRelationHierarchy(no descendants) = %v", err)
 	}
 	if err := validateCDCRelationHierarchy(true); !errors.Is(err, errCDCRelationHasDescendants) {
 		t.Fatalf("validateCDCRelationHierarchy(descendants) = %v, want descendant rejection", err)
+	}
+}
+
+func TestCDCReplicaIdentityModes(t *testing.T) {
+	for _, tc := range []struct {
+		name              string
+		replicaIdentity   string
+		primaryKeyVersion string
+		want              error
+	}{
+		{name: "default with primary key", replicaIdentity: "d", primaryKeyVersion: "105"},
+		{name: "default without primary key", replicaIdentity: "d", want: errCDCReplicaIdentityDefault},
+		{name: "full", replicaIdentity: "f", primaryKeyVersion: "105", want: errCDCReplicaIdentityFull},
+		{name: "custom index", replicaIdentity: "i", primaryKeyVersion: "105", want: errCDCReplicaIdentityIndex},
+		{name: "nothing", replicaIdentity: "n", primaryKeyVersion: "105", want: errCDCReplicaIdentityNothing},
+		{name: "unknown", replicaIdentity: "x", primaryKeyVersion: "105", want: errCDCReplicaIdentityUnknown},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			scope := validCDCPublicationScope()
+			scope.replicaIdentity = tc.replicaIdentity
+			scope.primaryKeyVersion = tc.primaryKeyVersion
+			err := scope.validate()
+			if tc.want == nil {
+				if err != nil {
+					t.Fatalf("scope.validate() = %v, want nil", err)
+				}
+				return
+			}
+			if !errors.Is(err, tc.want) {
+				t.Fatalf("scope.validate() = %v, want %v", err, tc.want)
+			}
+		})
 	}
 }
 
@@ -285,6 +357,8 @@ func TestCDCPublicationScopeChangeRequiresRebootstrap(t *testing.T) {
 		{name: "partition root", set: func(scope *postgresCDCPublicationScope) { scope.publishesViaRoot = true }},
 		{name: "row filter", set: func(scope *postgresCDCPublicationScope) { scope.hasRowFilter = true }},
 		{name: "column list", set: func(scope *postgresCDCPublicationScope) { scope.hasColumnList = true }},
+		{name: "replica identity", set: func(scope *postgresCDCPublicationScope) { scope.replicaIdentity = "i" }},
+		{name: "primary key", set: func(scope *postgresCDCPublicationScope) { scope.primaryKeyVersion = "106" }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			changed := expected
@@ -320,6 +394,9 @@ func TestCDCRelationScopeQueriesAvoidExpandedPublicationTables(t *testing.T) {
 			if !strings.Contains(query, "pg_publication_rel") || !strings.Contains(query, "puballtables") {
 				t.Fatal("scope query does not use direct publication membership")
 			}
+			if !strings.Contains(query, "relreplident") || !strings.Contains(query, "pg_index") || !strings.Contains(query, "indisprimary") {
+				t.Fatal("scope query does not bind replica identity to a primary key")
+			}
 			if tc.viaRoot && !strings.Contains(query, "pubviaroot") {
 				t.Fatal("scope query does not inspect partition-root publishing")
 			}
@@ -345,6 +422,8 @@ func validCDCPublicationScope() postgresCDCPublicationScope {
 		publicationVersion: "102",
 		relationOID:        "103",
 		membershipVersion:  "104",
+		replicaIdentity:    "d",
+		primaryKeyVersion:  "105",
 		published:          true,
 		publishesInsert:    true,
 		publishesUpdate:    true,
