@@ -437,6 +437,26 @@ All fixtures are local and synthetic. The command test writes four PCM16 bytes u
 it does not open a provider connection or reveal a credential, token-derived value, transcript,
 signed URL, raw authorization header, or audio recording.
 
+## Review remediation RED — bounded session lifetime, captured 2026-08-10
+
+The inline code review found that the byte caps did not bound wall-clock execution: `cli.Run`
+supplies `context.Background()`, so a server that never closes can hold a completed upload open
+forever. Before changing the model or executor, the loader contract was extended to require the
+declaration-owned `max_session_seconds` field. The current closed schema rejects it verbatim:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadAcceptsClosedWebSocketSessionContract$'
+--- FAIL: TestBundleLoadAcceptsClosedWebSocketSessionContract (0.00s)
+    websocket_session_test.go:52: Load closed WebSocket session operation: load bundle acme: operations.json: /operations/0/websocket/max_session_seconds: additional property not allowed
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.758s
+FAIL
+```
+
+The green slice must make that duration a required, positive, capped declaration value, derive a
+child deadline from it before the upgrade, and prove a server that withholds its terminal close is
+closed and returned to the caller without relying on an external CLI timeout.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or

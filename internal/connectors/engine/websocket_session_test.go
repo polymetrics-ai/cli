@@ -34,6 +34,7 @@ func TestBundleLoadAcceptsClosedWebSocketSessionContract(t *testing.T) {
 				"max_input_bytes": 65536,
 				"max_output_bytes": 65536,
 				"max_frame_bytes": 4096,
+				"max_session_seconds": 60,
 				"session_update_schema": {
 					"type": "object",
 					"additionalProperties": false,

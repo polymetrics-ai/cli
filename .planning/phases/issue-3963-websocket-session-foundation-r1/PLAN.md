@@ -37,7 +37,11 @@
 4. The session runner propagates the caller context, checks cancellation between every bounded
    read/write, and owns/cleans up its network connection synchronously—no detached goroutine or
    background session is permitted.
-5. Initial adoption must satisfy Zoom Live Scribe's fixed `live-asr` subprotocol and PCM16 input
+5. Review remediation: byte bounds alone do not bound a session when the CLI supplies a background
+   context and a provider never sends its terminal close. The closed declaration must therefore own
+   a positive, capped `max_session_seconds` lifetime; the executor derives its deadline from that
+   declaration and closes the upgraded connection when it expires.
+6. Initial adoption must satisfy Zoom Live Scribe's fixed `live-asr` subprotocol and PCM16 input
    needs, but the foundation itself exposes no Zoom command. Its generic tests use only a loopback
    server and synthetic bytes.
 
