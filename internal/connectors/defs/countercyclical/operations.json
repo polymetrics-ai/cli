@@ -1,0 +1,278 @@
+{
+  "operations": [
+    {
+      "id": "countercyclical.get.assumptions",
+      "kind": "rest_read",
+      "summary": "GET /assumptions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/assumptions.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/assumptions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.post.integrations-make-actions-investments",
+      "kind": "rest_write",
+      "summary": "POST /integrations/make/actions/investments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/make/actions/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.integrations-make-auth",
+      "kind": "rest_read",
+      "summary": "GET /integrations/make/auth",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/make/auth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.integrations-make-triggers-investments",
+      "kind": "rest_read",
+      "summary": "GET /integrations/make/triggers/investments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/make.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/make/triggers/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.post.integrations-zapier-actions-investments",
+      "kind": "rest_write",
+      "summary": "POST /integrations/zapier/actions/investments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/zapier/actions/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.integrations-zapier-auth",
+      "kind": "rest_read",
+      "summary": "GET /integrations/zapier/auth",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/zapier/auth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.integrations-zapier-triggers-investments",
+      "kind": "rest_read",
+      "summary": "GET /integrations/zapier/triggers/investments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/integrations/zapier.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/zapier/triggers/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.investments",
+      "kind": "rest_read",
+      "summary": "GET /investments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/investments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.memos",
+      "kind": "rest_read",
+      "summary": "GET /memos",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/memos",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/memos",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.pipelines",
+      "kind": "rest_read",
+      "summary": "GET /pipelines",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/pipelines",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.teams",
+      "kind": "rest_read",
+      "summary": "GET /teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.v1-integrations-make-auth",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/make/auth",
+      "description": "Make-app credential-validation probe, not a syncable object or a record mutation",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/make/auth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.v1-integrations-make-triggers-investments",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/make/triggers/investments",
+      "description": "Make-scenario-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/make/triggers/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.post.v1-integrations-zapier-actions-investments",
+      "kind": "rest_write",
+      "summary": "POST /v1/integrations/zapier/actions/investments",
+      "description": "functionally identical to create_investment (POST .../make/actions/investments): same apiKey auth, same tickerSymbol-only request body, same investment-creation effect; declaring both would be two write actions with byte-identical behavior differing only in URL path",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integrations/zapier/actions/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.v1-integrations-zapier-auth",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/zapier/auth",
+      "description": "Zapier-app credential-validation probe, not a syncable object or a record mutation",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/zapier/auth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.v1-integrations-zapier-triggers-investments",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/zapier/triggers/investments",
+      "description": "Zapier-trigger polling endpoint for newly created investments; identical record shape to the already-covered investments list stream",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/zapier/triggers/investments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.post.v1-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v1/webhooks",
+      "description": "webhook management is documented as a Settings-UI-only Enterprise feature (Settings \u003e Workspace \u003e Advanced \u003e Developers); no CRUD API endpoint is published for creating/listing/deleting webhooks",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "countercyclical.get.valuations",
+      "kind": "rest_read",
+      "summary": "GET /valuations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints/valuations.md",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/valuations",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -83,6 +83,7 @@ type batchMaterializeOptions struct {
 	reportPath              string
 	connectors              []string
 	existingSurfaceEvidence bool
+	cachedReferencesOnly    bool
 }
 
 // runBatchMaterialize is the one post-#3869 artifact-to-bundle authoring
@@ -153,6 +154,10 @@ func parseBatchMaterializeOptions(args []string) (batchMaterializeOptions, error
 			opts.existingSurfaceEvidence = true
 			continue
 		}
+		if arg == "--cached-references-only" {
+			opts.cachedReferencesOnly = true
+			continue
+		}
 		if i+1 >= len(args) {
 			return batchMaterializeOptions{}, fmt.Errorf("%s requires a value", arg)
 		}
@@ -191,6 +196,9 @@ func parseBatchMaterializeOptions(args []string) (batchMaterializeOptions, error
 	}
 	if opts.reportPath == "" {
 		return batchMaterializeOptions{}, errors.New("--report is required")
+	}
+	if opts.cachedReferencesOnly && opts.artifactDir == "" {
+		return batchMaterializeOptions{}, errors.New("--cached-references-only requires --artifact-dir")
 	}
 	if opts.defsRoot == "" {
 		root, err := repoRoot()
@@ -872,6 +880,9 @@ func batchArtifactSourceFetcher(opts batchMaterializeOptions, candidate BatchMan
 			} else if !errors.Is(cacheErr, os.ErrNotExist) {
 				return nil, fmt.Errorf("read cached external artifact %q: %w", rawURL, cacheErr)
 			}
+			if opts.cachedReferencesOnly {
+				return nil, fmt.Errorf("cached-references-only source pass has no cached external artifact %q", rawURL)
+			}
 			raw, err := fetchBatchMaterializeSource(rawURL)
 			if err != nil {
 				return nil, err
@@ -1528,13 +1539,42 @@ func batchOpenAPIServerURLPath(serverURL string) (string, error) {
 	if authority == "" || strings.ContainsAny(authority, "?#") {
 		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not a valid absolute URL", serverURL)
 	}
-	if strings.ContainsAny(basePath, "?#{}") {
+	if strings.ContainsAny(basePath, "?#") || !validBatchOpenAPIServerBasePath(basePath) {
 		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q has a non-literal request path", serverURL)
 	}
 	if err := validateBatchSwaggerBasePath(basePath); err != nil {
 		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q has an invalid request path", serverURL)
 	}
 	return basePath, nil
+}
+
+// validBatchOpenAPIServerBasePath allows only ordinary OpenAPI server-variable
+// names within an otherwise literal request path. A provider may put a required
+// account or space segment in servers[].url while retaining root-relative paths;
+// that segment is part of the documented request path, not an unsafe URL escape.
+func validBatchOpenAPIServerBasePath(path string) bool {
+	for index := 0; index < len(path); index++ {
+		switch path[index] {
+		case '{':
+			end := strings.IndexByte(path[index+1:], '}')
+			if end < 0 {
+				return false
+			}
+			end += index + 1
+			if end == index+1 {
+				return false
+			}
+			for _, character := range path[index+1 : end] {
+				if (character < 'a' || character > 'z') && (character < 'A' || character > 'Z') && (character < '0' || character > '9') && character != '_' && character != '-' && character != '.' {
+					return false
+				}
+			}
+			index = end
+		case '}':
+			return false
+		}
+	}
+	return true
 }
 
 func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchArtifactDocument, error) {
@@ -2511,7 +2551,42 @@ func materializedArtifactPathWithExistingBinding(method, path string, existing m
 	if withoutVersion != path && len(existing[batchArtifactEndpointKey(method, withoutVersion)]) > 0 {
 		return withoutVersion
 	}
+	if suffix := materializedDynamicServerBaseSuffix(method, path, existing); suffix != "" {
+		return suffix
+	}
 	return path
+}
+
+// materializedDynamicServerBaseSuffix preserves a connector-relative binding
+// when an OpenAPI server base adds a dynamic path segment before a root-relative
+// operation path. It is deliberately narrower than a generic suffix match: the
+// retained binding must include an OpenAPI-style variable, and the longest
+// matching binding wins only when it is unambiguous.
+func materializedDynamicServerBaseSuffix(method, path string, existing map[string][]engine.SurfaceEndpoint) string {
+	prefix := strings.ToUpper(strings.TrimSpace(method)) + "\x00"
+	match := ""
+	ambiguous := false
+	for key := range existing {
+		if !strings.HasPrefix(key, prefix) {
+			continue
+		}
+		candidate := strings.TrimPrefix(key, prefix)
+		if candidate == path || !strings.Contains(candidate, "{") || !strings.HasSuffix(path, candidate) {
+			continue
+		}
+		if len(candidate) > len(match) {
+			match = candidate
+			ambiguous = false
+			continue
+		}
+		if len(candidate) == len(match) && candidate != match {
+			ambiguous = true
+		}
+	}
+	if ambiguous {
+		return ""
+	}
+	return match
 }
 
 func materializedVersionlessDiscoveryPath(path string) string {

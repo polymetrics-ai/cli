@@ -1499,6 +1499,26 @@ func TestParseBatchOpenAPIArtifactPrefixesServerBasePath(t *testing.T) {
 	}
 }
 
+func TestParseBatchOpenAPIArtifactPrefixesServerBasePathWithPathVariable(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"servers": [{"url": "https://api.provider.example/api/v100/rest/spaces/{space_id}"}],
+		"paths": {
+			"/widgets": {
+				"get": {"summary": "List widgets", "responses": {"200": {"description": "OK"}}}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse OpenAPI templated server base-path artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodGet || endpoints[0].Path != "/api/v100/rest/spaces/{space_id}/widgets" {
+		t.Fatalf("parsed endpoints = %+v, want GET /api/v100/rest/spaces/{space_id}/widgets", endpoints)
+	}
+}
+
 func TestParseBatchOpenAPIArtifactRequiresOpenAPI3OrSwagger2(t *testing.T) {
 	for _, test := range []struct {
 		name string
@@ -1611,6 +1631,39 @@ func TestMaterializeAPISurfaceRetainsDuplicateCoveredStreamBindings(t *testing.T
 	}
 	if !got["widgets"] || !got["archived_widgets"] {
 		t.Fatalf("surface stream bindings = %+v, want both source streams", got)
+	}
+}
+
+func TestMaterializeAPISurfaceUsesExistingDynamicServerBaseSuffix(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "example",
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    http.MethodGet,
+				Path:      "/spaces/{space_id}/widgets",
+				CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"},
+			}},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}},
+	}
+	candidate := BatchManifestConnector{Connector: "example", Artifact: BatchArtifact{URL: "https://example.test/openapi.json", Kind: "openapi", Version: "v1"}}
+	surface, err := materializeAPISurface(bundle, candidate, "2026-08-09", strings.Repeat("a", 64), []batchArtifactEndpoint{{
+		Method:           http.MethodGet,
+		Path:             "/api/v100/rest/spaces/{space_id}/widgets",
+		Summary:          "List widgets",
+		SourceURL:        candidate.Artifact.URL,
+		SourceKind:       candidate.Artifact.Kind,
+		SourceVersion:    candidate.Artifact.Version,
+		SourceRetrieved:  "2026-08-09",
+		SourceSHA256:     strings.Repeat("a", 64),
+		SourceCoordinate: "paths[\"/widgets\"].get",
+	}})
+	if err != nil {
+		t.Fatalf("materialize dynamic server base suffix: %v", err)
+	}
+	if len(surface.Endpoints) != 1 || surface.Endpoints[0].Path != "/spaces/{space_id}/widgets" || surface.Endpoints[0].CoveredBy == nil || surface.Endpoints[0].CoveredBy.Stream != "widgets" || surface.Endpoints[0].Discrepancy != "" {
+		t.Fatalf("surface endpoints = %+v, want one classified connector-relative dynamic-base endpoint", surface.Endpoints)
 	}
 }
 
@@ -1949,6 +2002,38 @@ func TestParseBatchHTMLReferenceSkipsStaticAssetCandidates(t *testing.T) {
 	}
 	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Path != "/widgets" {
 		t.Fatalf("HTML/source endpoints = %+v, want linked machine operation only", inventory.Endpoints)
+	}
+}
+
+func TestParseBatchHTMLReferenceSkipsFeedCandidates(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><head><link href="/reference/rss.xml" rel="alternate" type="application/rss+xml"></head><body><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"get":{"summary":"List widgets"}}}}`)
+
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-09"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want only official machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("HTML/source endpoints = %+v, want linked machine operation only", inventory.Endpoints)
+	}
+}
+
+func TestParseBatchHTMLReferenceRecognizesMarkdownCodeOperations(t *testing.T) {
+	root := []byte("<mark style=\"color:green;\">`GET`</mark> `/widgets`\n<mark style=\"color:blue;\">`POST`</mark> `/widgets`")
+
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: "https://provider.example/reference.md", Kind: "html_reference", Retrieved: "2026-08-09"}, nil)
+	if err != nil {
+		t.Fatalf("parse Markdown HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 2 || inventory.Endpoints[0].Method != http.MethodGet || inventory.Endpoints[0].Path != "/widgets" || inventory.Endpoints[1].Method != http.MethodPost || inventory.Endpoints[1].Path != "/widgets" {
+		t.Fatalf("Markdown code endpoints = %+v, want GET and POST /widgets", inventory.Endpoints)
 	}
 }
 
@@ -2329,6 +2414,38 @@ func TestBatchArtifactSourceFetcherRejectsSymlinkedCacheComponent(t *testing.T) 
 	}
 	if len(entries) != 0 {
 		t.Fatalf("external cache directory entries = %+v, want no write through symlink", entries)
+	}
+}
+
+func TestBatchArtifactSourceFetcherCachedReferencesOnlyRefusesCacheMiss(t *testing.T) {
+	artifactDir := t.TempDir()
+	fetch := batchArtifactSourceFetcher(batchMaterializeOptions{
+		artifactDir:          artifactDir,
+		cachedReferencesOnly: true,
+	}, BatchManifestConnector{Connector: "acme"})
+	if _, err := fetch("https://provider.example/openapi.yaml"); err == nil || !strings.Contains(err.Error(), "cached-references-only") {
+		t.Fatalf("cache-only fetch error = %v, want cache-miss refusal without a network fetch", err)
+	}
+}
+
+func TestParseBatchMaterializeOptionsCachedReferencesOnlyRequiresArtifactDir(t *testing.T) {
+	args := []string{
+		"--manifest", "manifest.json",
+		"--source-defs-root", "source-defs",
+		"--retrieved-at", "2026-08-09",
+		"--report", "report.json",
+		"--cached-references-only",
+	}
+	if _, err := parseBatchMaterializeOptions(args); err == nil || !strings.Contains(err.Error(), "requires --artifact-dir") {
+		t.Fatalf("cache-only options error = %v, want artifact cache requirement", err)
+	}
+	args = append(args[:len(args)-1], "--artifact-dir", "artifacts", "--cached-references-only")
+	opts, err := parseBatchMaterializeOptions(args)
+	if err != nil {
+		t.Fatalf("parse cache-only options: %v", err)
+	}
+	if !opts.cachedReferencesOnly || opts.artifactDir != "artifacts" {
+		t.Fatalf("cache-only options = %+v, want enabled artifact cache", opts)
 	}
 }
 

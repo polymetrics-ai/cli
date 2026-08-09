@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-052-unattempted-retry-chunk-03-manifest.json",
+  "candidates": 32,
+  "included": [
+    {
+      "connector": "recharge",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.rechargepayments.com/2021-11/",
+        "version": "Recharge API v.2021-11 current rendered reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ff33a6ce49840aca4af99fa2fe61a108f0da6192864b12c6e75a0a9452b0ca6c"
+      },
+      "artifact_operations": 127,
+      "declared_operations": 127,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 59,
+        "excluded": 65
+      },
+      "cli_commands": 127,
+      "implemented_commands": 3,
+      "named_dependency_commands": 124,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 124
+    },
+    {
+      "connector": "recruitee",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://apidocs.recruitee.com/",
+        "version": "current generated Recruitee API HTML reference (Last-Modified 2026-07-28)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "537e0b650e4e1f5643f060f61e6909bd4372f22a9fac6f0c10933ecd7bb68479"
+      },
+      "artifact_operations": 946,
+      "declared_operations": 950,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 2,
+        "excluded": 943
+      },
+      "cli_commands": 950,
+      "implemented_commands": 5,
+      "named_dependency_commands": 945,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 945
+    },
+    {
+      "connector": "retently",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://www.retently.com/docs/api/",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4"
+      },
+      "artifact_operations": 41,
+      "declared_operations": 44,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 23,
+        "excluded": 17
+      },
+      "cli_commands": 44,
+      "implemented_commands": 4,
+      "named_dependency_commands": 40,
+      "flagged_discrepancies": 3,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 40
+    },
+    {
+      "connector": "service-now",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+        "version": "ServiceNow Zurich API Reference; current Table API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f79735804a5cd8a308b201e8226e5e1e247352bf7565f0cf9ac1e145573e3bc8"
+      },
+      "artifact_operations": 6,
+      "declared_operations": 28,
+      "operation_split": {
+        "executable": 9,
+        "provider_blocked": 3,
+        "excluded": 16
+      },
+      "cli_commands": 28,
+      "implemented_commands": 9,
+      "named_dependency_commands": 19,
+      "flagged_discrepancies": 22,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 19
+    },
+    {
+      "connector": "strava",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.strava.com/docs/reference/",
+        "version": "v3 REST API",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d57d798df85a914afa038092656d4f7c13bb64d4e1a8a0a882e6b2cf32d33a44"
+      },
+      "artifact_operations": 34,
+      "declared_operations": 35,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 19,
+        "excluded": 12
+      },
+      "cli_commands": 35,
+      "implemented_commands": 4,
+      "named_dependency_commands": 31,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 31
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "qualaroo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "rd-station-marketing",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://developers.rdstation.com/docs/reference/introducao-rdsm\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://developers.rdstation.com/reference/introducao-rdsm\" failed: artifact operation inventory is unknown: official reference link \"https://developers.rdstation.com/docs/reference/introducao-rdsm\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "reddit",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "referralhero",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://support.referralhero.com/integrate/rest-api/endpoints-reference\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "rentcast",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.rentcast.io/reference/introduction\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "salesforce",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "salesloft",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.salesloft.com/docs/api/salesloft-platform/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "savvycal",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.savvycal.com/authentication\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "scryfall",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://scryfall.com/settings/preferences\" could not be fetched: fetch artifact: Get \"https://scryfall.com/signin?return_path=%2Fsettings%2Fpreferences\u0026status=303\": artifact reference query must use only non-sensitive parameters), and official reference fallback \"https://scryfall.com/docs/api/cards\" failed: artifact operation inventory is unknown: official reference link \"https://scryfall.com/settings/preferences\" could not be fetched: fetch artifact: Get \"https://scryfall.com/signin?return_path=%2Fsettings%2Fpreferences\u0026status=303\": artifact reference query must use only non-sensitive parameters"
+    },
+    {
+      "connector": "segment",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 196 operation(s), below the ledger's 197"
+    },
+    {
+      "connector": "sendowl",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 46 operation(s), below the ledger's 54"
+    },
+    {
+      "connector": "sentry",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.sentry.io/api/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "serpstat",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://serpstat.com/api/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "shipstation",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "shortio",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 3 operation(s), below the ledger's 53; official reference fallback \"https://developers.short.io/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "sigma-computing",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://help.sigmacomputing.com/reference/create-api-credential.md\" could not be fetched: fetch artifact: Get \"https://help.sigmacomputing.com/reference/create-api-credential.md\": http2: timeout awaiting response headers), and official reference fallback \"https://help.sigmacomputing.com/reference/get-started-sigma-api\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "signnow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "simfin",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://simfin.readme.io/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "smartreach",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://help.smartreach.io/reference/getprospects\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "smartwaiver",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://api.smartwaiver.com/api/docs.postman\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: artifact operation inventory is unknown: Postman request collection.item[0].item[0]: request URL must be a string or object"
+    },
+    {
+      "connector": "snapchat-marketing",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://developers.snap.com/lens-studio/references/guides/overview.md\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://developers.snap.com/marketing-api/Ads-API/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sonar-cloud",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1 operation(s), below the ledger's 118; official reference fallback \"https://sonarcloud.io/web_api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "sparkpost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://github.com/SparkPost/developers.sparkpost.com/commits/main/content/api/ab-testing.apib\" could not be fetched: fetch artifact: provider returned HTTP 429), and official reference fallback \"https://developers.sparkpost.com/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "split-io",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://docs.split.io/reference/introduction\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "spotify-ads",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://developer.spotify.com/documentation/ads-api/reference/v1.2/get_cost_estimate\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://developer.spotify.com/documentation/ads-api/reference/v3.0/getAdAccount\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "stigg",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "stockdata",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

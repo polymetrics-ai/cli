@@ -1,0 +1,860 @@
+{
+  "tagline": "Run OpenAQ's declared streams and reverse-ETL actions.",
+  "usage": "pm openaq \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v3 countries countries-id",
+        "api get v3 instruments instruments-id",
+        "api get v3 licenses",
+        "api get v3 licenses licenses-id",
+        "api get v3 locations id sensors",
+        "api get v3 locations locations-id",
+        "api get v3 locations locations-id flags",
+        "api get v3 locations locations-id latest",
+        "api get v3 locations locations-id sensors",
+        "api get v3 manufacturers manufacturers-id",
+        "api get v3 manufacturers manufacturers-id instruments",
+        "api get v3 owners",
+        "api get v3 owners owners-id",
+        "api get v3 parameters parameters-id",
+        "api get v3 parameters parameters-id latest",
+        "api get v3 providers",
+        "api get v3 providers providers-id",
+        "api get v3 sensors id measurements",
+        "api get v3 sensors sensor-id flags",
+        "api get v3 sensors sensors-id",
+        "api get v3 sensors sensors-id days",
+        "api get v3 sensors sensors-id days dayofweek",
+        "api get v3 sensors sensors-id days monthly",
+        "api get v3 sensors sensors-id days monthofyear",
+        "api get v3 sensors sensors-id days yearly",
+        "api get v3 sensors sensors-id hours",
+        "api get v3 sensors sensors-id hours daily",
+        "api get v3 sensors sensors-id hours dayofweek",
+        "api get v3 sensors sensors-id hours hourofday",
+        "api get v3 sensors sensors-id hours monthly",
+        "api get v3 sensors sensors-id hours monthofyear",
+        "api get v3 sensors sensors-id hours yearly",
+        "api get v3 sensors sensors-id measurements",
+        "api get v3 sensors sensors-id measurements daily",
+        "api get v3 sensors sensors-id measurements hourly",
+        "api get v3 sensors sensors-id years",
+        "countries list",
+        "instruments list",
+        "locations list",
+        "manufacturers list",
+        "parameters list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get v3 countries countries-id",
+      "summary": "Documented GET /v3/countries/{countries_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 countries countries-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/countries/{countries_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-countries-countries-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 instruments instruments-id",
+      "summary": "Documented GET /v3/instruments/{instruments_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 instruments instruments-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/instruments/{instruments_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-instruments-instruments-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 licenses",
+      "summary": "Documented GET /v3/licenses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/licenses"
+        }
+      ],
+      "operation": "openaq.get.v3-licenses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 licenses licenses-id",
+      "summary": "Documented GET /v3/licenses/{licenses_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 licenses licenses-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/licenses/{licenses_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-licenses-licenses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 locations id sensors",
+      "summary": "Documented GET /v3/locations/{id}/sensors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 locations id sensors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations/{id}/sensors"
+        }
+      ],
+      "operation": "openaq.get.v3-locations-id-sensors",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 locations locations-id",
+      "summary": "Documented GET /v3/locations/{locations_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 locations locations-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations/{locations_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-locations-locations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 locations locations-id flags",
+      "summary": "Documented GET /v3/locations/{locations_id}/flags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 locations locations-id flags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations/{locations_id}/flags"
+        }
+      ],
+      "operation": "openaq.get.v3-locations-locations-id-flags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 locations locations-id latest",
+      "summary": "Documented GET /v3/locations/{locations_id}/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 locations locations-id latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations/{locations_id}/latest"
+        }
+      ],
+      "operation": "openaq.get.v3-locations-locations-id-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 locations locations-id sensors",
+      "summary": "Documented GET /v3/locations/{locations_id}/sensors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 locations locations-id sensors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations/{locations_id}/sensors"
+        }
+      ],
+      "operation": "openaq.get.v3-locations-locations-id-sensors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 manufacturers manufacturers-id",
+      "summary": "Documented GET /v3/manufacturers/{manufacturers_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 manufacturers manufacturers-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/manufacturers/{manufacturers_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-manufacturers-manufacturers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 manufacturers manufacturers-id instruments",
+      "summary": "Documented GET /v3/manufacturers/{manufacturers_id}/instruments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 manufacturers manufacturers-id instruments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/manufacturers/{manufacturers_id}/instruments"
+        }
+      ],
+      "operation": "openaq.get.v3-manufacturers-manufacturers-id-instruments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 owners",
+      "summary": "Documented GET /v3/owners (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 owners --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/owners"
+        }
+      ],
+      "operation": "openaq.get.v3-owners",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 owners owners-id",
+      "summary": "Documented GET /v3/owners/{owners_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 owners owners-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/owners/{owners_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-owners-owners-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 parameters parameters-id",
+      "summary": "Documented GET /v3/parameters/{parameters_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 parameters parameters-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/parameters/{parameters_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-parameters-parameters-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 parameters parameters-id latest",
+      "summary": "Documented GET /v3/parameters/{parameters_id}/latest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 parameters parameters-id latest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/parameters/{parameters_id}/latest"
+        }
+      ],
+      "operation": "openaq.get.v3-parameters-parameters-id-latest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 providers",
+      "summary": "Documented GET /v3/providers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 providers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/providers"
+        }
+      ],
+      "operation": "openaq.get.v3-providers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 providers providers-id",
+      "summary": "Documented GET /v3/providers/{providers_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 providers providers-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/providers/{providers_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-providers-providers-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors id measurements",
+      "summary": "Documented GET /v3/sensors/{id}/measurements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors id measurements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{id}/measurements"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-id-measurements",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensor-id flags",
+      "summary": "Documented GET /v3/sensors/{sensor_id}/flags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensor-id flags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensor_id}/flags"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensor-id-flags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id",
+      "summary": "Documented GET /v3/sensors/{sensors_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id days",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/days (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id days --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/days"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-days",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id days dayofweek",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/days/dayofweek (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id days dayofweek --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/days/dayofweek"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-days-dayofweek",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id days monthly",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/days/monthly (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id days monthly --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/days/monthly"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-days-monthly",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id days monthofyear",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/days/monthofyear (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id days monthofyear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/days/monthofyear"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-days-monthofyear",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id days yearly",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/days/yearly (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id days yearly --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/days/yearly"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-days-yearly",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours daily",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/daily (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours daily --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/daily"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-daily",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours dayofweek",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/dayofweek (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours dayofweek --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/dayofweek"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-dayofweek",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours hourofday",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/hourofday (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours hourofday --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/hourofday"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-hourofday",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours monthly",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/monthly (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours monthly --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/monthly"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-monthly",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours monthofyear",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/monthofyear (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours monthofyear --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/monthofyear"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-monthofyear",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id hours yearly",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/hours/yearly (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id hours yearly --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/hours/yearly"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-hours-yearly",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id measurements",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/measurements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id measurements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/measurements"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-measurements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id measurements daily",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/measurements/daily (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id measurements daily --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/measurements/daily"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-measurements-daily",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id measurements hourly",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/measurements/hourly (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id measurements hourly --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/measurements/hourly"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-measurements-hourly",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sensors sensors-id years",
+      "summary": "Documented GET /v3/sensors/{sensors_id}/years (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq api get v3 sensors sensors-id years --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sensors/{sensors_id}/years"
+        }
+      ],
+      "operation": "openaq.get.v3-sensors-sensors-id-years",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "countries list",
+      "summary": "Run the countries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "countries",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq countries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/countries"
+        }
+      ]
+    },
+    {
+      "path": "instruments list",
+      "summary": "Run the instruments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instruments",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq instruments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/instruments"
+        }
+      ]
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/locations"
+        }
+      ]
+    },
+    {
+      "path": "manufacturers list",
+      "summary": "Run the manufacturers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "manufacturers",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq manufacturers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/manufacturers"
+        }
+      ]
+    },
+    {
+      "path": "parameters list",
+      "summary": "Run the parameters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "parameters",
+      "source_url": "https://docs.openaq.org/sitemap-0.xml",
+      "examples": [
+        "pm openaq parameters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/parameters"
+        }
+      ]
+    }
+  ]
+}

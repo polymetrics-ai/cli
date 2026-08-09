@@ -1,0 +1,236 @@
+{
+  "operations": [
+    {
+      "id": "tyntec-sms.get.byon-contacts-v1",
+      "kind": "rest_read",
+      "summary": "GET /byon/contacts/v1",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/contacts/v1",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.byon-contacts-v1",
+      "kind": "rest_write",
+      "summary": "POST /byon/contacts/v1",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/byon/contacts/v1",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.byon-contacts-v1-contactid",
+      "kind": "rest_read",
+      "summary": "GET /byon/contacts/v1/{contactId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/contacts/v1/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.byon-contacts-v1-contactid",
+      "kind": "rest_write",
+      "summary": "POST /byon/contacts/v1/{contactId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/byon/contacts/v1/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.delete.byon-contacts-v1-contactid",
+      "kind": "rest_write",
+      "summary": "DELETE /byon/contacts/v1/{contactId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/byon/contacts/v1/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.byon-phonebook-v1-numbers",
+      "kind": "rest_read",
+      "summary": "GET /byon/phonebook/v1/numbers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/phonebook/v1/numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.byon-phonebook-v1-numbers-phonenumber",
+      "kind": "rest_read",
+      "summary": "GET /byon/phonebook/v1/numbers/{phoneNumber}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/phonebook/v1/numbers/{phoneNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.byon-provisioning-v1",
+      "kind": "rest_read",
+      "summary": "GET /byon/provisioning/v1",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/provisioning/v1",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.byon-provisioning-v1",
+      "kind": "rest_write",
+      "summary": "POST /byon/provisioning/v1",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/byon/provisioning/v1",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.byon-provisioning-v1-requestid",
+      "kind": "rest_read",
+      "summary": "GET /byon/provisioning/v1/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/byon/provisioning/v1/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.incoming",
+      "kind": "rest_write",
+      "summary": "POST /incoming",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/incoming",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.messaging-v1-conversion",
+      "kind": "rest_write",
+      "summary": "POST /messaging/v1/conversion",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/messaging/v1/conversion",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.messaging-v1-messages-requestid",
+      "kind": "rest_read",
+      "summary": "GET /messaging/v1/messages/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/messaging/v1/messages/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.get.messaging-v1-sms",
+      "kind": "rest_read",
+      "summary": "GET /messaging/v1/sms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/messaging/v1/sms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tyntec-sms.post.messaging-v1-sms",
+      "kind": "rest_write",
+      "summary": "POST /messaging/v1/sms",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.tyntec.com/reference/sms/current.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/messaging/v1/sms",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ import (
 	nethtml "golang.org/x/net/html"
 )
 
-var batchHTMLExplicitOperation = regexp.MustCompile(`(?i)\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE)\s+(/[A-Za-z0-9._~%!$&'()*+,;=:@/{}\[\]-]+)`)
+var batchHTMLExplicitOperation = regexp.MustCompile(`(?i)\b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|TRACE)\b\x60?\s+\x60?(/[A-Za-z0-9._~%!$&'()*+,;=:@/{}\[\]-]+)`)
 var batchMarkdownReferenceLink = regexp.MustCompile(`\[[^\]]+\]\(([^)\s]+)\)`)
 var batchHTMLAnglePathParameter = regexp.MustCompile(`<([A-Za-z_][A-Za-z0-9_-]*)>`)
 
@@ -42,7 +42,7 @@ func parseBatchHTMLReferenceRoot(raw []byte, source batchArtifactSource) (batchA
 		return batchArtifactInventory{}, batchArtifactInventoryUnknown("official HTML reference URL is unsafe: %v", err)
 	}
 	inventory := batchArtifactInventory{Sources: []batchArtifactSource{source}}
-	for _, match := range batchHTMLExplicitOperation.FindAllSubmatch(raw, -1) {
+	for _, match := range batchHTMLExplicitOperationMatches(raw) {
 		method := strings.ToUpper(string(match[1]))
 		path := normalizeBatchHTMLOperationPath(string(match[2]))
 		if path == "" {
@@ -116,7 +116,7 @@ func parseBatchHTMLReferenceWithBudget(raw []byte, source batchArtifactSource, f
 			continue
 		}
 
-		for _, match := range batchHTMLExplicitOperation.FindAllSubmatch(current.Raw, -1) {
+		for _, match := range batchHTMLExplicitOperationMatches(current.Raw) {
 			method := strings.ToUpper(string(match[1]))
 			path := normalizeBatchHTMLOperationPath(string(match[2]))
 			if path == "" {
@@ -256,7 +256,7 @@ func batchReferenceLooksLikeMachineArtifact(raw []byte, sourceURL string) bool {
 
 func batchReferenceLooksLikeText(raw []byte, sourceURL string) bool {
 	lower := strings.ToLower(string(raw))
-	if batchHTMLExplicitOperation.Match(raw) || batchMarkdownReferenceLink.Match(raw) {
+	if len(batchHTMLExplicitOperationMatches(raw)) > 0 || batchMarkdownReferenceLink.Match(raw) {
 		return true
 	}
 	for _, marker := range []string{"<html", "<!doctype html", "<a ", "<a>", "<body", "<article", "<main"} {
@@ -265,6 +265,31 @@ func batchReferenceLooksLikeText(raw []byte, sourceURL string) bool {
 		}
 	}
 	return batchReferenceURLHasSuffix(sourceURL, ".html", ".htm", ".md", ".txt")
+}
+
+// batchHTMLExplicitOperationMatches recognizes request lines in raw HTML and
+// in the equivalent rendered text. GitBook's Markdown export wraps the
+// method token in a <mark> element, so the method and its code-formatted path
+// are separate raw tokens even though they form one visible request line.
+func batchHTMLExplicitOperationMatches(raw []byte) [][][]byte {
+	matches := batchHTMLExplicitOperation.FindAllSubmatch(raw, -1)
+	if !bytes.Contains(raw, []byte("<")) {
+		return matches
+	}
+	var text strings.Builder
+	tokenizer := nethtml.NewTokenizer(bytes.NewReader(raw))
+	for {
+		tokenType := tokenizer.Next()
+		if tokenType == nethtml.ErrorToken {
+			break
+		}
+		if tokenType != nethtml.TextToken {
+			continue
+		}
+		text.Write(tokenizer.Raw())
+		text.WriteByte(' ')
+	}
+	return append(matches, batchHTMLExplicitOperation.FindAllSubmatch([]byte(text.String()), -1)...)
 }
 
 func batchReferenceURLHasSuffix(rawURL string, suffixes ...string) bool {
@@ -374,7 +399,7 @@ func isLikelyBatchReferenceLink(raw string) bool {
 		return false
 	}
 	if parsed, err := url.Parse(lower); err == nil {
-		for _, suffix := range []string{".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot"} {
+		for _, suffix := range []string{".css", ".js", ".mjs", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".eot", ".rss", "/rss.xml", ".atom", "/atom.xml"} {
 			if strings.HasSuffix(parsed.Path, suffix) {
 				return false
 			}

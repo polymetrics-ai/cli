@@ -1,0 +1,409 @@
+{
+  "operations": [
+    {
+      "id": "ticketmaster.get.discovery-v2-attractions",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/attractions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/attractions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-attractions-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/attractions.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/attractions.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-attractions-k8vz9175bhv-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/attractions/K8vZ9175BhV.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/attractions/K8vZ9175BhV.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-attractions-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/attractions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/attractions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-kzfzniwnsyzfz7v7ne",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/KZFzniwnSyZfZ7v7nE",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/KZFzniwnSyZfZ7v7nE",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-genres-knvzfz7va71-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/genres/KnvZfZ7vA71.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/genres/KnvZfZ7vA71.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-genres-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/genres/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/genres/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-segments-kzazbeonsmnzfz7vfta-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-segments-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/segments/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/segments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-subgenres-kzazbeonsmnzfz7vfta-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-subgenres-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/subgenres/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/subgenres/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-classifications-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/classifications/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/classifications/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events-0b004f0401bd55e5-images-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events/0B004F0401BD55E5/images.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events/0B004F0401BD55E5/images.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events-g5dizfkn0b-bh-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events/G5diZfkn0B-bh.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events/G5diZfkn0B-bh.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-events-id-images",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/events/{id}/images",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/events/{id}/images",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-suggest",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/suggest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/suggest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-venues",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/venues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/venues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-venues-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/venues.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/venues.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-venues-kovzpzafniea-json",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/venues/KovZpZAFnIEA.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/venues/KovZpZAFnIEA.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.discovery-v2-venues-id",
+      "kind": "rest_read",
+      "summary": "GET /discovery/v2/venues/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/discovery/v2/venues/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.events-id-json",
+      "kind": "rest_read",
+      "summary": "GET /events/{id}.json",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/events/{id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ticketmaster.get.suggest",
+      "kind": "rest_read",
+      "summary": "GET /suggest",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suggest",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

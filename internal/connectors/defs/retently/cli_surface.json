@@ -1,0 +1,935 @@
+{
+  "tagline": "Run Retently's declared streams and reverse-ETL actions.",
+  "usage": "pm retently \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 companies",
+        "api get api v2 companies companyid",
+        "api get api v2 customers",
+        "api get api v2 customers customerid",
+        "api get api v2 feedback",
+        "api get api v2 feedback feedbackid",
+        "api get api v2 feedback operation",
+        "api get api v2 metric score",
+        "api get api v2 nps campaigns",
+        "api get api v2 nps customers response",
+        "api get api v2 nps templates",
+        "api get api v2 outbox",
+        "api get api v2 outbox operation",
+        "api get api v2 ping",
+        "api get api v2 reports",
+        "api get api v2 suppressions domains",
+        "api get api v2 suppressions emails",
+        "api get api v2 templates",
+        "api get api v2 templates templateid",
+        "api get api v2 templates templateid operation",
+        "api get api v2 trends",
+        "api get api v2 trends groupid",
+        "campaigns list",
+        "customers list",
+        "responses list",
+        "surveys list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api v2 customers",
+        "api delete api v2 feedback",
+        "api delete api v2 outbox",
+        "api delete api v2 suppressions domains id",
+        "api delete api v2 suppressions emails by-email",
+        "api delete api v2 suppressions emails id",
+        "api post api v2 customers",
+        "api post api v2 customers resubscribe",
+        "api post api v2 customers unsubscribe",
+        "api post api v2 import",
+        "api post api v2 nps customers response tags",
+        "api post api v2 nps customers survey",
+        "api post api v2 response tags",
+        "api post api v2 response topics",
+        "api post api v2 suppressions domains",
+        "api post api v2 suppressions emails",
+        "api post api v2 survey",
+        "api post api v2 sync-attributes"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api v2 customers",
+      "summary": "Documented DELETE /api/v2/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/customers"
+        }
+      ],
+      "operation": "retently.delete.api-v2-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 feedback",
+      "summary": "Documented DELETE /api/v2/feedback (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/feedback"
+        }
+      ],
+      "operation": "retently.delete.api-v2-feedback",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 outbox",
+      "summary": "Documented DELETE /api/v2/outbox (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 outbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/outbox"
+        }
+      ],
+      "operation": "retently.delete.api-v2-outbox",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 suppressions domains id",
+      "summary": "Documented DELETE /api/v2/suppressions/domains/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 suppressions domains id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/suppressions/domains/{id}"
+        }
+      ],
+      "operation": "retently.delete.api-v2-suppressions-domains-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 suppressions emails by-email",
+      "summary": "Documented DELETE /api/v2/suppressions/emails/by-email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 suppressions emails by-email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/suppressions/emails/by-email"
+        }
+      ],
+      "operation": "retently.delete.api-v2-suppressions-emails-by-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 suppressions emails id",
+      "summary": "Documented DELETE /api/v2/suppressions/emails/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api delete api v2 suppressions emails id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/suppressions/emails/{id}"
+        }
+      ],
+      "operation": "retently.delete.api-v2-suppressions-emails-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v2 companies",
+      "summary": "Documented GET /api/v2/companies{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/companies{"
+        }
+      ],
+      "operation": "retently.get.api-v2-companies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 companies companyid",
+      "summary": "Documented GET /api/v2/companies/{companyId (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 companies companyid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/companies/{companyId"
+        }
+      ],
+      "operation": "retently.get.api-v2-companies-companyid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 customers",
+      "summary": "Documented GET /api/v2/customers{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/customers{"
+        }
+      ],
+      "operation": "retently.get.api-v2-customers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 customers customerid",
+      "summary": "Documented GET /api/v2/customers/{customerId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 customers customerid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/customers/{customerId}"
+        }
+      ],
+      "operation": "retently.get.api-v2-customers-customerid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 feedback",
+      "summary": "Documented GET /api/v2/feedback (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 feedback --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/feedback"
+        }
+      ],
+      "operation": "retently.get.api-v2-feedback",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 feedback feedbackid",
+      "summary": "Documented GET /api/v2/feedback/{feedbackId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 feedback feedbackid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/feedback/{feedbackId}"
+        }
+      ],
+      "operation": "retently.get.api-v2-feedback-feedbackid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 feedback operation",
+      "summary": "Documented GET /api/v2/feedback{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 feedback operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/feedback{"
+        }
+      ],
+      "operation": "retently.get.api-v2-feedback-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 metric score",
+      "summary": "Documented GET /api/v2/{metric}/score (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 metric score --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/{metric}/score"
+        }
+      ],
+      "operation": "retently.get.api-v2-metric-score",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 nps campaigns",
+      "summary": "Documented GET /api/v2/nps/campaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 nps campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/nps/campaigns"
+        }
+      ],
+      "operation": "retently.get.api-v2-nps-campaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 nps customers response",
+      "summary": "Documented GET /api/v2/nps/customers/response{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 nps customers response --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/nps/customers/response{"
+        }
+      ],
+      "operation": "retently.get.api-v2-nps-customers-response",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 nps templates",
+      "summary": "Documented GET /api/v2/nps/templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 nps templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/nps/templates"
+        }
+      ],
+      "operation": "retently.get.api-v2-nps-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 outbox",
+      "summary": "Documented GET /api/v2/outbox (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 outbox --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/outbox"
+        }
+      ],
+      "operation": "retently.get.api-v2-outbox",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 outbox operation",
+      "summary": "Documented GET /api/v2/outbox{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 outbox operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/outbox{"
+        }
+      ],
+      "operation": "retently.get.api-v2-outbox-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 ping",
+      "summary": "Documented GET /api/v2/ping (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 ping --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ping"
+        }
+      ],
+      "operation": "retently.get.api-v2-ping",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 reports",
+      "summary": "Documented GET /api/v2/reports/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/reports/"
+        }
+      ],
+      "operation": "retently.get.api-v2-reports",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 suppressions domains",
+      "summary": "Documented GET /api/v2/suppressions/domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 suppressions domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/suppressions/domains"
+        }
+      ],
+      "operation": "retently.get.api-v2-suppressions-domains",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 suppressions emails",
+      "summary": "Documented GET /api/v2/suppressions/emails (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 suppressions emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/suppressions/emails"
+        }
+      ],
+      "operation": "retently.get.api-v2-suppressions-emails",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 templates",
+      "summary": "Documented GET /api/v2/templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/templates"
+        }
+      ],
+      "operation": "retently.get.api-v2-templates",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 templates templateid",
+      "summary": "Documented GET /api/v2/templates/{templateId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 templates templateid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/templates/{templateId}"
+        }
+      ],
+      "operation": "retently.get.api-v2-templates-templateid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 templates templateid operation",
+      "summary": "Documented GET /api/v2/templates/{templateId}. (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 templates templateid operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/templates/{templateId}."
+        }
+      ],
+      "operation": "retently.get.api-v2-templates-templateid-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 trends",
+      "summary": "Documented GET /api/v2/trends (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 trends --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/trends"
+        }
+      ],
+      "operation": "retently.get.api-v2-trends",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 trends groupid",
+      "summary": "Documented GET /api/v2/trends/:groupId (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api get api v2 trends groupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/trends/:groupId"
+        }
+      ],
+      "operation": "retently.get.api-v2-trends-groupid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api v2 customers",
+      "summary": "Documented POST /api/v2/customers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 customers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/customers"
+        }
+      ],
+      "operation": "retently.post.api-v2-customers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 customers resubscribe",
+      "summary": "Documented POST /api/v2/customers/resubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 customers resubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/customers/resubscribe"
+        }
+      ],
+      "operation": "retently.post.api-v2-customers-resubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 customers unsubscribe",
+      "summary": "Documented POST /api/v2/customers/unsubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 customers unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/customers/unsubscribe"
+        }
+      ],
+      "operation": "retently.post.api-v2-customers-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 import",
+      "summary": "Documented POST /api/v2/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/import"
+        }
+      ],
+      "operation": "retently.post.api-v2-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 nps customers response tags",
+      "summary": "Documented POST /api/v2/nps/customers/response/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 nps customers response tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/nps/customers/response/tags"
+        }
+      ],
+      "operation": "retently.post.api-v2-nps-customers-response-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 nps customers survey",
+      "summary": "Documented POST /api/v2/nps/customers/survey (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 nps customers survey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/nps/customers/survey"
+        }
+      ],
+      "operation": "retently.post.api-v2-nps-customers-survey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 response tags",
+      "summary": "Documented POST /api/v2/response/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 response tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/response/tags"
+        }
+      ],
+      "operation": "retently.post.api-v2-response-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 response topics",
+      "summary": "Documented POST /api/v2/response/topics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 response topics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/response/topics"
+        }
+      ],
+      "operation": "retently.post.api-v2-response-topics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 suppressions domains",
+      "summary": "Documented POST /api/v2/suppressions/domains (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 suppressions domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/suppressions/domains"
+        }
+      ],
+      "operation": "retently.post.api-v2-suppressions-domains",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 suppressions emails",
+      "summary": "Documented POST /api/v2/suppressions/emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 suppressions emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/suppressions/emails"
+        }
+      ],
+      "operation": "retently.post.api-v2-suppressions-emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 survey",
+      "summary": "Documented POST /api/v2/survey (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 survey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/survey"
+        }
+      ],
+      "operation": "retently.post.api-v2-survey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 sync-attributes",
+      "summary": "Documented POST /api/v2/sync-attributes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently api post api v2 sync-attributes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/sync-attributes"
+        }
+      ],
+      "operation": "retently.post.api-v2-sync-attributes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/customers"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/responses"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://www.retently.com/docs/api/",
+      "examples": [
+        "pm retently surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/surveys"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

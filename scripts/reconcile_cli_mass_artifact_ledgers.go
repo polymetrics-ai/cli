@@ -19,7 +19,7 @@ import (
 const (
 	defaultPhaseRoot = ".planning/phases/cli-mass-artifact-materialize-r1"
 	defaultDefsRoot  = "internal/connectors/defs"
-	authority        = "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md"
+	authority        = "CAPTAIN-ORDER-fast-426-terra-20260809.md"
 )
 
 var recoveredSeven = map[string]bool{
@@ -327,8 +327,39 @@ func buildLedgers(opts buildOptions) (buildResult, error) {
 			continue
 		}
 
-		counts["retry_pending"]++
 		attempts := retryAttempts(connectorEvents)
+		if blocked, ok := finalBlockedAttempt(connectorEvents); ok {
+			counts["genuinely_blocked"]++
+			entry := map[string]any{
+				"connector":          target.Connector,
+				"state":              "genuinely_blocked",
+				"reachability":       firstNonBlank(blocked.Reachability, "not_checked"),
+				"foundation_pending": false,
+				"evidence":           blocked.Evidence,
+				"stage":              blocked.Stage,
+				"reason":             blocked.Reason,
+				"source":             source,
+				"rate_limits":        rateLimit,
+				"provenance_reports": reports,
+			}
+			entries = append(entries, entry)
+			resolved = append(resolved, map[string]any{
+				"connector":          target.Connector,
+				"primary_source":     source,
+				"rate_limits":        rateLimit,
+				"provenance_reports": reports,
+				"resolved_by": map[string]any{
+					"state":    "genuinely_blocked",
+					"evidence": blocked.Evidence,
+					"route":    blocked.Route,
+					"stage":    blocked.Stage,
+					"reason":   blocked.Reason,
+				},
+			})
+			continue
+		}
+
+		counts["retry_pending"]++
 		primaryAttempt := map[string]any{
 			"evidence": "TARGET-LEDGER.json",
 			"stage":    "not_attempted_in_retained_batch_report",
@@ -559,6 +590,30 @@ func retryAttempts(events []BatchEvent) []map[string]any {
 	return attempts
 }
 
+// finalBlockedAttempt selects only a recorded terminal exhaustion outcome. A
+// regular retry failure, a partial report, or a terminal record superseded by
+// a later retry can never drain the queue. This makes the ledger's blocked
+// state a durable conclusion rather than an accidental consequence of a
+// failed primary artifact fetch.
+func finalBlockedAttempt(events []BatchEvent) (BatchEvent, bool) {
+	for index := len(events) - 1; index >= 0; index-- {
+		event := events[index]
+		if event.State != "genuinely_blocked" {
+			continue
+		}
+		if event.Stage != "official_source_exhausted" || strings.TrimSpace(event.Route) == "" || strings.TrimSpace(event.Reason) == "" || strings.TrimSpace(event.Evidence) == "" {
+			return BatchEvent{}, false
+		}
+		for _, later := range events[index+1:] {
+			if later.State == "retry_pending" {
+				return BatchEvent{}, false
+			}
+		}
+		return event, true
+	}
+	return BatchEvent{}, false
+}
+
 func retryRoutes(attempts []map[string]any) []map[string]any {
 	status := "pending"
 	var evidence any
@@ -687,7 +742,7 @@ func assertCounts(counts map[string]int) error {
 		return fmt.Errorf("target conservation failed: %d materialized + %d retry_pending + %d blocked != %d targets", counts["materialized_total"], counts["retry_pending"], counts["genuinely_blocked"], counts["target_total"])
 	}
 	if counts["remaining"] != counts["retry_pending"] {
-		return errors.New("remaining must equal retry_pending while genuinely_blocked is zero")
+		return errors.New("remaining must equal retry_pending")
 	}
 	if counts["rate_limits_file_total"] != counts["target_total"] {
 		return fmt.Errorf("rate-limit file total failed: %d files != %d targets", counts["rate_limits_file_total"], counts["target_total"])

@@ -1,76 +1,705 @@
 {
-  "api": "Mailosaur REST API (https://mailosaur.com/api)",
+  "api": "Mailosaur REST API (https://mailosaur.com/api); provider artifact version: current provider HTML reference (no API version displayed)",
   "docs": "https://mailosaur.com/docs/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 legacy-parity read streams only; the full Mailosaur surface (message content/attachments, SMS content, server creation/deletion, rules) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (24 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "mailosaur-artifact-2026-08-09",
+      "url": "https://mailosaur.com/docs/api",
+      "kind": "html_reference",
+      "version": "current provider HTML reference (no API version displayed)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/servers",
-      "covered_by": {
-        "stream": "servers"
+      "path": "/analysis/spam/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /analysis/spam/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/analysis/deliverability/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/analysis/deliverability/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/devices",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/devices"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/devices",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/devices"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/devices/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#DELETE /api/devices/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/devices/:id/otp",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/devices/:id/otp"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/devices/otp",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/devices/otp"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/files/attachments/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/files/attachments/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/files/email/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/files/email/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/messages"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/messages"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/messages",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#DELETE /api/messages"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/messages/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/messages/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#DELETE /api/messages/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages/:id/forward",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/messages/:id/forward"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages/:id/reply",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/messages/:id/reply"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages/search",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/messages/search"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/servers",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/servers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/servers",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#POST /api/servers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/servers/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/servers/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/servers/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#PUT /api/servers/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/servers/:id",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#DELETE /api/servers/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/servers/:id/password",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/servers/:id/password"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/usage/limits",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/usage/limits"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/usage/transactions",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "https://mailosaur.com/docs/api#GET /api/usage/transactions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /messages]"
+      },
       "covered_by": {
         "stream": "messages"
       }
     },
     {
       "method": "GET",
-      "path": "/usage/transactions",
-      "covered_by": {
-        "stream": "transactions"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/messages/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /messages/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "DELETE",
       "path": "/messages/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "message deletion is a destructive mutation, not a read stream"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[DELETE /messages/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "message deletion is a destructive mutation, not a read stream",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/servers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /servers]"
+      },
+      "covered_by": {
+        "stream": "servers"
       }
     },
     {
       "method": "POST",
       "path": "/servers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[POST /servers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
       "path": "/servers/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "server deletion is a destructive mutation, not a read stream"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/analysis/spam/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[DELETE /servers/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "server deletion is a destructive mutation, not a read stream",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/usage/limits",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "account plan/limit snapshot, not a syncable object stream"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /usage/limits]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "account plan/limit snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usage/transactions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "mailosaur-artifact-2026-08-09",
+        "source_url": "https://mailosaur.com/docs/api",
+        "source_kind": "html_reference",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd",
+        "coordinate": "existing-surface[GET /usage/transactions]"
+      },
+      "covered_by": {
+        "stream": "transactions"
       }
     }
   ]

@@ -1,0 +1,405 @@
+{
+  "operations": [
+    {
+      "id": "tally.get.forms-formid",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}",
+      "description": "single-form detail is already covered by the forms stream's list read; no incremental/detail-only field requires a separate stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-analytics-dimensions",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/analytics/dimensions",
+      "description": "aggregate analytics snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/analytics/dimensions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-analytics-drop-off",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/analytics/drop-off",
+      "description": "aggregate analytics snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/analytics/drop-off",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-analytics-metrics",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/analytics/metrics",
+      "description": "aggregate analytics snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/analytics/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-analytics-submissions",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/analytics/submissions",
+      "description": "aggregate analytics snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/analytics/submissions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-analytics-visits",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/analytics/visits",
+      "description": "aggregate analytics snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/analytics/visits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-blocks",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/blocks",
+      "description": "form-builder block metadata, not a syncable data object",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/blocks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.patch.forms-formid-blocks",
+      "kind": "rest_write",
+      "summary": "PATCH /forms/{formId}/blocks",
+      "description": "form-builder block editing, not a reverse-ETL data mutation",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/forms/{formId}/blocks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-questions",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/questions",
+      "description": "form-definition metadata sub-resource, not a syncable data object distinct from forms",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/questions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.patch.forms-formid-questions-questionid",
+      "kind": "rest_write",
+      "summary": "PATCH /forms/{formId}/questions/{questionId}",
+      "description": "form-builder question editing, not a reverse-ETL data mutation",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/forms/{formId}/questions/{questionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.forms-formid-submissions-submissionid",
+      "kind": "rest_read",
+      "summary": "GET /forms/{formId}/submissions/{submissionId}",
+      "description": "single-submission detail is already covered by the submissions stream's list read",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/forms/{formId}/submissions/{submissionId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.organizations-organizationid-invites",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/invites",
+      "description": "organization/team administration, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/invites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.post.organizations-organizationid-invites",
+      "kind": "rest_write",
+      "summary": "POST /organizations/{organizationId}/invites",
+      "description": "sends an account invite email; account-administration mutation out of scope for this build",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/organizations/{organizationId}/invites",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.delete.organizations-organizationid-invites-inviteid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/invites/{inviteId}",
+      "description": "revokes a pending organization invite; account-administration mutation out of scope for this build",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/invites/{inviteId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.organizations-organizationid-users",
+      "kind": "rest_read",
+      "summary": "GET /organizations/{organizationId}/users",
+      "description": "organization/team administration, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organizations/{organizationId}/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.delete.organizations-organizationid-users-userid",
+      "kind": "rest_write",
+      "summary": "DELETE /organizations/{organizationId}/users/{userId}",
+      "description": "removes a user from the organization; account-administration mutation out of scope for this build",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/organizations/{organizationId}/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.users-me",
+      "kind": "rest_read",
+      "summary": "GET /users/me",
+      "description": "current-user identity/profile snapshot, not a syncable object stream",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.webhooks-webhookid-events",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhookId}/events",
+      "description": "webhook delivery-log inspection, not a syncable data object",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhookId}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.post.webhooks-webhookid-events-eventid",
+      "kind": "rest_write",
+      "summary": "POST /webhooks/{webhookId}/events/{eventId}",
+      "description": "manual delivery retry action, not a reverse-ETL data mutation",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks/{webhookId}/events/{eventId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.workspaces-workspaceid",
+      "kind": "rest_read",
+      "summary": "GET /workspaces/{workspaceId}",
+      "description": "single-workspace detail is already covered by the workspaces stream's list read",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspaceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.patch.workspaces-workspaceid",
+      "kind": "rest_write",
+      "summary": "PATCH /workspaces/{workspaceId}",
+      "description": "workspace membership/settings mutation with no documented example body in this pass; deferred to a capability-expansion pass",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/workspaces/{workspaceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.delete.workspaces-workspaceid",
+      "kind": "rest_write",
+      "summary": "DELETE /workspaces/{workspaceId}",
+      "description": "deletes an entire workspace and its forms; out of scope for this build's write surface",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/workspaces/{workspaceId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.get.workspaces-workspaceid-folders",
+      "kind": "rest_read",
+      "summary": "GET /workspaces/{workspaceId}/folders",
+      "description": "Pro-only folder organization metadata, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspaceId}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.post.workspaces-workspaceid-folders",
+      "kind": "rest_write",
+      "summary": "POST /workspaces/{workspaceId}/folders",
+      "description": "Pro-only folder organization metadata, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspaceId}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.patch.workspaces-workspaceid-folders-id",
+      "kind": "rest_write",
+      "summary": "PATCH /workspaces/{workspaceId}/folders/{id}",
+      "description": "Pro-only folder organization metadata, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/workspaces/{workspaceId}/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tally.delete.workspaces-workspaceid-folders-id",
+      "kind": "rest_write",
+      "summary": "DELETE /workspaces/{workspaceId}/folders/{id}",
+      "description": "Pro-only folder organization metadata, not core forms/submissions data",
+      "source_url": "https://developers.tally.so/api-reference/introduction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/workspaces/{workspaceId}/folders/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

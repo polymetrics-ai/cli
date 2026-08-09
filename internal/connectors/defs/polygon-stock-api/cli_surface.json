@@ -1,0 +1,1055 @@
+{
+  "tagline": "Run Polygon Stock API's declared streams and reverse-ETL actions.",
+  "usage": "pm polygon-stock-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get stocks filings 10-k vx sections",
+        "api get stocks filings 8-k vx disclosures",
+        "api get stocks filings 8-k vx text",
+        "api get stocks filings vx 13-f",
+        "api get stocks filings vx form-3",
+        "api get stocks filings vx form-4",
+        "api get stocks filings vx index",
+        "api get stocks filings vx risk-factors",
+        "api get stocks financials v1 balance-sheets",
+        "api get stocks financials v1 cash-flow-statements",
+        "api get stocks financials v1 income-statements",
+        "api get stocks financials v1 ratios",
+        "api get stocks taxonomies vx disclosures",
+        "api get stocks taxonomies vx risk-factors",
+        "api get stocks v1 dividends",
+        "api get stocks v1 short-interest",
+        "api get stocks v1 short-volume",
+        "api get stocks v1 splits",
+        "api get stocks vx float",
+        "api get v1 indicators ema stockticker",
+        "api get v1 indicators macd stockticker",
+        "api get v1 indicators rsi stockticker",
+        "api get v1 indicators sma stockticker",
+        "api get v1 marketstatus now",
+        "api get v1 marketstatus upcoming",
+        "api get v1 open-close stocksticker date",
+        "api get v1 related-companies ticker",
+        "api get v2 aggs grouped locale us market stocks date",
+        "api get v2 aggs ticker stocksticker prev",
+        "api get v2 aggs ticker stocksticker range multiplier timespan from to",
+        "api get v2 aggs ticker ticker range multiplier timespan from to",
+        "api get v2 last nbbo stocksticker",
+        "api get v2 last trade stocksticker",
+        "api get v2 reference news",
+        "api get v2 snapshot locale us markets stocks direction",
+        "api get v2 snapshot locale us markets stocks tickers",
+        "api get v2 snapshot locale us markets stocks tickers stocksticker",
+        "api get v3 quotes stockticker",
+        "api get v3 reference conditions",
+        "api get v3 reference exchanges",
+        "api get v3 reference tickers ticker",
+        "api get v3 reference tickers types",
+        "api get v3 snapshot",
+        "api get v3 trades stockticker",
+        "api get vx reference financials",
+        "api get vx reference ipos",
+        "api get vx reference tickers id events",
+        "dividends list",
+        "splits list",
+        "tickers list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get stocks filings 10-k vx sections",
+      "summary": "Documented GET /stocks/filings/10-K/vX/sections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings 10-k vx sections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/10-K/vX/sections"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-10-k-vx-sections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings 8-k vx disclosures",
+      "summary": "Documented GET /stocks/filings/8-K/vX/disclosures (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings 8-k vx disclosures --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/8-K/vX/disclosures"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-8-k-vx-disclosures",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings 8-k vx text",
+      "summary": "Documented GET /stocks/filings/8-K/vX/text (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings 8-k vx text --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/8-K/vX/text"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-8-k-vx-text",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings vx 13-f",
+      "summary": "Documented GET /stocks/filings/vX/13-F (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings vx 13-f --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/vX/13-F"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-vx-13-f",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings vx form-3",
+      "summary": "Documented GET /stocks/filings/vX/form-3 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings vx form-3 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/vX/form-3"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-vx-form-3",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings vx form-4",
+      "summary": "Documented GET /stocks/filings/vX/form-4 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings vx form-4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/vX/form-4"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-vx-form-4",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings vx index",
+      "summary": "Documented GET /stocks/filings/vX/index (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings vx index --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/vX/index"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-vx-index",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks filings vx risk-factors",
+      "summary": "Documented GET /stocks/filings/vX/risk-factors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks filings vx risk-factors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/filings/vX/risk-factors"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-filings-vx-risk-factors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks financials v1 balance-sheets",
+      "summary": "Documented GET /stocks/financials/v1/balance-sheets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks financials v1 balance-sheets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/financials/v1/balance-sheets"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-financials-v1-balance-sheets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks financials v1 cash-flow-statements",
+      "summary": "Documented GET /stocks/financials/v1/cash-flow-statements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks financials v1 cash-flow-statements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/financials/v1/cash-flow-statements"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-financials-v1-cash-flow-statements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks financials v1 income-statements",
+      "summary": "Documented GET /stocks/financials/v1/income-statements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks financials v1 income-statements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/financials/v1/income-statements"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-financials-v1-income-statements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks financials v1 ratios",
+      "summary": "Documented GET /stocks/financials/v1/ratios (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks financials v1 ratios --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/financials/v1/ratios"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-financials-v1-ratios",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks taxonomies vx disclosures",
+      "summary": "Documented GET /stocks/taxonomies/vX/disclosures (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks taxonomies vx disclosures --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/taxonomies/vX/disclosures"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-taxonomies-vx-disclosures",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks taxonomies vx risk-factors",
+      "summary": "Documented GET /stocks/taxonomies/vX/risk-factors (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks taxonomies vx risk-factors --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/taxonomies/vX/risk-factors"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-taxonomies-vx-risk-factors",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks v1 dividends",
+      "summary": "Documented GET /stocks/v1/dividends (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks v1 dividends --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/v1/dividends"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-v1-dividends",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks v1 short-interest",
+      "summary": "Documented GET /stocks/v1/short-interest (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks v1 short-interest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/v1/short-interest"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-v1-short-interest",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks v1 short-volume",
+      "summary": "Documented GET /stocks/v1/short-volume (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks v1 short-volume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/v1/short-volume"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-v1-short-volume",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks v1 splits",
+      "summary": "Documented GET /stocks/v1/splits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks v1 splits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/v1/splits"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-v1-splits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stocks vx float",
+      "summary": "Documented GET /stocks/vX/float (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get stocks vx float --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stocks/vX/float"
+        }
+      ],
+      "operation": "polygon-stock-api.get.stocks-vx-float",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 indicators ema stockticker",
+      "summary": "Documented GET /v1/indicators/ema/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 indicators ema stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/indicators/ema/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-indicators-ema-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 indicators macd stockticker",
+      "summary": "Documented GET /v1/indicators/macd/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 indicators macd stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/indicators/macd/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-indicators-macd-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 indicators rsi stockticker",
+      "summary": "Documented GET /v1/indicators/rsi/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 indicators rsi stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/indicators/rsi/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-indicators-rsi-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 indicators sma stockticker",
+      "summary": "Documented GET /v1/indicators/sma/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 indicators sma stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/indicators/sma/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-indicators-sma-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 marketstatus now",
+      "summary": "Documented GET /v1/marketstatus/now (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 marketstatus now --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/marketstatus/now"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-marketstatus-now",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 marketstatus upcoming",
+      "summary": "Documented GET /v1/marketstatus/upcoming (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 marketstatus upcoming --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/marketstatus/upcoming"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-marketstatus-upcoming",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 open-close stocksticker date",
+      "summary": "Documented GET /v1/open-close/{stocksTicker}/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 open-close stocksticker date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/open-close/{stocksTicker}/{date}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-open-close-stocksticker-date",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 related-companies ticker",
+      "summary": "Documented GET /v1/related-companies/{ticker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v1 related-companies ticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/related-companies/{ticker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v1-related-companies-ticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 aggs grouped locale us market stocks date",
+      "summary": "Documented GET /v2/aggs/grouped/locale/us/market/stocks/{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 aggs grouped locale us market stocks date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aggs/grouped/locale/us/market/stocks/{date}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-aggs-grouped-locale-us-market-stocks-date",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 aggs ticker stocksticker prev",
+      "summary": "Documented GET /v2/aggs/ticker/{stocksTicker}/prev (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 aggs ticker stocksticker prev --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aggs/ticker/{stocksTicker}/prev"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-aggs-ticker-stocksticker-prev",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 aggs ticker stocksticker range multiplier timespan from to",
+      "summary": "Documented GET /v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 aggs ticker stocksticker range multiplier timespan from to --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-aggs-ticker-stocksticker-range-multiplier-timespan-from-to",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 aggs ticker ticker range multiplier timespan from to",
+      "summary": "Documented GET /v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 aggs ticker ticker range multiplier timespan from to --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-aggs-ticker-ticker-range-multiplier-timespan-from-to",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 last nbbo stocksticker",
+      "summary": "Documented GET /v2/last/nbbo/{stocksTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 last nbbo stocksticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/last/nbbo/{stocksTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-last-nbbo-stocksticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 last trade stocksticker",
+      "summary": "Documented GET /v2/last/trade/{stocksTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 last trade stocksticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/last/trade/{stocksTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-last-trade-stocksticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 reference news",
+      "summary": "Documented GET /v2/reference/news (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 reference news --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reference/news"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-reference-news",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 snapshot locale us markets stocks direction",
+      "summary": "Documented GET /v2/snapshot/locale/us/markets/stocks/{direction} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 snapshot locale us markets stocks direction --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/snapshot/locale/us/markets/stocks/{direction}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-direction",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 snapshot locale us markets stocks tickers",
+      "summary": "Documented GET /v2/snapshot/locale/us/markets/stocks/tickers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 snapshot locale us markets stocks tickers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/snapshot/locale/us/markets/stocks/tickers"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-tickers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 snapshot locale us markets stocks tickers stocksticker",
+      "summary": "Documented GET /v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v2 snapshot locale us markets stocks tickers stocksticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-tickers-stocksticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 quotes stockticker",
+      "summary": "Documented GET /v3/quotes/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 quotes stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/quotes/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-quotes-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reference conditions",
+      "summary": "Documented GET /v3/reference/conditions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 reference conditions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/conditions"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-reference-conditions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reference exchanges",
+      "summary": "Documented GET /v3/reference/exchanges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 reference exchanges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/exchanges"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-reference-exchanges",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reference tickers ticker",
+      "summary": "Documented GET /v3/reference/tickers/{ticker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 reference tickers ticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/tickers/{ticker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-reference-tickers-ticker",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reference tickers types",
+      "summary": "Documented GET /v3/reference/tickers/types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 reference tickers types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/tickers/types"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-reference-tickers-types",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 snapshot",
+      "summary": "Documented GET /v3/snapshot (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 snapshot --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/snapshot"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-snapshot",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 trades stockticker",
+      "summary": "Documented GET /v3/trades/{stockTicker} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get v3 trades stockticker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/trades/{stockTicker}"
+        }
+      ],
+      "operation": "polygon-stock-api.get.v3-trades-stockticker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vx reference financials",
+      "summary": "Documented GET /vX/reference/financials (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get vx reference financials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vX/reference/financials"
+        }
+      ],
+      "operation": "polygon-stock-api.get.vx-reference-financials",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vx reference ipos",
+      "summary": "Documented GET /vX/reference/ipos (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get vx reference ipos --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vX/reference/ipos"
+        }
+      ],
+      "operation": "polygon-stock-api.get.vx-reference-ipos",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get vx reference tickers id events",
+      "summary": "Documented GET /vX/reference/tickers/{id}/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api api get vx reference tickers id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/vX/reference/tickers/{id}/events"
+        }
+      ],
+      "operation": "polygon-stock-api.get.vx-reference-tickers-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "dividends list",
+      "summary": "Run the dividends ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dividends",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api dividends list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/dividends"
+        }
+      ]
+    },
+    {
+      "path": "splits list",
+      "summary": "Run the splits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "splits",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api splits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/splits"
+        }
+      ]
+    },
+    {
+      "path": "tickers list",
+      "summary": "Run the tickers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickers",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "examples": [
+        "pm polygon-stock-api tickers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reference/tickers"
+        }
+      ]
+    }
+  ]
+}

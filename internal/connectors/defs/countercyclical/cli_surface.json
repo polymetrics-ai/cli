@@ -1,0 +1,541 @@
+{
+  "tagline": "Run Countercyclical's declared streams and reverse-ETL actions.",
+  "usage": "pm countercyclical \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get assumptions",
+        "api get integrations make auth",
+        "api get integrations make triggers investments",
+        "api get integrations zapier auth",
+        "api get integrations zapier triggers investments",
+        "api get investments",
+        "api get memos",
+        "api get pipelines",
+        "api get teams",
+        "api get v1 integrations make auth",
+        "api get v1 integrations make triggers investments",
+        "api get v1 integrations zapier auth",
+        "api get v1 integrations zapier triggers investments",
+        "api get valuations",
+        "assumptions list",
+        "investments list",
+        "memos list",
+        "pipelines list",
+        "teams list",
+        "valuations list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post integrations make actions investments",
+        "api post integrations zapier actions investments",
+        "api post v1 integrations zapier actions investments",
+        "api post v1 webhooks",
+        "create investment apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get assumptions",
+      "summary": "Documented GET /assumptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get assumptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/assumptions"
+        }
+      ],
+      "operation": "countercyclical.get.assumptions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations make auth",
+      "summary": "Documented GET /integrations/make/auth (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get integrations make auth --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/make/auth"
+        }
+      ],
+      "operation": "countercyclical.get.integrations-make-auth",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations make triggers investments",
+      "summary": "Documented GET /integrations/make/triggers/investments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get integrations make triggers investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/make/triggers/investments"
+        }
+      ],
+      "operation": "countercyclical.get.integrations-make-triggers-investments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations zapier auth",
+      "summary": "Documented GET /integrations/zapier/auth (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get integrations zapier auth --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/zapier/auth"
+        }
+      ],
+      "operation": "countercyclical.get.integrations-zapier-auth",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get integrations zapier triggers investments",
+      "summary": "Documented GET /integrations/zapier/triggers/investments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get integrations zapier triggers investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations/zapier/triggers/investments"
+        }
+      ],
+      "operation": "countercyclical.get.integrations-zapier-triggers-investments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get investments",
+      "summary": "Documented GET /investments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/investments"
+        }
+      ],
+      "operation": "countercyclical.get.investments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get memos",
+      "summary": "Documented GET /memos (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get memos --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/memos"
+        }
+      ],
+      "operation": "countercyclical.get.memos",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pipelines",
+      "summary": "Documented GET /pipelines (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get pipelines --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines"
+        }
+      ],
+      "operation": "countercyclical.get.pipelines",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get teams",
+      "summary": "Documented GET /teams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get teams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "operation": "countercyclical.get.teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations make auth",
+      "summary": "Documented GET /v1/integrations/make/auth (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get v1 integrations make auth --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/make/auth"
+        }
+      ],
+      "operation": "countercyclical.get.v1-integrations-make-auth",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations make triggers investments",
+      "summary": "Documented GET /v1/integrations/make/triggers/investments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get v1 integrations make triggers investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/make/triggers/investments"
+        }
+      ],
+      "operation": "countercyclical.get.v1-integrations-make-triggers-investments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations zapier auth",
+      "summary": "Documented GET /v1/integrations/zapier/auth (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get v1 integrations zapier auth --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/zapier/auth"
+        }
+      ],
+      "operation": "countercyclical.get.v1-integrations-zapier-auth",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 integrations zapier triggers investments",
+      "summary": "Documented GET /v1/integrations/zapier/triggers/investments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get v1 integrations zapier triggers investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/integrations/zapier/triggers/investments"
+        }
+      ],
+      "operation": "countercyclical.get.v1-integrations-zapier-triggers-investments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get valuations",
+      "summary": "Documented GET /valuations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api get valuations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/valuations"
+        }
+      ],
+      "operation": "countercyclical.get.valuations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post integrations make actions investments",
+      "summary": "Documented POST /integrations/make/actions/investments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api post integrations make actions investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/make/actions/investments"
+        }
+      ],
+      "operation": "countercyclical.post.integrations-make-actions-investments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post integrations zapier actions investments",
+      "summary": "Documented POST /integrations/zapier/actions/investments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api post integrations zapier actions investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/integrations/zapier/actions/investments"
+        }
+      ],
+      "operation": "countercyclical.post.integrations-zapier-actions-investments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 integrations zapier actions investments",
+      "summary": "Documented POST /v1/integrations/zapier/actions/investments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api post v1 integrations zapier actions investments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/zapier/actions/investments"
+        }
+      ],
+      "operation": "countercyclical.post.v1-integrations-zapier-actions-investments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 webhooks",
+      "summary": "Documented POST /v1/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical api post v1 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/webhooks"
+        }
+      ],
+      "operation": "countercyclical.post.v1-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "assumptions list",
+      "summary": "Run the assumptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "assumptions",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical assumptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assumptions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create investment apply",
+      "summary": "Plan and execute the create investment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_investment",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "flags": [
+        {
+          "name": "tickerSymbol",
+          "type": "string",
+          "summary": "Required tickerSymbol record field.",
+          "maps_to": "record.tickerSymbol",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm countercyclical create investment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/integrations/make/actions/investments"
+        }
+      ],
+      "risk": "creates a new Investment in the caller's Countercyclical workspace via the Make-integration action endpoint (the only documented general-purpose creation endpoint; the functionally-identical Zapier-integration endpoint is not separately exposed, see api_surface.json); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "investments list",
+      "summary": "Run the investments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "investments",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical investments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/investments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "memos list",
+      "summary": "Run the memos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "memos",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical memos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/memos"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/pipelines"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/teams"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "valuations list",
+      "summary": "Run the valuations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "valuations",
+      "source_url": "https://docs.countercyclical.io/developers/endpoints",
+      "examples": [
+        "pm countercyclical valuations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/valuations"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

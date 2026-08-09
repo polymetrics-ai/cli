@@ -1,0 +1,1220 @@
+{
+  "api_version": "polymetrics.ai/v1",
+  "connector": {
+    "name": "activecampaign",
+    "display_name": "ActiveCampaign",
+    "integration_type": "api",
+    "description": "Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": false,
+      "query": false
+    },
+    "icon": {
+      "id": "activecampaign",
+      "path": "icons/activecampaign.svg",
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://developers.activecampaign.com/reference/overview"
+    }
+  },
+  "kind": "Connector",
+  "manifest": {
+    "metadata": {
+      "name": "activecampaign",
+      "display_name": "ActiveCampaign",
+      "integration_type": "api",
+      "description": "Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.",
+      "capabilities": {
+        "check": true,
+        "catalog": true,
+        "read": true,
+        "write": false,
+        "query": false
+      },
+      "icon": {
+        "id": "activecampaign",
+        "path": "icons/activecampaign.svg",
+        "source": "official",
+        "review_status": "official_verified",
+        "review_url": "https://developers.activecampaign.com/reference/overview"
+      }
+    },
+    "config_fields": [
+      {
+        "name": "base_url"
+      },
+      {
+        "name": "mode"
+      }
+    ],
+    "secret_fields": [
+      {
+        "name": "api_key"
+      }
+    ],
+    "streams": [
+      {
+        "name": "contacts",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "deleted",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "type": "string"
+          },
+          {
+            "name": "orgid",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "type": "string"
+          },
+          {
+            "name": "udate",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "udate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Contact",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "udate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "email": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "firstName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lastName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "phone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "udate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "orgid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "deleted": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "lists",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "sender_url",
+            "type": "string"
+          },
+          {
+            "name": "stringid",
+            "type": "string"
+          },
+          {
+            "name": "subscriber_count",
+            "type": "string"
+          },
+          {
+            "name": "userid",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "cdate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign List",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "cdate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stringid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "sender_url": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "subscriber_count": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "userid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "deals",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "contact",
+            "type": "string"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mdate",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "string"
+          },
+          {
+            "name": "stage",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "mdate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Deal",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "mdate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "contact": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "currency": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stage": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "owner": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "campaigns",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "linkclicks",
+            "type": "string"
+          },
+          {
+            "name": "mdate",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "opens",
+            "type": "string"
+          },
+          {
+            "name": "send_amt",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "subject",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "uniqueopens",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "cdate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Campaign",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "cdate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "subject": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "send_amt": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "opens": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "uniqueopens": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "linkclicks": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "tags",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "subscriber_count",
+            "type": "string"
+          },
+          {
+            "name": "tag",
+            "type": "string"
+          },
+          {
+            "name": "tagType",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "cdate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Tag",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "cdate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "tag": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "tagType": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "subscriber_count": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "automations",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "entered",
+            "type": "string"
+          },
+          {
+            "name": "exited",
+            "type": "string"
+          },
+          {
+            "name": "hidden",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "mdate",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "name": "userid",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "mdate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Automation",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "mdate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "entered": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "exited": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "hidden": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "userid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "fields",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "descript",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "isrequired",
+            "type": "string"
+          },
+          {
+            "name": "perstag",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "name": "udate",
+            "type": "string"
+          },
+          {
+            "name": "visible",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "udate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Custom Field",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "udate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "descript": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "isrequired": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "perstag": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "visible": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "udate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "accounts",
+        "description": "",
+        "fields": [
+          {
+            "name": "accountUrl",
+            "type": "string"
+          },
+          {
+            "name": "contactCount",
+            "type": "string"
+          },
+          {
+            "name": "createdTimestamp",
+            "type": "string"
+          },
+          {
+            "name": "dealCount",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "updatedTimestamp",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "updatedTimestamp"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Account",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "updatedTimestamp",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "accountUrl": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "contactCount": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "dealCount": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "createdTimestamp": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "updatedTimestamp": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "users",
+        "description": "",
+        "fields": [
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": null,
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign User",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "username": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "firstName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "lastName": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "email": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "phone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "deal_stages",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "color",
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "udate",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "udate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Deal Stage",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "udate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "group": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "order": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "color": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "udate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "deal_tasks",
+        "description": "",
+        "fields": [
+          {
+            "name": "cdate",
+            "type": "string"
+          },
+          {
+            "name": "duedate",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "type": "string"
+          },
+          {
+            "name": "note",
+            "type": "string"
+          },
+          {
+            "name": "relid",
+            "type": "string"
+          },
+          {
+            "name": "reltype",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": "integer"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "udate",
+            "type": "string"
+          }
+        ],
+        "primary_key": [
+          "id"
+        ],
+        "cursor_fields": [
+          "udate"
+        ],
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "ActiveCampaign Deal Task",
+          "type": "object",
+          "x-primary-key": [
+            "id"
+          ],
+          "x-cursor-field": "udate",
+          "properties": {
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "title": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "note": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "duedate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "relid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reltype": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "cdate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "udate": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "sync_modes": [
+      "full_refresh_append",
+      "full_refresh_overwrite",
+      "full_refresh_overwrite_deduped"
+    ],
+    "pagination": {},
+    "risk": {
+      "read": "external ActiveCampaign API read of contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks"
+    }
+  }
+}

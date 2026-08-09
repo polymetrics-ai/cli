@@ -1,0 +1,163 @@
+{
+  "tagline": "Run JustSift's declared streams and reverse-ETL actions.",
+  "usage": "pm just-sift \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get fields person",
+        "api get media people idoremail mediakind",
+        "api get people idoremail",
+        "api get search people",
+        "fields list",
+        "peoples list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post search people"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get fields person",
+      "summary": "Documented GET /fields/person (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift api get fields person --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fields/person"
+        }
+      ],
+      "operation": "just-sift.get.fields-person",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get media people idoremail mediakind",
+      "summary": "Documented GET /media/people/{idOrEmail}/{mediaKind} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift api get media people idoremail mediakind --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/media/people/{idOrEmail}/{mediaKind}"
+        }
+      ],
+      "operation": "just-sift.get.media-people-idoremail-mediakind",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get people idoremail",
+      "summary": "Documented GET /people/{idOrEmail} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift api get people idoremail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/people/{idOrEmail}"
+        }
+      ],
+      "operation": "just-sift.get.people-idoremail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search people",
+      "summary": "Documented GET /search/people (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift api get search people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/people"
+        }
+      ],
+      "operation": "just-sift.get.search-people",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post search people",
+      "summary": "Documented POST /search/people (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift api post search people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/search/people"
+        }
+      ],
+      "operation": "just-sift.post.search-people",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "fields list",
+      "summary": "Run the fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fields/person"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "peoples list",
+      "summary": "Run the peoples ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "peoples",
+      "source_url": "https://developers.justsift.com/",
+      "examples": [
+        "pm just-sift peoples list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/search/people"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

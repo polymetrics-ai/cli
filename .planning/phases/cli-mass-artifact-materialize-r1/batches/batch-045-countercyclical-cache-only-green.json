@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-043-public-machine-manifest.json",
+  "candidates": 1,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "countercyclical",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://docs.countercyclical.io/developers/endpoints/teams\" could not be fetched: cached-references-only source pass has no cached external artifact \"https://docs.countercyclical.io/developers/endpoints/teams\"), and official reference fallback \"https://docs.countercyclical.io/llms.txt\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

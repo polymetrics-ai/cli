@@ -1,0 +1,622 @@
+{
+  "operations": [
+    {
+      "id": "retently.get.api-v2-companies-companyid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/companies/{companyId",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/companies/{companyId",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-companies",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/companies{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/companies{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-customers",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/customers",
+      "description": "Legacy connector never implemented customer create/update",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-customers",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/customers",
+      "description": "bulk customer deletion; legacy never implemented writes",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-customers-resubscribe",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/customers/resubscribe",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/customers/resubscribe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-customers-unsubscribe",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/customers/unsubscribe",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/customers/unsubscribe",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-customers-customerid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/customers/{customerId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/customers/{customerId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-customers",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/customers{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/customers{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-feedback",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/feedback",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-feedback",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/feedback",
+      "description": "response soft-delete; legacy never implemented writes",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-feedback-feedbackid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/feedback/{feedbackId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/feedback/{feedbackId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-feedback-2",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/feedback{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/feedback{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-import",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/import",
+      "description": "Batch historical feedback import not modeled by legacy",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-nps-campaigns",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/nps/campaigns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/nps/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-nps-customers-response-tags",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/nps/customers/response/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/nps/customers/response/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-nps-customers-response",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/nps/customers/response{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/nps/customers/response{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-nps-customers-survey",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/nps/customers/survey",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/nps/customers/survey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-nps-templates",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/nps/templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/nps/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-outbox",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/outbox",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/outbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-outbox",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/outbox",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/outbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-outbox-2",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/outbox{",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/outbox{",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-ping",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/ping",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-reports",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/reports/",
+      "description": "Campaign report/trend endpoints not modeled by legacy",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/reports/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-response-tags",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/response/tags",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/response/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-response-topics",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/response/topics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/response/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-suppressions-domains",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/suppressions/domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/suppressions/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-suppressions-domains",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/suppressions/domains",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/suppressions/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-suppressions-domains-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/suppressions/domains/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/suppressions/domains/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-suppressions-emails",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/suppressions/emails",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/suppressions/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-suppressions-emails",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/suppressions/emails",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/suppressions/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-suppressions-emails-by-email",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/suppressions/emails/by-email",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/suppressions/emails/by-email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.delete.api-v2-suppressions-emails-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/suppressions/emails/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/suppressions/emails/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-survey",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/survey",
+      "description": "Transactional survey queueing not modeled by legacy",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/survey",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.post.api-v2-sync-attributes",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/sync-attributes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/sync-attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-templates",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/templates",
+      "description": "Survey template catalog not modeled by legacy",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-templates-templateid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/templates/{templateId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/templates/{templateId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-templates-templateid-2",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/templates/{templateId}.",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/templates/{templateId}.",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-trends",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/trends",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/trends",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-trends-groupid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/trends/:groupId",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/trends/:groupId",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "retently.get.api-v2-metric-score",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/{metric}/score",
+      "description": "Aggregate NPS/CSAT/CES score endpoints not modeled by legacy",
+      "source_url": "https://www.retently.com/docs/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/{metric}/score",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

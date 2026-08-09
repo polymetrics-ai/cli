@@ -1,74 +1,1622 @@
 {
-  "api": "OpenAQ v3 API (https://api.openaq.org/v3)",
+  "api": "OpenAQ v3 API (https://api.openaq.org/v3); provider artifact version: OpenAQ API v3",
   "docs": "https://docs.openaq.org/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity reference-data read streams only; measurement/sensor time-series endpoints are out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (39 documented operations across 48 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "openaq-artifact-2026-08-09",
+      "url": "https://docs.openaq.org/sitemap-0.xml",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b3696ade3ddae3f7e501602865b332ad7bd0292df07a3f7eed2030782d095846"
+    },
+    {
+      "id": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+      "url": "https://docs.openaq.org/api",
+      "kind": "official-reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633"
+    },
+    {
+      "id": "openaq-artifact-ref-6c054af775fdb7c7-434b0ac6952223bd",
+      "url": "https://docs.openaq.org/api/operations/countries_get_v3_countries_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6c054af775fdb7c782a7b10fee25185b47219269a2a9145d0ef1bb4287b5ae6d"
+    },
+    {
+      "id": "openaq-artifact-ref-905d7273767514bc-60184597f16a1912",
+      "url": "https://docs.openaq.org/api/operations/country_get_v3_countries__countries_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "905d7273767514bc2e1bfe0f4bfb6af3c5b5f77eca329df76610563326c55677"
+    },
+    {
+      "id": "openaq-artifact-ref-7b1e8b36153eb2c8-898db1ac2e01b8ba",
+      "url": "https://docs.openaq.org/api/operations/get_instruments_by_manufacturer_v3_manufacturers__manufacturers_id__instruments_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7b1e8b36153eb2c8a13595e38807ac474af7ff234abd259f6b1b9b8a2045e6d0"
+    },
+    {
+      "id": "openaq-artifact-ref-3f099f05f8e72763-9b31c83df2b5e182",
+      "url": "https://docs.openaq.org/api/operations/instrument_get_v3_instruments__instruments_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3f099f05f8e727634b251412a319135966c442fd7d7a63978f10125ff48809ca"
+    },
+    {
+      "id": "openaq-artifact-ref-c2570af9c209b5e9-ff441150273d9147",
+      "url": "https://docs.openaq.org/api/operations/instruments_get_v3_instruments_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c2570af9c209b5e9dce7eebf3f8fbcbda10b8743b15968d996979179417fdcca"
+    },
+    {
+      "id": "openaq-artifact-ref-e8939a52744b8d6d-57458920e76a5829",
+      "url": "https://docs.openaq.org/api/operations/instruments_get_v3_licenses_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "e8939a52744b8d6de41472602a25f55b1aa67d1d9058f9152608ac2420c992d0"
+    },
+    {
+      "id": "openaq-artifact-ref-fcd595c49cb5dac3-649f6049f2543968",
+      "url": "https://docs.openaq.org/api/operations/license_get_v3_licenses__licenses_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "fcd595c49cb5dac30684a4568e9afbde9b88d49cdfed3f6eacd3c23479a4b704"
+    },
+    {
+      "id": "openaq-artifact-ref-bea181263e699ae2-4491b8f7081a686e",
+      "url": "https://docs.openaq.org/api/operations/location_flags_get_v3_locations__locations_id__flags_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "bea181263e699ae219d21a7f0b2131a96b41d93ddd25813b959052e988e5430c"
+    },
+    {
+      "id": "openaq-artifact-ref-14f71bb21e95c8de-eb6aa553c91751ac",
+      "url": "https://docs.openaq.org/api/operations/location_get_v3_locations__locations_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "14f71bb21e95c8dec0ec1d01ba3c2ca335f5d633612ef785a1b44ee7ef9b3147"
+    },
+    {
+      "id": "openaq-artifact-ref-bea25c7b38703792-c040b31fb3082d52",
+      "url": "https://docs.openaq.org/api/operations/location_latest_get_v3_locations__locations_id__latest_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "bea25c7b38703792c97a1b3cafa905f7da6147c19d0f412f920f13a4483af4b9"
+    },
+    {
+      "id": "openaq-artifact-ref-c2e9171da9dc2d7d-506c21135fc74be7",
+      "url": "https://docs.openaq.org/api/operations/locations_get_v3_locations_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c2e9171da9dc2d7d2f389b99377e19efaff6532d7438cd5bc6b7fa1286e839b0"
+    },
+    {
+      "id": "openaq-artifact-ref-c12796e0d83959b1-a2861e3c9f64b5e4",
+      "url": "https://docs.openaq.org/api/operations/manufacturer_get_v3_manufacturers__manufacturers_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c12796e0d83959b1d9d1c25d2140e755904c2f051e7b7a6eb6dc662ab277e286"
+    },
+    {
+      "id": "openaq-artifact-ref-0fd4ce776c00e34a-2bc5210ab59a1679",
+      "url": "https://docs.openaq.org/api/operations/manufacturers_get_v3_manufacturers_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0fd4ce776c00e34a910a776983e9b1a96a3f3ed9a7fc514e92fb67172081fe30"
+    },
+    {
+      "id": "openaq-artifact-ref-1582c057bae7b963-94f0a6f4d1f5fa54",
+      "url": "https://docs.openaq.org/api/operations/owner_get_v3_owners__owners_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1582c057bae7b9632b062b8e5601fe17473a0054081430e74a117d13a3d665ad"
+    },
+    {
+      "id": "openaq-artifact-ref-c94e63ae0d678944-c94aa34a1b96fd59",
+      "url": "https://docs.openaq.org/api/operations/owners_get_v3_owners_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c94e63ae0d678944292ca653dd3b23b688fd385a1f16e3d48c30beba968e0937"
+    },
+    {
+      "id": "openaq-artifact-ref-181b5ca9527b439c-e812f98fa79734a0",
+      "url": "https://docs.openaq.org/api/operations/parameter_get_v3_parameters__parameters_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "181b5ca9527b439cd9b65b257e7d9f8d4f76f11d99d4c03270b5c4c7658f98c6"
+    },
+    {
+      "id": "openaq-artifact-ref-69a71356868124d6-7903c25d1907ac82",
+      "url": "https://docs.openaq.org/api/operations/parameters_get_v3_parameters_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "69a71356868124d63685b80df2a4f57adab471bcf8554fe7081ff8cd8b03ffb4"
+    },
+    {
+      "id": "openaq-artifact-ref-eb9b07b9e00d581e-143d09bb7b103af1",
+      "url": "https://docs.openaq.org/api/operations/parameters_latest_get_v3_parameters__parameters_id__latest_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "eb9b07b9e00d581e994155812f5d6d7c2af565202cba9089b7533fec6663e223"
+    },
+    {
+      "id": "openaq-artifact-ref-55d80edf716b41db-d217b0ac56c5125d",
+      "url": "https://docs.openaq.org/api/operations/provider_get_v3_providers__providers_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "55d80edf716b41dbb2d95858cf066d479482832f2501ce4709010efb4430aca4"
+    },
+    {
+      "id": "openaq-artifact-ref-c515e03e5e72d9bf-8ee29894fab5da0a",
+      "url": "https://docs.openaq.org/api/operations/providers_get_v3_providers_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c515e03e5e72d9bf76044a0c1c2de8437d8f4b9318bfdafbf85ac056cf796dc4"
+    },
+    {
+      "id": "openaq-artifact-ref-f0f8ecd5d4243da2-8d37eb8c1ea7c952",
+      "url": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_month_get_v3_sensors__sensors_id__days_monthly_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f0f8ecd5d4243da2db5107e42ff9321119892e9d4f7d1a21ce602a925c6e2f70"
+    },
+    {
+      "id": "openaq-artifact-ref-25127a74a7b534c5-0190e2e7f4f9c5ad",
+      "url": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_year_get_v3_sensors__sensors_id__days_yearly_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "25127a74a7b534c5d4834bdbea153ca7f9c45ecdd072c83c801860604e11af70"
+    },
+    {
+      "id": "openaq-artifact-ref-94ae6b297cdc3051-7f4f8ceb0a84e742",
+      "url": "https://docs.openaq.org/api/operations/sensor_daily_get_v3_sensors__sensors_id__days_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "94ae6b297cdc30510e2a3512e193e46370fc156082a62fb600c559b292f501d8"
+    },
+    {
+      "id": "openaq-artifact-ref-8989595459bd6d8e-f2c4cf6b8af6db81",
+      "url": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__days_dayofweek_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8989595459bd6d8e6fb5b8a3aa3d675ef1679b3d901055a2a4afa4d7190fc708"
+    },
+    {
+      "id": "openaq-artifact-ref-023054d8386d2a1c-ebaa81f638a860ed",
+      "url": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__days_monthofyear_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "023054d8386d2a1c9909c8bfb21c88a4bca8401e04f15c66c882da49268265b3"
+    },
+    {
+      "id": "openaq-artifact-ref-31aaf0b1f8557b01-2005190b540ade55",
+      "url": "https://docs.openaq.org/api/operations/sensor_flags_get_v3_sensors__sensor_id__flags_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "31aaf0b1f8557b01e919dbebd0e41f3a141f81946a50a3b26ec91aef1ead6679"
+    },
+    {
+      "id": "openaq-artifact-ref-62207d5239078d87-3f58ec63d8dc40c7",
+      "url": "https://docs.openaq.org/api/operations/sensor_get_v3_sensors__sensors_id__get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "62207d5239078d879904480714acc67d991a1f8e16ae6959c1de14464bc0d4e2"
+    },
+    {
+      "id": "openaq-artifact-ref-f840355ca9b69760-855fe3514189adfb",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_day_get_v3_sensors__sensors_id__hours_daily_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f840355ca9b69760ada172af6fb8244490a83291819bccd2cdbd19f9cfaeecf9"
+    },
+    {
+      "id": "openaq-artifact-ref-aa31c310e64f05d2-321b2341047e3b08",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__hours_dayofweek_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "aa31c310e64f05d2698e1a45a6307bcd64a59dcedd4111283b7dc4f7b8df39aa"
+    },
+    {
+      "id": "openaq-artifact-ref-c1f086583928084a-04454db5b018960b",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_hod_get_v3_sensors__sensors_id__hours_hourofday_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c1f086583928084a51077063acb898a6d85c5c9d9c4aef13017bbf5d5eebc04c"
+    },
+    {
+      "id": "openaq-artifact-ref-b69e16071be471df-144aa6eba47d3183",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_month_get_v3_sensors__sensors_id__hours_monthly_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b69e16071be471df815d8d701c93e09b0242c9457ef7c9eb48d86ff5e5ac1327"
+    },
+    {
+      "id": "openaq-artifact-ref-d9488b21a83f6ad2-028244017e9a29f0",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__hours_monthofyear_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d9488b21a83f6ad2e9ac6cd7791ab586996f7d85b2923b3344b4e86e0dd954d0"
+    },
+    {
+      "id": "openaq-artifact-ref-a44d6d3d278ebb77-808bb8989e62af38",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_year_get_v3_sensors__sensors_id__hours_yearly_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a44d6d3d278ebb77963e6617948cbb71a17fd40638045fbbadc402ac5694087e"
+    },
+    {
+      "id": "openaq-artifact-ref-3fcd66a67e3517fb-0f96cdeb978750b9",
+      "url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_get_v3_sensors__sensors_id__hours_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3fcd66a67e3517fb2718b2919344d54e14e2fcfed1ae7f920bcd449b2fbffb73"
+    },
+    {
+      "id": "openaq-artifact-ref-6ee7d9850dfd34c3-e09d3fa92dc110d8",
+      "url": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_daily_v3_sensors__sensors_id__measurements_daily_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6ee7d9850dfd34c3d34f23d019eab5437883076b15cb612b45b1221f1440c87e"
+    },
+    {
+      "id": "openaq-artifact-ref-2ca1c78dfd60c7ba-573ee2b2c10d00df",
+      "url": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_hourly_v3_sensors__sensors_id__measurements_hourly_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2ca1c78dfd60c7bacc1d0a70abc394900b8b8c850fee8e6bbf12b42be0875473"
+    },
+    {
+      "id": "openaq-artifact-ref-ccd27fae17b80816-7a175c22f08a891b",
+      "url": "https://docs.openaq.org/api/operations/sensor_measurements_get_v3_sensors__sensors_id__measurements_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ccd27fae17b80816f55096d472fdda71705f6ef11d9c82c0d9a892b11e975a74"
+    },
+    {
+      "id": "openaq-artifact-ref-34624a2fb1d719aa-6556f87b24e2c830",
+      "url": "https://docs.openaq.org/api/operations/sensor_yearly_get_v3_sensors__sensors_id__years_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "34624a2fb1d719aa0b94454d4c1541c419098647dae7cc16ec2451044449f24a"
+    },
+    {
+      "id": "openaq-artifact-ref-3f0a3f74d9d9f49a-e08d4596412ffffc",
+      "url": "https://docs.openaq.org/api/operations/sensors_get_v3_locations__locations_id__sensors_get",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3f0a3f74d9d9f49aeb52042b5fa228301522b2059e9f387d0d83e7ead2317e21"
+    },
+    {
+      "id": "openaq-artifact-ref-8d40e87d8e79e7dc-2ef0a0511a26c239",
+      "url": "https://docs.openaq.org/using-the-api/api-key",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8d40e87d8e79e7dc2f92ed8b36711f27e5ff33dff2babc9bc89600d679909f50"
+    },
+    {
+      "id": "openaq-artifact-ref-b58dc4605a022cdb-37a86c3bc61c8653",
+      "url": "https://docs.openaq.org/using-the-api/dates-datetimes",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b58dc4605a022cdb0b23dda8b976f459aa5a97b87f1cf71981c9922642fc8724"
+    },
+    {
+      "id": "openaq-artifact-ref-0bbc279436491fc5-1e5e790f8dc78c6d",
+      "url": "https://docs.openaq.org/using-the-api/geospatial",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0bbc279436491fc5671230d65430a369337e5ad75c9d15e86685f776194fe569"
+    },
+    {
+      "id": "openaq-artifact-ref-f18ccc8b34b50ca0-ce98334dc30082fb",
+      "url": "https://docs.openaq.org/using-the-api/libraries",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f18ccc8b34b50ca0f67dc464d269e41ecf8a6139cc39580824d92899da36179d"
+    },
+    {
+      "id": "openaq-artifact-ref-1aa7b67dbc606867-a051b03beb259777",
+      "url": "https://docs.openaq.org/using-the-api/pagination",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1aa7b67dbc60686729a19489410534f9eb92ee5b9df3960540a1d49c40aebf46"
+    },
+    {
+      "id": "openaq-artifact-ref-220c090f6b8a6b40-9f75f968d7089a01",
+      "url": "https://docs.openaq.org/using-the-api/quick-start",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "220c090f6b8a6b403c16e72e5479544a0d4fb111122e2395ace160b225e86819"
+    },
+    {
+      "id": "openaq-artifact-ref-0426aba0e64bc572-1cf5d7fd11e27c57",
+      "url": "https://docs.openaq.org/using-the-api/rate-limits",
+      "kind": "html_reference",
+      "version": "OpenAQ API v3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0426aba0e64bc5722131da82c6494d36960d50097e394fc6b24270164d625265"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/v3/countries",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/countries",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/countries_get_v3_countries_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "6c054af775fdb7c782a7b10fee25185b47219269a2a9145d0ef1bb4287b5ae6d",
+            "coordinate": "https://docs.openaq.org/api/operations/countries_get_v3_countries_get#GET /v3/countries"
+          }
+        ]
+      },
       "covered_by": {
         "stream": "countries"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/parameters",
-      "covered_by": {
-        "stream": "parameters"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/locations",
-      "covered_by": {
-        "stream": "locations"
+      "path": "/v3/countries/{countries_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/countries/{countries_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/country_get_v3_countries__countries_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "905d7273767514bc2e1bfe0f4bfb6af3c5b5f77eca329df76610563326c55677",
+            "coordinate": "https://docs.openaq.org/api/operations/country_get_v3_countries__countries_id__get#GET /v3/countries/{countries_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v3/instruments",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/instruments",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/instruments_get_v3_instruments_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c2570af9c209b5e9dce7eebf3f8fbcbda10b8743b15968d996979179417fdcca",
+            "coordinate": "https://docs.openaq.org/api/operations/instruments_get_v3_instruments_get#GET /v3/instruments"
+          }
+        ]
+      },
       "covered_by": {
         "stream": "instruments"
       }
     },
     {
       "method": "GET",
+      "path": "/v3/instruments/{instruments_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/instruments/{instruments_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/instrument_get_v3_instruments__instruments_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "3f099f05f8e727634b251412a319135966c442fd7d7a63978f10125ff48809ca",
+            "coordinate": "https://docs.openaq.org/api/operations/instrument_get_v3_instruments__instruments_id__get#GET /v3/instruments/{instruments_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/licenses",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/licenses",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/instruments_get_v3_licenses_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "e8939a52744b8d6de41472602a25f55b1aa67d1d9058f9152608ac2420c992d0",
+            "coordinate": "https://docs.openaq.org/api/operations/instruments_get_v3_licenses_get#GET /v3/licenses"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/licenses/{licenses_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/licenses/{licenses_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/license_get_v3_licenses__licenses_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "fcd595c49cb5dac30684a4568e9afbde9b88d49cdfed3f6eacd3c23479a4b704",
+            "coordinate": "https://docs.openaq.org/api/operations/license_get_v3_licenses__licenses_id__get#GET /v3/licenses/{licenses_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/locations",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/locations_get_v3_locations_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c2e9171da9dc2d7d2f389b99377e19efaff6532d7438cd5bc6b7fa1286e839b0",
+            "coordinate": "https://docs.openaq.org/api/operations/locations_get_v3_locations_get#GET /v3/locations"
+          }
+        ]
+      },
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{id}/sensors",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "openaq-artifact-2026-08-09",
+        "source_url": "https://docs.openaq.org/sitemap-0.xml",
+        "source_kind": "html_reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3696ade3ddae3f7e501602865b332ad7bd0292df07a3f7eed2030782d095846",
+        "coordinate": "existing-surface[GET /v3/locations/{id}/sensors]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/locations/{id}/sensors is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{locations_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/locations/{locations_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/location_get_v3_locations__locations_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "14f71bb21e95c8dec0ec1d01ba3c2ca335f5d633612ef785a1b44ee7ef9b3147",
+            "coordinate": "https://docs.openaq.org/api/operations/location_get_v3_locations__locations_id__get#GET /v3/locations/{locations_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{locations_id}/flags",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/locations/{locations_id}/flags",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/location_flags_get_v3_locations__locations_id__flags_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "bea181263e699ae219d21a7f0b2131a96b41d93ddd25813b959052e988e5430c",
+            "coordinate": "https://docs.openaq.org/api/operations/location_flags_get_v3_locations__locations_id__flags_get#GET /v3/locations/{locations_id}/flags"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{locations_id}/latest",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/locations/{locations_id}/latest",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/location_latest_get_v3_locations__locations_id__latest_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "bea25c7b38703792c97a1b3cafa905f7da6147c19d0f412f920f13a4483af4b9",
+            "coordinate": "https://docs.openaq.org/api/operations/location_latest_get_v3_locations__locations_id__latest_get#GET /v3/locations/{locations_id}/latest"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/locations/{locations_id}/sensors",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/locations/{locations_id}/sensors",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensors_get_v3_locations__locations_id__sensors_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "3f0a3f74d9d9f49aeb52042b5fa228301522b2059e9f387d0d83e7ead2317e21",
+            "coordinate": "https://docs.openaq.org/api/operations/sensors_get_v3_locations__locations_id__sensors_get#GET /v3/locations/{locations_id}/sensors"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v3/manufacturers",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/manufacturers",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/manufacturers_get_v3_manufacturers_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "0fd4ce776c00e34a910a776983e9b1a96a3f3ed9a7fc514e92fb67172081fe30",
+            "coordinate": "https://docs.openaq.org/api/operations/manufacturers_get_v3_manufacturers_get#GET /v3/manufacturers"
+          }
+        ]
+      },
       "covered_by": {
         "stream": "manufacturers"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/locations/{id}/sensors",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/locations/{id}/sensors is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "path": "/v3/manufacturers/{manufacturers_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/manufacturers/{manufacturers_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/manufacturer_get_v3_manufacturers__manufacturers_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c12796e0d83959b1d9d1c25d2140e755904c2f051e7b7a6eb6dc662ab277e286",
+            "coordinate": "https://docs.openaq.org/api/operations/manufacturer_get_v3_manufacturers__manufacturers_id__get#GET /v3/manufacturers/{manufacturers_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/sensors/{id}/measurements",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/sensors/{id}/measurements is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "path": "/v3/manufacturers/{manufacturers_id}/instruments",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/manufacturers/{manufacturers_id}/instruments",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/get_instruments_by_manufacturer_v3_manufacturers__manufacturers_id__instruments_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "7b1e8b36153eb2c8a13595e38807ac474af7ff234abd259f6b1b9b8a2045e6d0",
+            "coordinate": "https://docs.openaq.org/api/operations/get_instruments_by_manufacturer_v3_manufacturers__manufacturers_id__instruments_get#GET /v3/manufacturers/{manufacturers_id}/instruments"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v3/owners",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/owners is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/owners",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/owners_get_v3_owners_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c94e63ae0d678944292ca653dd3b23b688fd385a1f16e3d48c30beba968e0937",
+            "coordinate": "https://docs.openaq.org/api/operations/owners_get_v3_owners_get#GET /v3/owners"
+          }
+        ]
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/owners is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/owners/{owners_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/owners/{owners_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/owner_get_v3_owners__owners_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "1582c057bae7b9632b062b8e5601fe17473a0054081430e74a117d13a3d665ad",
+            "coordinate": "https://docs.openaq.org/api/operations/owner_get_v3_owners__owners_id__get#GET /v3/owners/{owners_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/parameters",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/parameters",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/parameters_get_v3_parameters_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "69a71356868124d63685b80df2a4f57adab471bcf8554fe7081ff8cd8b03ffb4",
+            "coordinate": "https://docs.openaq.org/api/operations/parameters_get_v3_parameters_get#GET /v3/parameters"
+          }
+        ]
+      },
+      "covered_by": {
+        "stream": "parameters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/parameters/{parameters_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/parameters/{parameters_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/parameter_get_v3_parameters__parameters_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "181b5ca9527b439cd9b65b257e7d9f8d4f76f11d99d4c03270b5c4c7658f98c6",
+            "coordinate": "https://docs.openaq.org/api/operations/parameter_get_v3_parameters__parameters_id__get#GET /v3/parameters/{parameters_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/parameters/{parameters_id}/latest",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/parameters/{parameters_id}/latest",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/parameters_latest_get_v3_parameters__parameters_id__latest_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "eb9b07b9e00d581e994155812f5d6d7c2af565202cba9089b7533fec6663e223",
+            "coordinate": "https://docs.openaq.org/api/operations/parameters_latest_get_v3_parameters__parameters_id__latest_get#GET /v3/parameters/{parameters_id}/latest"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v3/providers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v3/providers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/providers",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/providers_get_v3_providers_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c515e03e5e72d9bf76044a0c1c2de8437d8f4b9318bfdafbf85ac056cf796dc4",
+            "coordinate": "https://docs.openaq.org/api/operations/providers_get_v3_providers_get#GET /v3/providers"
+          }
+        ]
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/providers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/providers/{providers_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/providers/{providers_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/provider_get_v3_providers__providers_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "55d80edf716b41dbb2d95858cf066d479482832f2501ce4709010efb4430aca4",
+            "coordinate": "https://docs.openaq.org/api/operations/provider_get_v3_providers__providers_id__get#GET /v3/providers/{providers_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{id}/measurements",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "openaq-artifact-2026-08-09",
+        "source_url": "https://docs.openaq.org/sitemap-0.xml",
+        "source_kind": "html_reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3696ade3ddae3f7e501602865b332ad7bd0292df07a3f7eed2030782d095846",
+        "coordinate": "existing-surface[GET /v3/sensors/{id}/measurements]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v3/sensors/{id}/measurements is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensor_id}/flags",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensor_id}/flags",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_flags_get_v3_sensors__sensor_id__flags_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "31aaf0b1f8557b01e919dbebd0e41f3a141f81946a50a3b26ec91aef1ead6679",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_flags_get_v3_sensors__sensor_id__flags_get#GET /v3/sensors/{sensor_id}/flags"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_get_v3_sensors__sensors_id__get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "62207d5239078d879904480714acc67d991a1f8e16ae6959c1de14464bc0d4e2",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_get_v3_sensors__sensors_id__get#GET /v3/sensors/{sensors_id}"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/days",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/days",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_daily_get_v3_sensors__sensors_id__days_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "94ae6b297cdc30510e2a3512e193e46370fc156082a62fb600c559b292f501d8",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_daily_get_v3_sensors__sensors_id__days_get#GET /v3/sensors/{sensors_id}/days"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/days/dayofweek",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/days/dayofweek",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__days_dayofweek_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "8989595459bd6d8e6fb5b8a3aa3d675ef1679b3d901055a2a4afa4d7190fc708",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__days_dayofweek_get#GET /v3/sensors/{sensors_id}/days/dayofweek"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/days/monthly",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/days/monthly",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_month_get_v3_sensors__sensors_id__days_monthly_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "f0f8ecd5d4243da2db5107e42ff9321119892e9d4f7d1a21ce602a925c6e2f70",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_month_get_v3_sensors__sensors_id__days_monthly_get#GET /v3/sensors/{sensors_id}/days/monthly"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/days/monthofyear",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/days/monthofyear",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__days_monthofyear_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "023054d8386d2a1c9909c8bfb21c88a4bca8401e04f15c66c882da49268265b3",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_daily_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__days_monthofyear_get#GET /v3/sensors/{sensors_id}/days/monthofyear"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/days/yearly",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/days/yearly",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_year_get_v3_sensors__sensors_id__days_yearly_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "25127a74a7b534c5d4834bdbea153ca7f9c45ecdd072c83c801860604e11af70",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_daily_aggregate_to_year_get_v3_sensors__sensors_id__days_yearly_get#GET /v3/sensors/{sensors_id}/days/yearly"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_get_v3_sensors__sensors_id__hours_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "3fcd66a67e3517fb2718b2919344d54e14e2fcfed1ae7f920bcd449b2fbffb73",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_get_v3_sensors__sensors_id__hours_get#GET /v3/sensors/{sensors_id}/hours"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/daily",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/daily",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_day_get_v3_sensors__sensors_id__hours_daily_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "f840355ca9b69760ada172af6fb8244490a83291819bccd2cdbd19f9cfaeecf9",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_day_get_v3_sensors__sensors_id__hours_daily_get#GET /v3/sensors/{sensors_id}/hours/daily"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/dayofweek",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/dayofweek",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__hours_dayofweek_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "aa31c310e64f05d2698e1a45a6307bcd64a59dcedd4111283b7dc4f7b8df39aa",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_dow_get_v3_sensors__sensors_id__hours_dayofweek_get#GET /v3/sensors/{sensors_id}/hours/dayofweek"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/hourofday",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/hourofday",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_hod_get_v3_sensors__sensors_id__hours_hourofday_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "c1f086583928084a51077063acb898a6d85c5c9d9c4aef13017bbf5d5eebc04c",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_hod_get_v3_sensors__sensors_id__hours_hourofday_get#GET /v3/sensors/{sensors_id}/hours/hourofday"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/monthly",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/monthly",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_month_get_v3_sensors__sensors_id__hours_monthly_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "b69e16071be471df815d8d701c93e09b0242c9457ef7c9eb48d86ff5e5ac1327",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_month_get_v3_sensors__sensors_id__hours_monthly_get#GET /v3/sensors/{sensors_id}/hours/monthly"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/monthofyear",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/monthofyear",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__hours_monthofyear_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "d9488b21a83f6ad2e9ac6cd7791ab586996f7d85b2923b3344b4e86e0dd954d0",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_moy_get_v3_sensors__sensors_id__hours_monthofyear_get#GET /v3/sensors/{sensors_id}/hours/monthofyear"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/hours/yearly",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/hours/yearly",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_year_get_v3_sensors__sensors_id__hours_yearly_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "a44d6d3d278ebb77963e6617948cbb71a17fd40638045fbbadc402ac5694087e",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_hourly_measurements_aggregate_to_year_get_v3_sensors__sensors_id__hours_yearly_get#GET /v3/sensors/{sensors_id}/hours/yearly"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/measurements",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/measurements",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_measurements_get_v3_sensors__sensors_id__measurements_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "ccd27fae17b80816f55096d472fdda71705f6ef11d9c82c0d9a892b11e975a74",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_measurements_get_v3_sensors__sensors_id__measurements_get#GET /v3/sensors/{sensors_id}/measurements"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/measurements/daily",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/measurements/daily",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_daily_v3_sensors__sensors_id__measurements_daily_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "6ee7d9850dfd34c3d34f23d019eab5437883076b15cb612b45b1221f1440c87e",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_daily_v3_sensors__sensors_id__measurements_daily_get#GET /v3/sensors/{sensors_id}/measurements/daily"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/measurements/hourly",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/measurements/hourly",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_hourly_v3_sensors__sensors_id__measurements_hourly_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "2ca1c78dfd60c7bacc1d0a70abc394900b8b8c850fee8e6bbf12b42be0875473",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_measurements_aggregated_get_hourly_v3_sensors__sensors_id__measurements_hourly_get#GET /v3/sensors/{sensors_id}/measurements/hourly"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/sensors/{sensors_id}/years",
+      "provenance": {
+        "artifact": "openaq-artifact-ref-61708c122be89c11-44b34a542296ee3d",
+        "source_url": "https://docs.openaq.org/api",
+        "source_kind": "official-reference",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "61708c122be89c1166798fabf95b9247572acb5ad93b4d67f89316c5c05e2633",
+        "coordinate": "https://docs.openaq.org/api#GET /v3/sensors/{sensors_id}/years",
+        "alternatives": [
+          {
+            "source_url": "https://docs.openaq.org/api/operations/sensor_yearly_get_v3_sensors__sensors_id__years_get",
+            "source_kind": "html_reference",
+            "version": "OpenAQ API v3",
+            "retrieved_at": "2026-08-09",
+            "sha256": "34624a2fb1d719aa0b94454d4c1541c419098647dae7cc16ec2451044449f24a",
+            "coordinate": "https://docs.openaq.org/api/operations/sensor_yearly_get_v3_sensors__sensors_id__years_get#GET /v3/sensors/{sensors_id}/years"
+          }
+        ]
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

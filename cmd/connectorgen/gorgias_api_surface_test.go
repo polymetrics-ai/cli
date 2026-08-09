@@ -41,17 +41,19 @@ func TestGorgiasAPISurfaceOperationLedger(t *testing.T) {
 	var surface struct {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
-			Method    string         `json:"method"`
-			Path      string         `json:"path"`
-			CoveredBy map[string]any `json:"covered_by"`
-			Excluded  map[string]any `json:"excluded"`
+			Method     string         `json:"method"`
+			Path       string         `json:"path"`
+			CoveredBy  map[string]any `json:"covered_by"`
+			Excluded   map[string]any `json:"excluded"`
+			Provenance *struct {
+				SourceURL string `json:"source_url"`
+			} `json:"provenance"`
 			Operation *struct {
 				Model            string `json:"model"`
 				Status           string `json:"status"`
 				Risk             string `json:"risk"`
 				BlockedByDefault bool   `json:"blocked_by_default"`
 				Reason           string `json:"reason"`
-				SourceURL        string `json:"source_url"`
 				Notes            string `json:"notes"`
 			} `json:"operation"`
 		} `json:"endpoints"`
@@ -60,8 +62,8 @@ func TestGorgiasAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("unmarshal gorgias api_surface.json: %v", err)
 	}
 
-	if surface.OperationLedgerVersion != 1 {
-		t.Errorf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	if surface.OperationLedgerVersion != 2 {
+		t.Errorf("operation_ledger_version = %d, want 2", surface.OperationLedgerVersion)
 	}
 	if got := len(surface.Endpoints); got != gorgiasDocumentedOperations {
 		t.Errorf("api_surface declares %d rows, want %d documented operations", got, gorgiasDocumentedOperations)
@@ -94,7 +96,7 @@ func TestGorgiasAPISurfaceOperationLedger(t *testing.T) {
 			if strings.TrimSpace(ep.Operation.Reason) == "" {
 				t.Errorf("%s: blocked row has no reason", key)
 			}
-			if strings.TrimSpace(ep.Operation.SourceURL) == "" {
+			if ep.Provenance == nil || strings.TrimSpace(ep.Provenance.SourceURL) == "" {
 				t.Errorf("%s: blocked row has no source citation", key)
 			}
 			if !strings.HasPrefix(ep.Operation.Notes, "named_dependency=") {

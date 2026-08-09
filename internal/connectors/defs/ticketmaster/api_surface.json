@@ -1,26 +1,33 @@
 {
-  "api": "Ticketmaster Discovery API v2 (https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/)",
+  "api": "Ticketmaster Discovery API v2 (https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/); provider artifact version: Discovery API v2",
   "docs": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Discovery API surface (venue detail, attraction detail, suggest/autocomplete, images, event-to-attraction expansion, etc.) is out of scope outside this connector's current declared surface. ticketmaster is read-only in legacy (Capabilities.Write is false) so no writes.json.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (25 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "ticketmaster-artifact-2026-08-09",
+      "url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+      "kind": "html_reference",
+      "version": "Discovery API v2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/events.json",
-      "covered_by": {
-        "stream": "events"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/venues.json",
-      "covered_by": {
-        "stream": "venues"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/attractions.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /attractions.json]"
+      },
       "covered_by": {
         "stream": "attractions"
       }
@@ -28,24 +35,621 @@
     {
       "method": "GET",
       "path": "/classifications.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /classifications.json]"
+      },
       "covered_by": {
         "stream": "classifications"
       }
     },
     {
       "method": "GET",
-      "path": "/suggest",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/discovery/v2/attractions",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/attractions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/attractions.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/attractions.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/attractions/K8vZ9175BhV.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/attractions/K8vZ9175BhV.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/attractions/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/attractions/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/KZFzniwnSyZfZ7v7nE",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/KZFzniwnSyZfZ7v7nE"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/genres/KnvZfZ7vA71.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/genres/KnvZfZ7vA71.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/genres/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/genres/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/segments/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/segments/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/subgenres/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/subgenres/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/classifications/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/classifications/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events/0B004F0401BD55E5/images.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events/0B004F0401BD55E5/images.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events/G5diZfkn0B-bh.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events/G5diZfkn0B-bh.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/events/{id}/images",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/events/{id}/images"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/suggest",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/suggest"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/venues",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/venues"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/venues.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/venues.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/venues/KovZpZAFnIEA.json",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/venues/KovZpZAFnIEA.json"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discovery/v2/venues/{id}",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#GET /discovery/v2/venues/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /events.json]"
+      },
+      "covered_by": {
+        "stream": "events"
       }
     },
     {
       "method": "GET",
       "path": "/events/{id}.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /events/{id}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/suggest",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /suggest]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/venues.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ticketmaster-artifact-2026-08-09",
+        "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
+        "source_kind": "html_reference",
+        "version": "Discovery API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8e2982cc2994d6683f89435c8865383cd4f2b9ff84e48627f55814753dac6ac2",
+        "coordinate": "existing-surface[GET /venues.json]"
+      },
+      "covered_by": {
+        "stream": "venues"
       }
     }
   ]

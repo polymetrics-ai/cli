@@ -1,46 +1,760 @@
 {
-  "api": "Tally API (https://api.tally.so)",
+  "api": "Tally API (https://api.tally.so); provider artifact version: Current date-versioned Tally REST API reference",
   "docs": "https://developers.tally.so/api-reference/introduction",
-  "reviewed_at": "2026-07-03",
-  "scope": "Greenfield full-capability build: every primary GET list/detail resource is a stream, and every primary POST/PUT/PATCH/DELETE mutation the engine dialect can express is a writes.json action. Sub-resource analytics endpoints, org/user/invite administration, folders, questions/blocks metadata endpoints, and webhook event/retry endpoints are excluded as out_of_scope (narrower admin/analytics surface, not core forms+submissions+webhooks+workspaces sync).",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (35 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "tally-artifact-2026-08-09",
+      "url": "https://developers.tally.so/api-reference/introduction",
+      "kind": "html_reference",
+      "version": "Current date-versioned Tally REST API reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/forms", "covered_by": { "stream": "forms" } },
-    { "method": "POST", "path": "/forms", "covered_by": { "write": "create_form" } },
-    { "method": "GET", "path": "/forms/{formId}", "excluded": { "category": "duplicate_of", "reason": "single-form detail is already covered by the forms stream's list read; no incremental/detail-only field requires a separate stream" } },
-    { "method": "PATCH", "path": "/forms/{formId}", "covered_by": { "write": "update_form" } },
-    { "method": "DELETE", "path": "/forms/{formId}", "covered_by": { "write": "delete_form" } },
-    { "method": "GET", "path": "/forms/{formId}/questions", "excluded": { "category": "out_of_scope", "reason": "form-definition metadata sub-resource, not a syncable data object distinct from forms" } },
-    { "method": "PATCH", "path": "/forms/{formId}/questions/{questionId}", "excluded": { "category": "out_of_scope", "reason": "form-builder question editing, not a reverse-ETL data mutation" } },
-    { "method": "GET", "path": "/forms/{formId}/blocks", "excluded": { "category": "out_of_scope", "reason": "form-builder block metadata, not a syncable data object" } },
-    { "method": "PATCH", "path": "/forms/{formId}/blocks", "excluded": { "category": "out_of_scope", "reason": "form-builder block editing, not a reverse-ETL data mutation" } },
-    { "method": "GET", "path": "/forms/{formId}/submissions", "covered_by": { "stream": "submissions" } },
-    { "method": "GET", "path": "/forms/{formId}/submissions/{submissionId}", "excluded": { "category": "duplicate_of", "reason": "single-submission detail is already covered by the submissions stream's list read" } },
-    { "method": "DELETE", "path": "/forms/{formId}/submissions/{submissionId}", "covered_by": { "write": "delete_submission" } },
-    { "method": "GET", "path": "/forms/{formId}/analytics/metrics", "excluded": { "category": "out_of_scope", "reason": "aggregate analytics snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/forms/{formId}/analytics/visits", "excluded": { "category": "out_of_scope", "reason": "aggregate analytics snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/forms/{formId}/analytics/submissions", "excluded": { "category": "out_of_scope", "reason": "aggregate analytics snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/forms/{formId}/analytics/dimensions", "excluded": { "category": "out_of_scope", "reason": "aggregate analytics snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/forms/{formId}/analytics/drop-off", "excluded": { "category": "out_of_scope", "reason": "aggregate analytics snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/workspaces", "covered_by": { "stream": "workspaces" } },
-    { "method": "POST", "path": "/workspaces", "covered_by": { "write": "create_workspace" } },
-    { "method": "GET", "path": "/workspaces/{workspaceId}", "excluded": { "category": "duplicate_of", "reason": "single-workspace detail is already covered by the workspaces stream's list read" } },
-    { "method": "PATCH", "path": "/workspaces/{workspaceId}", "excluded": { "category": "requires_elevated_scope", "reason": "workspace membership/settings mutation with no documented example body in this pass; deferred to a capability-expansion pass" } },
-    { "method": "DELETE", "path": "/workspaces/{workspaceId}", "excluded": { "category": "destructive_admin", "reason": "deletes an entire workspace and its forms; out of scope for this build's write surface" } },
-    { "method": "GET", "path": "/workspaces/{workspaceId}/folders", "excluded": { "category": "out_of_scope", "reason": "Pro-only folder organization metadata, not core forms/submissions data" } },
-    { "method": "POST", "path": "/workspaces/{workspaceId}/folders", "excluded": { "category": "out_of_scope", "reason": "Pro-only folder organization metadata, not core forms/submissions data" } },
-    { "method": "PATCH", "path": "/workspaces/{workspaceId}/folders/{id}", "excluded": { "category": "out_of_scope", "reason": "Pro-only folder organization metadata, not core forms/submissions data" } },
-    { "method": "DELETE", "path": "/workspaces/{workspaceId}/folders/{id}", "excluded": { "category": "out_of_scope", "reason": "Pro-only folder organization metadata, not core forms/submissions data" } },
-    { "method": "GET", "path": "/organizations/{organizationId}/users", "excluded": { "category": "out_of_scope", "reason": "organization/team administration, not core forms/submissions data" } },
-    { "method": "DELETE", "path": "/organizations/{organizationId}/users/{userId}", "excluded": { "category": "destructive_admin", "reason": "removes a user from the organization; account-administration mutation out of scope for this build" } },
-    { "method": "GET", "path": "/organizations/{organizationId}/invites", "excluded": { "category": "out_of_scope", "reason": "organization/team administration, not core forms/submissions data" } },
-    { "method": "POST", "path": "/organizations/{organizationId}/invites", "excluded": { "category": "requires_elevated_scope", "reason": "sends an account invite email; account-administration mutation out of scope for this build" } },
-    { "method": "DELETE", "path": "/organizations/{organizationId}/invites/{inviteId}", "excluded": { "category": "destructive_admin", "reason": "revokes a pending organization invite; account-administration mutation out of scope for this build" } },
-    { "method": "GET", "path": "/users/me", "excluded": { "category": "non_data_endpoint", "reason": "current-user identity/profile snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/webhooks", "covered_by": { "stream": "webhooks" } },
-    { "method": "POST", "path": "/webhooks", "covered_by": { "write": "create_webhook" } },
-    { "method": "PATCH", "path": "/webhooks/{webhookId}", "covered_by": { "write": "update_webhook" } },
-    { "method": "DELETE", "path": "/webhooks/{webhookId}", "covered_by": { "write": "delete_webhook" } },
-    { "method": "GET", "path": "/webhooks/{webhookId}/events", "excluded": { "category": "out_of_scope", "reason": "webhook delivery-log inspection, not a syncable data object" } },
-    { "method": "POST", "path": "/webhooks/{webhookId}/events/{eventId}", "excluded": { "category": "out_of_scope", "reason": "manual delivery retry action, not a reverse-ETL data mutation" } }
+    {
+      "method": "GET",
+      "path": "/forms",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms"
+      },
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/forms",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /forms"
+      },
+      "covered_by": {
+        "write": "create_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-form detail is already covered by the forms stream's list read; no incremental/detail-only field requires a separate stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/forms/{formId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#PATCH /forms/{formId}"
+      },
+      "covered_by": {
+        "write": "update_form"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/forms/{formId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /forms/{formId}"
+      },
+      "covered_by": {
+        "write": "delete_form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/analytics/dimensions",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/analytics/dimensions"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate analytics snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/analytics/drop-off",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/analytics/drop-off"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate analytics snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/analytics/metrics",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/analytics/metrics"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate analytics snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/analytics/submissions",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/analytics/submissions"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate analytics snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/analytics/visits",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/analytics/visits"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "aggregate analytics snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/blocks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "existing-surface[GET /forms/{formId}/blocks]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "form-builder block metadata, not a syncable data object",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/forms/{formId}/blocks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "existing-surface[PATCH /forms/{formId}/blocks]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "form-builder block editing, not a reverse-ETL data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/questions",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/questions"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "form-definition metadata sub-resource, not a syncable data object distinct from forms",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/forms/{formId}/questions/{questionId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "existing-surface[PATCH /forms/{formId}/questions/{questionId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "form-builder question editing, not a reverse-ETL data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/submissions",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/submissions"
+      },
+      "covered_by": {
+        "stream": "submissions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/forms/{formId}/submissions/{submissionId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /forms/{formId}/submissions/{submissionId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-submission detail is already covered by the submissions stream's list read",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/forms/{formId}/submissions/{submissionId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /forms/{formId}/submissions/{submissionId}"
+      },
+      "covered_by": {
+        "write": "delete_submission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/invites",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /organizations/{organizationId}/invites"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization/team administration, not core forms/submissions data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/invites",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /organizations/{organizationId}/invites"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "sends an account invite email; account-administration mutation out of scope for this build",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/invites/{inviteId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /organizations/{organizationId}/invites/{inviteId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes a pending organization invite; account-administration mutation out of scope for this build",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/users",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /organizations/{organizationId}/users"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "organization/team administration, not core forms/submissions data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/users/{userId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /organizations/{organizationId}/users/{userId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "removes a user from the organization; account-administration mutation out of scope for this build",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/me",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /users/me"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "current-user identity/profile snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /webhooks"
+      },
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /webhooks"
+      },
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#PATCH /webhooks/{webhookId}"
+      },
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /webhooks/{webhookId}"
+      },
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{webhookId}/events",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /webhooks/{webhookId}/events"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "webhook delivery-log inspection, not a syncable data object",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/{webhookId}/events/{eventId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /webhooks/{webhookId}/events/{eventId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "manual delivery retry action, not a reverse-ETL data mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /workspaces"
+      },
+      "covered_by": {
+        "stream": "workspaces"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /workspaces"
+      },
+      "covered_by": {
+        "write": "create_workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /workspaces/{workspaceId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-workspace detail is already covered by the workspaces stream's list read",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspaceId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#PATCH /workspaces/{workspaceId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "workspace membership/settings mutation with no documented example body in this pass; deferred to a capability-expansion pass",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspaceId}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /workspaces/{workspaceId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "deletes an entire workspace and its forms; out of scope for this build's write surface",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/folders",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#GET /workspaces/{workspaceId}/folders"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pro-only folder organization metadata, not core forms/submissions data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/folders",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#POST /workspaces/{workspaceId}/folders"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pro-only folder organization metadata, not core forms/submissions data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspaceId}/folders/{id}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#PATCH /workspaces/{workspaceId}/folders/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pro-only folder organization metadata, not core forms/submissions data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspaceId}/folders/{id}",
+      "provenance": {
+        "artifact": "tally-artifact-2026-08-09",
+        "source_url": "https://developers.tally.so/api-reference/introduction",
+        "source_kind": "html_reference",
+        "version": "Current date-versioned Tally REST API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "bc1485d217323727118f4fba98a2514d5b76d9168221e6d71d38e6ec094ede02",
+        "coordinate": "https://developers.tally.so/api-reference/introduction#DELETE /workspaces/{workspaceId}/folders/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pro-only folder organization metadata, not core forms/submissions data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

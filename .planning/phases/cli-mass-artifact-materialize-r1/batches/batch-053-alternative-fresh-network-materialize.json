@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-024-primary-plus-alternative-manifest.json",
+  "candidates": 2,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "mailjet-sms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://dev.mailjet.com/page-data/sms/reference/overview/page-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "ebay-finance",
+      "stage": "artifact_fetch",
+      "reason": "fetch artifact: provider returned HTTP 403"
+    }
+  ]
+}

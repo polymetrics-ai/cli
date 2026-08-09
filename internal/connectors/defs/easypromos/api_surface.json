@@ -1,65 +1,662 @@
 {
-  "api": "Easypromos REST API (https://developers.easypromos.com/)",
+  "api": "Easypromos REST API (https://developers.easypromos.com/); provider artifact version: Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
   "docs": "https://developers.easypromos.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (promotions, organizing_brands, stages, users, participations, prizes). Easypromos is read-only in legacy (no reverse-ETL writes); capabilities.write is false.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (30 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "easypromos-artifact-2026-08-09",
+      "url": "https://easypromos-apiref.redoc.ly/",
+      "kind": "html_reference",
+      "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/promotions",
-      "covered_by": {
-        "stream": "promotions"
+      "path": "/coin_transactions/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /coin_transactions/{promotion_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coin_transactions/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /coin_transactions/{promotion_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coin_transactions/{promotion_id}/users/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /coin_transactions/{promotion_id}/users/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/coins/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#PUT /coins/{promotion_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coins/{promotion_id}/users/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /coins/{promotion_id}/users/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/organizing_brands",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /organizing_brands"
+      },
       "covered_by": {
         "stream": "organizing_brands"
       }
     },
     {
       "method": "GET",
+      "path": "/organizing_brands/{organizing_brand_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /organizing_brands/{organizing_brand_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizing_brands/{organizing_brand_id}/promotions",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /organizing_brands/{organizing_brand_id}/promotions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/participations/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /participations/{promotion_id}"
+      },
+      "covered_by": {
+        "stream": "participations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/participations/{promotion_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "existing-surface[POST /participations/{promotion_id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented participation creation; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/participations/{promotion_id}/check_requirement/{stage_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /participations/{promotion_id}/check_requirement/{stage_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/participations/{promotion_id}/participate/{stage_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /participations/{promotion_id}/participate/{stage_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/participations/{promotion_id}/remaining/{stage_id}/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /participations/{promotion_id}/remaining/{stage_id}/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/participations/{promotion_id}/users/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /participations/{promotion_id}/users/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/participations/{promotion_id}/validate_code/{stage_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /participations/{promotion_id}/validate_code/{stage_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/participations/{promotion_id}/{participation_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /participations/{promotion_id}/{participation_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pos/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /pos/{promotion_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prizes/inventory/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /prizes/inventory/{promotion_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prizes/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /prizes/{promotion_id}"
+      },
+      "covered_by": {
+        "stream": "prizes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prizes/{promotion_id}/users/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /prizes/{promotion_id}/users/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /promotions"
+      },
+      "covered_by": {
+        "stream": "promotions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /promotions/{promotion_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promotions/{promotion_id}/registration_fields",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "existing-surface[GET /promotions/{promotion_id}/registration_fields]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ranking/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /ranking/{promotion_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/stages/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /stages/{promotion_id}"
+      },
       "covered_by": {
         "stream": "stages"
       }
     },
     {
       "method": "GET",
+      "path": "/stages/{promotion_id}/{stage_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /stages/{promotion_id}/{stage_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/autologin/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /users/autologin/{promotion_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/logintoken/{promotion_id}/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /users/logintoken/{promotion_id}/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/segments/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#POST /users/segments/{promotion_id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/segments/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#DELETE /users/segments/{promotion_id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/users/{promotion_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /users/{promotion_id}"
+      },
       "covered_by": {
         "stream": "users"
       }
     },
     {
       "method": "GET",
-      "path": "/participations/{promotion_id}",
-      "covered_by": {
-        "stream": "participations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/prizes/{promotion_id}",
-      "covered_by": {
-        "stream": "prizes"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/participations/{promotion_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented participation creation; not implemented in this bundle"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/promotions/{promotion_id}/registration_fields",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "path": "/users/{promotion_id}/{user_id}",
+      "provenance": {
+        "artifact": "easypromos-artifact-2026-08-09",
+        "source_url": "https://easypromos-apiref.redoc.ly/",
+        "source_kind": "html_reference",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911",
+        "coordinate": "https://easypromos-apiref.redoc.ly/#GET /users/{promotion_id}/{user_id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

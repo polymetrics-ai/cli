@@ -1,0 +1,1653 @@
+{
+  "operations": [
+    {
+      "id": "aircall.post.v1-ai-voice-agents-id-trigger-outbound-call",
+      "kind": "rest_write",
+      "summary": "POST /v1/ai_voice_agents/:id/trigger_outbound_call",
+      "description": "triggers a live outbound AI Voice Agent call; a real-world telephony side effect, not a reverse-ETL data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/ai_voice_agents/:id/trigger_outbound_call",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-analytics-report-export",
+      "kind": "rest_write",
+      "summary": "POST /v1/analytics/report/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/analytics/report/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-analytics-report-export-export-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/analytics/report/export/:export_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/analytics/report/export/:export_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-analytics-report-exports",
+      "kind": "rest_write",
+      "summary": "POST /v1/analytics/report_exports",
+      "description": "starts an async analytics report export job; the resulting export is a downloadable artifact, not a synchronous JSON record this dialect's write action can model without polling",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/analytics/report_exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-analytics-report-exports-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/analytics/report_exports/:id",
+      "description": "async export-job status/result poll, paired with the excluded report_exports create above",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/analytics/report_exports/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-action-items",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/action_items",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/action_items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-custom-summary-result",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/custom_summary_result",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/custom_summary_result",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-evaluations",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/evaluations",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/evaluations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-playbook-result",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/playbook_result",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/playbook_result",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-predicted-csat",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/predicted_csat",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/predicted_csat",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-realtime-transcription",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/realtime_transcription",
+      "description": "real-time streaming transcription of an in-progress call, not a historical record",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/realtime_transcription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-sentiments",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/sentiments",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/sentiments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-summary",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/summary",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-topics",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/topics",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/topics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-call-id-transcription",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:call_id/transcription",
+      "description": "Conversation Intelligence add-on feature not available on every Aircall plan; per-call detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:call_id/transcription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/:id",
+      "description": "single-call detail; the calls stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-calls-id-insight-cards",
+      "kind": "rest_write",
+      "summary": "POST /v1/calls/:id/insight_cards",
+      "description": "posts a custom CRM insight card into the live agent call UI; a UI-integration action, not a data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calls/:id/insight_cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-calls-id-pause-recording",
+      "kind": "rest_write",
+      "summary": "POST /v1/calls/:id/pause_recording",
+      "description": "controls live in-progress call recording state; a real-time telephony action, not a data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calls/:id/pause_recording",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-calls-id-recording",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/calls/:id/recording",
+      "description": "permanently deletes a call recording asset with no undo; not a safe reverse-ETL action for this pass",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/calls/:id/recording",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-calls-id-resume-recording",
+      "kind": "rest_write",
+      "summary": "POST /v1/calls/:id/resume_recording",
+      "description": "controls live in-progress call recording state; a real-time telephony action, not a data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calls/:id/resume_recording",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-calls-id-transfers",
+      "kind": "rest_write",
+      "summary": "POST /v1/calls/:id/transfers",
+      "description": "transfers a live in-progress call to another agent/number; a real-time telephony action, not a data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calls/:id/transfers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-calls-id-voicemail",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/calls/:id/voicemail",
+      "description": "permanently deletes a voicemail asset with no undo; not a safe reverse-ETL action for this pass",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/calls/:id/voicemail",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-calls-search",
+      "kind": "rest_read",
+      "summary": "GET /v1/calls/search",
+      "description": "server-side search over the same Call resource the calls stream already lists in full",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/calls/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-company",
+      "kind": "rest_read",
+      "summary": "GET /v1/company",
+      "description": "singleton account-metadata endpoint (company name/plan), not a syncable record list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/company",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/:id",
+      "description": "single-contact detail; the contacts stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-contacts-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/:id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-contacts-id-email-details",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/:id/email_details",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/:id/email_details",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-contacts-id-email-details-email-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/contacts/:id/email_details/:email_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/contacts/:id/email_details/:email_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-contacts-id-email-details-email-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/:id/email_details/:email_id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/email_details/:email_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-contacts-id-emails",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/:id/emails",
+      "description": "sub-resource add of a single email to a contact; update_contact's full-record PUT already lets a caller replace a contact's emails array in one request",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/:id/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-contacts-id-emails-email-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/contacts/:id/emails/:email_id",
+      "description": "sub-resource update of a single contact email; covered by update_contact's full-record PUT",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/contacts/:id/emails/:email_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-contacts-id-emails-email-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/:id/emails/:email_id",
+      "description": "sub-resource delete of a single contact email; covered by update_contact's full-record PUT",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/emails/:email_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-contacts-id-phone-details",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/:id/phone_details",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/:id/phone_details",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-contacts-id-phone-details-phone-number-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/contacts/:id/phone_details/:phone_number_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-contacts-id-phone-details-phone-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/:id/phone_details/:phone_number_id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-contacts-id-phone-numbers",
+      "kind": "rest_write",
+      "summary": "POST /v1/contacts/:id/phone_numbers",
+      "description": "sub-resource add of a single phone number to a contact; update_contact's full-record PUT already lets a caller replace a contact's phone_numbers array in one request",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/contacts/:id/phone_numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-contacts-id-phone-numbers-phone-number-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/contacts/:id/phone_numbers/:phone_number_id",
+      "description": "sub-resource update of a single contact phone number; covered by update_contact's full-record PUT",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-contacts-id-phone-numbers-phone-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/contacts/:id/phone_numbers/:phone_number_id",
+      "description": "sub-resource delete of a single contact phone number; covered by update_contact's full-record PUT",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/contacts/:id/phone_numbers/:phone_number_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-contacts-search",
+      "kind": "rest_read",
+      "summary": "GET /v1/contacts/search",
+      "description": "server-side search over the same Contact resource the contacts stream already lists in full",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/contacts/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-group-messages",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/group_messages",
+      "description": "sends a live outbound group SMS/message to real phone numbers; a real-world messaging side effect",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/group_messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-group-messages-skip-inbox",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/group_messages/skip_inbox",
+      "description": "sends a live outbound group SMS/message to real phone numbers; a real-world messaging side effect",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/group_messages/skip_inbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-messages",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/messages",
+      "description": "sends a live outbound SMS/message to a real phone number; a real-world messaging side effect, not a reverse-ETL data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-messages-skip-inbox",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/messages/skip_inbox",
+      "description": "sends a live outbound SMS/message to a real phone number; a real-world messaging side effect",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/messages/skip_inbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-whatsapp-messages",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/whatsapp_messages",
+      "description": "sends a live outbound WhatsApp message to a real phone number; a real-world messaging side effect",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/whatsapp_messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-conversations-conversation-id-whatsapp-messages-skip-inbox",
+      "kind": "rest_write",
+      "summary": "POST /v1/conversations/:conversation_id/whatsapp_messages/skip_inbox",
+      "description": "sends a live outbound WhatsApp message to a real phone number; a real-world messaging side effect",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/conversations/:conversation_id/whatsapp_messages/skip_inbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-dialer-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /v1/dialer_campaigns",
+      "description": "Power Dialer add-on feature not available on every Aircall plan",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dialer_campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-dialer-campaigns-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/dialer_campaigns/:id",
+      "description": "Power Dialer add-on feature not available on every Aircall plan; no list-all-campaigns endpoint exists to hang a stream off of (detail-only by id)",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dialer_campaigns/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-dialer-campaigns-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/dialer_campaigns/:id",
+      "description": "Power Dialer add-on feature not available on every Aircall plan",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/dialer_campaigns/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-dialer-campaigns-id-phone-numbers",
+      "kind": "rest_read",
+      "summary": "GET /v1/dialer_campaigns/:id/phone_numbers",
+      "description": "Power Dialer add-on feature not available on every Aircall plan",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/dialer_campaigns/:id/phone_numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-dialer-campaigns-id-phone-numbers",
+      "kind": "rest_write",
+      "summary": "POST /v1/dialer_campaigns/:id/phone_numbers",
+      "description": "Power Dialer add-on feature not available on every Aircall plan",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/dialer_campaigns/:id/phone_numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-dialer-campaigns-id-phone-numbers-phone-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/dialer_campaigns/:id/phone_numbers/:phone_number_id",
+      "description": "Power Dialer add-on feature not available on every Aircall plan",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/dialer_campaigns/:id/phone_numbers/:phone_number_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-integrations-name",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/:name",
+      "description": "per-named-integration detail requires knowing the integration's name in advance and account-admin visibility; no list-all endpoint",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/:name",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-integrations-name-disable",
+      "kind": "rest_write",
+      "summary": "POST /v1/integrations/:name/disable",
+      "description": "account-level integration provisioning, not reverse-ETL record data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integrations/:name/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-integrations-name-enable",
+      "kind": "rest_write",
+      "summary": "POST /v1/integrations/:name/enable",
+      "description": "account-level integration provisioning, not reverse-ETL record data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integrations/:name/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-integrations-disable",
+      "kind": "rest_write",
+      "summary": "POST /v1/integrations/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integrations/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-integrations-enable",
+      "kind": "rest_write",
+      "summary": "POST /v1/integrations/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integrations/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-integrations-me",
+      "kind": "rest_read",
+      "summary": "GET /v1/integrations/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/integrations/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-messages-send-whatsapp-native",
+      "kind": "rest_write",
+      "summary": "POST /v1/messages/send/whatsapp/native",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/messages/send/whatsapp/native",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-messages-whatsapp-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/messages/whatsapp/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/messages/whatsapp/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-number-configurations",
+      "kind": "rest_write",
+      "summary": "POST /v1/number_configurations",
+      "description": "creates a live number-porting/configuration provisioning request; an account-provisioning action, not reverse-ETL record data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/number_configurations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-number-configurations-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/number_configurations/:id",
+      "description": "per-configuration-request detail fetch, no list-all endpoint to hang a stream off of",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/number_configurations/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-number-configurations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/number_configurations/:id",
+      "description": "cancels a live number-porting/configuration provisioning request; an account-provisioning action",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/number_configurations/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id",
+      "description": "single-number detail; the numbers stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-numbers-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/numbers/:id",
+      "description": "number-level admin settings (name, live-recording toggle) require elevated account-admin scope beyond this pilot's read/write credential; no safe default request shape without per-account setting knowledge",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/numbers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-numbers-id-messages",
+      "kind": "rest_write",
+      "summary": "PUT /v1/numbers/:id/messages",
+      "description": "IVR music/message-file configuration is an audio-asset upload (multipart), not a JSON record mutation this dialect can express",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/numbers/:id/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-messages-configuration",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id/messages/configuration",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-numbers-id-messages-configuration",
+      "kind": "rest_write",
+      "summary": "POST /v1/numbers/:id/messages/configuration",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-numbers-id-messages-configuration",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/numbers/:id/messages/configuration",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/numbers/:id/messages/configuration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-numbers-id-messages-group-native-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/numbers/:id/messages/group/native/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/native/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-numbers-id-messages-group-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/numbers/:id/messages/group/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/group/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-numbers-id-messages-native-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/numbers/:id/messages/native/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/native/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-numbers-id-messages-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/numbers/:id/messages/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/numbers/:id/messages/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-registration-status",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id/registration_status",
+      "description": "per-number regulatory registration status detail fetch, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/registration_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-templates",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id/templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-whatsapp-status",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id/whatsapp_status",
+      "description": "WhatsApp Business add-on feature not available on every Aircall plan; per-number status detail fetch",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/whatsapp_status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-whatsapp-templates",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/:id/whatsapp_templates",
+      "description": "WhatsApp Business add-on feature not available on every Aircall plan; per-number sub-resource, not a bulk syncable list",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/:id/whatsapp_templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-numbers-id-2",
+      "kind": "rest_read",
+      "summary": "GET /v1/numbers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/numbers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-outbound-calls-agents-agent-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/outbound-calls/agents/:agent_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/outbound-calls/agents/:agent_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-tags-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/tags/:id",
+      "description": "single-tag detail; the tags stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tags/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-teams-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/teams/:id",
+      "description": "single-team detail; the teams stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/teams/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-456",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/456",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/456",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/:id",
+      "description": "single-user detail; the users stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-id-availability",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/:id/availability",
+      "description": "real-time presence/availability snapshot, not a syncable historical record stream",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/:id/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-users-id-calls",
+      "kind": "rest_write",
+      "summary": "POST /v1/users/:id/calls",
+      "description": "starts a live outbound call from the agent's device; a real-world telephony side effect, not a reverse-ETL data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/users/:id/calls",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-users-id-dial",
+      "kind": "rest_write",
+      "summary": "POST /v1/users/:id/dial",
+      "description": "dials a phone number in the agent's Aircall Phone; a real-world telephony side effect, not a reverse-ETL data mutation",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/users/:id/dial",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-user-id-dialer-campaign",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/:user_id/dialer_campaign",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-users-user-id-dialer-campaign",
+      "kind": "rest_write",
+      "summary": "POST /v1/users/:user_id/dialer_campaign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-users-user-id-dialer-campaign",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/users/:user_id/dialer_campaign",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/users/:user_id/dialer_campaign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-user-id-dialer-campaign-phone-numbers",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/:user_id/dialer_campaign/phone_numbers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v1-users-user-id-dialer-campaign-phone-numbers",
+      "kind": "rest_write",
+      "summary": "POST /v1/users/:user_id/dialer_campaign/phone_numbers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-users-user-id-dialer-campaign-phone-numbers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-availabilities",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/availabilities",
+      "description": "real-time presence/availability snapshot, not a syncable historical record stream",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/availabilities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-john-doe-aircall-io",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/john.doe@aircall.io",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/john.doe@aircall.io",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/:id",
+      "description": "single-webhook detail; the webhooks stream already covers the list data",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v1-webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/webhooks/:webhook_id",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/webhooks/:webhook_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v1-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/webhooks/:webhook_id",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/webhooks/:webhook_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.delete.v1-webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/webhooks/:webhook_id",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/webhooks/:webhook_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users",
+      "kind": "rest_read",
+      "summary": "GET /v2/users",
+      "description": "v2 list is the same User resource as the v1 users stream with a different envelope; v1 is covered, v2 is not separately migrated",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.post.v2-users",
+      "kind": "rest_write",
+      "summary": "POST /v2/users",
+      "description": "v2 create is the same operation as write action create_user (v1); not separately migrated",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-456",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/456",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/456",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/:id",
+      "description": "v2 single-user detail; covered by the v1 users stream",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.put.v2-users-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/users/:id",
+      "description": "v2 update is the same operation as write action update_user (v1); not separately migrated",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/users/:id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-id-numbers",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/:id/numbers",
+      "description": "per-user number assignment sub-resource; the numbers stream already covers all number records",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/:id/numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-john-doe-aircall-io",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/john.doe@aircall.io",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/john.doe@aircall.io",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-user-id-numbers",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{user_id}/numbers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/numbers",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}
