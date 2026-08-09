@@ -1367,10 +1367,15 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 		return batchArtifactInventory{}, fmt.Errorf("artifact swagger field: %w", err)
 	}
 	swaggerBasePath := ""
+	openAPIServerBasePath := ""
 	switch {
 	case openAPI != "" && strings.HasPrefix(openAPI, "3.") && swagger == "":
 		source.Kind = "openapi"
 		source.Version = openAPI
+		openAPIServerBasePath, err = batchOpenAPIServerBasePath(fields)
+		if err != nil {
+			return batchArtifactInventory{}, err
+		}
 	case swagger == "2.0" && openAPI == "":
 		source.Kind = "swagger"
 		source.Version = swagger
@@ -1397,6 +1402,7 @@ func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch b
 		}
 		for index := range pathEndpoints {
 			pathEndpoints[index].Path = batchSwaggerBasePathEndpointPath(swaggerBasePath, pathEndpoints[index].Path)
+			pathEndpoints[index].Path = batchSwaggerBasePathEndpointPath(openAPIServerBasePath, pathEndpoints[index].Path)
 		}
 		for _, endpoint := range pathEndpoints {
 			key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
@@ -1450,6 +1456,85 @@ func batchSwaggerBasePathEndpointPath(basePath, endpointPath string) string {
 		return endpointPath
 	}
 	return strings.TrimRight(basePath, "/") + endpointPath
+}
+
+// batchOpenAPIServerBasePath admits a server URL path only when every declared
+// OpenAPI server has the same literal request base path. That keeps a server
+// alternative from silently changing the materialized endpoint inventory.
+func batchOpenAPIServerBasePath(fields map[string]*yaml.Node) (string, error) {
+	servers, exists := fields["servers"]
+	if !exists {
+		return "", nil
+	}
+	servers, err := batchYAMLDeref(servers)
+	if err != nil {
+		return "", err
+	}
+	if servers == nil || servers.Kind != yaml.SequenceNode {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI servers must be a sequence")
+	}
+	if len(servers.Content) == 0 {
+		return "", nil
+	}
+
+	basePath := ""
+	for index, server := range servers.Content {
+		serverFields, err := batchYAMLFields(server)
+		if err != nil {
+			return "", batchArtifactInventoryUnknown("artifact OpenAPI server %d is not a mapping", index+1)
+		}
+		serverURL, err := batchYAMLFieldString(serverFields, "url")
+		if err != nil || serverURL == "" {
+			return "", batchArtifactInventoryUnknown("artifact OpenAPI server %d has no valid URL", index+1)
+		}
+		candidate, err := batchOpenAPIServerURLPath(serverURL)
+		if err != nil {
+			return "", err
+		}
+		if index == 0 {
+			basePath = candidate
+			continue
+		}
+		if basePath != candidate {
+			return "", batchArtifactInventoryUnknown("artifact OpenAPI servers have ambiguous request base paths %q and %q", basePath, candidate)
+		}
+	}
+	return basePath, nil
+}
+
+func batchOpenAPIServerURLPath(serverURL string) (string, error) {
+	serverURL = strings.TrimSpace(serverURL)
+	if strings.ContainsAny(serverURL, "\r\n\t\\\x00") {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not a valid absolute URL", serverURL)
+	}
+	schemeEnd := strings.Index(serverURL, "://")
+	if schemeEnd < 1 {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not an absolute HTTP URL", serverURL)
+	}
+	scheme := strings.ToLower(serverURL[:schemeEnd])
+	if scheme != "https" && scheme != "http" {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not an HTTP URL", serverURL)
+	}
+	authorityAndPath := serverURL[schemeEnd+3:]
+	pathOffset := strings.IndexByte(authorityAndPath, '/')
+	if pathOffset < 0 {
+		if authorityAndPath == "" || strings.ContainsAny(authorityAndPath, "?#") {
+			return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not a valid absolute URL", serverURL)
+		}
+		return "", nil
+	}
+	authority := authorityAndPath[:pathOffset]
+	basePath := authorityAndPath[pathOffset:]
+	if authority == "" || strings.ContainsAny(authority, "?#") {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q is not a valid absolute URL", serverURL)
+	}
+	if strings.ContainsAny(basePath, "?#{}") {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q has a non-literal request path", serverURL)
+	}
+	if err := validateBatchSwaggerBasePath(basePath); err != nil {
+		return "", batchArtifactInventoryUnknown("artifact OpenAPI server URL %q has an invalid request path", serverURL)
+	}
+	return basePath, nil
 }
 
 func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchArtifactDocument, error) {

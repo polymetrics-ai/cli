@@ -1,0 +1,1963 @@
+{
+  "operations": [
+    {
+      "id": "activecampaign.get.api-3-accountcustomfieldmeta",
+      "kind": "rest_read",
+      "summary": "GET /api/3/accountCustomFieldMeta",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/accountCustomFieldMeta",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-accountcustomfieldmeta",
+      "kind": "rest_write",
+      "summary": "POST /api/3/accountCustomFieldMeta",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/accountCustomFieldMeta",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-accountcustomfieldmeta-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/accountCustomFieldMeta/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/accountCustomFieldMeta/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-accounts",
+      "kind": "rest_write",
+      "summary": "POST /api/3/accounts",
+      "description": "ENGINE_GAP: account-create body is a nested {\"account\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-accounts-bulk-delete",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/accounts/bulk_delete",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/accounts/bulk_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-accounts-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/accounts/{id}",
+      "description": "single-account detail subsumed by the accounts list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-accounts-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/accounts/{id}",
+      "description": "ENGINE_GAP: account update shares the same nested envelope shape as create",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-accounts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/accounts/{id}",
+      "description": "permanently deletes an account and its contact/deal associations",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-activities",
+      "kind": "rest_read",
+      "summary": "GET /api/3/activities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-audiences",
+      "kind": "rest_read",
+      "summary": "GET /api/3/audiences",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/audiences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-audiences-segmentid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/audiences/{segmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/audiences/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-automations-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/automations/{id}",
+      "description": "single-automation detail subsumed by the automations list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/automations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-automations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/automations/{id}",
+      "description": "permanently deletes an automation and removes every contact currently enrolled in it",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/automations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-campaign",
+      "kind": "rest_write",
+      "summary": "POST /api/3/campaign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/campaign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-campaigns",
+      "kind": "rest_write",
+      "summary": "POST /api/3/campaigns",
+      "description": "ENGINE_GAP: campaign-create body is a nested {\"campaign\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-campaigns-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/campaigns/{id}",
+      "description": "single-campaign detail subsumed by the campaigns list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-campaigns-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/campaigns/{id}",
+      "description": "permanently deletes a campaign, including sent-campaign performance history",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/campaigns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-campaigns-id-copy",
+      "kind": "rest_write",
+      "summary": "POST /api/3/campaigns/{id}/copy",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/campaigns/{id}/copy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-campaigns-id-edit",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/campaigns/{id}/edit",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/campaigns/{id}/edit",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-channels-whatsapp-template",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/channels/whatsapp/template",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/channels/whatsapp/template",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-channel-whatsapp-channels-whatsapp-template-id-send",
+      "kind": "rest_write",
+      "summary": "POST /api/3/channel/whatsapp/channels/whatsapp/template/{id}/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-flow-execution",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/flow-execution",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/flow-execution",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-flow-execution-contact",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/flow-execution-contact",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/flow-execution-contact",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-flow-execution-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/flow-execution-contact/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/flow-execution-contact/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-flow-execution-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/flow-execution/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/flow-execution/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-channel-whatsapp-flow-id-run",
+      "kind": "rest_write",
+      "summary": "POST /api/3/channel/whatsapp/flow/{id}/run",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/channel/whatsapp/flow/{id}/run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-channel-whatsapp-inbox-conversation",
+      "kind": "rest_read",
+      "summary": "GET /api/3/channel/whatsapp/inbox/conversation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/channel/whatsapp/inbox/conversation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-channel-whatsapp-inbox-conversation-id-update",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/channel/whatsapp/inbox/conversation/{id}/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/channel/whatsapp/inbox/conversation/{id}/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.patch.api-3-channel-whatsapp-inbox-conversation-id-update",
+      "kind": "rest_write",
+      "summary": "PATCH /api/3/channel/whatsapp/inbox/conversation/{id}/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/3/channel/whatsapp/inbox/conversation/{id}/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-connections",
+      "kind": "rest_read",
+      "summary": "GET /api/3/connections",
+      "description": "third-party e-commerce connection metadata (Shopify/WooCommerce link records), not core CRM catalog data",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-connections",
+      "kind": "rest_write",
+      "summary": "POST /api/3/connections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-connections-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/connections/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/connections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-connections-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/connections/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/connections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-contact-sync",
+      "kind": "rest_write",
+      "summary": "POST /api/3/contact/sync",
+      "description": "ENGINE_GAP: the upsert-by-email sync endpoint shares the same nested {\"contact\": {...}} envelope body shape as create/update",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/contact/sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-contacttags",
+      "kind": "rest_write",
+      "summary": "POST /api/3/contactTags",
+      "description": "ENGINE_GAP: applying a tag to a contact wraps the body in a nested {\"contactTag\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/contactTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-contacttags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/contactTags/{id}",
+      "description": "removes a tag assignment from a contact",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/contactTags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-contacts",
+      "kind": "rest_write",
+      "summary": "POST /api/3/contacts",
+      "description": "ENGINE_GAP: ActiveCampaign's contact-create body is a nested envelope ({\"contact\": {...fieldValues...}}); the dialect's write body construction always sends record fields flat at the top level with no envelope-wrapping mechanism, so a correct create_contact action cannot be expressed declaratively without silently diverging from the real wire shape",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/contacts/{id}",
+      "description": "single-contact detail subsumed by the contacts list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-contacts-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/contacts/{id}",
+      "description": "ENGINE_GAP: contact update shares the same nested contact-envelope body shape as create; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-contacts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/contacts/{id}",
+      "description": "permanently deletes a contact and its associated activity history",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-contacts-id-contactautomations",
+      "kind": "rest_read",
+      "summary": "GET /api/3/contacts/{id}/contactAutomations",
+      "description": "per-contact automation-membership sub-resource with no top-level list endpoint of its own; would require per-contact fan_out this pass does not scope",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactAutomations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-contacts-id-contacttags",
+      "kind": "rest_read",
+      "summary": "GET /api/3/contacts/{id}/contactTags",
+      "description": "per-contact tag-membership sub-resource with no top-level list endpoint of its own; same per-parent fan_out reasoning as contactAutomations",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/contactTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-contacts-id-geoips",
+      "kind": "rest_read",
+      "summary": "GET /api/3/contacts/{id}/geoIps",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/contacts/{id}/geoIps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-dealcustomfieldmeta",
+      "kind": "rest_read",
+      "summary": "GET /api/3/dealCustomFieldMeta",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/dealCustomFieldMeta",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-dealcustomfieldmeta",
+      "kind": "rest_write",
+      "summary": "POST /api/3/dealCustomFieldMeta",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/dealCustomFieldMeta",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-dealcustomfieldmeta-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/dealCustomFieldMeta/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/dealCustomFieldMeta/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-dealgroups",
+      "kind": "rest_read",
+      "summary": "GET /api/3/dealGroups",
+      "description": "deal pipeline (group) container objects; deal_stages already surfaces each stage's parent group id, and pipelines are a low-cardinality admin-configuration list rarely needed independently of stages",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/dealGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-dealstages-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/dealStages/{id}",
+      "description": "single-deal-stage detail subsumed by the deal_stages list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/dealStages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-dealtasks",
+      "kind": "rest_write",
+      "summary": "POST /api/3/dealTasks",
+      "description": "ENGINE_GAP: deal-task-create body is a nested {\"dealTask\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/dealTasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-dealtasks-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/dealTasks/{id}",
+      "description": "single-deal-task detail subsumed by the deal_tasks list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/dealTasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-dealtasks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/dealTasks/{id}",
+      "description": "permanently deletes a scheduled deal task",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/dealTasks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-deals",
+      "kind": "rest_write",
+      "summary": "POST /api/3/deals",
+      "description": "ENGINE_GAP: ActiveCampaign's deal-create body is a nested envelope ({\"deal\": {...fields...}}); not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/deals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-deals-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/deals/{id}",
+      "description": "single-deal detail subsumed by the deals list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/deals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-deals-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/deals/{id}",
+      "description": "ENGINE_GAP: deal update shares the same nested deal-envelope body shape as create",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/deals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-deals-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/deals/{id}",
+      "description": "permanently deletes a deal and its pipeline history",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/deals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-deals-id-notes",
+      "kind": "rest_read",
+      "summary": "GET /api/3/deals/{id}/notes",
+      "description": "per-deal notes sub-resource with no top-level list endpoint of its own; would require per-deal fan_out this pass does not scope",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/deals/{id}/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-ecomorderproducts",
+      "kind": "rest_read",
+      "summary": "GET /api/3/ecomOrderProducts",
+      "description": "e-commerce order line-item data; deferred alongside ecomOrders",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/ecomOrderProducts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-ecomorders",
+      "kind": "rest_read",
+      "summary": "GET /api/3/ecomOrders",
+      "description": "e-commerce order sync data requires a configured storefront connection (see /connections above); deferred alongside it",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/ecomOrders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-fieldvalues",
+      "kind": "rest_read",
+      "summary": "GET /api/3/fieldValues",
+      "description": "per-contact custom-field-value collection with no useful top-level unfiltered list endpoint; would require per-contact fan_out this pass does not scope",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/fieldValues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-fieldvalues",
+      "kind": "rest_write",
+      "summary": "POST /api/3/fieldValues",
+      "description": "ENGINE_GAP: field-value-create body is a nested {\"fieldValue\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/fieldValues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-fieldvalues-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/fieldValues/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/fieldValues/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-fields",
+      "kind": "rest_write",
+      "summary": "POST /api/3/fields",
+      "description": "ENGINE_GAP: custom-field-create body is a nested {\"field\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-fields-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/fields/{id}",
+      "description": "single-custom-field detail subsumed by the fields list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/fields/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-form-optin",
+      "kind": "rest_write",
+      "summary": "POST /api/3/form/optin",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/form/optin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-forms",
+      "kind": "rest_write",
+      "summary": "POST /api/3/forms",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-forms-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/forms/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/forms/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-forms-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/forms/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/forms/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-geoips-geoaddressid-geoaddress",
+      "kind": "rest_read",
+      "summary": "GET /api/3/geoIps/{geoAddressID}/geoAddress",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/geoIps/{geoAddressID}/geoAddress",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-groupmembers",
+      "kind": "rest_read",
+      "summary": "GET /api/3/groupMembers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/groupMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-groupmembers",
+      "kind": "rest_write",
+      "summary": "POST /api/3/groupMembers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/groupMembers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-groupmembers-groupid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/groupMembers/{groupID}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/groupMembers/{groupID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-import-bulk-import",
+      "kind": "rest_read",
+      "summary": "GET /api/3/import/bulk_import",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/import/bulk_import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-import-bulk-import",
+      "kind": "rest_write",
+      "summary": "POST /api/3/import/bulk_import",
+      "description": "asynchronous CSV/bulk-file contact import job; a batch-file upload workflow, not a per-record declarative write",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/import/bulk_import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-import-info",
+      "kind": "rest_read",
+      "summary": "GET /api/3/import/info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/import/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-importbulk-batchid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/importBulk/{batchId}",
+      "description": "bulk-import job status polling; tied to the deferred bulk-import feature above",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/importBulk/{batchId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-lists",
+      "kind": "rest_write",
+      "summary": "POST /api/3/lists",
+      "description": "ENGINE_GAP: list-create body is a nested {\"list\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-lists-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/lists/{id}",
+      "description": "single-list detail subsumed by the lists list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-lists-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/lists/{id}",
+      "description": "ENGINE_GAP: list update shares the same nested envelope shape as create",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-lists-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/lists/{id}",
+      "description": "permanently deletes a list and its subscriber associations",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/lists/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-messages-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/messages/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/messages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-notes",
+      "kind": "rest_write",
+      "summary": "POST /api/3/notes",
+      "description": "ENGINE_GAP: note-create body is a nested {\"note\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-personalizations",
+      "kind": "rest_read",
+      "summary": "GET /api/3/personalizations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/personalizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-personalizations",
+      "kind": "rest_write",
+      "summary": "POST /api/3/personalizations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/personalizations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-personalizations-bulkdelete",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/personalizations/bulkdelete",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/personalizations/bulkdelete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-personalizations-variableid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/personalizations/{variableID}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/personalizations/{variableID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-personalizations-variableid",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/personalizations/{variableID}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/personalizations/{variableID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-personalizations-variableid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/personalizations/{variableID}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/personalizations/{variableID}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.patch.api-3-personalizations-variableid-lock",
+      "kind": "rest_write",
+      "summary": "PATCH /api/3/personalizations/{variableID}/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/3/personalizations/{variableID}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.patch.api-3-personalizations-variableid-unlock",
+      "kind": "rest_write",
+      "summary": "PATCH /api/3/personalizations/{variableID}/unlock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/3/personalizations/{variableID}/unlock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-segmentmatch-segmentid-contactid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/segmentMatch/{segmentId}/{contactId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/segmentMatch/{segmentId}/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-segmentmatch-segmentid-contactid-externalid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/segmentMatch/{segmentId}/{contactId}/{externalId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/segmentMatch/{segmentId}/{contactId}/{externalId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-segments",
+      "kind": "rest_read",
+      "summary": "GET /api/3/segments",
+      "description": "saved-segment definitions are a niche admin-configuration list with a large, deeply nested JSON-structure surface; deferred pending real demand",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/segments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-segmentsv2",
+      "kind": "rest_write",
+      "summary": "POST /api/3/segmentsV2",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/segmentsV2",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-segmentsv2-segmentid",
+      "kind": "rest_read",
+      "summary": "GET /api/3/segmentsV2/{segmentId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/segmentsV2/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-segmentsv2-segmentid",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/segmentsV2/{segmentId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/segmentsV2/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-segmentsv2-segmentid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/segmentsV2/{segmentId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/segmentsV2/{segmentId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-segmentsv2-segmentid-createddate-timestamp",
+      "kind": "rest_read",
+      "summary": "GET /api/3/segmentsV2/{segmentId}/createdDate/{timestamp}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/segmentsV2/{segmentId}/createdDate/{timestamp}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-segmentsv2-segmentid-createddate-timestamp",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/segmentsV2/{segmentId}/createdDate/{timestamp}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/segmentsV2/{segmentId}/createdDate/{timestamp}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts-ai",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts/ai",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts/ai",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-sms-broadcasts-ai",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/sms/broadcasts/ai",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/sms/broadcasts/ai",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts-ai-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts/ai/{Id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts/ai/{Id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts-export",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts-metrics",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts/metrics",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts-metrics-snapshot",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts/metrics/snapshot",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts/metrics/snapshot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts-metrics-snapshot",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts/metrics/snapshot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts/metrics/snapshot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts-metrics-broadcastid-failures",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts/metrics/{broadcastId}/failures",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts/metrics/{broadcastId}/failures",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts-broadcastid-recipients",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts/{broadcastId}/recipients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts/{broadcastId}/recipients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-sms-broadcasts-broadcastid-recipients-export",
+      "kind": "rest_write",
+      "summary": "POST /api/3/sms/broadcasts/{broadcastId}/recipients/export",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/sms/broadcasts/{broadcastId}/recipients/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-broadcasts-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/broadcasts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/broadcasts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-sms-broadcasts-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/sms/broadcasts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/sms/broadcasts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-sms-broadcasts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/sms/broadcasts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/sms/broadcasts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-credits",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/credits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/credits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-sms-lists",
+      "kind": "rest_read",
+      "summary": "GET /api/3/sms/lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/sms/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-tags",
+      "kind": "rest_write",
+      "summary": "POST /api/3/tags",
+      "description": "ENGINE_GAP: tag-create body is a nested {\"tag\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-tags-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/tags/{id}",
+      "description": "single-tag detail subsumed by the tags list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.put.api-3-tags-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/3/tags/{id}",
+      "description": "ENGINE_GAP: tag update shares the same nested envelope shape as create",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/3/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.delete.api-3-tags-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/3/tags/{id}",
+      "description": "permanently deletes a tag and removes it from every contact it was applied to",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/3/tags/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-tasknotifications",
+      "kind": "rest_write",
+      "summary": "POST /api/3/taskNotifications",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/taskNotifications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-users-id",
+      "kind": "rest_read",
+      "summary": "GET /api/3/users/{id}",
+      "description": "single-user detail subsumed by the users list stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.get.api-3-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /api/3/webhooks",
+      "description": "operator-configured webhook-subscription list, not customer-facing CRM catalog data; low value as a sync stream",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/3/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "activecampaign.post.api-3-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/3/webhooks",
+      "description": "ENGINE_GAP: webhook-create body is a nested {\"webhook\": {...}} envelope; not expressible without an envelope-wrapping write dialect",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/3/webhooks",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

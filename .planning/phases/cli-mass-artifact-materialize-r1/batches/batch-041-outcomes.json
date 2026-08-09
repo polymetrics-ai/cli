@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-direct-reference-manifest.json",
+  "source_index": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-source-index.json",
+  "materialize_report": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-serverpath-materialize.json",
+  "fetch_results": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-fetch-results.json",
+  "outcomes": [
+    {
+      "connector": "activecampaign",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-serverpath-materialize.json",
+      "route": "official non-recursive llms index/direct-reference extraction: 87 provider OpenAPI v3 fragments produce the immutable 87-operation inventory",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.activecampaign.com/llms.txt",
+        "version": "v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "38cc7a803cbf730fac0d67fea26af899e9e3cd7ea7169a3ffbd6a45d43af110a"
+      },
+      "artifact_operations": 87,
+      "declared_operations": 137,
+      "operation_split": {
+        "executable": 11,
+        "provider_blocked": 42,
+        "excluded": 84
+      },
+      "cli_commands": 137,
+      "foundation_note": "The JSON surface and credential-free inspect are available. One hundred twenty-six generated command entries remain not_implemented pending generic runtime capabilities; no foundation work is part of this artifact sweep."
+    }
+  ]
+}

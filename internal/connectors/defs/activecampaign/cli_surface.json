@@ -1,0 +1,2872 @@
+{
+  "tagline": "Run ActiveCampaign's declared streams and reverse-ETL actions.",
+  "usage": "pm activecampaign \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api get api 3 accountcustomfieldmeta",
+        "api get api 3 accountcustomfieldmeta id",
+        "api get api 3 accounts id",
+        "api get api 3 activities",
+        "api get api 3 audiences",
+        "api get api 3 audiences segmentid",
+        "api get api 3 automations id",
+        "api get api 3 campaigns id",
+        "api get api 3 channel whatsapp channels whatsapp template",
+        "api get api 3 channel whatsapp channels whatsapp template id",
+        "api get api 3 channel whatsapp flow-execution",
+        "api get api 3 channel whatsapp flow-execution id",
+        "api get api 3 channel whatsapp flow-execution-contact",
+        "api get api 3 channel whatsapp flow-execution-contact id",
+        "api get api 3 channel whatsapp inbox conversation",
+        "api get api 3 connections",
+        "api get api 3 connections id",
+        "api get api 3 contacts id",
+        "api get api 3 contacts id contactautomations",
+        "api get api 3 contacts id contacttags",
+        "api get api 3 contacts id geoips",
+        "api get api 3 dealcustomfieldmeta",
+        "api get api 3 dealcustomfieldmeta id",
+        "api get api 3 dealgroups",
+        "api get api 3 deals id",
+        "api get api 3 deals id notes",
+        "api get api 3 dealstages id",
+        "api get api 3 dealtasks id",
+        "api get api 3 ecomorderproducts",
+        "api get api 3 ecomorders",
+        "api get api 3 fields id",
+        "api get api 3 fieldvalues",
+        "api get api 3 geoips geoaddressid geoaddress",
+        "api get api 3 groupmembers",
+        "api get api 3 groupmembers groupid",
+        "api get api 3 import bulk-import",
+        "api get api 3 import info",
+        "api get api 3 importbulk batchid",
+        "api get api 3 lists id",
+        "api get api 3 personalizations",
+        "api get api 3 personalizations variableid",
+        "api get api 3 segmentmatch segmentid contactid",
+        "api get api 3 segmentmatch segmentid contactid externalid",
+        "api get api 3 segments",
+        "api get api 3 segmentsv2 segmentid",
+        "api get api 3 segmentsv2 segmentid createddate timestamp",
+        "api get api 3 sms broadcasts",
+        "api get api 3 sms broadcasts ai id",
+        "api get api 3 sms broadcasts broadcastid recipients",
+        "api get api 3 sms broadcasts id",
+        "api get api 3 sms broadcasts metrics broadcastid failures",
+        "api get api 3 sms broadcasts metrics snapshot",
+        "api get api 3 sms credits",
+        "api get api 3 sms lists",
+        "api get api 3 tags id",
+        "api get api 3 users id",
+        "api get api 3 webhooks",
+        "automations list",
+        "campaigns list",
+        "contacts list",
+        "deal stages list",
+        "deal tasks list",
+        "deals list",
+        "fields list",
+        "lists list",
+        "tags list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api 3 accounts bulk-delete",
+        "api delete api 3 accounts id",
+        "api delete api 3 automations id",
+        "api delete api 3 campaigns id",
+        "api delete api 3 channel whatsapp channels whatsapp template id",
+        "api delete api 3 contacts id",
+        "api delete api 3 contacttags id",
+        "api delete api 3 deals id",
+        "api delete api 3 dealtasks id",
+        "api delete api 3 forms id",
+        "api delete api 3 lists id",
+        "api delete api 3 personalizations bulkdelete",
+        "api delete api 3 personalizations variableid",
+        "api delete api 3 segmentsv2 segmentid",
+        "api delete api 3 sms broadcasts id",
+        "api delete api 3 tags id",
+        "api patch api 3 channel whatsapp inbox conversation id update",
+        "api patch api 3 personalizations variableid lock",
+        "api patch api 3 personalizations variableid unlock",
+        "api post api 3 accountcustomfieldmeta",
+        "api post api 3 accounts",
+        "api post api 3 campaign",
+        "api post api 3 campaigns",
+        "api post api 3 campaigns id copy",
+        "api post api 3 channel whatsapp channels whatsapp template id send",
+        "api post api 3 channel whatsapp flow id run",
+        "api post api 3 connections",
+        "api post api 3 contact sync",
+        "api post api 3 contacts",
+        "api post api 3 contacttags",
+        "api post api 3 dealcustomfieldmeta",
+        "api post api 3 deals",
+        "api post api 3 dealtasks",
+        "api post api 3 fields",
+        "api post api 3 fieldvalues",
+        "api post api 3 form optin",
+        "api post api 3 forms",
+        "api post api 3 groupmembers",
+        "api post api 3 import bulk-import",
+        "api post api 3 lists",
+        "api post api 3 notes",
+        "api post api 3 personalizations",
+        "api post api 3 segmentsv2",
+        "api post api 3 sms broadcasts",
+        "api post api 3 sms broadcasts ai",
+        "api post api 3 sms broadcasts broadcastid recipients export",
+        "api post api 3 sms broadcasts export",
+        "api post api 3 sms broadcasts metrics",
+        "api post api 3 sms broadcasts metrics snapshot",
+        "api post api 3 tags",
+        "api post api 3 tasknotifications",
+        "api post api 3 webhooks",
+        "api put api 3 accounts id",
+        "api put api 3 campaigns id edit",
+        "api put api 3 channel whatsapp channels whatsapp template id",
+        "api put api 3 channel whatsapp inbox conversation id update",
+        "api put api 3 connections id",
+        "api put api 3 contacts id",
+        "api put api 3 deals id",
+        "api put api 3 fieldvalues id",
+        "api put api 3 forms id",
+        "api put api 3 lists id",
+        "api put api 3 messages id",
+        "api put api 3 personalizations variableid",
+        "api put api 3 segmentsv2 segmentid",
+        "api put api 3 segmentsv2 segmentid createddate timestamp",
+        "api put api 3 sms broadcasts ai",
+        "api put api 3 sms broadcasts id",
+        "api put api 3 tags id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/accounts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api delete api 3 accounts bulk-delete",
+      "summary": "Documented DELETE /api/3/accounts/bulk_delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 accounts bulk-delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/accounts/bulk_delete"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-accounts-bulk-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 accounts id",
+      "summary": "Documented DELETE /api/3/accounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/accounts/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-accounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 automations id",
+      "summary": "Documented DELETE /api/3/automations/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 automations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/automations/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-automations-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 campaigns id",
+      "summary": "Documented DELETE /api/3/campaigns/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/campaigns/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-campaigns-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 channel whatsapp channels whatsapp template id",
+      "summary": "Documented DELETE /api/3/channel/whatsapp/channels/whatsapp/template/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 channel whatsapp channels whatsapp template id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 contacts id",
+      "summary": "Documented DELETE /api/3/contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/contacts/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 contacttags id",
+      "summary": "Documented DELETE /api/3/contactTags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 contacttags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/contactTags/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-contacttags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 deals id",
+      "summary": "Documented DELETE /api/3/deals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 deals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/deals/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-deals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 dealtasks id",
+      "summary": "Documented DELETE /api/3/dealTasks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 dealtasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/dealTasks/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-dealtasks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 forms id",
+      "summary": "Documented DELETE /api/3/forms/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 forms id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/forms/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-forms-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 lists id",
+      "summary": "Documented DELETE /api/3/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/lists/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 personalizations bulkdelete",
+      "summary": "Documented DELETE /api/3/personalizations/bulkdelete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 personalizations bulkdelete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/personalizations/bulkdelete"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-personalizations-bulkdelete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 personalizations variableid",
+      "summary": "Documented DELETE /api/3/personalizations/{variableID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 personalizations variableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/personalizations/{variableID}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-personalizations-variableid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 segmentsv2 segmentid",
+      "summary": "Documented DELETE /api/3/segmentsV2/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 segmentsv2 segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/segmentsV2/{segmentId}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-segmentsv2-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 sms broadcasts id",
+      "summary": "Documented DELETE /api/3/sms/broadcasts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 sms broadcasts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/sms/broadcasts/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-sms-broadcasts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api 3 tags id",
+      "summary": "Documented DELETE /api/3/tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api delete api 3 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/3/tags/{id}"
+        }
+      ],
+      "operation": "activecampaign.delete.api-3-tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api 3 accountcustomfieldmeta",
+      "summary": "Documented GET /api/3/accountCustomFieldMeta (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 accountcustomfieldmeta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/accountCustomFieldMeta"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-accountcustomfieldmeta",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 accountcustomfieldmeta id",
+      "summary": "Documented GET /api/3/accountCustomFieldMeta/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 accountcustomfieldmeta id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/accountCustomFieldMeta/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-accountcustomfieldmeta-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 accounts id",
+      "summary": "Documented GET /api/3/accounts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/accounts/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-accounts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 activities",
+      "summary": "Documented GET /api/3/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/activities"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-activities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 audiences",
+      "summary": "Documented GET /api/3/audiences (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 audiences --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/audiences"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-audiences",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 audiences segmentid",
+      "summary": "Documented GET /api/3/audiences/{segmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 audiences segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/audiences/{segmentId}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-audiences-segmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 automations id",
+      "summary": "Documented GET /api/3/automations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 automations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/automations/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-automations-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 campaigns id",
+      "summary": "Documented GET /api/3/campaigns/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/campaigns/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-campaigns-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp channels whatsapp template",
+      "summary": "Documented GET /api/3/channel/whatsapp/channels/whatsapp/template (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp channels whatsapp template --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/channels/whatsapp/template"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-channels-whatsapp-template",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp channels whatsapp template id",
+      "summary": "Documented GET /api/3/channel/whatsapp/channels/whatsapp/template/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp channels whatsapp template id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp flow-execution",
+      "summary": "Documented GET /api/3/channel/whatsapp/flow-execution (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp flow-execution --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/flow-execution"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-flow-execution",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp flow-execution id",
+      "summary": "Documented GET /api/3/channel/whatsapp/flow-execution/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp flow-execution id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/flow-execution/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-flow-execution-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp flow-execution-contact",
+      "summary": "Documented GET /api/3/channel/whatsapp/flow-execution-contact (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp flow-execution-contact --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/flow-execution-contact"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-flow-execution-contact",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp flow-execution-contact id",
+      "summary": "Documented GET /api/3/channel/whatsapp/flow-execution-contact/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp flow-execution-contact id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/flow-execution-contact/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-flow-execution-contact-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 channel whatsapp inbox conversation",
+      "summary": "Documented GET /api/3/channel/whatsapp/inbox/conversation (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 channel whatsapp inbox conversation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/channel/whatsapp/inbox/conversation"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-channel-whatsapp-inbox-conversation",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 connections",
+      "summary": "Documented GET /api/3/connections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 connections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/connections"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-connections",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 connections id",
+      "summary": "Documented GET /api/3/connections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 connections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/connections/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-connections-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 contacts id",
+      "summary": "Documented GET /api/3/contacts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-contacts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 contacts id contactautomations",
+      "summary": "Documented GET /api/3/contacts/{id}/contactAutomations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 contacts id contactautomations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts/{id}/contactAutomations"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-contacts-id-contactautomations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 contacts id contacttags",
+      "summary": "Documented GET /api/3/contacts/{id}/contactTags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 contacts id contacttags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts/{id}/contactTags"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-contacts-id-contacttags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 contacts id geoips",
+      "summary": "Documented GET /api/3/contacts/{id}/geoIps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 contacts id geoips --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts/{id}/geoIps"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-contacts-id-geoips",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 dealcustomfieldmeta",
+      "summary": "Documented GET /api/3/dealCustomFieldMeta (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 dealcustomfieldmeta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealCustomFieldMeta"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-dealcustomfieldmeta",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 dealcustomfieldmeta id",
+      "summary": "Documented GET /api/3/dealCustomFieldMeta/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 dealcustomfieldmeta id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealCustomFieldMeta/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-dealcustomfieldmeta-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 dealgroups",
+      "summary": "Documented GET /api/3/dealGroups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 dealgroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealGroups"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-dealgroups",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 deals id",
+      "summary": "Documented GET /api/3/deals/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 deals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/deals/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-deals-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 deals id notes",
+      "summary": "Documented GET /api/3/deals/{id}/notes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 deals id notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/deals/{id}/notes"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-deals-id-notes",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 dealstages id",
+      "summary": "Documented GET /api/3/dealStages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 dealstages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealStages/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-dealstages-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 dealtasks id",
+      "summary": "Documented GET /api/3/dealTasks/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 dealtasks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealTasks/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-dealtasks-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 ecomorderproducts",
+      "summary": "Documented GET /api/3/ecomOrderProducts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 ecomorderproducts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/ecomOrderProducts"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-ecomorderproducts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 ecomorders",
+      "summary": "Documented GET /api/3/ecomOrders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 ecomorders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/ecomOrders"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-ecomorders",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 fields id",
+      "summary": "Documented GET /api/3/fields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/fields/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-fields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 fieldvalues",
+      "summary": "Documented GET /api/3/fieldValues (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 fieldvalues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/fieldValues"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-fieldvalues",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 geoips geoaddressid geoaddress",
+      "summary": "Documented GET /api/3/geoIps/{geoAddressID}/geoAddress (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 geoips geoaddressid geoaddress --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/geoIps/{geoAddressID}/geoAddress"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-geoips-geoaddressid-geoaddress",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 groupmembers",
+      "summary": "Documented GET /api/3/groupMembers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 groupmembers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/groupMembers"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-groupmembers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 groupmembers groupid",
+      "summary": "Documented GET /api/3/groupMembers/{groupID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 groupmembers groupid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/groupMembers/{groupID}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-groupmembers-groupid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 import bulk-import",
+      "summary": "Documented GET /api/3/import/bulk_import (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 import bulk-import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/import/bulk_import"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-import-bulk-import",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 import info",
+      "summary": "Documented GET /api/3/import/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 import info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/import/info"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-import-info",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 importbulk batchid",
+      "summary": "Documented GET /api/3/importBulk/{batchId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 importbulk batchid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/importBulk/{batchId}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-importbulk-batchid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 lists id",
+      "summary": "Documented GET /api/3/lists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/lists/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-lists-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 personalizations",
+      "summary": "Documented GET /api/3/personalizations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 personalizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/personalizations"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-personalizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 personalizations variableid",
+      "summary": "Documented GET /api/3/personalizations/{variableID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 personalizations variableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/personalizations/{variableID}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-personalizations-variableid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 segmentmatch segmentid contactid",
+      "summary": "Documented GET /api/3/segmentMatch/{segmentId}/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 segmentmatch segmentid contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/segmentMatch/{segmentId}/{contactId}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-segmentmatch-segmentid-contactid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 segmentmatch segmentid contactid externalid",
+      "summary": "Documented GET /api/3/segmentMatch/{segmentId}/{contactId}/{externalId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 segmentmatch segmentid contactid externalid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/segmentMatch/{segmentId}/{contactId}/{externalId}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-segmentmatch-segmentid-contactid-externalid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 segments",
+      "summary": "Documented GET /api/3/segments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 segments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/segments"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-segments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 segmentsv2 segmentid",
+      "summary": "Documented GET /api/3/segmentsV2/{segmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 segmentsv2 segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/segmentsV2/{segmentId}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-segmentsv2-segmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 segmentsv2 segmentid createddate timestamp",
+      "summary": "Documented GET /api/3/segmentsV2/{segmentId}/createdDate/{timestamp} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 segmentsv2 segmentid createddate timestamp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/segmentsV2/{segmentId}/createdDate/{timestamp}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-segmentsv2-segmentid-createddate-timestamp",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts",
+      "summary": "Documented GET /api/3/sms/broadcasts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts ai id",
+      "summary": "Documented GET /api/3/sms/broadcasts/ai/{Id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts ai id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts/ai/{Id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts-ai-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts broadcastid recipients",
+      "summary": "Documented GET /api/3/sms/broadcasts/{broadcastId}/recipients (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts broadcastid recipients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts/{broadcastId}/recipients"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts-broadcastid-recipients",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts id",
+      "summary": "Documented GET /api/3/sms/broadcasts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts metrics broadcastid failures",
+      "summary": "Documented GET /api/3/sms/broadcasts/metrics/{broadcastId}/failures (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts metrics broadcastid failures --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts/metrics/{broadcastId}/failures"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts-metrics-broadcastid-failures",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms broadcasts metrics snapshot",
+      "summary": "Documented GET /api/3/sms/broadcasts/metrics/snapshot (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms broadcasts metrics snapshot --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/broadcasts/metrics/snapshot"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-broadcasts-metrics-snapshot",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms credits",
+      "summary": "Documented GET /api/3/sms/credits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms credits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/credits"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-credits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 sms lists",
+      "summary": "Documented GET /api/3/sms/lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 sms lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/sms/lists"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-sms-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 tags id",
+      "summary": "Documented GET /api/3/tags/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/tags/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-tags-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 users id",
+      "summary": "Documented GET /api/3/users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/users/{id}"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api 3 webhooks",
+      "summary": "Documented GET /api/3/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api get api 3 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/webhooks"
+        }
+      ],
+      "operation": "activecampaign.get.api-3-webhooks",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api 3 channel whatsapp inbox conversation id update",
+      "summary": "Documented PATCH /api/3/channel/whatsapp/inbox/conversation/{id}/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api patch api 3 channel whatsapp inbox conversation id update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/3/channel/whatsapp/inbox/conversation/{id}/update"
+        }
+      ],
+      "operation": "activecampaign.patch.api-3-channel-whatsapp-inbox-conversation-id-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api 3 personalizations variableid lock",
+      "summary": "Documented PATCH /api/3/personalizations/{variableID}/lock (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api patch api 3 personalizations variableid lock --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/3/personalizations/{variableID}/lock"
+        }
+      ],
+      "operation": "activecampaign.patch.api-3-personalizations-variableid-lock",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api 3 personalizations variableid unlock",
+      "summary": "Documented PATCH /api/3/personalizations/{variableID}/unlock (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api patch api 3 personalizations variableid unlock --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/3/personalizations/{variableID}/unlock"
+        }
+      ],
+      "operation": "activecampaign.patch.api-3-personalizations-variableid-unlock",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 accountcustomfieldmeta",
+      "summary": "Documented POST /api/3/accountCustomFieldMeta (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 accountcustomfieldmeta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/accountCustomFieldMeta"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-accountcustomfieldmeta",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 accounts",
+      "summary": "Documented POST /api/3/accounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/accounts"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-accounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 campaign",
+      "summary": "Documented POST /api/3/campaign (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 campaign --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/campaign"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-campaign",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 campaigns",
+      "summary": "Documented POST /api/3/campaigns (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/campaigns"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-campaigns",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 campaigns id copy",
+      "summary": "Documented POST /api/3/campaigns/{id}/copy (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 campaigns id copy --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/campaigns/{id}/copy"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-campaigns-id-copy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 channel whatsapp channels whatsapp template id send",
+      "summary": "Documented POST /api/3/channel/whatsapp/channels/whatsapp/template/{id}/send (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 channel whatsapp channels whatsapp template id send --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}/send"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-channel-whatsapp-channels-whatsapp-template-id-send",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 channel whatsapp flow id run",
+      "summary": "Documented POST /api/3/channel/whatsapp/flow/{id}/run (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 channel whatsapp flow id run --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/channel/whatsapp/flow/{id}/run"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-channel-whatsapp-flow-id-run",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 connections",
+      "summary": "Documented POST /api/3/connections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 connections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/connections"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-connections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 contact sync",
+      "summary": "Documented POST /api/3/contact/sync (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 contact sync --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/contact/sync"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-contact-sync",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 contacts",
+      "summary": "Documented POST /api/3/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/contacts"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 contacttags",
+      "summary": "Documented POST /api/3/contactTags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 contacttags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/contactTags"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-contacttags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 dealcustomfieldmeta",
+      "summary": "Documented POST /api/3/dealCustomFieldMeta (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 dealcustomfieldmeta --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/dealCustomFieldMeta"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-dealcustomfieldmeta",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 deals",
+      "summary": "Documented POST /api/3/deals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 deals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/deals"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-deals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 dealtasks",
+      "summary": "Documented POST /api/3/dealTasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 dealtasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/dealTasks"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-dealtasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 fields",
+      "summary": "Documented POST /api/3/fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/fields"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 fieldvalues",
+      "summary": "Documented POST /api/3/fieldValues (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 fieldvalues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/fieldValues"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-fieldvalues",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 form optin",
+      "summary": "Documented POST /api/3/form/optin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 form optin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/form/optin"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-form-optin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 forms",
+      "summary": "Documented POST /api/3/forms (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 forms --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/forms"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-forms",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 groupmembers",
+      "summary": "Documented POST /api/3/groupMembers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 groupmembers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/groupMembers"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-groupmembers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 import bulk-import",
+      "summary": "Documented POST /api/3/import/bulk_import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 import bulk-import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/import/bulk_import"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-import-bulk-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 lists",
+      "summary": "Documented POST /api/3/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/lists"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 notes",
+      "summary": "Documented POST /api/3/notes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 notes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/notes"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-notes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 personalizations",
+      "summary": "Documented POST /api/3/personalizations (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 personalizations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/personalizations"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-personalizations",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 segmentsv2",
+      "summary": "Documented POST /api/3/segmentsV2 (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 segmentsv2 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/segmentsV2"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-segmentsv2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts",
+      "summary": "Documented POST /api/3/sms/broadcasts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts ai",
+      "summary": "Documented POST /api/3/sms/broadcasts/ai (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts ai --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts/ai"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts-ai",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts broadcastid recipients export",
+      "summary": "Documented POST /api/3/sms/broadcasts/{broadcastId}/recipients/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts broadcastid recipients export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts/{broadcastId}/recipients/export"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts-broadcastid-recipients-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts export",
+      "summary": "Documented POST /api/3/sms/broadcasts/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts/export"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts metrics",
+      "summary": "Documented POST /api/3/sms/broadcasts/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts/metrics"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 sms broadcasts metrics snapshot",
+      "summary": "Documented POST /api/3/sms/broadcasts/metrics/snapshot (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 sms broadcasts metrics snapshot --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/sms/broadcasts/metrics/snapshot"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-sms-broadcasts-metrics-snapshot",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 tags",
+      "summary": "Documented POST /api/3/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/tags"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post api 3 tasknotifications",
+      "summary": "Documented POST /api/3/taskNotifications (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 tasknotifications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/taskNotifications"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-tasknotifications",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api 3 webhooks",
+      "summary": "Documented POST /api/3/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api post api 3 webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/3/webhooks"
+        }
+      ],
+      "operation": "activecampaign.post.api-3-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put api 3 accounts id",
+      "summary": "Documented PUT /api/3/accounts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 accounts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/accounts/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-accounts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put api 3 campaigns id edit",
+      "summary": "Documented PUT /api/3/campaigns/{id}/edit (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 campaigns id edit --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/campaigns/{id}/edit"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-campaigns-id-edit",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 channel whatsapp channels whatsapp template id",
+      "summary": "Documented PUT /api/3/channel/whatsapp/channels/whatsapp/template/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 channel whatsapp channels whatsapp template id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/channel/whatsapp/channels/whatsapp/template/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-channel-whatsapp-channels-whatsapp-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 channel whatsapp inbox conversation id update",
+      "summary": "Documented PUT /api/3/channel/whatsapp/inbox/conversation/{id}/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 channel whatsapp inbox conversation id update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/channel/whatsapp/inbox/conversation/{id}/update"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-channel-whatsapp-inbox-conversation-id-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 connections id",
+      "summary": "Documented PUT /api/3/connections/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 connections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/connections/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-connections-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 contacts id",
+      "summary": "Documented PUT /api/3/contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/contacts/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put api 3 deals id",
+      "summary": "Documented PUT /api/3/deals/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 deals id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/deals/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-deals-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put api 3 fieldvalues id",
+      "summary": "Documented PUT /api/3/fieldValues/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 fieldvalues id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/fieldValues/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-fieldvalues-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 forms id",
+      "summary": "Documented PUT /api/3/forms/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 forms id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/forms/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-forms-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 lists id",
+      "summary": "Documented PUT /api/3/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/lists/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put api 3 messages id",
+      "summary": "Documented PUT /api/3/messages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 messages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/messages/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-messages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 personalizations variableid",
+      "summary": "Documented PUT /api/3/personalizations/{variableID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 personalizations variableid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/personalizations/{variableID}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-personalizations-variableid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 segmentsv2 segmentid",
+      "summary": "Documented PUT /api/3/segmentsV2/{segmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 segmentsv2 segmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/segmentsV2/{segmentId}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-segmentsv2-segmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 segmentsv2 segmentid createddate timestamp",
+      "summary": "Documented PUT /api/3/segmentsV2/{segmentId}/createdDate/{timestamp} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 segmentsv2 segmentid createddate timestamp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/segmentsV2/{segmentId}/createdDate/{timestamp}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-segmentsv2-segmentid-createddate-timestamp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 sms broadcasts ai",
+      "summary": "Documented PUT /api/3/sms/broadcasts/ai (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 sms broadcasts ai --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/sms/broadcasts/ai"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-sms-broadcasts-ai",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 sms broadcasts id",
+      "summary": "Documented PUT /api/3/sms/broadcasts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 sms broadcasts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/sms/broadcasts/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-sms-broadcasts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api 3 tags id",
+      "summary": "Documented PUT /api/3/tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign api put api 3 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/3/tags/{id}"
+        }
+      ],
+      "operation": "activecampaign.put.api-3-tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "automations list",
+      "summary": "Run the automations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "automations",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign automations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/automations"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/campaigns"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/contacts"
+        }
+      ]
+    },
+    {
+      "path": "deal stages list",
+      "summary": "Run the deal stages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_stages",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign deal stages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealStages"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "deal tasks list",
+      "summary": "Run the deal tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_tasks",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign deal tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/dealTasks"
+        }
+      ]
+    },
+    {
+      "path": "deals list",
+      "summary": "Run the deals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deals",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign deals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/deals"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "fields list",
+      "summary": "Run the fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/fields"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/lists"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/tags"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.activecampaign.com/llms.txt",
+      "examples": [
+        "pm activecampaign users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/3/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

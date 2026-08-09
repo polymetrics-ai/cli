@@ -1479,6 +1479,26 @@ func TestParseBatchSwaggerArtifactPrefixesBasePath(t *testing.T) {
 	}
 }
 
+func TestParseBatchOpenAPIArtifactPrefixesServerBasePath(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"servers": [{"url": "https://{account}.provider.example/api/3"}],
+		"paths": {
+			"/widgets": {
+				"get": {"summary": "List widgets", "responses": {"200": {"description": "OK"}}}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse OpenAPI server base-path artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodGet || endpoints[0].Path != "/api/3/widgets" {
+		t.Fatalf("parsed endpoints = %+v, want GET /api/3/widgets", endpoints)
+	}
+}
+
 func TestParseBatchOpenAPIArtifactRequiresOpenAPI3OrSwagger2(t *testing.T) {
 	for _, test := range []struct {
 		name string

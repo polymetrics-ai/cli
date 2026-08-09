@@ -85,6 +85,11 @@
 - Red: `TestParseBatchSwaggerArtifactPrefixesBasePath` showed a standard Swagger 2.0 `basePath: /api` was discarded, so Whisky Hunter's documented `/auctions_data/` artifact could not reconcile with its existing `/api/auctions_data/` ETL bindings.
 - Green: the parser validates and prefixes a Swagger base path before coverage reconciliation. The focused regression passes, and Whisky Hunter's one-connector retry validates, loads, and retains both shared stream bindings without inventing a command.
 
+## OpenAPI server base-path preservation
+
+- Red: ActiveCampaign's provider OpenAPI 3 fragments declare the v3 API root in `servers[0].url` (`https://{youraccountname}.api-us1.com/api/3`) while their `paths` are root-relative. The extractor returned `/contacts` rather than `/api/3/contacts`, causing all 61 legacy classifications to become false artifact-absent discrepancies.
+- Green: TestParseBatchOpenAPIArtifactPrefixesServerBasePath first reproduced the root-relative result, then passes with the literal /api/3 request base path retained from a templated official server URL. The parser admits a server base only when every declared server has the same valid literal request path; ordinary OpenAPI provenance and Swagger basePath behavior remain unchanged. go test -count=1 ./cmd/connectorgen -run '^(TestParseBatchOpenAPIArtifactPrefixesServerBasePath|TestParseBatchSwaggerArtifactPrefixesBasePath)$' passes.
+
 ## Complete root-reference fast path
 
 - Red: `TestCompleteBatchHTMLReferenceRootAvoidsTraversalWhenCountIsMet` was absent while a 40-connector reference pass crawled unrelated provider links even where a root page already enumerated its entire immutable ledger count.
