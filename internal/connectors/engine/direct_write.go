@@ -95,7 +95,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		requestCtx, cancel := context.WithTimeout(gated, defaultOperationDirectWriteTimeout)
 		defer cancel()
 
-		rt, err := newRuntime(requestCtx, b, prepared.cfg, h)
+		runtimeBundle := b
+		if prepared.authMode == "none" {
+			runtimeBundle.HTTP.Auth = nil
+		}
+		rt, err := newRuntime(requestCtx, runtimeBundle, prepared.cfg, h)
 		if err != nil {
 			return err
 		}
@@ -105,9 +109,6 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
-		if prepared.authMode == "none" {
-			requester.Auth = nil
-		}
 
 		var response *connsdk.Response
 		switch prepared.format {

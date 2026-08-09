@@ -215,6 +215,58 @@ func TestCheckSurfaceComplete_FixedGraphQLOperationsSatisfyCoverage(t *testing.T
 	}
 }
 
+func TestCheckSurfaceComplete_DirectWriteCoverage(t *testing.T) {
+	newBundle := func(method, availability string, write bool) engine.Bundle {
+		return engine.Bundle{
+			Name: "acme",
+			Metadata: engine.Metadata{
+				Capabilities: engine.Capabilities{Write: write},
+			},
+			Surface: &engine.APISurface{
+				API: "https://api.acme.test",
+				Endpoints: []engine.SurfaceEndpoint{{
+					Method:    method,
+					Path:      "/widgets",
+					CoveredBy: &engine.SurfaceCoverage{DirectWrite: "widgets create"},
+				}},
+			},
+			CLISurface: &engine.CLISurface{
+				Commands: []engine.CLICommand{{
+					Path:         "widgets create",
+					Intent:       "direct_write",
+					Availability: availability,
+				}},
+			},
+		}
+	}
+
+	for _, tt := range []struct {
+		name         string
+		method       string
+		availability string
+		write        bool
+		wantErr      string
+	}{
+		{name: "implemented mutation", method: "POST", availability: "implemented", write: true},
+		{name: "planned command", method: "POST", availability: "planned", write: true, wantErr: "covered_by.direct_write"},
+		{name: "read method", method: "GET", availability: "implemented", write: true, wantErr: "covered_by.direct_write must use POST, PUT, PATCH, or DELETE"},
+		{name: "write capability disabled", method: "POST", availability: "implemented", write: false, wantErr: "capabilities.write is false"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := checkSurfaceComplete(newBundle(tt.method, tt.availability, tt.write))
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("checkSurfaceComplete: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("checkSurfaceComplete error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestCheckSurfaceComplete_RequiresV2EndpointProvenance(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

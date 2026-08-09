@@ -1969,7 +1969,7 @@
       "examples": [
         "pm dockerhub scim-users update --id \"<id>\" --schemas \"urn:ietf:params:scim:schemas:core:2.0:User\" --enabled true --json"
       ],
-      "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); this bundle's write executor sends application/json, which is the widely-accepted compatible variant most SCIM 2.0 server implementations accept, but Docker Hub's own leniency here is not independently live-verified."
+      "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); the declared write sends that media type."
     },
     {
       "path": "tag detail list",

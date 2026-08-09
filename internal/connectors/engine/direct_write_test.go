@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,6 +11,68 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 )
+
+func TestOperationDirectWriteAuthModeNoneSkipsAuthenticatorConstruction(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Authorization") != "" {
+			t.Fatalf("Authorization = %q, want empty", r.Header.Get("Authorization"))
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	hooks := &fakeHooks{name: "acme", authErr: errors.New("custom authentication should not be constructed")}
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{
+			URL:  srv.URL,
+			Auth: []AuthSpec{{Mode: "custom", Hook: "acme"}},
+		},
+		Operations: []OperationSpec{{
+			ID:            "acme.auth-login",
+			Kind:          "rest_write",
+			Summary:       "Exchange credentials",
+			Risk:          "low",
+			Approval:      "none",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/auth/login",
+				ContentType: "application/json",
+				AuthMode:    "none",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["username","password"],"properties":{"username":{"type":"string"},"password":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/auth/login",
+			Operation: &SurfaceOperation{Model: "write_action"},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.auth-login",
+		Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, hooks)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+
+	result, err := OperationDirectWrite(context.Background(), bundle, req, hooks)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want %d", result.Status, http.StatusOK)
+	}
+	if hooks.authCalls != 0 {
+		t.Fatalf("custom authenticator calls = %d, want 0", hooks.authCalls)
+	}
+}
 
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
