@@ -2,110 +2,6 @@
   "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
   "queue": [
     {
-      "connector": "activecampaign",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-029-materialize.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-029-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "openapi",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://developers.activecampaign.com/llms.txt"
-      },
-      "provenance_reports": [
-        "batches/batch-006-materialize.json",
-        "batches/batch-015-materialize.json",
-        "batches/batch-015-outcomes.json",
-        "batches/batch-017-materialize.json",
-        "batches/batch-017-outcomes.json",
-        "batches/batch-021-materialize.json",
-        "batches/batch-021-outcomes.json",
-        "batches/batch-029-materialize.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-006-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-021-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-021-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-029-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
       "connector": "adjust",
       "official_routes": [
         {
@@ -16632,6 +16528,34 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-039-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "activecampaign",
+      "primary_source": {
+        "kind": "openapi",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://developers.activecampaign.com/llms.txt"
+      },
+      "provenance_reports": [
+        "batches/batch-006-materialize.json",
+        "batches/batch-015-materialize.json",
+        "batches/batch-015-outcomes.json",
+        "batches/batch-017-materialize.json",
+        "batches/batch-017-outcomes.json",
+        "batches/batch-021-materialize.json",
+        "batches/batch-021-outcomes.json",
+        "batches/batch-029-materialize.json",
+        "batches/batch-041-activecampaign-materialize.json",
+        "batches/batch-041-activecampaign-serverpath-materialize.json",
+        "batches/batch-041-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-041-outcomes.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }

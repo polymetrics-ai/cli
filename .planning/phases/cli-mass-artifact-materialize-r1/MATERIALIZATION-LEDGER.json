@@ -1,15 +1,15 @@
 {
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 190,
+    "foundation_pending": 191,
     "genuinely_blocked": 0,
-    "materialized_total": 204,
-    "newly_materialized": 188,
-    "reachable": 23,
+    "materialized_total": 205,
+    "newly_materialized": 189,
+    "reachable": 24,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 222,
-    "retry_pending": 222
+    "remaining": 221,
+    "retry_pending": 221
   },
   "entries": [
     {
@@ -106,9 +106,27 @@
       "state": "newly_materialized"
     },
     {
+      "bundle_provenance": {
+        "artifacts": [
+          {
+            "id": "activecampaign-artifact-2026-08-09",
+            "url": "https://developers.activecampaign.com/llms.txt",
+            "kind": "openapi",
+            "version": "3.1.0",
+            "retrieved_at": "2026-08-09",
+            "sha256": "38cc7a803cbf730fac0d67fea26af899e9e3cd7ea7169a3ffbd6a45d43af110a"
+          }
+        ],
+        "bundle_api_surface": "internal/connectors/defs/activecampaign/api_surface.json",
+        "endpoint_count": 137,
+        "operation_ledger_version": 2,
+        "source_urls": [
+          "https://developers.activecampaign.com/llms.txt"
+        ]
+      },
       "connector": "activecampaign",
-      "evidence": "batches/batch-029-materialize.json",
-      "foundation_pending": false,
+      "evidence": "batches/batch-041-outcomes.json",
+      "foundation_pending": true,
       "provenance_reports": [
         "batches/batch-006-materialize.json",
         "batches/batch-015-materialize.json",
@@ -117,10 +135,12 @@
         "batches/batch-017-outcomes.json",
         "batches/batch-021-materialize.json",
         "batches/batch-021-outcomes.json",
-        "batches/batch-029-materialize.json"
+        "batches/batch-029-materialize.json",
+        "batches/batch-041-activecampaign-materialize.json",
+        "batches/batch-041-activecampaign-serverpath-materialize.json",
+        "batches/batch-041-outcomes.json"
       ],
-      "reachability": "not_checked",
-      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.activecampaign.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
+      "reachability": "reachable",
       "source": {
         "kind": "openapi",
         "retrieved_at": "2026-08-05",
@@ -128,8 +148,7 @@
         "source_status": "done",
         "url": "https://developers.activecampaign.com/llms.txt"
       },
-      "stage": "artifact_inventory_unknown",
-      "state": "retry_pending"
+      "state": "newly_materialized"
     },
     {
       "connector": "adjust",

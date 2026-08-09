@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "source_index": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-041-activecampaign-source-index.json",
+  "results": [
+    {
+      "connector": "activecampaign",
+      "status": "retrieved",
+      "route": "provider-published llms API-reference index plus 147 directly selected provider reference pages",
+      "url": "https://developers.activecampaign.com/llms.txt",
+      "reference_entries": 147,
+      "successful_reference_pages": 147,
+      "selected_v3_openapi_fragments": 87,
+      "operations": 87,
+      "read_operations": 40,
+      "write_operations": 47,
+      "cache": "batch-041-activecampaign-reference-artifacts (reproducible, not staged)"
+    }
+  ]
+}

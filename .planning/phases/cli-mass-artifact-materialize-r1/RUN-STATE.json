@@ -2,15 +2,15 @@
   "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 190,
+    "foundation_pending": 191,
     "genuinely_blocked": 0,
-    "materialized_total": 204,
-    "newly_materialized": 188,
-    "reachable": 23,
+    "materialized_total": 205,
+    "newly_materialized": 189,
+    "reachable": 24,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 222,
-    "retry_pending": 222
+    "remaining": 221,
+    "retry_pending": 221
   },
   "execution_mode": "inline_manual_gsd_fallback_single_worker",
   "phase": "cli-mass-artifact-materialize-r1",
